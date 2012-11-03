@@ -200,7 +200,7 @@ gint i, j;
 	for(i=0;i<base.nbgrp;i++)
 	{
 	Category *entry;
-	gint parentid;
+	gint parentid = 0;
 	gboolean budget;
 
 		entry = da_category_malloc();

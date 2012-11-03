@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HomeBank 3.2 alpha2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-26 13:31+0200\n"
+"POT-Creation-Date: 2006-11-27 13:00+0100\n"
 "PO-Revision-Date: 2006-07-20 22:05+0200\n"
 "Last-Translator: Alberto Caso <alberto.caso@adaptia.es>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -28,59 +28,59 @@ msgstr ""
 "Versión %d.%d de archivo Amiga incorrecta\n"
 "(debe ser > 3.0)"
 
-#: src/def_account.c:193
+#: src/def_account.c:202
 msgid "(new account)"
 msgstr "(nueva cuenta)"
 
-#: src/def_account.c:547
+#: src/def_account.c:556
 msgid "Edit Accounts"
 msgstr "Editar cuentas"
 
-#: src/def_account.c:621
+#: src/def_account.c:630
 msgid "<b>Informations</b>"
 msgstr "<b>Información</b>"
 
-#: src/def_account.c:629
+#: src/def_account.c:638
 msgid "_Heading:"
 msgstr "_Nombre:"
 
-#: src/def_account.c:636
+#: src/def_account.c:645
 msgid "_Number:"
 msgstr "Nú_mero:"
 
-#: src/def_account.c:643
+#: src/def_account.c:652
 msgid "_Bank name:"
 msgstr "Nombre del _banco:"
 
-#: src/def_account.c:650
+#: src/def_account.c:659
 msgid "Include in the budget"
 msgstr ""
 
-#: src/def_account.c:655
+#: src/def_account.c:664
 msgid "This account was closed"
 msgstr "Esta cuenta está cerrada"
 
-#: src/def_account.c:667
+#: src/def_account.c:676
 msgid "<b>Balances</b>"
 msgstr "<b>Balances</b>"
 
-#: src/def_account.c:671
+#: src/def_account.c:680
 msgid "_Initial:"
 msgstr "_Inicial:"
 
-#: src/def_account.c:682
+#: src/def_account.c:691
 msgid "_Overdrawn at:"
 msgstr "Números _rojos en:"
 
-#: src/def_account.c:696
+#: src/def_account.c:705
 msgid "<b>Cheque number</b>"
 msgstr "<b>Número de cheques</b>"
 
-#: src/def_account.c:700
+#: src/def_account.c:709
 msgid "Notebook _1:"
 msgstr "Talonario _1:"
 
-#: src/def_account.c:714
+#: src/def_account.c:723
 msgid "Notebook _2:"
 msgstr "Talonario _2:"
 
@@ -92,11 +92,11 @@ msgstr "Día"
 msgid "Week"
 msgstr "Semana"
 
-#: src/def_archive.c:108 src/rep_stats.c:180
+#: src/def_archive.c:108 src/rep_stats.c:182
 msgid "Month"
 msgstr "Mes"
 
-#: src/def_archive.c:108 src/rep_stats.c:180
+#: src/def_archive.c:108 src/rep_stats.c:182
 msgid "Year"
 msgstr "Año"
 
@@ -108,48 +108,48 @@ msgstr ""
 msgid "Edit Archives"
 msgstr ""
 
-#: src/def_archive.c:658 src/def_operation.c:480
+#: src/def_archive.c:658 src/def_operation.c:485
 msgid "<b>General infos</b>"
 msgstr "<b>Información general</b>"
 
-#: src/def_archive.c:666 src/def_operation.c:497
+#: src/def_archive.c:666 src/def_operation.c:502
 msgid "_Wording:"
 msgstr "_Concepto:"
 
-#: src/def_archive.c:674 src/def_operation.c:506
+#: src/def_archive.c:674 src/def_operation.c:511
 msgid "_Amount:"
 msgstr "_Importe"
 
-#: src/def_archive.c:690 src/def_operation.c:522 src/rep_over.c:538
-#: src/wiz_import.c:935
+#: src/def_archive.c:690 src/def_operation.c:527 src/rep_over.c:543
+#: src/wiz_import.c:1349
 msgid "A_ccount:"
 msgstr "_Cuenta:"
 
-#: src/def_archive.c:698 src/def_operation.c:530
+#: src/def_archive.c:698 src/def_operation.c:535
 msgid "_Validated"
 msgstr ""
 
-#: src/def_archive.c:706 src/def_operation.c:554
+#: src/def_archive.c:706 src/def_operation.c:559
 msgid "<b>Optional infos</b>"
 msgstr "<b>Información opcional</b>"
 
-#: src/def_archive.c:710 src/def_operation.c:562
+#: src/def_archive.c:710 src/def_operation.c:567
 msgid "Pay_ment:"
 msgstr "_Pago:"
 
-#: src/def_archive.c:729 src/def_operation.c:581
+#: src/def_archive.c:729 src/def_operation.c:586
 msgid "Of notebook _2"
 msgstr "De talonario _2"
 
-#: src/def_archive.c:735 src/def_operation.c:587
+#: src/def_archive.c:735 src/def_operation.c:592
 msgid "_To account:"
 msgstr "_A cuenta:"
 
-#: src/def_archive.c:742 src/def_operation.c:603
+#: src/def_archive.c:742 src/def_operation.c:608
 msgid "_Payee:"
 msgstr "_Tercero:"
 
-#: src/def_archive.c:750 src/def_operation.c:611 src/def_wallet.c:217
+#: src/def_archive.c:750 src/def_operation.c:616 src/def_wallet.c:217
 msgid "_Category:"
 msgstr "_Categoría:"
 
@@ -181,65 +181,65 @@ msgstr "_Unidad:"
 msgid "_Next on:"
 msgstr "_Siguiente:"
 
-#: src/def_budget.c:261 src/def_category.c:229
+#: src/def_budget.c:262 src/def_category.c:208
 msgid "File format error"
 msgstr "Error en el formato del archivo"
 
-#: src/def_budget.c:262 src/def_category.c:230
+#: src/def_budget.c:263 src/def_category.c:209
 msgid ""
 "The csv file must contains the exact numbers of column,\n"
 "separated by a semi-colon, read the help for more details."
 msgstr ""
 
-#: src/def_budget.c:668
+#: src/def_budget.c:669
 msgid "Edit Budget"
 msgstr "Editar presupuesto"
 
-#: src/def_budget.c:729
+#: src/def_budget.c:730
 msgid "<b>Budget for each month</b>"
 msgstr "<b>Presupuesto para cada mes</b>"
 
-#: src/def_budget.c:737
+#: src/def_budget.c:738
 msgid "is the same"
 msgstr "es el mismo"
 
-#: src/def_budget.c:755
+#: src/def_budget.c:756
 msgid "is different"
 msgstr "es diferente"
 
-#: src/def_budget.c:786 src/def_category.c:1195 src/def_payee.c:795
+#: src/def_budget.c:787 src/def_category.c:1174 src/def_payee.c:777
 msgid "_Import"
 msgstr "_Importar"
 
-#: src/def_budget.c:790 src/def_category.c:1199 src/def_payee.c:799
+#: src/def_budget.c:791 src/def_category.c:1178 src/def_payee.c:781
 msgid "E_xport"
 msgstr "E_xportar"
 
-#: src/def_category.c:669 src/def_payee.c:479
+#: src/def_category.c:648 src/def_payee.c:461
 msgid "Modify..."
 msgstr "Modificar..."
 
-#: src/def_category.c:691
+#: src/def_category.c:670
 msgid "_Income"
 msgstr "_Ingreso"
 
-#: src/def_category.c:1098
+#: src/def_category.c:1077
 msgid "Edit Categories"
 msgstr "Editar categorías"
 
-#: src/def_category.c:1138
+#: src/def_category.c:1117
 msgid "I_s income"
 msgstr "E_s ingreso"
 
-#: src/def_filter.c:50
+#: src/def_filter.c:51
 msgid "Inactive"
 msgstr "Inactivo"
 
-#: src/def_filter.c:50
+#: src/def_filter.c:51
 msgid "Include"
 msgstr "Incluir"
 
-#: src/def_filter.c:50
+#: src/def_filter.c:51
 msgid "Exclude"
 msgstr "Excluir"
 
@@ -265,13 +265,13 @@ msgstr "_Insertar:"
 msgid "<b>Filter Date</b>"
 msgstr "<b>Filtrar por fecha</b>"
 
-#: src/def_filter.c:922 src/def_filter.c:1018 src/rep_budget.c:863
-#: src/rep_car.c:615 src/rep_over.c:559 src/rep_stats.c:1211
+#: src/def_filter.c:922 src/def_filter.c:1018 src/rep_budget.c:869
+#: src/rep_car.c:615 src/rep_over.c:564 src/rep_stats.c:1255
 msgid "_From:"
 msgstr "_Desde:"
 
-#: src/def_filter.c:930 src/def_filter.c:1025 src/rep_budget.c:869
-#: src/rep_car.c:622 src/rep_over.c:565 src/rep_stats.c:1217
+#: src/def_filter.c:930 src/def_filter.c:1025 src/rep_budget.c:875
+#: src/rep_car.c:622 src/rep_over.c:570 src/rep_stats.c:1261
 msgid "_To:"
 msgstr "_Hasta:"
 
@@ -308,26 +308,26 @@ msgstr "<b>Filtrar por importe</b>"
 msgid "<b>Filter Payment</b>"
 msgstr "<b>Filtrar pago</b>"
 
-#: src/def_filter.c:1105
+#: src/def_filter.c:1104
 msgid "Edit Filter"
 msgstr "Editar filtro"
 
 #. common (date + state + amount)
-#: src/def_filter.c:1138 src/def_pref.c:117
+#: src/def_filter.c:1137 src/def_pref.c:117
 msgid "General"
 msgstr "General"
 
-#: src/def_filter.c:1144 src/list_operation.c:382 src/list_operation.c:600
-#: src/rep_budget.c:1173 src/rep_stats.c:180
+#: src/def_filter.c:1143 src/list_operation.c:382 src/list_operation.c:638
+#: src/rep_budget.c:1179 src/rep_stats.c:182
 msgid "Category"
 msgstr "Categoría"
 
-#: src/def_filter.c:1149 src/list_operation.c:338 src/list_operation.c:567
-#: src/rep_stats.c:180
+#: src/def_filter.c:1148 src/list_operation.c:338 src/list_operation.c:605
+#: src/rep_stats.c:182
 msgid "Payee"
 msgstr "Tercero"
 
-#: src/def_filter.c:1158
+#: src/def_filter.c:1157 src/list_operation.c:570
 msgid "Account"
 msgstr "Cuenta"
 
@@ -340,7 +340,7 @@ msgstr "Visible"
 msgid "(none)"
 msgstr "(ninguno)"
 
-#: src/def_operation.c:80 src/dsp_wallet.c:167
+#: src/def_operation.c:80 src/dsp_wallet.c:191
 msgid "Add operation(s)"
 msgstr "Añadir operación(es)"
 
@@ -352,23 +352,23 @@ msgstr "Heredar operación"
 msgid "Modify operation"
 msgstr "Modificar operación"
 
-#: src/def_operation.c:488
+#: src/def_operation.c:493
 msgid "_Date:"
 msgstr "_Fecha:"
 
-#: src/def_operation.c:535
+#: src/def_operation.c:540
 msgid "_Remind"
 msgstr "_Recordar"
 
-#: src/def_operation.c:594
+#: src/def_operation.c:599
 msgid "_Info:"
 msgstr "_Info:"
 
-#: src/def_operation.c:714
+#: src/def_operation.c:719
 msgid "_Fill with archive:"
 msgstr ""
 
-#: src/def_payee.c:725
+#: src/def_payee.c:707
 msgid "Edit Payees"
 msgstr "Editar terceros"
 
@@ -528,8 +528,8 @@ msgstr "Ejecutar el _druida"
 msgid "<b>Initial date filter</b>"
 msgstr "<b>Filtro de fechas inicial</b>"
 
-#: src/def_pref.c:783 src/dsp_account.c:1693 src/rep_budget.c:875
-#: src/rep_car.c:628 src/rep_over.c:571 src/rep_stats.c:1223
+#: src/def_pref.c:783 src/dsp_account.c:1698 src/rep_budget.c:881
+#: src/rep_car.c:628 src/rep_over.c:576 src/rep_stats.c:1267
 msgid "_Range:"
 msgstr "_Intervalo:"
 
@@ -562,343 +562,343 @@ msgid "<b>Car cost</b>"
 msgstr "<b>Coste de coche</b>"
 
 #. name, stock id, label
-#: src/dsp_account.c:154 src/dsp_wallet.c:138
+#: src/dsp_account.c:158 src/dsp_wallet.c:162
 msgid "_Edit"
 msgstr "_Editar"
 
-#: src/dsp_account.c:155
+#: src/dsp_account.c:159
 msgid "_Operation"
 msgstr "_Operación"
 
-#: src/dsp_account.c:156 src/dsp_wallet.c:141
+#: src/dsp_account.c:160 src/dsp_wallet.c:165
 msgid "_Tools"
 msgstr "_Herramientas"
 
 #. name, stock id, label, accelerator, tooltip
-#: src/dsp_account.c:159
+#: src/dsp_account.c:163
 msgid "_Filter..."
 msgstr "_Filtro..."
 
-#: src/dsp_account.c:159
+#: src/dsp_account.c:163
 msgid "Open the list filter"
 msgstr "Abrir el filtro de listado"
 
-#: src/dsp_account.c:161
+#: src/dsp_account.c:165
 msgid "_Add..."
 msgstr "_Añadir..."
 
-#: src/dsp_account.c:161
+#: src/dsp_account.c:165
 msgid "Add a new operation"
 msgstr "Añadir una nueva operación"
 
-#: src/dsp_account.c:162
+#: src/dsp_account.c:166
 msgid "_Inherit..."
 msgstr "_Heredar..."
 
-#: src/dsp_account.c:162
+#: src/dsp_account.c:166
 msgid "Inherit from active operation"
 msgstr "Heredar de la operación activa"
 
-#: src/dsp_account.c:163
+#: src/dsp_account.c:167
 msgid "_Edit..."
 msgstr "_Editar..."
 
-#: src/dsp_account.c:163
+#: src/dsp_account.c:167
 msgid "Edit active operation"
 msgstr "Editar la operación activa"
 
-#: src/dsp_account.c:164
+#: src/dsp_account.c:168
 msgid "(De)_Validate..."
 msgstr "(In)_validar..."
 
-#: src/dsp_account.c:164
+#: src/dsp_account.c:168
 msgid "Validate active operation(s)"
 msgstr "Validar la(s) operación(es) activa(s)"
 
-#: src/dsp_account.c:165
+#: src/dsp_account.c:169
 msgid "_Remove..."
 msgstr "_Borrar..."
 
-#: src/dsp_account.c:165
+#: src/dsp_account.c:169
 msgid "Remove active operation(s)"
 msgstr "Borrar la(s) operación(es) activa(s)"
 
-#: src/dsp_account.c:166
+#: src/dsp_account.c:170
 msgid "Make an archive..."
 msgstr ""
 
-#: src/dsp_account.c:168
+#: src/dsp_account.c:172
 msgid "Import csv..."
 msgstr "Importar CSV..."
 
-#: src/dsp_account.c:169
+#: src/dsp_account.c:173
 msgid "Export csv..."
 msgstr "Exportar CSV..."
 
-#: src/dsp_account.c:467
+#: src/dsp_account.c:472
 msgid "Operation CSV import result"
 msgstr ""
 
-#: src/dsp_account.c:468
+#: src/dsp_account.c:473
 #, fuzzy, c-format
 msgid ""
 "%d operation(s) inserted\n"
 "%d error(s) in the file"
 msgstr "%d operaciones insertadas"
 
-#: src/dsp_account.c:587
+#: src/dsp_account.c:592
 msgid ""
 "Do you want to create an Archive with\n"
 "each of the selected Operation(s) ?"
 msgstr ""
 
-#: src/dsp_account.c:1112
+#: src/dsp_account.c:1117
 msgid ""
 "Do you want to delete\n"
 "each of the selected Operation(s) ?"
 msgstr "¿Desea borrar las operaciones seleccionadas?"
 
-#: src/dsp_account.c:1445
+#: src/dsp_account.c:1450
 msgid "Modify date..."
 msgstr "Modificar fecha..."
 
-#: src/dsp_account.c:1450
+#: src/dsp_account.c:1455
 msgid "Modify info..."
 msgstr "Modificar información..."
 
-#: src/dsp_account.c:1457
+#: src/dsp_account.c:1462
 msgid "Modify payee..."
 msgstr "Modificar tercero..."
 
-#: src/dsp_account.c:1463
+#: src/dsp_account.c:1468
 msgid "Modify wording..."
 msgstr "Modificar concepto..."
 
-#: src/dsp_account.c:1469
+#: src/dsp_account.c:1474
 msgid "Modify amount..."
 msgstr "Modificar importe..."
 
-#: src/dsp_account.c:1474
+#: src/dsp_account.c:1479
 msgid "Modify category..."
 msgstr "Modificar categoría..."
 
-#: src/dsp_account.c:1698 src/rep_budget.c:881 src/rep_car.c:634
-#: src/rep_over.c:577 src/rep_stats.c:1229
+#: src/dsp_account.c:1703 src/rep_budget.c:887 src/rep_car.c:634
+#: src/rep_over.c:582 src/rep_stats.c:1273
 msgid "_Month:"
 msgstr "_Mes:"
 
-#: src/dsp_account.c:1703 src/rep_budget.c:887 src/rep_car.c:640
-#: src/rep_over.c:583 src/rep_stats.c:1235
+#: src/dsp_account.c:1708 src/rep_budget.c:893 src/rep_car.c:640
+#: src/rep_over.c:588 src/rep_stats.c:1279
 msgid "_Year:"
 msgstr "Añ_o:"
 
-#: src/dsp_account.c:1723 src/dsp_wallet.c:1614
+#: src/dsp_account.c:1728 src/dsp_wallet.c:1644
 msgid "Future:"
 msgstr "Futuro:"
 
-#: src/dsp_account.c:1732 src/dsp_wallet.c:1623
+#: src/dsp_account.c:1737 src/dsp_wallet.c:1653
 msgid "Today:"
 msgstr "Hoy:"
 
-#: src/dsp_account.c:1741 src/dsp_wallet.c:1632
+#: src/dsp_account.c:1746 src/dsp_wallet.c:1662
 msgid "Bank:"
 msgstr ""
 
-#: src/dsp_account.c:1747 src/dsp_wallet.c:1638
+#: src/dsp_account.c:1752 src/dsp_wallet.c:1668
 msgid "Minor"
 msgstr "Menor"
 
 #. name, stock id, label
-#: src/dsp_wallet.c:137
+#: src/dsp_wallet.c:161
 msgid "_File"
 msgstr "_Archivo"
 
-#: src/dsp_wallet.c:139
+#: src/dsp_wallet.c:163
 msgid "_Operations"
 msgstr "_Operaciones"
 
-#: src/dsp_wallet.c:140
+#: src/dsp_wallet.c:164
 msgid "_Reports"
 msgstr "_Informes"
 
-#: src/dsp_wallet.c:142
+#: src/dsp_wallet.c:166
 msgid "_Help"
 msgstr "A_yuda"
 
 #. name, stock id, label, accelerator, tooltip
-#: src/dsp_wallet.c:146
+#: src/dsp_wallet.c:170
 msgid "_New"
 msgstr "_Nuevo"
 
-#: src/dsp_wallet.c:146
+#: src/dsp_wallet.c:170
 msgid "Clear all"
 msgstr "Limpiar todo"
 
-#: src/dsp_wallet.c:147
+#: src/dsp_wallet.c:171
 msgid "_Open..."
 msgstr "_Abrir..."
 
-#: src/dsp_wallet.c:147
+#: src/dsp_wallet.c:171
 msgid "Open a wallet"
 msgstr "Abrir una cartera"
 
-#: src/dsp_wallet.c:148
+#: src/dsp_wallet.c:172
 msgid "_Save"
 msgstr "_Guardar"
 
-#: src/dsp_wallet.c:148
+#: src/dsp_wallet.c:172
 msgid "Save this wallet"
 msgstr "Guardar esta cartera"
 
-#: src/dsp_wallet.c:149
+#: src/dsp_wallet.c:173
 msgid "Save As..."
 msgstr "Guardar _como..."
 
-#: src/dsp_wallet.c:150
+#: src/dsp_wallet.c:174
 msgid "_Properties..."
 msgstr "_Propiedades..."
 
-#: src/dsp_wallet.c:153
+#: src/dsp_wallet.c:177
 #, fuzzy
 msgid "Import..."
 msgstr "Importar CSV..."
 
-#: src/dsp_wallet.c:153 src/dsp_wallet.c:168
-msgid "tip"
-msgstr ""
-
-#: src/dsp_wallet.c:156
+#: src/dsp_wallet.c:180
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: src/dsp_wallet.c:157
+#: src/dsp_wallet.c:181
 msgid "_Quit"
 msgstr "_Salir"
 
-#: src/dsp_wallet.c:159
+#: src/dsp_wallet.c:183
 msgid "Acc_ounts..."
 msgstr "_Cuentas..."
 
-#: src/dsp_wallet.c:159
+#: src/dsp_wallet.c:183
 msgid "Edit the accounts"
 msgstr "Editar las cuentas"
 
-#: src/dsp_wallet.c:160
+#: src/dsp_wallet.c:184
 msgid "_Payees..."
 msgstr "_Terceros..."
 
-#: src/dsp_wallet.c:160
+#: src/dsp_wallet.c:184
 msgid "Edit the payees"
 msgstr "Editar los terceros"
 
-#: src/dsp_wallet.c:161
+#: src/dsp_wallet.c:185
 msgid "Categories..."
 msgstr "Ca_tegorías..."
 
-#: src/dsp_wallet.c:161
+#: src/dsp_wallet.c:185
 msgid "Edit the categories"
 msgstr "Editar las categorías"
 
-#: src/dsp_wallet.c:162
+#: src/dsp_wallet.c:186
 msgid "Arc_hives..."
 msgstr ""
 
-#: src/dsp_wallet.c:162
+#: src/dsp_wallet.c:186
 msgid "Edit the archives"
 msgstr ""
 
-#: src/dsp_wallet.c:163
+#: src/dsp_wallet.c:187
 msgid "Budget..."
 msgstr "Presupuesto..."
 
-#: src/dsp_wallet.c:163
+#: src/dsp_wallet.c:187
 msgid "Edit the budget"
 msgstr "Editar el presupuesto"
 
-#: src/dsp_wallet.c:164
+#: src/dsp_wallet.c:188
 msgid "Preferences..."
 msgstr "Preferencias..."
 
-#: src/dsp_wallet.c:166
+#: src/dsp_wallet.c:190
 msgid "Show..."
 msgstr "Mostrar..."
 
-#: src/dsp_wallet.c:166
+#: src/dsp_wallet.c:190
 msgid "Show operations"
 msgstr "Mostrar operaciones"
 
-#: src/dsp_wallet.c:167
+#: src/dsp_wallet.c:191
 msgid "Add..."
 msgstr "Añadir..."
 
-#: src/dsp_wallet.c:168
+#: src/dsp_wallet.c:192
 msgid "Check automated..."
 msgstr ""
 
-#: src/dsp_wallet.c:170
+#: src/dsp_wallet.c:192
+msgid "tip"
+msgstr ""
+
+#: src/dsp_wallet.c:194
 msgid "_Statistics..."
 msgstr "_Estadísticas..."
 
-#: src/dsp_wallet.c:170
+#: src/dsp_wallet.c:194
 msgid "Statistics"
 msgstr "Estadísticas"
 
-#: src/dsp_wallet.c:171
+#: src/dsp_wallet.c:195
 msgid "B_udget..."
 msgstr "_Presupuesto..."
 
 #. column: Income
-#: src/dsp_wallet.c:171 src/rep_budget.c:96 src/rep_budget.c:1186
+#: src/dsp_wallet.c:195 src/rep_budget.c:96 src/rep_budget.c:1192
 msgid "Budget"
 msgstr "Presupuesto"
 
-#: src/dsp_wallet.c:172
+#: src/dsp_wallet.c:196
 msgid "Ove_rdrawn..."
 msgstr "_Números rojos..."
 
-#: src/dsp_wallet.c:172
+#: src/dsp_wallet.c:196
 msgid "Overdrawn"
 msgstr "Números rojos"
 
-#: src/dsp_wallet.c:173
+#: src/dsp_wallet.c:197
 msgid "_Carcost..."
 msgstr "_Coste coche"
 
-#: src/dsp_wallet.c:173
+#: src/dsp_wallet.c:197
 msgid "Car cost"
 msgstr "Coste de coche"
 
-#: src/dsp_wallet.c:175
+#: src/dsp_wallet.c:199
 #, fuzzy
 msgid "Import Amiga..."
 msgstr "Importar archivo Amiga"
 
-#: src/dsp_wallet.c:175
+#: src/dsp_wallet.c:199
 #, fuzzy
 msgid "Import an Amiga 3.0 file"
 msgstr "Importar archivo Amiga"
 
-#: src/dsp_wallet.c:177
+#: src/dsp_wallet.c:201
 msgid "_Contents..."
 msgstr "_Contenidos..."
 
-#: src/dsp_wallet.c:178
+#: src/dsp_wallet.c:202
 msgid "_About..."
 msgstr "_Acerca de..."
 
-#: src/dsp_wallet.c:475 src/dsp_wallet.c:497
+#: src/dsp_wallet.c:503 src/dsp_wallet.c:525
 msgid "Web navigator problem"
 msgstr "Problema con el navegador web"
 
-#: src/dsp_wallet.c:476 src/dsp_wallet.c:498
+#: src/dsp_wallet.c:504 src/dsp_wallet.c:526
 msgid "Please check the preferences."
 msgstr "Revise las preferencias."
 
-#: src/dsp_wallet.c:531
+#: src/dsp_wallet.c:560
 msgid "Free easy personal accounting for all !"
 msgstr "¡Contabilidad personal libre y fácil para todos!"
 
-#: src/dsp_wallet.c:614
+#: src/dsp_wallet.c:647
 msgid ""
 "Do you want to save the changes\n"
 "in the current file ?"
@@ -906,7 +906,7 @@ msgstr ""
 "¿Desea guardar los cambios\n"
 "en el archivo actual?"
 
-#: src/dsp_wallet.c:618
+#: src/dsp_wallet.c:651
 #, c-format
 msgid ""
 "If you do not save, %d changes will be\n"
@@ -915,44 +915,44 @@ msgstr ""
 "Si no guarda, se perderán %d cambios\n"
 "de manera definitiva."
 
-#: src/dsp_wallet.c:623
+#: src/dsp_wallet.c:656
 msgid "Do _not save"
 msgstr "_No guardar"
 
-#: src/dsp_wallet.c:712
+#: src/dsp_wallet.c:745
 msgid "(Nobody)"
 msgstr "(Nadie)"
 
-#: src/dsp_wallet.c:958
+#: src/dsp_wallet.c:991
 msgid "No operation to insert"
 msgstr "Sin operaciones para insertar"
 
-#: src/dsp_wallet.c:960
+#: src/dsp_wallet.c:993
 #, c-format
 msgid "%d operations inserted"
 msgstr "%d operaciones insertadas"
 
-#: src/dsp_wallet.c:963
+#: src/dsp_wallet.c:996
 msgid "Check automated operations result"
 msgstr ""
 
-#: src/dsp_wallet.c:985
+#: src/dsp_wallet.c:1018
 msgid "Import Amiga file"
 msgstr "Importar archivo Amiga"
 
-#: src/homebank.c:130
+#: src/homebank.c:133
 msgid "Import from csv"
 msgstr "Importar desde CSV"
 
-#: src/homebank.c:135
+#: src/homebank.c:138
 msgid "Export as csv"
 msgstr "Exportar como CSV"
 
-#: src/homebank.c:147 src/wiz_import.c:893
+#: src/homebank.c:150
 msgid "CSV files"
 msgstr "Archivos CSV"
 
-#: src/homebank.c:882
+#: src/homebank.c:884
 #, c-format
 msgid "Version: HomeBank-%s"
 msgstr ""
@@ -981,43 +981,38 @@ msgstr "Hoy"
 msgid "Future"
 msgstr "Futuro"
 
-#: src/list_operation.c:313 src/list_operation.c:542 src/rep_car.c:955
-#: src/rep_over.c:867
+#: src/list_operation.c:313 src/list_operation.c:580 src/rep_car.c:955
+#: src/rep_over.c:872
 msgid "Date"
 msgstr "Fecha"
 
-#: src/list_operation.c:323 src/list_operation.c:552
+#: src/list_operation.c:323 src/list_operation.c:590
 msgid "Info"
 msgstr "Información"
 
-#: src/list_operation.c:348 src/list_operation.c:577 src/rep_over.c:877
+#: src/list_operation.c:348 src/list_operation.c:615 src/rep_over.c:882
 msgid "Wording"
 msgstr "Concepto"
 
 #. column: Expense
-#: src/list_operation.c:358 src/rep_budget.c:98 src/rep_over.c:885
-#: src/rep_stats.c:184 src/rep_stats.c:1565
+#: src/list_operation.c:358 src/rep_budget.c:98 src/rep_over.c:890
+#: src/rep_stats.c:186 src/rep_stats.c:1609
 msgid "Expense"
 msgstr "Gasto"
 
 #. column: Income
-#: src/list_operation.c:370 src/rep_budget.c:98 src/rep_over.c:889
-#: src/rep_stats.c:184 src/rep_stats.c:1571
+#: src/list_operation.c:370 src/rep_budget.c:98 src/rep_over.c:894
+#: src/rep_stats.c:186 src/rep_stats.c:1615
 msgid "Income"
 msgstr "Ingreso"
 
-#: src/list_operation.c:521
-#, fuzzy
-msgid "Duplicate"
-msgstr "Fecha"
-
-#: src/list_operation.c:531
+#: src/list_operation.c:552
 #, fuzzy
 msgid "Import ?"
 msgstr "_Importar"
 
 #. column: Amount
-#: src/list_operation.c:587 src/rep_car.c:998
+#: src/list_operation.c:625 src/rep_car.c:998
 msgid "Amount"
 msgstr "Cantidad"
 
@@ -1027,94 +1022,94 @@ msgid "Spent & Budget"
 msgstr "Editar presupuesto"
 
 #. column: Expense
-#: src/rep_budget.c:96 src/rep_budget.c:1182
+#: src/rep_budget.c:96 src/rep_budget.c:1188
 msgid "Spent"
 msgstr "Gastado"
 
 #. column: Balance
-#: src/rep_budget.c:96 src/rep_budget.c:1190
+#: src/rep_budget.c:96 src/rep_budget.c:1196
 msgid "Decay"
 msgstr ""
 
-#: src/rep_budget.c:104 src/rep_over.c:87 src/rep_stats.c:116
+#: src/rep_budget.c:104 src/rep_over.c:87 src/rep_stats.c:117
 #, fuzzy
 msgid "List"
 msgstr "Dist."
 
-#: src/rep_budget.c:104 src/rep_over.c:87 src/rep_stats.c:116
+#: src/rep_budget.c:104 src/rep_over.c:87 src/rep_stats.c:117
 msgid "View results as list"
 msgstr ""
 
-#: src/rep_budget.c:105 src/rep_stats.c:117
+#: src/rep_budget.c:105 src/rep_stats.c:118
 #, fuzzy
 msgid "Bar"
 msgstr "Coche"
 
-#: src/rep_budget.c:105 src/rep_stats.c:117
+#: src/rep_budget.c:105 src/rep_stats.c:118
 msgid "View results as 2d-bars"
 msgstr ""
 
-#: src/rep_budget.c:107 src/rep_stats.c:120
+#: src/rep_budget.c:107 src/rep_stats.c:121
 msgid "Detail"
 msgstr ""
 
-#: src/rep_budget.c:107 src/rep_stats.c:120
+#: src/rep_budget.c:107 src/rep_stats.c:121
 #, fuzzy
 msgid "Toggle detail"
 msgstr "Mostrar _detalles"
 
-#: src/rep_budget.c:108 src/rep_stats.c:121
+#: src/rep_budget.c:108 src/rep_stats.c:122
 msgid "Legend"
 msgstr ""
 
-#: src/rep_budget.c:108 src/rep_stats.c:121
+#: src/rep_budget.c:108 src/rep_stats.c:122
 msgid "Toggle legend"
 msgstr ""
 
-#: src/rep_budget.c:110 src/rep_over.c:90 src/rep_stats.c:125
+#: src/rep_budget.c:110 src/rep_over.c:90 src/rep_stats.c:126
 msgid "Refresh"
 msgstr ""
 
-#: src/rep_budget.c:110 src/rep_over.c:90 src/rep_stats.c:125
+#: src/rep_budget.c:110 src/rep_over.c:90 src/rep_stats.c:126
 msgid "Refresh results"
 msgstr ""
 
-#: src/rep_budget.c:805
+#: src/rep_budget.c:811
 msgid "Budget report"
 msgstr "Informe de presupuesto"
 
-#: src/rep_budget.c:831 src/rep_car.c:589 src/rep_over.c:534
-#: src/rep_stats.c:1168
+#: src/rep_budget.c:837 src/rep_car.c:589 src/rep_over.c:539
+#: src/rep_stats.c:1212
 msgid "<b>Display</b>"
 msgstr ""
 
-#: src/rep_budget.c:835
+#: src/rep_budget.c:841
 msgid "_Kind:"
 msgstr "_Tipo:"
 
-#: src/rep_budget.c:842 src/rep_stats.c:1179
+#: src/rep_budget.c:848 src/rep_stats.c:1223
 msgid "_View:"
 msgstr "_Vista:"
 
-#: src/rep_budget.c:849 src/rep_car.c:601 src/rep_over.c:545
-#: src/rep_stats.c:1191
+#: src/rep_budget.c:855 src/rep_car.c:601 src/rep_over.c:550
+#: src/rep_stats.c:1235
 msgid "_Minor currency"
 msgstr ""
 
-#: src/rep_budget.c:859 src/rep_car.c:611 src/rep_over.c:555
-#: src/rep_stats.c:1207
+#: src/rep_budget.c:865 src/rep_car.c:611 src/rep_over.c:560
+#: src/rep_stats.c:1251
 msgid "<b>Date filter</b>"
 msgstr "<b>Filtro de fecha</b>"
 
-#: src/rep_budget.c:935
+#: src/rep_budget.c:941
 msgid "Decay:"
 msgstr ""
 
-#: src/rep_budget.c:944
+#: src/rep_budget.c:950
 msgid "Budget:"
 msgstr "Presupuesto:"
 
-#: src/rep_budget.c:953
+#: src/rep_budget.c:959
 msgid "Spent:"
 msgstr "Gastado:"
 
@@ -1204,117 +1199,172 @@ msgstr ""
 msgid "View results as lines"
 msgstr ""
 
-#: src/rep_over.c:505
+#: src/rep_over.c:510
 msgid "Overdrawn report"
 msgstr "Informe sobre números rojos"
 
 #. column: Balance
-#: src/rep_over.c:893 src/rep_stats.c:184 src/rep_stats.c:1577
+#: src/rep_over.c:898 src/rep_stats.c:186 src/rep_stats.c:1621
 msgid "Balance"
 msgstr "Balance"
 
-#: src/rep_stats.c:118
+#: src/rep_stats.c:119
 #, fuzzy
 msgid "Pie"
 msgstr "Precio"
 
-#: src/rep_stats.c:118
+#: src/rep_stats.c:119
 msgid "View results as 2d-pies"
 msgstr ""
 
-#: src/rep_stats.c:122
+#: src/rep_stats.c:123
 #, fuzzy
 msgid "Rate"
 msgstr "Fecha"
 
-#: src/rep_stats.c:122
+#: src/rep_stats.c:123
 #, fuzzy
 msgid "Toggle rate"
 msgstr "Mostrar _detalles"
 
-#: src/rep_stats.c:124
+#: src/rep_stats.c:125
 #, fuzzy
 msgid "Filter"
 msgstr "_Filtro..."
 
-#: src/rep_stats.c:124
+#: src/rep_stats.c:125
 #, fuzzy
 msgid "Edit the filter"
 msgstr "Editar filtro"
 
-#: src/rep_stats.c:184
+#: src/rep_stats.c:186
 msgid "Exp. & Inc."
 msgstr ""
 
-#: src/rep_stats.c:188
+#: src/rep_stats.c:190
 msgid "All date"
 msgstr "Todas las fechas"
 
-#: src/rep_stats.c:189
+#: src/rep_stats.c:191
 msgid "Current month"
 msgstr "Mes actual"
 
-#: src/rep_stats.c:190
+#: src/rep_stats.c:192
 msgid "Current year"
 msgstr "Año actual"
 
-#: src/rep_stats.c:191
+#: src/rep_stats.c:193
 msgid "Previous month"
 msgstr "Mes anterior"
 
-#: src/rep_stats.c:192
+#: src/rep_stats.c:194
 msgid "Previous year"
 msgstr "Año anterior"
 
-#: src/rep_stats.c:193
+#: src/rep_stats.c:195
 msgid "Last 30 days"
 msgstr "Últimos 30 días"
 
-#: src/rep_stats.c:194
+#: src/rep_stats.c:196
 msgid "Last 2 months"
 msgstr "Últimos 2 meses"
 
-#: src/rep_stats.c:195
+#: src/rep_stats.c:197
 msgid "Last 3 months"
 msgstr "Últimos 3 meses"
 
-#: src/rep_stats.c:196
+#: src/rep_stats.c:198
 msgid "Last 4 months"
 msgstr "Últimos 4 meses"
 
-#: src/rep_stats.c:197
+#: src/rep_stats.c:199
 msgid "Last 6 months"
 msgstr "Últimos 6 meses"
 
-#: src/rep_stats.c:198
+#: src/rep_stats.c:200
 msgid "Last 12 months"
 msgstr "Últimos 12 meses"
 
-#: src/rep_stats.c:1142
+#: src/rep_stats.c:207
+#, fuzzy
+msgid "All month"
+msgstr "Cantidad"
+
+#: src/rep_stats.c:208 src/rep_stats.c:226
+msgid "January"
+msgstr ""
+
+#: src/rep_stats.c:209 src/rep_stats.c:227
+msgid "February"
+msgstr ""
+
+#: src/rep_stats.c:210 src/rep_stats.c:228
+msgid "March"
+msgstr ""
+
+#: src/rep_stats.c:211 src/rep_stats.c:229
+msgid "April"
+msgstr ""
+
+#: src/rep_stats.c:212 src/rep_stats.c:230
+#, fuzzy
+msgid "May"
+msgstr "Día"
+
+#: src/rep_stats.c:213 src/rep_stats.c:231
+msgid "June"
+msgstr ""
+
+#: src/rep_stats.c:214 src/rep_stats.c:232
+msgid "July"
+msgstr ""
+
+#: src/rep_stats.c:215 src/rep_stats.c:233
+msgid "August"
+msgstr ""
+
+#: src/rep_stats.c:216 src/rep_stats.c:234
+msgid "September"
+msgstr ""
+
+#: src/rep_stats.c:217 src/rep_stats.c:235
+msgid "October"
+msgstr ""
+
+#: src/rep_stats.c:218 src/rep_stats.c:236
+#, fuzzy
+msgid "November"
+msgstr "Nú_mero:"
+
+#: src/rep_stats.c:219 src/rep_stats.c:237
+msgid "December"
+msgstr ""
+
+#: src/rep_stats.c:1186
 msgid "Statistics Report"
 msgstr "Informe estadístico"
 
-#: src/rep_stats.c:1172
+#: src/rep_stats.c:1216
 msgid "_For:"
 msgstr "_Para:"
 
-#: src/rep_stats.c:1186
+#: src/rep_stats.c:1230
 msgid "By _amount"
 msgstr "Por _importe"
 
-#: src/rep_stats.c:1283
+#: src/rep_stats.c:1327
 msgid "Balance:"
 msgstr "Balance:"
 
-#: src/rep_stats.c:1292
+#: src/rep_stats.c:1336
 msgid "Income:"
 msgstr "Ingresos:"
 
-#: src/rep_stats.c:1301
+#: src/rep_stats.c:1345
 msgid "Expense:"
 msgstr "Gastos:"
 
-#: src/rep_stats.c:1556
+#: src/rep_stats.c:1600
 msgid "Result"
 msgstr "Resultado"
 
@@ -1338,39 +1388,37 @@ msgstr "Trasnferencia bancaria"
 msgid "Internal transfer"
 msgstr "Transferencia interna"
 
-#: src/wiz_import.c:280
+#: src/wiz_import.c:300
+#, c-format
+msgid "(OFX new %d)"
+msgstr ""
+
+#: src/wiz_import.c:642
 msgid "Unknow/Invalid file..."
 msgstr ""
 
-#: src/wiz_import.c:283
+#: src/wiz_import.c:645
 msgid "OFX file recognized !"
 msgstr ""
 
-#: src/wiz_import.c:286
+#: src/wiz_import.c:649
 #, fuzzy
 msgid "CSV operation file recognized !"
 msgstr "%d operaciones insertadas"
 
-#: src/wiz_import.c:550
+#: src/wiz_import.c:927
 #, fuzzy, c-format
 msgid ""
 "%d operation(s) were imported.\n"
 "%d operation(s) were rejected."
 msgstr "%d operaciones insertadas"
 
-#. icon = gtk_window_get_icon(GLOBALS->mainwindow);
-#. gtk_window_set_icon(window, icon);
-#: src/wiz_import.c:832
-#, fuzzy
-msgid "Operations import wizard"
-msgstr "%d operaciones insertadas"
-
-#: src/wiz_import.c:853
+#: src/wiz_import.c:1218
 #, fuzzy
 msgid "<b>Operation import wizard</b>"
 msgstr "<b>Información opcional</b>"
 
-#: src/wiz_import.c:858
+#: src/wiz_import.c:1223
 msgid ""
 "The operation import wizard will insert the operations\n"
 "from a file (csv homebank specific format only supported for now)\n"
@@ -1382,15 +1430,11 @@ msgid ""
 "(NB: OFX/QFX/QIF format support will come in the next release !)"
 msgstr ""
 
-#: src/wiz_import.c:879
+#: src/wiz_import.c:1250
 msgid "<b>Select a file to import</b>"
 msgstr ""
 
-#: src/wiz_import.c:913
-msgid "1) Select the account to import operation to."
-msgstr ""
-
-#: src/wiz_import.c:917
+#: src/wiz_import.c:1298
 msgid ""
 "2) Each operation to be imported will be checked for\n"
 "an existing duplicate on amount and date criterion.\n"
@@ -1401,34 +1445,55 @@ msgid ""
 "if the date is plus or minus the number of day you select.\n"
 msgstr ""
 
-#: src/wiz_import.c:929
+#: src/wiz_import.c:1310 src/wiz_import.c:1343
 #, fuzzy
 msgid "<b>Import options</b>"
 msgstr "<b>Opciones de fecha</b>"
 
-#: src/wiz_import.c:944
+#: src/wiz_import.c:1317
 #, fuzzy
 msgid "Duplicate date decay:"
 msgstr "Fecha"
 
-#: src/wiz_import.c:949
+#: src/wiz_import.c:1322
 #, fuzzy
 msgid "days"
 msgstr "Hoy"
 
-#: src/wiz_import.c:958
+#: src/wiz_import.c:1339
+msgid "1) Select the account to import operation to."
+msgstr ""
+
+#: src/wiz_import.c:1370
 #, fuzzy
 msgid "<b>Operations to import</b>"
 msgstr "<b>Información opcional</b>"
 
-#: src/wiz_import.c:971
+#: src/wiz_import.c:1385
 msgid "<b>Possible duplicate of selected operations to import</b>"
 msgstr ""
 
-#: src/wiz_import.c:991
+#. Create the expander
+#: src/wiz_import.c:1389
+#, fuzzy
+msgid "Details"
+msgstr "Mostrar _detalles"
+
+#: src/wiz_import.c:1420
 #, fuzzy
 msgid "<b>Summary</b>"
 msgstr "<b>Formato numérico</b>"
+
+#. icon = gtk_window_get_icon(GLOBALS->mainwindow);
+#. gtk_window_set_icon(window, icon);
+#: src/wiz_import.c:1458
+#, fuzzy
+msgid "Operations import wizard"
+msgstr "%d operaciones insertadas"
+
+#, fuzzy
+#~ msgid "Duplicate"
+#~ msgstr "Fecha"
 
 #~ msgid "HomeBank setup wizard"
 #~ msgstr "Asistente de configuración de HomeBank"

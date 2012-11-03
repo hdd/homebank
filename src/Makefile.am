@@ -28,11 +28,40 @@ rep_over.c \
 rep_stats.c \
 widgets.c \
 wiz_import.c \
-xml.c
+xml.c \
+amiga.h \
+data_access.h \
+def_account.h \
+def_archive.h \
+def_budget.h \
+def_category.h \
+def_filter.h \
+def_lists.h \
+def_operation.h \
+def_payee.h \
+def_pref.h \
+def_wallet.h \
+dsp_account.h \
+dsp_wallet.h \
+enums.h \
+gtkchart.h \
+gtkdateentry.h \
+homebank.h \
+list_account.h \
+list_operation.h \
+misc.h \
+rep_budget.h \
+rep_car.h \
+rep_over.h \
+rep_stats.h \
+widgets.h \
+wiz_import.h \
+xml.h
 
 homebank_LDADD = $(DEPS_LIBS)
 
-AM_CPPFLAGS = $(DEPS_CFLAGS) \
-	      -DLOCALE_DIR=\""$(datadir)/locale"\" \
-	      -DPIXMAPS_DIR=\""$(datadir)/homebank/images"\" \
-	      -DHELP_DIR=\""$(datadir)/homebank/help"\"
+AM_CPPFLAGS = \
+$(DEPS_CFLAGS) \
+-DLOCALE_DIR=\""$(datadir)/locale"\" \
+-DPIXMAPS_DIR=\""$(datadir)/homebank/images"\" \
+-DHELP_DIR=\""$(datadir)/homebank/help"\"

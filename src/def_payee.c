@@ -19,6 +19,7 @@
 
 #include "homebank.h"
 
+#include "def_lists.h"
 #include "def_payee.h"
 
 /****************************************************************************/
@@ -133,7 +134,7 @@ static void defpayee_save_csv( GtkWidget *widget, gpointer user_data)
 struct defpayee_data *data;
 gchar *filename;
 GtkTreeModel *model;
-GtkTreeIter	iter, child;
+GtkTreeIter	iter;
 gboolean valid;
 GIOChannel *io;
 
@@ -285,25 +286,6 @@ gint pos = 0;
 }
 
 
-gint defpayee_glist_exists(GList *src_list, gchar *name)
-{
-GList *list;
-gint pos = 0;
-
-	list = g_list_first(src_list);
-	while (list != NULL)
-	{
-	Payee *entry = list->data;
-
-		if(entry->name && g_ascii_strcasecmp(name, entry->name) == 0)
-		{
-			return pos;
-		}
-		list = g_list_next(list);
-		pos++;
-	}
-	return 0;
-}
 
 
 /*

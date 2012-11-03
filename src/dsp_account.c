@@ -19,8 +19,12 @@
 
 #include "homebank.h"
 
-#include "def_lists.h"
 #include "dsp_account.h"
+
+#include "list_operation.h"
+
+#include "def_lists.h"
+#include "def_filter.h"
 #include "def_operation.h"
 
 /****************************************************************************/
@@ -331,7 +335,8 @@ Account *acc;
 
 	/* update acc flags */
 	acc = g_list_nth_data(GLOBALS->acc_list, ope->account);
-	acc->flags |= AF_ADDED;
+	if(acc != NULL)
+		acc->flags |= AF_ADDED;
 
 	GLOBALS->ope_list = g_list_append(GLOBALS->ope_list, newope);
 	if(treeview != NULL) operation_add_treeview(newope, treeview, accnum);
@@ -396,7 +401,7 @@ static gint csvtype[7] = {
 		io = g_io_channel_new_file(filename, "r", NULL);
 		if(io != NULL)
 		{
-		gchar *tmpstr, *txt;
+		gchar *tmpstr;
 		gint io_stat;
 		gboolean valid;
 		gint count = 0;
@@ -440,10 +445,10 @@ static gint csvtype[7] = {
 							newope->date		= hb_date_get_julian_parse(str_array[0]);	
 							newope->paymode     = atoi(str_array[1]);
 							newope->info        = g_strdup(str_array[2]);
-							newope->payee       = defpayee_glist_exists(GLOBALS->pay_list, str_array[3]);
+							newope->payee       = da_payee_exists(GLOBALS->pay_list, str_array[3]);
 							newope->wording     = g_strdup(str_array[4]);
 							newope->amount      = g_ascii_strtod(str_array[5],NULL);
-							newope->category    = defcategory_glist_exists(GLOBALS->cat_list, str_array[6]);
+							newope->category    = da_category_exists(GLOBALS->cat_list, str_array[6]);
 							newope->account     = data->accnum;
 							newope->dst_account = data->accnum;
 
@@ -482,7 +487,7 @@ void account_export_csv(GtkWidget *widget, gpointer user_data)
 struct account_data *data;
 gchar *filename;
 GtkTreeModel *model;
-GtkTreeIter	iter, child;
+GtkTreeIter	iter;
 gboolean valid;
 GIOChannel *io;
 
@@ -1591,7 +1596,7 @@ struct account_data *data = user_data;
 GtkWidget *create_account_window(gint accnum, Account *acc)
 {
 struct account_data *data;
-GtkWidget *window, *mainvbox, *hbox, *hbox2, *vbox, *toolbar, *statusbar;
+GtkWidget *window, *mainvbox, *hbox, *hbox2, *statusbar;
 GtkWidget *treeview, *check_button, *vbar, *label, *entry, *sw;
 GtkUIManager *ui;
 GtkActionGroup *actions;

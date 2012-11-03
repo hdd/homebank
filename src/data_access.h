@@ -170,11 +170,13 @@ Payee *da_payee_malloc(void);
 Payee *da_payee_clone(Payee *src_item);
 void da_payee_free(Payee *item);
 void da_payee_destroy(GList *list);
+gint da_payee_exists(GList *src_list, gchar *name);
 
 Category *da_category_malloc(void);
 Category *da_category_clone(Category *src_item);
 void da_category_free(Category *item);
 void da_category_destroy(GList *list);
+gint da_category_exists(GList *src_list, gchar *name);
 
 Archive *da_archive_malloc(void);
 Archive *da_archive_clone(Archive *src_item);

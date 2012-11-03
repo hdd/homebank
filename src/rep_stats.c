@@ -21,6 +21,7 @@
 
 #include "rep_stats.h"
 #include "list_operation.h"
+#include "def_filter.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -202,11 +203,39 @@ NULL
 
 gchar *CYA_SELECT[] =
 {
-"----", "All",
-"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL
+"----",
+N_("All month"),
+N_("January"),
+N_("February"),
+N_("March"),
+N_("April"),
+N_("May"),
+N_("June"),
+N_("July"),
+N_("August"),
+N_("September"),
+N_("October"),
+N_("November"),
+N_("December"),
+NULL
 };
 
-
+gchar *CYA_MONTHS[] =
+{
+NULL,
+N_("January"),
+N_("February"),
+N_("March"),
+N_("April"),
+N_("May"),
+N_("June"),
+N_("July"),
+N_("August"),
+N_("September"),
+N_("October"),
+N_("November"),
+N_("December"),
+};
 
 /* action functions -------------------- */
 
@@ -577,22 +606,24 @@ gint tmpkind, column;
 
 	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(model), column, GTK_SORT_DESCENDING);
 
-	column = LST_STAT_EXPENSE+tmpkind-1;
+	column = LST_STAT_EXPENSE+(tmpkind-1)*2;
 
 	/* update bar chart */
-	DB( g_print(" set bar to %d\n\n", column) );
+	DB( g_print(" set bar to %d %s\n\n", column, _(CYA_KIND2[tmpkind])) );
 	if( tmpkind == 0 )
 		gtk_chart_set_dualdatas(GTK_CHART(data->RE_bar), model, LST_STAT_EXPENSE, LST_STAT_INCOME);
 	else
 		gtk_chart_set_datas(GTK_CHART(data->RE_bar), model, column);
-
+	gtk_chart_set_title(GTK_CHART(data->RE_bar), _(CYA_KIND2[tmpkind]));
+	
 	/* update pie chart */
-	DB( g_print(" set pie to %d\n\n", column) );
+	DB( g_print(" set pie to %d %s\n\n", column, _(CYA_KIND2[tmpkind])) );
 	if( tmpkind != 0 )
 		gtk_chart_set_datas(GTK_CHART(data->RE_pie), model, column);
 	else
 		gtk_chart_set_datas(GTK_CHART(data->RE_pie), NULL, 0);
-
+	gtk_chart_set_title(GTK_CHART(data->RE_pie), _(CYA_KIND2[tmpkind]));
+	
 }
 
 void statistic_update_total(GtkWidget *widget, gpointer user_data)
@@ -667,6 +698,8 @@ gdouble *tmp_income, *tmp_expense;
 			g_date_free(date2);
 			g_date_free(date1);
 			break;
+		default:
+			n_result = 0;
 	}
 
 	DB( g_print(" %s :: n_result=%d\n", CYA_STATSELECT[tmpfor], n_result) );
@@ -745,9 +778,10 @@ gdouble *tmp_income, *tmp_expense;
 		for(i=0, id=0; i<n_result; i++)
 		{
 		gchar *name, *fullcatname;
-		gchar buffer[32];
+		gchar buffer[64];
 		GDate *date;
 
+			name = NULL;
 			fullcatname = NULL;
 
 			/* filter empty results */
@@ -785,14 +819,15 @@ gdouble *tmp_income, *tmp_expense;
 				case 2: /* period */
 					date = g_date_new_julian(from);
 					g_date_add_months(date, i);
-					g_snprintf(buffer, 31, "%d-%02d", g_date_get_year(date), g_date_get_month(date));
+					//g_snprintf(buffer, 63, "%d-%02d", g_date_get_year(date), g_date_get_month(date));
+					g_snprintf(buffer, 63, "%d-%s", g_date_get_year(date), _(CYA_MONTHS[g_date_get_month(date)]));
 					g_date_free(date);
 					name = buffer;
 					break;
 				case 3: /* year */
 					date = g_date_new_julian(from);
 					g_date_add_years(date, i);
-					g_snprintf(buffer, 31, "%d", g_date_get_year(date));
+					g_snprintf(buffer, 63, "%d", g_date_get_year(date));
 					g_date_free(date);
 					name = buffer;
 					break;
@@ -1022,7 +1057,9 @@ void statistic_setup(struct statistic_data *data)
 
 	data->detail = PREFS->stat_showdetail;
 	data->legend = 1;
-	data->rate = 1;
+	data->rate = PREFS->stat_showrate^1;
+
+	statistic_toggle_rate(data->window, NULL);
 
 	filter_reset(data->filter);
 
@@ -1119,7 +1156,7 @@ struct statistic_data *data = user_data;
 GtkWidget *create_statistic_window(void)
 {
 struct statistic_data *data;
-GtkWidget *window, *mainvbox, *hbox, *vbox, *notebook, *treeview, *toolbar;
+GtkWidget *window, *mainvbox, *hbox, *vbox, *notebook, *treeview;
 GtkWidget *label, *widget, *table, *alignment, *vbar, *entry;
 gint row;
 GtkUIManager *ui;

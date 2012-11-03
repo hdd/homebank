@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __HOMEBANK_DEFPAYEE_H__
-#define __HOMEBANK_DEFPAYEE_H__
+#ifndef __LIST_ACCOUNT__H__
+#define __LIST_ACCOUNT__H__
 
-GtkWidget *create_defpayee_window (void);
+GtkWidget *create_list_account(void);
 
-#endif /* __HOMEBANK_DEFPAYEE_H__ */
+#endif /* __LIST_ACCOUNT__H__ */

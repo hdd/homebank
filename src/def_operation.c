@@ -126,6 +126,7 @@ gint page;
 		{
 			DB( g_printf(" -> cheque ") );
 
+
 			if(expense == TRUE)
 			{
 			Account *acc;
@@ -133,14 +134,18 @@ gint page;
 			guint cheque;
 			gchar *cheque_str;
 
-				DB( g_printf(" -> should fill cheque number from %d", active) );
+				DB( g_printf(" -> should fill cheque number for account %d ", active) );
 
-				acc = g_list_nth_data(GLOBALS->acc_list, active);
-				cheque = ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_cheque))==TRUE ? acc->cheque2 : acc->cheque1 );
-				cheque_str = g_strdup_printf("%d", cheque + 1);
-				gtk_entry_set_text(GTK_ENTRY(data->ST_info), cheque_str);
-				g_free(cheque_str);
+				if( active != -1 )
+				{
+					acc = g_list_nth_data(GLOBALS->acc_list, active);
+					cheque = ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_cheque))==TRUE ? acc->cheque2 : acc->cheque1 );
+					cheque_str = g_strdup_printf("%d", cheque + 1);
+					gtk_entry_set_text(GTK_ENTRY(data->ST_info), cheque_str);
+					g_free(cheque_str);
+				}
 			}
+
 		}
 	}
 
@@ -406,7 +411,7 @@ struct defoperation_data *data;
 
 
 	defoperation_set(widget, NULL);
-	defoperation_paymode(widget, NULL);
+	//defoperation_paymode(widget, NULL);
 	defoperation_update(widget, NULL);
 
 }
@@ -628,7 +633,7 @@ gboolean defoperation_delete(GtkWidget *widget, GdkEvent *event, gpointer user_d
 GtkWidget *create_defoperation_window (Operation *ope, gint type, gint accnum)
 {
 struct defoperation_data *data;
-GtkWidget *parentwindow, *window, *hbox, *mainbox, *vbox, *frame, *table, *label, *widget;
+GtkWidget *window, *hbox, *mainbox, *table, *label, *widget;
 GtkWidget *alignment;
 
 	data = g_malloc0(sizeof(struct defoperation_data));

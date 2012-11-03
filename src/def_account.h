@@ -22,14 +22,6 @@
 
 
 
-void defaccount_add			(GtkWidget *widget, gpointer user_data);
-void defaccount_remove		(GtkWidget *widget, gpointer user_data);
-void defaccount_update		(GtkWidget *widget, gpointer user_data);
-void defaccount_get			(GtkWidget *widget, gpointer user_data);
-void defaccount_set			(GtkWidget *widget, gpointer user_data);
-gboolean defaccount_cleanup(struct defaccount_data *data, gint result);
-void defaccount_setup(struct defaccount_data *data);
-void defaccount_dispose(struct defaccount_data *data);
 
 GtkWidget *create_editaccount_window (void);
 

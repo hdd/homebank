@@ -7,11 +7,11 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="standing_order.svg"
-   sodipodi:docbase="/home/max/dev/homebank/images/max_art"
-   inkscape:version="0.43"
+   sodipodi:docname="banktransfert.svg"
+   sodipodi:docbase="/home/max/dev/homebank/art/max_art"
+   inkscape:version="0.44"
    sodipodi:version="0.32"
    id="svg5816"
    height="48px"
@@ -1076,17 +1076,17 @@
     </linearGradient>
   </defs>
   <sodipodi:namedview
-     inkscape:window-y="23"
+     inkscape:window-y="25"
      inkscape:window-x="0"
-     inkscape:window-height="687"
+     inkscape:window-height="684"
      inkscape:window-width="1014"
      inkscape:document-units="px"
      inkscape:grid-bbox="false"
      showgrid="false"
      inkscape:current-layer="layer1"
-     inkscape:cy="21.140837"
-     inkscape:cx="19.587051"
-     inkscape:zoom="4"
+     inkscape:cy="24"
+     inkscape:cx="24"
+     inkscape:zoom="10.604167"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="0.16862745"
@@ -1110,26 +1110,14 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Mail</dc:title>
+        <dc:title>HomeBank Bank transfert</dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Jakub Steiner</dc:title>
+            <dc:title>Maxime Doyen</dc:title>
           </cc:Agent>
         </dc:creator>
-        <dc:contributor>
-          <cc:Agent>
-            <dc:title>Andreas Nilsson</dc:title>
-          </cc:Agent>
-        </dc:contributor>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/2.0/" />
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>mail</rdf:li>
-            <rdf:li>e-mail</rdf:li>
-            <rdf:li>MUA</rdf:li>
-          </rdf:Bag>
-        </dc:subject>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/2.0/">

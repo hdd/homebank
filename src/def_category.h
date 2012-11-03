@@ -19,7 +19,7 @@
 #ifndef __HOMEBANK_DEFCATEGORY_H__
 #define __HOMEBANK_DEFCATEGORY_H__
 
-gint defcategory_glist_exists(GList *src_list, gchar *name);
+gint defcategory_exists (GtkTreeModel *model, gchar *level, gchar *type, gchar *name, GtkTreeIter *return_iter);
 
 GtkWidget *create_defcategory_window (void);
 

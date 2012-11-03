@@ -19,6 +19,7 @@
 
 #include "homebank.h"
 
+#include "def_lists.h"
 #include "def_filter.h"
 
 /****************************************************************************/
@@ -232,7 +233,6 @@ end:
 void deffilter_clear(GtkWidget *widget, gpointer user_data)
 {
 struct deffilter_data *data;
-gint i;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(widget), GTK_TYPE_WINDOW)), "inst_data");
 
@@ -253,7 +253,7 @@ void deffilter_acc_select(GtkWidget *widget, gpointer user_data)
 struct deffilter_data *data;
 gint select = GPOINTER_TO_INT(user_data);
 GtkTreeModel *model;
-GtkTreeIter	iter, child;
+GtkTreeIter	iter;
 gboolean valid;
 gboolean toggle;
 
@@ -291,7 +291,7 @@ void deffilter_pay_select(GtkWidget *widget, gpointer user_data)
 struct deffilter_data *data;
 gint select = GPOINTER_TO_INT(user_data);
 GtkTreeModel *model;
-GtkTreeIter	iter, child;
+GtkTreeIter	iter;
 gboolean valid;
 gboolean toggle;
 
@@ -330,7 +330,7 @@ struct deffilter_data *data;
 gint select = GPOINTER_TO_INT(user_data);
 GtkTreeModel *model;
 GtkTreeIter	iter, child;
-gboolean valid, toggled;
+gboolean valid;
 gint n_child;
 gboolean toggle;
 
@@ -875,7 +875,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 */
 GtkWidget *deffilter_page_general (struct deffilter_data *data)
 {
-GtkWidget *container, *table, *table1, *hbox, *label, *widget, *image;
+GtkWidget *container, *table, *table1, *label, *widget, *image;
 GtkWidget *alignment;
 gint row, i;
 
@@ -1094,7 +1094,6 @@ gint create_deffilter_window (Filter *filter, gboolean show_account)
 {
 struct deffilter_data data;
 GtkWidget *window, *mainbox, *notebook, *label, *page;
-GtkWidget *alignment;
 
 	//data = g_malloc0(sizeof(struct deffilter_data));
 	//if(!data) return NULL;

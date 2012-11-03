@@ -19,5 +19,6 @@
 #ifndef __HOMEBANK_WIZIMPORT_H__
 #define __HOMEBANK_WIZIMPORT_H__
 
+GtkWidget *create_wizimport_window (void);
 
 #endif /* __HOMEBANK_WIZIMPORT_H__ */

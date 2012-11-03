@@ -459,7 +459,7 @@ gint mindate, maxdate;
 GtkTreeModel *model;
 GtkTreeIter  iter;
 GList *list;
-gint n_result, i, id, column;
+gint n_result, id, column;
 gdouble *tmp_spent, *tmp_budget;
 gint nbmonth = 1;
 
@@ -600,6 +600,25 @@ gint nbmonth = 1;
 		/* Re-attach model to view */
   		gtk_tree_view_set_model(GTK_TREE_VIEW(data->LV_report), model);
 		g_object_unref(model);
+
+		
+
+		repbudget_update_total(widget, NULL);
+
+		column = LST_BUDGET_SPENT+tmpview-1;
+
+		/* update bar chart */
+		DB( g_print(" set bar to %d\n\n", column) );
+
+		if( tmpview == 0 )
+			gtk_chart_set_dualdatas(GTK_CHART(data->RE_bar), model, LST_BUDGET_SPENT, LST_BUDGET_BUDGET);
+		else
+			gtk_chart_set_datas(GTK_CHART(data->RE_bar), model, column);
+
+		gtk_chart_set_title(GTK_CHART(data->RE_bar), _(CYA_BUDGETSELECT[tmpfor]));
+
+		
+		
 	}
 
 
@@ -631,17 +650,6 @@ gint nbmonth = 1;
 		g_free(info);
 	}
 */
-	repbudget_update_total(widget, NULL);
-
-	column = LST_BUDGET_SPENT+tmpview-1;
-
-	/* update bar chart */
-	DB( g_print(" set bar to %d\n\n", column) );
-
-	if( tmpview == 0 )
-		gtk_chart_set_dualdatas(GTK_CHART(data->RE_bar), model, LST_BUDGET_SPENT, LST_BUDGET_BUDGET);
-	else
-		gtk_chart_set_datas(GTK_CHART(data->RE_bar), model, column);
 
 
 }
@@ -779,7 +787,7 @@ struct repbudget_data *data = user_data;
 GtkWidget *repbudget_window_new(void)
 {
 struct repbudget_data *data;
-GtkWidget *window, *mainvbox, *hbox, *vbox, *notebook, *treeview, *toolbar;
+GtkWidget *window, *mainvbox, *hbox, *vbox, *notebook, *treeview;
 GtkWidget *label, *widget, *table, *alignment, *vbar, *entry;
 gint row;
 GtkUIManager *ui;

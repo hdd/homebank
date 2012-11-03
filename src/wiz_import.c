@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-
 #include "homebank.h"
 
 #include "wiz_import.h"
@@ -170,7 +169,7 @@ static gint csvtype[7] = {
 	io = g_io_channel_new_file(filename, "r", NULL);
 	if(io != NULL)
 	{
-	gchar *tmpstr, *txt;
+	gchar *tmpstr;
 	gint io_stat;
 	gboolean valid;
 	gint count = 0;
@@ -209,10 +208,10 @@ static gint csvtype[7] = {
 						newope->date		= hb_date_get_julian_parse(str_array[0]);
 						newope->paymode     = atoi(str_array[1]);
 						newope->info        = g_strdup(str_array[2]);
-						newope->payee       = defpayee_glist_exists(GLOBALS->pay_list, str_array[3]);
+						newope->payee       = da_payee_exists(GLOBALS->pay_list, str_array[3]);
 						newope->wording     = g_strdup(str_array[4]);
 						newope->amount      = g_ascii_strtod(str_array[5],NULL);
-						newope->category    = defcategory_glist_exists(GLOBALS->cat_list, str_array[6]);
+						newope->category    = da_category_exists(GLOBALS->cat_list, str_array[6]);
 						
 						
 						newope->account     = accnum;
@@ -223,7 +222,7 @@ static gint csvtype[7] = {
 						if( newope->amount > 0)
 							newope->flags |= OF_INCOME;
 
-						DB( g_print(" storing %s : %s : %s :%s : %s : %s : %s\n", 
+						DB( g_print(" storing %s : %s : %s :%s : %s : %s : %s : %s\n", 
 							str_array[0], str_array[1], str_array[2],
 							str_array[3], str_array[4], str_array[5],
 							str_array[6], str_array[7]
@@ -500,7 +499,14 @@ gboolean result;
 }
 
 /*
- *
+
+	step 1: explain what is the wizard for
+	step 2: choose a file and detect filetype
+	step 3: import file (populate acc+ope list)
+	        find duplicate
+
+
+
  */
 void wizimport_forward(GtkWidget *widget, gpointer user_data)
 {

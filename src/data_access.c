@@ -124,6 +124,26 @@ GList *tmplist = g_list_first(list);
 	g_list_free(list);
 }
 
+gint da_payee_exists(GList *src_list, gchar *name)
+{
+GList *list;
+gint pos = 0;
+
+	list = g_list_first(src_list);
+	while (list != NULL)
+	{
+	Payee *item = list->data;
+
+		if(item->name && g_ascii_strcasecmp(name, item->name) == 0)
+		{
+			return pos;
+		}
+		list = g_list_next(list);
+		pos++;
+	}
+	return 0;
+}
+
 
 /* = = = = = = = = = = = = = = = = = = = = */
 /* Category */
@@ -169,6 +189,25 @@ GList *tmplist = g_list_first(list);
 	g_list_free(list);
 }
 
+gint da_category_exists(GList *src_list, gchar *name)
+{
+GList *list;
+gint pos = 0;
+
+	list = g_list_first(src_list);
+	while (list != NULL)
+	{
+	Category *item = list->data;
+
+		if(item->name && g_ascii_strcasecmp(name, item->name) == 0)
+		{
+			return pos;
+		}
+		list = g_list_next(list);
+		pos++;
+	}
+	return 0;
+}
 
 /* = = = = = = = = = = = = = = = = = = = = */
 /* Archive */

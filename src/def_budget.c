@@ -20,6 +20,7 @@
 #include "homebank.h"
 
 #include "def_lists.h"
+#include "def_category.h"
 #include "def_budget.h"
 
 /****************************************************************************/
@@ -167,9 +168,9 @@ GIOChannel *io;
 		if(io != NULL)
 		{
 		GtkTreeModel *model;
-		GtkTreeIter iter, newiter;
+		GtkTreeIter iter;
 		gboolean error = FALSE;
-		gchar *tmpstr, *lastcatname;
+		gchar *tmpstr;
 		gint io_stat;
 
 			model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_cat));
@@ -658,8 +659,8 @@ GList *list;
 GtkWidget *create_defbudget_window (void)
 {
 struct defbudget_data data;
-GtkWidget *window, *hbox, *bbox, *mainbox, *treeview, *scrollwin, *vbox, *radio, *table, *label, *button, *separator;
-GtkWidget *spinner, *apply;
+GtkWidget *window, *bbox, *mainbox, *treeview, *scrollwin, *vbox, *radio, *table, *label;
+GtkWidget *spinner;
 GtkWidget *alignment;
 guint i, row;
 

@@ -74,6 +74,8 @@ struct defpref_data
 
 	GtkWidget	*CM_stat_byamount;
 	GtkWidget	*CM_stat_showdetail;
+	GtkWidget	*CM_stat_showrate;
+	
 	GtkWidget	*CM_budg_showdetail;	
 
 	GtkWidget	*CM_chartlegend;
@@ -303,7 +305,9 @@ GdkColor color;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_euro_thsep), PREFS->euro_thsep);
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_stat_byamount), PREFS->stat_byamount);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_stat_showrate), PREFS->stat_showrate);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_stat_showdetail), PREFS->stat_showdetail);
+
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_budg_showdetail), PREFS->budg_showdetail);
 
 	//gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_chartlegend), PREFS->chart_legend);
@@ -357,7 +361,9 @@ GdkColor color;
 	PREFS->euro_thsep = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_euro_thsep));
 
 	PREFS->stat_byamount   = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_stat_byamount));
+	PREFS->stat_showrate   = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_stat_showrate));
 	PREFS->stat_showdetail = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_stat_showdetail));
+
 	PREFS->budg_showdetail = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_budg_showdetail));
 
 	//PREFS->chart_legend = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_chartlegend));
@@ -427,6 +433,11 @@ gint row;
 
 	widget = gtk_check_button_new_with_mnemonic (_("Show by _amount"));
 	data->CM_stat_byamount = widget;
+	gtk_table_attach (GTK_TABLE (table), widget, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+
+	row++;
+	widget = gtk_check_button_new_with_mnemonic (_("Show _rate column"));
+	data->CM_stat_showrate = widget;
 	gtk_table_attach (GTK_TABLE (table), widget, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
 	row++;
@@ -579,7 +590,7 @@ gint row;
 GtkWidget *defpref_page_display (struct defpref_data *data)
 {
 GtkWidget *container;
-GtkWidget *table, *hbox, *label, *widget;
+GtkWidget *table, *label, *widget;
 gint row;
 
 	container = gtk_vbox_new(FALSE, 0);
@@ -733,7 +744,7 @@ gint row;
 GtkWidget *defpref_page_general (struct defpref_data *data)
 {
 GtkWidget *container;
-GtkWidget *table, *hbox, *label, *widget;
+GtkWidget *table, *label, *widget;
 gint row;
 
 	container = gtk_vbox_new(FALSE, 0);

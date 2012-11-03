@@ -7,14 +7,14 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="48.000000px"
    height="48.000000px"
    id="svg249"
    sodipodi:version="0.32"
-   inkscape:version="0.43"
-   sodipodi:docbase="/home/max/dev/homebank/images/max_art"
+   inkscape:version="0.44"
+   sodipodi:docbase="/home/max/dev/homebank/art/max_art"
    sodipodi:docname="archive.svg">
   <defs
      id="defs3">
@@ -1254,17 +1254,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="6.0833333"
-     inkscape:cx="30"
-     inkscape:cy="17"
+     inkscape:zoom="10.604167"
+     inkscape:cx="24"
+     inkscape:cy="24"
      inkscape:current-layer="layer5"
      showgrid="false"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      inkscape:window-width="1014"
-     inkscape:window-height="687"
+     inkscape:window-height="684"
      inkscape:window-x="0"
-     inkscape:window-y="23" />
+     inkscape:window-y="25" />
   <metadata
      id="metadata4">
     <rdf:RDF>
@@ -1273,20 +1273,12 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>HTML Document</dc:title>
+        <dc:title>HomeBank Archive</dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Jakub Steiner</dc:title>
+            <dc:title>Maxime Doyen</dc:title>
           </cc:Agent>
         </dc:creator>
-        <dc:source>http://jimmac.musichall.cz</dc:source>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>HTML</rdf:li>
-            <rdf:li>hypertext</rdf:li>
-            <rdf:li>web</rdf:li>
-          </rdf:Bag>
-        </dc:subject>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by/2.0/" />
       </cc:Work>

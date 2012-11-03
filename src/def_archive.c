@@ -586,7 +586,7 @@ GtkWidget *create_defarchive_window (void)
 {
 struct defarchive_data data;
 GtkWidget *window, *mainbox, *hbox, *vbox, *bbox, *table;
-GtkWidget *label, *widget, *treeview, *scrollwin, *notebook, *separator;
+GtkWidget *label, *widget, *treeview, *scrollwin, *notebook;
 GtkWidget *alignment;
 gint row;
 

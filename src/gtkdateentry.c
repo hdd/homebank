@@ -71,7 +71,7 @@ static gint gtk_dateentry_button_press (GtkWidget * widget, GdkEvent * event, gp
 
 static void gtk_dateentry_datetoentry(GtkDateEntry * dateentry);
 
-
+/*
 static void
 gtk_dateentry_set_property (GObject         *object,
                         guint            prop_id,
@@ -83,6 +83,7 @@ gtk_dateentry_get_property (GObject         *object,
                         guint            prop_id,
                         GValue          *value,
                         GParamSpec      *pspec);
+*/
 
 static GtkHBoxClass *parent_class = NULL;
 static guint dateentry_signals[LAST_SIGNAL] = {0,};

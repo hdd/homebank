@@ -1,4 +1,17 @@
 
+2006-11-27  Maxime Doyen  <mdoyen@free.fr>
+
+	* Made 3.2-1 release.
+	* bugfix: inherit a cheque operation was crashing
+	* bugfix: overdrawn balance column was shifted 1 line down
+	* bugfix: charts tooltip was a little buggy
+	* bugfix: charts were sometimes all black colored
+	* bugfix: statistics credit charts value displayed were wrong (bad column)
+	* change: new category and budget icons
+	* change: chart month displayed full name
+	* add   : title in chart tooltype
+	* add   : preferences statistic rate column display
+
 2006-09-26  Maxime Doyen  <mdoyen@free.fr>
 
 	* Made 3.2 (final) release.
@@ -9,6 +22,7 @@
 	* add   : icon to indicate automated archive in the archive list
 	* add   : csv operation import wizard with user control of duplicate filter
 	* add   : statistics report toggle rate toolbutton
+	* add   : splash window
 
 2006-07-12  Maxime Doyen  <mdoyen@free.fr>
 

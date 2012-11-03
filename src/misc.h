@@ -26,7 +26,7 @@ void hb_label_set_colvalue(GtkLabel *label, gdouble value, gboolean minor);
 void get_period_minmax(guint month, guint year, guint32 *mindate, guint32 *maxdate);
 void get_range_minmax(guint32 refdate, gint range, guint32 *mindate, guint32 *maxdate);
 
-gchar hb_string_strip_crlf(gchar *str);
+void hb_string_strip_crlf(gchar *str);
 
 gboolean hb_string_csv_valid(gchar *str, gint nbcolumns, gint *csvtype);
 

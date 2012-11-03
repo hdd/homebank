@@ -34,6 +34,10 @@ GtkWidget *make_year(GtkWidget *label);
 GtkWidget *make_cycle(GtkWidget *label, gchar **items);
 GtkWidget *make_radio(GtkWidget *label, gchar **items);
 
+void
+gimp_label_set_attributes (GtkLabel *label,
+                           ...);
+
 guint make_popaccount_populate(GtkComboBox *combobox, GList *srclist);
 GtkWidget *make_popaccount(GtkWidget *label);
 

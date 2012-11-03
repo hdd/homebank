@@ -55,7 +55,7 @@
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
 #define	PROGNAME		"HomeBank"
-#define PROGVERSION		"3.2"
+//#define PROGVERSION		"3.2"
 
 
 #define FILE_VERSION	"0.1"
@@ -165,6 +165,7 @@ struct Preferences
 
 	//report options
 	gboolean	stat_byamount;
+	gboolean	stat_showrate;
 	gboolean	stat_showdetail;
 	gboolean	budg_showdetail;
 
@@ -175,10 +176,13 @@ struct Preferences
 	//gint		last_page;
 };
 
-
-void homebank_pref_createformat(void);
-void homebank_dialog_info(gchar *title, gchar *message, ...) G_GNUC_PRINTF (2, 3);
 void homebank_message_dialog(GtkWindow *parent, GtkMessageType type, gchar *title, gchar *message_format, ...);
 gboolean homebank_csv_file_chooser(GtkWindow *parent, GtkFileChooserAction action, gchar **storage_ptr);
+gboolean homebank_alienfile_chooser(gchar *title);
+
+void homebank_init_prefs(void);
+void homebank_pref_createformat(void);
+gboolean homebank_pref_load(void);
+gboolean homebank_pref_save(void);
 
 #endif /* __HOMEBANK_H__ */

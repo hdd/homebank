@@ -50,7 +50,7 @@ gdouble fi;
 */
 gint hb_strfmon(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
-gint size;
+gint size = 0;
 
 	if(!value)
 		*outstr = 0;
@@ -66,7 +66,7 @@ gint size;
 */
 gint hb_strfmonall(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
-gint size;
+gint size = 0;
 
 	if(minor != TRUE)
 	{
@@ -205,7 +205,7 @@ lastmonth:
 ** String utility
 */ 
 
-gchar hb_string_strip_crlf(gchar *str)
+void hb_string_strip_crlf(gchar *str)
 {
 gchar *ptr;
 
@@ -215,6 +215,32 @@ gchar *ptr;
 	ptr = g_strrstr (str, "\r");
 	if(ptr != NULL)
 		*ptr = 0;
+}
+
+static gboolean hb_string_isdate(gchar *str)
+{
+guint32 julian;
+
+	julian = hb_date_get_julian_parse(str);
+
+	return(g_date_valid_julian(julian));
+}
+
+
+static gboolean hb_string_isdigit(gchar *str)
+{
+gboolean valid = TRUE;
+	while(*str && valid)
+		valid = g_ascii_isdigit(*str++);
+	return valid;
+}
+
+static gboolean hb_string_isprint(gchar *str)
+{
+gboolean valid = TRUE;
+	while(*str && valid)
+		valid = g_ascii_isprint(*str++);
+	return valid;
 }
 
 gboolean hb_string_csv_valid(gchar *str, gint nbcolumns, gint *csvtype)
@@ -274,31 +300,7 @@ extern int errno;
 	return valid;
 }
 
-gboolean hb_string_isdate(gchar *str)
-{
-guint32 julian;
 
-	julian = hb_date_get_julian_parse(str);
-
-	return(g_date_valid_julian(julian));
-}
-
-
-gboolean hb_string_isdigit(gchar *str)
-{
-gboolean valid = TRUE;
-	while(*str && valid)
-		valid = g_ascii_isdigit(*str++);
-	return valid;
-}
-
-gboolean hb_string_isprint(gchar *str)
-{
-gboolean valid = TRUE;
-	while(*str && valid)
-		valid = g_ascii_isprint(*str++);
-	return valid;
-}
 
 /*
 ** parse a string an retrieve an iso date (dd-mm-yy(yy) or dd/mm/yy(yy))

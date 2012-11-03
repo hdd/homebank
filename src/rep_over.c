@@ -366,7 +366,11 @@ Account *acc;
 			{
 			gdouble expense = ope->amount < 0 ? ope->amount : 0;
 			gdouble income  = ope->amount > 0 ? ope->amount : 0;
-			gboolean is_over = balance < acc->minimum ? TRUE : FALSE;
+			gboolean is_over;
+
+				balance += ope->amount;
+
+				is_over = balance < acc->minimum ? TRUE : FALSE;
 
 		    	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
 		    		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
@@ -383,7 +387,6 @@ Account *acc;
 			}
 
 			data->nbope++;
-			balance += ope->amount;
 		}
 		list = g_list_next(list);
 	}
@@ -397,7 +400,9 @@ Account *acc;
 	/* update bar chart */
 	//DB( g_print(" set bar to %d\n\n", LST_STAT_EXPENSE+tmpkind) );
 	gtk_chart_set_legend(GTK_CHART(data->RE_line), FALSE);
+	
 	gtk_chart_set_datas(GTK_CHART(data->RE_line), model, LST_OVER_BALANCE);
+	//gtk_chart_set_line_datas(GTK_CHART(data->RE_line), model, LST_OVER_BALANCE, LST_OVER_DATE);
 
 
 }
@@ -479,8 +484,8 @@ struct repover_data *data = user_data;
 GtkWidget *repover_window_new(void)
 {
 struct repover_data *data;
-GtkWidget *window, *mainvbox, *hbox, *vbox, *toolbar, *notebook, *treeview;
-GtkWidget *label, *widget, *table, *alignment, *vbar;
+GtkWidget *window, *mainvbox, *hbox, *vbox, *notebook, *treeview;
+GtkWidget *label, *widget, *table, *alignment;
 gint row;
 GtkUIManager *ui;
 GtkActionGroup *actions;

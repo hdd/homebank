@@ -18,6 +18,9 @@
 
 #include "homebank.h"
 
+#include "dsp_wallet.h"
+#include "def_pref.h"
+
 /****************************************************************************/
 /* Debug macros                                                             */
 /****************************************************************************/
@@ -284,6 +287,7 @@ void homebank_init_prefs(void)
 
 	PREFS->stat_byamount   = FALSE;
 	PREFS->stat_showdetail = FALSE;
+	PREFS->stat_showrate   = FALSE;
 	PREFS->budg_showdetail = FALSE;
 
 	PREFS->chart_legend = FALSE;
@@ -426,6 +430,9 @@ GError *error = NULL;
 				PREFS->stat_byamount   = g_key_file_get_boolean (keyfile, group, "StatByAmount", NULL);
 			if(g_key_file_has_key(keyfile, group, "StatDetail", NULL))
 				PREFS->stat_showdetail = g_key_file_get_boolean (keyfile, group, "StatDetail", NULL);
+			if(g_key_file_has_key(keyfile, group, "StatRate", NULL))
+				PREFS->stat_showrate = g_key_file_get_boolean (keyfile, group, "StatRate", NULL);
+
 			if(g_key_file_has_key(keyfile, group, "BudgDetail", NULL))
 				PREFS->budg_showdetail = g_key_file_get_boolean (keyfile, group, "BudgDetail", NULL);
 
@@ -486,41 +493,42 @@ guint length;
 		g_key_file_set_integer (keyfile, group, "BarStyle", PREFS->toolbar_style);
 		//g_key_file_set_integer (keyfile, group, "BarImageSize", PREFS->image_size);
 
-		g_key_file_set_integer (keyfile, group, "ColorExp", PREFS->color_exp);
-		g_key_file_set_integer (keyfile, group, "ColorInc", PREFS->color_inc);
+		g_key_file_set_integer (keyfile, group, "ColorExp" , PREFS->color_exp);
+		g_key_file_set_integer (keyfile, group, "ColorInc" , PREFS->color_inc);
 		g_key_file_set_integer (keyfile, group, "ColorWarn", PREFS->color_warn);
 
 		#if DOWIZARD == 1
 		g_key_file_set_boolean (keyfile, group, "RunWizard", PREFS->runwizard);
 		#endif
 
-		g_key_file_set_string  (keyfile, group, "WalletPath", PREFS->path_wallet);
+		g_key_file_set_string  (keyfile, group, "WalletPath"   , PREFS->path_wallet);
 		g_key_file_set_string  (keyfile, group, "NavigatorPath", PREFS->path_navigator);
 
 		group = "Format";
 		g_key_file_set_integer (keyfile, group, "NumNbDec", PREFS->num_nbdecimal);
-		g_key_file_set_boolean (keyfile, group, "NumSep", PREFS->num_separator);
-		g_key_file_set_boolean (keyfile, group, "UKUnits", PREFS->british_unit);
+		g_key_file_set_boolean (keyfile, group, "NumSep"  , PREFS->num_separator);
+		g_key_file_set_boolean (keyfile, group, "UKUnits" , PREFS->british_unit);
 
 		group = "Filter";
 		g_key_file_set_integer (keyfile, group, "DefRange", PREFS->filter_range);
 
 	//euro options
 		group = "Euro";
-		g_key_file_set_boolean (keyfile, group, "Active", PREFS->euro_active);
+		g_key_file_set_boolean (keyfile, group, "Active" , PREFS->euro_active);
 		g_key_file_set_integer (keyfile, group, "Country", PREFS->euro_country);
 		gchar ratestr[64];
 		g_ascii_dtostr(ratestr, 63, PREFS->euro_value);
-		g_key_file_set_string (keyfile, group, "ChangeRate", ratestr);
-		g_key_file_set_integer (keyfile, group, "NBDec", PREFS->euro_nbdec);
-		g_key_file_set_boolean (keyfile, group, "Sep", PREFS->euro_thsep);
-		g_key_file_set_string  (keyfile, group, "Symbol", PREFS->euro_symbol);
+		g_key_file_set_string  (keyfile, group, "ChangeRate", ratestr);
+		g_key_file_set_integer (keyfile, group, "NBDec"     , PREFS->euro_nbdec);
+		g_key_file_set_boolean (keyfile, group, "Sep"       , PREFS->euro_thsep);
+		g_key_file_set_string  (keyfile, group, "Symbol"    , PREFS->euro_symbol);
 
 	//report options
 		group = "Report";
 		g_key_file_set_boolean (keyfile, group, "StatByAmount", PREFS->stat_byamount);
-		g_key_file_set_boolean (keyfile, group, "StatDetail", PREFS->stat_showdetail);
-		g_key_file_set_boolean (keyfile, group, "BudgDetail", PREFS->budg_showdetail);
+		g_key_file_set_boolean (keyfile, group, "StatDetail"  , PREFS->stat_showdetail);
+		g_key_file_set_boolean (keyfile, group, "StatRate"    , PREFS->stat_showrate);
+		g_key_file_set_boolean (keyfile, group, "BudgDetail"  , PREFS->budg_showdetail);
 
 		//group = "Chart";
 		//g_key_file_set_boolean (keyfile, group, "Legend", PREFS->chart_legend);
@@ -546,7 +554,7 @@ guint length;
 
 
 /* = = = = = = = = = = = = = = = = = = = = */
-/* lastopenedfiles
+/* lastopenedfiles */
 
 /*
 ** load lastopenedfiles from homedir/.homebank
@@ -556,7 +564,6 @@ gboolean homebank_lastopenedfiles_load(void)
 GKeyFile *keyfile;
 gboolean retval = FALSE;
 gchar *group, *filename;
-GError *error = NULL;
 
 	DB( g_print("\n(homebank) lastopenedfiles load\n") );
 

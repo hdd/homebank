@@ -71,27 +71,6 @@ void defcategory_modify(GtkWidget *widget, gpointer user_data);
 void defcategory_remove(GtkWidget *widget, gpointer user_data);
 void defcategory_selection(GtkTreeSelection *treeselection, gpointer user_data);
 
-
-gint defcategory_glist_exists(GList *src_list, gchar *name)
-{
-GList *list;
-gint pos = 0;
-
-	list = g_list_first(src_list);
-	while (list != NULL)
-	{
-	Category *entry = list->data;
-
-		if(entry->name && g_ascii_strcasecmp(name, entry->name) == 0)
-		{
-			return pos;
-		}
-		list = g_list_next(list);
-		pos++;
-	}
-	return 0;
-}
-
 static void defcategory_load_csv( GtkWidget *widget, gpointer user_data)
 {
 struct defcategory_data *data;
@@ -113,7 +92,7 @@ GIOChannel *io;
 		GtkTreeModel *model;
 		GtkTreeIter iter, newiter;
 		gboolean error = FALSE;
-		gchar *tmpstr, *lastcatname;
+		gchar *tmpstr, *lastcatname = "";
 		gint io_stat;
 
 			model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_cat));
@@ -150,7 +129,7 @@ GIOChannel *io;
 						if( pos == 0 )
 						{
 						Category *item;
-						GtkTreeIter *parent;
+						GtkTreeIter *parent = NULL;
 
 							DB( g_print(" pos=%d, should insert %s\n", pos, str_array[2]) );
 
@@ -442,9 +421,9 @@ struct defcategory_data *data;
 gint count;
 gboolean selected, sensitive;
 GtkTreeSelection *selection;
-  GtkTreeModel     *model;
-  GtkTreeIter       iter;
-	GtkTreePath *path;
+GtkTreeModel     *model;
+GtkTreeIter       iter;
+GtkTreePath *path;
 gchar *category;
 
 	DB( g_print("\n(defcategory) cursor changed\n") );
@@ -541,7 +520,7 @@ void defcategory_add(GtkWidget *widget, gpointer user_data)
 struct defcategory_data *data;
 
 GtkTreeModel *model;
-GtkTreeIter  iter, newiter, *parent;
+GtkTreeIter  iter, newiter, *parent = NULL;
 GtkTreePath *path;
 const gchar *name;
 gboolean subcat = (gboolean)user_data;
@@ -650,7 +629,7 @@ gboolean type;
 void defcategory_modify(GtkWidget *widget, gpointer user_data)
 {
 struct defcategory_data *data;
-GtkWidget *window, *mainvbox, *w_name, *w_type;
+GtkWidget *window, *mainvbox, *w_name, *w_type = NULL;
 GtkTreeSelection *selection;
 GtkTreeModel		 *model;
 GtkTreeIter			 iter, child_iter;

@@ -427,7 +427,6 @@ Operation *ope;
 	gtk_tree_model_get(model, iter, LST_DSPOPE_DATAS, &ope, -1);
 
 	gchar   buf[128];
-	gboolean minor;
 	gchar *markuptxt;
 	guint32 color;
 

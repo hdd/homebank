@@ -20,7 +20,29 @@
 #include "homebank.h"
 
 #include "dsp_wallet.h"
+#include "dsp_account.h"
+#include "xml.h"
+
+#include "def_wallet.h"
+#include "def_account.h"
+#include "def_payee.h"
+#include "def_category.h"
+#include "def_archive.h"
+#include "def_budget.h"
+#include "def_pref.h"
 #include "def_operation.h"
+
+#include "rep_stats.h"
+#include "rep_budget.h"
+#include "rep_over.h"
+#include "rep_car.h"
+
+#include "wiz_import.h"
+
+#include "amiga.h"
+#include "list_account.h"
+
+
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -80,10 +102,12 @@ static void wallet_about(void);
 
 void wallet_open(GtkWidget *widget, gpointer user_data);
 void wallet_save(GtkWidget *widget, gpointer user_data);
-void wallet_populate_listview(GtkWidget *view);
+void wallet_populate_listview(GtkWidget *widget, gpointer user_data);
 void wallet_action(GtkWidget *widget, gpointer user_data);
 void wallet_toggle_minor(GtkWidget *widget, gpointer user_data);
 void wallet_clear(GtkWidget *widget, gpointer user_data);
+
+gboolean wallet_check_change(GtkWidget *widget, gpointer user_data);
 
 void wallet_update(GtkWidget *widget, gpointer user_data);
 void wallet_check_automated(GtkWidget *widget, gpointer user_data);
@@ -150,7 +174,7 @@ static GtkActionEntry entries[] = {
   { "Properties" , GTK_STOCK_PROPERTIES , N_("_Properties..."), NULL,    NULL,    G_CALLBACK (wallet_action_defwallet) },
 
 #if DOIMPORTWIZARD == 1
-  { "Import", NULL,    N_("Import..."), NULL,    N_("tip"),    G_CALLBACK (wallet_action_import) },
+  { "Import"     , NULL     , N_("Import...")     , NULL,    NULL,    G_CALLBACK (wallet_action_import) },
 #endif
 
   { "Close"      , GTK_STOCK_CLOSE      , N_("_Close")        , NULL,    NULL,    G_CALLBACK (wallet_action_close) },
@@ -222,9 +246,9 @@ static const gchar *ui_info =
 
 "    <menu action='ReportMenu'>"
 "      <menuitem action='Statistics'/>"
-"      <menuitem action='BudgetR'/>"
 "      <menuitem action='Overdrawn'/>"
 "      <separator/>"
+"      <menuitem action='BudgetR'/>"
 "      <menuitem action='Carcost'/>"
 "    </menu>"
 
@@ -250,6 +274,9 @@ static const gchar *ui_info =
 "    <toolitem action='Account'/>"
 "    <toolitem action='Payee'/>"
 "    <toolitem action='Category'/>"
+
+"      <separator/>"
+
 "    <toolitem action='Archive'/>"
 "    <toolitem action='Budget'/>"
 
@@ -261,8 +288,11 @@ static const gchar *ui_info =
 "      <separator/>"
 
 "    <toolitem action='Statistics'/>"
-"    <toolitem action='BudgetR'/>"
 "    <toolitem action='Overdrawn'/>"
+
+"      <separator/>"
+
+"    <toolitem action='BudgetR'/>"
 "    <toolitem action='Carcost'/>"
 
 "  </toolbar>"
@@ -361,12 +391,10 @@ static void wallet_action_defwallet(void)
 
 static void wallet_action_defaccount(void)
 {
-struct wallet_data *data = g_object_get_data(G_OBJECT(GLOBALS->mainwindow), "inst_data");
-
 	create_editaccount_window();
 
 	//our global acc_listchanged, so update the treeview
-	wallet_populate_listview(data->LV_acc);
+	wallet_populate_listview(GLOBALS->mainwindow, NULL);
 
 	wallet_compute_balances(GLOBALS->mainwindow, NULL);
 	wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE+UF_BALANCE);
@@ -504,7 +532,6 @@ gchar *path;
 static void wallet_about(void)
 {
 GdkPixbuf *logo;
-GtkWindow *about;
 
 	logo = gdk_pixbuf_new_from_file_at_size ( PIXMAPS_DIR "/homebank.svg", 128, 128, NULL);
 
@@ -522,10 +549,12 @@ GtkWindow *about;
     NULL
   };
 
+/*
   const gchar *documenters[] = {
     "Maxime DOYEN",
     NULL
   };
+*/
 
   const gchar *copyright = "Copyright © 1995-2006 Maxime DOYEN";
   const gchar *comments = N_("Free easy personal accounting for all !");
@@ -546,7 +575,7 @@ GtkWindow *about;
 		"name"		, PROGNAME,
 	//	"translator-credits"	, "trans",
 
-		"version"	, PROGVERSION,
+		"version"	, VERSION,
 		"website"	, website,
         NULL);
 
@@ -560,15 +589,19 @@ GtkWindow *about;
 /*
 **
 */
-void wallet_populate_listview(GtkWidget *view)
+void wallet_populate_listview(GtkWidget *widget, gpointer user_data)
 {
-GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+struct wallet_data *data;
+GtkTreeModel *model;
 GtkTreeIter  iter;
 GList *list;
 Account *acc;
 
 	DB( g_printf("(wallet) populate\n") );
 
+	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_acc));
 
 	gtk_list_store_clear (GTK_LIST_STORE(model));
 
@@ -993,7 +1026,7 @@ struct wallet_data *data;
 
 			import_from_amiga(GLOBALS->filename);
 
-			wallet_populate_listview(data->LV_acc);
+			wallet_populate_listview(GLOBALS->mainwindow, NULL);
 			wallet_check_automated(GLOBALS->mainwindow, GINT_TO_POINTER(FALSE));
 			wallet_compute_balances(GLOBALS->mainwindow, NULL);
 			wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE+UF_BALANCE);
@@ -1109,7 +1142,7 @@ struct wallet_data *data;
 
 			homebank_load_xml(GLOBALS->filename);
 
-			wallet_populate_listview(data->LV_acc);
+			wallet_populate_listview(GLOBALS->mainwindow, NULL);
 			wallet_check_automated(GLOBALS->mainwindow, GINT_TO_POINTER(FALSE));
 			wallet_compute_balances(GLOBALS->mainwindow, NULL);
 			wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE+UF_BALANCE);
@@ -1359,7 +1392,7 @@ gint flags;
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/EditMenu/Budget"), sensitive);
 
 	// empty archive list: disable Automated check
-		sensitive = g_list_length(GLOBALS->arc_list) > 1 ? TRUE : FALSE;
+		sensitive = g_list_length(GLOBALS->arc_list) > 0 ? TRUE : FALSE;
 
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/OperationMenu/Automated"), sensitive);
 
@@ -1372,10 +1405,7 @@ gint flags;
 	/* update toolbar & list */
 	if(flags & UF_VISUAL)
 	{
-	guint i;
-	
 		DB( printf(" +  8: visual\n") );
-
 	
 		if(PREFS->toolbar_style == 0)
 			gtk_toolbar_unset_style(GTK_TOOLBAR(data->TB_bar));
@@ -1514,7 +1544,7 @@ GtkWidget *vbox,*hbox;
 GtkWidget *label, *entry;
 GtkWidget *sw;
 GtkWidget *treeview;
-GtkWidget *toolbar1, *statusbar;
+GtkWidget *statusbar;
 GtkWidget *window, *check_button, *vbar;
 GtkUIManager *ui;
 GtkActionGroup *actions;
@@ -1702,7 +1732,7 @@ GError *error = NULL;
 
 #endif
 
-	wallet_populate_listview(data->LV_acc);
+	wallet_populate_listview(GLOBALS->mainwindow, NULL);
 	//wallet_check_automated(GLOBALS->mainwindow, NULL);
 	wallet_compute_balances(GLOBALS->mainwindow, NULL);
 	wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE+UF_BALANCE+UF_VISUAL);

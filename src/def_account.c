@@ -20,6 +20,7 @@
 #include "homebank.h"
 
 #include "def_lists.h"
+#include "def_account.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -81,7 +82,15 @@ struct defaccount_data
 
 };
 
-#include "def_account.h"
+void defaccount_add			(GtkWidget *widget, gpointer user_data);
+void defaccount_remove		(GtkWidget *widget, gpointer user_data);
+void defaccount_update		(GtkWidget *widget, gpointer user_data);
+void defaccount_get			(GtkWidget *widget, gpointer user_data);
+void defaccount_set			(GtkWidget *widget, gpointer user_data);
+gboolean defaccount_cleanup(struct defaccount_data *data, gint result);
+void defaccount_setup(struct defaccount_data *data);
+void defaccount_dispose(struct defaccount_data *data);
+
 
 
 
@@ -538,8 +547,8 @@ GtkWidget *create_editaccount_window (void)
 {
 struct defaccount_data data;
 GtkWidget *window, *mainbox;
-GtkWidget *hbox, *vbox, *frame, *table, *label, *entry1, *entry2, *entry3;
-GtkWidget  *spinner, *cheque1, *cheque2, *scrollwin, *separator;
+GtkWidget *vbox, *table, *label, *entry1, *entry2, *entry3;
+GtkWidget *spinner, *cheque1, *cheque2, *scrollwin;
 GtkWidget *bbox, *check_button;
 GtkWidget *alignment;
 gint row;

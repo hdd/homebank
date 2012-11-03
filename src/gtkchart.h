@@ -76,6 +76,7 @@ struct _GtkChart
 
 	GtkTreeModel	*model;
 	GtkWidget		*tooltipwin;
+	GtkWidget		*tttitle;
 	GtkWidget		*ttlabel;
 
 	GdkColor		normal_colors[NUM_COLORMAP_MAX];
@@ -83,20 +84,20 @@ struct _GtkChart
 
 
 
-	guint			entries;
-	gint			*id;
-	gchar			**titles;
-	gdouble			*datas1;
-	gdouble			*datas2;
-	gboolean		dual;
-	/*gint			test;*/
+	guint		entries;
+	gchar		*title;
+	gint		*id;
+	gchar		**titles;
+	gdouble		*datas1;
+	gdouble		*datas2;
+	gboolean	dual;
+	/*gint		test;*/
 
-	gint ox, oy;
-	gint lastx, lasty, lastactive;
-	gint lastpress_x, lastpress_y;
-	gint active;
-	guint timer_tag;
-	guint32	lasttime;
+	gint		ox, oy;
+	gint		lastx, lasty, lastactive;
+	gint		lastpress_x, lastpress_y;
+	gint		active;
+	guint		timer_tag;
 
 	/* pie specifics */
 	gdouble		total;
@@ -134,6 +135,8 @@ void gtk_chart_set_type(GtkChart *chart, gint type);
 
 void gtk_chart_set_datas(GtkChart *chart, GtkTreeModel *model, guint column);
 void gtk_chart_set_dualdatas(GtkChart *chart, GtkTreeModel *model, guint column1, guint column2);
+
+void gtk_chart_set_title(GtkChart * chart, gchar *title);
 
 void gtk_chart_set_legend(GtkChart * chart, gboolean visible);
 void gtk_chart_set_minor(GtkChart * chart, gboolean minor);

@@ -38,7 +38,6 @@
 #define DB(x);
 #endif
 
-#define PROPERTY_DATE		5
 #define PROP_SHOW_MINOR		6
 #define PROP_SHOW_LEGEND	7
 
@@ -76,7 +75,8 @@ void piechart_calculation(GtkChart *chart);
 static void piechart_draw_slices(GtkWidget *widget, GdkGC *gc, gpointer user_data);
 static gint piechart_get_active(GtkWidget *widget, gint x, gint y, gpointer user_data);
 
-void chart_tooltip_show(GtkChart *chart, gint xpos, gint ypos);
+static void chart_tooltip_hide(GtkChart *chart);
+static void chart_tooltip_show(GtkChart *chart, gint xpos, gint ypos);
 void chart_cleanup_colors(GtkWidget *widget);
 
 gboolean chart_setup_colors(GtkWidget *widget, GtkChart *chart );
@@ -163,7 +163,7 @@ gtk_chart_class_init (GtkChartClass * class)
 
   parent_class = g_type_class_peek_parent (class);
 
-	DB( g_print(" (chart) class_init\n") );
+	DB( g_print("\n(gtkchart) class_init\n") );
 
 	object_class->destroy = gtk_chart_destroy;
 
@@ -174,10 +174,11 @@ gtk_chart_init (GtkChart * chart)
 {
 GtkWidget *widget, *vbox, *frame, *scrollwin, *treeview;
 
-	DB( g_print(" (chart) init\n") );
+	DB( g_print("\n(gtkchart) init\n") );
 
  	chart->entries = 0;
  	chart->model = NULL;
+ 	chart->title = NULL;
  	chart->id = NULL;
  	chart->titles = NULL;
  	chart->datas1 = NULL;
@@ -186,8 +187,10 @@ GtkWidget *widget, *vbox, *frame, *scrollwin, *treeview;
  	
 	chart->tooltipwin = NULL;
 	chart->active = -1;
+	chart->lastactive = -1;
 
  	chart->minor_rate = 1.0;
+	chart->timer_tag = 0;
 
 	widget=GTK_WIDGET(chart);
 
@@ -223,6 +226,8 @@ GtkWidget *widget, *vbox, *frame, *scrollwin, *treeview;
 	gtk_container_add(GTK_CONTAINER(scrollwin), treeview);
 	gtk_box_pack_start (GTK_BOX (widget), scrollwin, FALSE, FALSE, 0);
 
+	chart_setup_colors(widget, chart);
+	
 	gtk_widget_set_events(GTK_WIDGET(chart->drawarea),
 		GDK_EXPOSURE_MASK |
 		GDK_POINTER_MOTION_MASK |
@@ -234,7 +239,7 @@ GtkWidget *widget, *vbox, *frame, *scrollwin, *treeview;
 		);
 
 	g_signal_connect( G_OBJECT(chart->drawarea), "size-allocate", G_CALLBACK(chart_sizeallocate), chart ) ;
-	g_signal_connect( G_OBJECT(chart->drawarea), "map-event", G_CALLBACK(chart_map), chart ) ;
+	//g_signal_connect( G_OBJECT(chart->drawarea), "map-event", G_CALLBACK(chart_map), chart ) ;
 	g_signal_connect( G_OBJECT(chart->drawarea), "expose-event", G_CALLBACK(chart_expose), chart ) ;
 
 	g_signal_connect( G_OBJECT(chart->drawarea), "motion-notify-event", G_CALLBACK(chart_motion), chart );
@@ -254,7 +259,7 @@ gtk_chart_new (gint type)
 {
 GtkChart *chart;
 
-	DB( g_print(" (chart) new\n") );
+	DB( g_print("\n(gtkchart) new\n") );
 
 	chart = g_object_new (GTK_TYPE_CHART, NULL);
 	chart->type = type;
@@ -267,13 +272,15 @@ gtk_chart_destroy (GtkObject * object)
 {
 GtkChart *chart;
 
-	DB( g_print(" (chart) destroy\n") );
+	DB( g_print("\n(gtkchart) destroy\n") );
 
   g_return_if_fail (GTK_IS_CHART (object));
 
 	chart = GTK_CHART (object);
 
 	chart_clear(chart, FALSE);
+
+	chart_tooltip_hide(chart);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -297,7 +304,6 @@ void gtk_chart_set_datas(GtkChart *chart, GtkTreeModel *model, guint column)
 	else
 	{	
 		chart_clear(chart, TRUE);
-		gtk_widget_queue_draw( chart->drawarea );
 	}
 }
 
@@ -316,10 +322,21 @@ void gtk_chart_set_dualdatas(GtkChart *chart, GtkTreeModel *model, guint column1
 	else
 	{	
 		chart_clear(chart, TRUE);
-		gtk_widget_queue_draw( chart->drawarea );
 	}
 }
 
+/*
+** change the tooltip title
+*/
+void gtk_chart_set_title(GtkChart * chart, gchar *title)
+{
+	g_return_if_fail (GTK_IS_CHART (chart));
+
+	chart->title = g_strdup(title);
+	
+	DB( g_print("\n(gtkchart) set title = %s\n", chart->title) );
+
+}
 
 /*
 ** change the type dynamically
@@ -329,7 +346,7 @@ void gtk_chart_set_type(GtkChart * chart, gint type)
 	g_return_if_fail (GTK_IS_CHART (chart));
 	//g_return_if_fail (type < CHART_TYPE_MAX);
 
-	DB( g_print(" (chart) set type %d\n", type) );
+	DB( g_print("\n(gtkchart) set type %d\n", type) );
 
 	chart->type = type;
 	chart->dual = FALSE;
@@ -461,9 +478,15 @@ void chart_clear(GtkChart *chart, gboolean store)
 {
 guint i;
 
-	DB( g_print("** chart clear\n") );
+	DB( g_print("\n(gtkchart) clear\n") );
 
 	//free & clear any previous allocated datas
+	if(chart->title != NULL)
+	{
+		g_free(chart->title);
+		chart->title = NULL;
+	}
+
 	if(chart->titles != NULL)
 	{
 		for(i=0;i<chart->entries;i++)
@@ -519,7 +542,7 @@ GtkTreeIter iter, l_iter;
 gint color;
 GdkColor colour;
 
-	DB( g_print("** setup with model\n") );
+	DB( g_print("\n(gtkchart) setup with model\n") );
 
 	chart_clear(chart, TRUE);
 
@@ -623,7 +646,8 @@ GdkColor colour;
 	}
 
 	//g_print("total is %.2f\n", total);
-
+	//ensure the widget is mapped
+	//gtk_widget_map(chart);
 
 }
 
@@ -633,7 +657,7 @@ GdkColor colour;
 void chart_recompute(GtkChart *chart)
 {
 
-	DB( g_print("** chart recompute\n") );
+	DB( g_print("\n(gtkchart) recompute\n") );
 
 	switch(chart->type)
 	{
@@ -665,7 +689,7 @@ void barchart_compute_range(GtkChart *chart)
 {
 gint div;
 
-	DB( g_print("** bar compute range\n") );
+	DB( g_print("\n(gtkchart) bar compute range\n") );
 
 	chart->range = chart->max - chart->min;
 
@@ -708,7 +732,7 @@ GtkWidget *drawarea = chart->drawarea;
 	gint w, h;
 	gchar *valstr;
 
-	DB( g_print("** bar calculation\n") );
+	DB( g_print("\n(gtkchart) bar calculation\n") );
 
 	/* compute width inc pixel of x scale text */
 	valstr = chart_print_int(chart, (gint)MAX(-chart->min, chart->max) * -1);
@@ -725,8 +749,12 @@ GtkWidget *drawarea = chart->drawarea;
 	chart->graph_height = drawarea->allocation.height - chart->scale_height - 4;
 
 	//if expand : we compute available space
-	//barw = MAX(32, (widget->allocation.width-scalew-8)/entries);
+	//chart->barw = MAX(32, (chart->graph_width)/chart->entries);
 	chart->barw = 32;
+
+	if( chart->dual == TRUE )
+		chart->barw *= 2;
+
 
 	chart->visible = chart->graph_width / chart->barw;
 	chart->visible = MIN(chart->visible, chart->entries);
@@ -763,7 +791,7 @@ gint i, y;
 gdouble curxval;
 gchar *valstr;
 
-	DB( g_print("** bar draw scale\n") );
+	DB( g_print("\n(gtkchart) bar draw scale\n") );
 
 	/* draw minimum ? */
 	//DB( g_print(" %f > %f\n", chart->minimum , chart->min) );
@@ -846,7 +874,7 @@ gint x,y, scale;
 gint first;
 gint i;
 
-	DB( g_print("** bar draw bars\n") );
+	DB( g_print("\n(gtkchart) bar draw bars\n") );
 
 	x = chart->ox + 1;
 	y = chart->oy;
@@ -904,7 +932,6 @@ gint i;
 		
 		}
 
-nextbar:
 		x += blkw;
 
 		//debug
@@ -967,7 +994,7 @@ static void barchart_first_changed( GtkAdjustment *adj, gpointer user_data)
 GtkChart *chart = GTK_CHART(user_data);
 gint first;
 
-	DB( g_print("\n** bar first changed\n") );
+	DB( g_print("\n(gtkchart) bar first changed\n") );
 
 	first = gtk_adjustment_get_value(GTK_ADJUSTMENT(adj));
 
@@ -994,7 +1021,7 @@ gint first;
 
 	g_return_if_fail (GTK_IS_ADJUSTMENT (adj));
 
-	DB( g_print("\n** sb_set_values\n") );
+	DB( g_print("\n(gtkchart) sb_set_values\n") );
 
 	//if(visible < entries)
 	//{
@@ -1034,7 +1061,7 @@ gint first;
 gint i;
 gint color;
 
-	DB( g_print("** line draw lines\n") );
+	DB( g_print("\n(gtkchart) line draw lines\n") );
 
 	x = chart->ox + 1;
 	y = chart->oy;
@@ -1168,7 +1195,7 @@ gdouble sum;
 			a2 = ((sum/chart->total) * -360) + 90;
 
 			//DB( g_print("%d :: %.2f\n", i, (ABS(chart->datas1[i])/chart->total)) );
-			DB( g_print("draw %2d: val:%9.2f max:%9.2f sum=%9.2f angle:%4d a1:%4d a2:%4d\n", i, chart->datas1[i], chart->total, sum, a2-a1, a1, a2) );
+			//DB( g_print("draw %2d: val:%9.2f max:%9.2f sum=%9.2f angle:%4d a1:%4d a2:%4d\n", i, chart->datas1[i], chart->total, sum, a2-a1, a1, a2) );
 
 			if(i == chart->active)
 				gdk_gc_set_foreground(gc, &chart->over_colors[color]);
@@ -1234,7 +1261,7 @@ GtkChart *chart = GTK_CHART(user_data);
 	if(chart->entries == 0)
 		return;
 
-	DB( g_print("** sizeallocate\n") );
+	DB( g_print("\n(gtkchart) sizeallocate\n") );
 	DB( g_print("w=%d h=%d\n", widget->allocation.width, widget->allocation.height) );
 
 	//here we will compute any widget size dependend values
@@ -1262,10 +1289,10 @@ static gboolean chart_map( GtkWidget *widget, GdkEvent *event, gpointer user_dat
 {
 GtkChart *chart = GTK_CHART(user_data);
 
-	DB( g_print("** map\n") );
+	DB( g_print("\n(gtkchart) map\n") );
 
 	/* our colors */
-	chart_setup_colors(widget, chart);
+	//chart_setup_colors(widget, chart);
 
 	DB( g_print("** end map\n") );
 
@@ -1284,7 +1311,7 @@ GdkGC	*gc1;
 	if(chart->entries == 0)
 		return FALSE;
 
-	//DB( g_print("** expose\n") );
+	DB( g_print("\n(gtkchart) expose %d\n", chart->type) );
 
 	gdk_draw_rectangle (widget->window,
 		      widget->style->white_gc,
@@ -1324,7 +1351,7 @@ GdkModifierType state;
 	if(chart->entries == 0)
 		return FALSE;
 
-	//DB( g_print("**motion\n") );
+	//DB( g_print("\n(gtkchart) motion\n") );
 
 	//todo see this
 	if(event->is_hint)
@@ -1340,7 +1367,7 @@ GdkModifierType state;
 		state = event->state;
 	}
 
-	//DB( g_print(" x=%d, y=%d, time=%d (%d)\n", x, y, event->time, event->time - chart->lasttime) );
+	//DB( g_print(" x=%d, y=%d, time=%d\n", x, y, event->time) );
 
 	switch(chart->type)
 	{
@@ -1356,32 +1383,31 @@ GdkModifierType state;
 	}
 
 	// rollover redraw ?
+	DB( g_print(" active: last=%d, curr=%d\n", chart->lastactive, chart->active) );
+
 	if(chart->lastactive != chart->active)
 	{
-		//DB( g_print("rollover redraw :: active=%d\n", chart->active) );
+		DB( g_print(" motion rollover redraw :: active=%d\n", chart->active) );
 
 		//set_info(active);
 		gtk_widget_queue_draw( widget );
-		chart_tooltip_start_delay(chart);
+//		chart_tooltip_start_delay(chart);
 	}
-
-
 
 	chart->lastactive = chart->active;
 
 	// hide the tooltip ?
-	if(chart->tooltipwin != NULL && (x != chart->lastpress_x || y != chart->lastpress_y) )
+	if( (x != chart->lastpress_x || y != chart->lastpress_y) )
 	{
 		//DB( g_print("hide tooltip\n") );
-		gtk_widget_hide(chart->tooltipwin);
+		chart_tooltip_hide(chart);
 
 	}
 
-	if( (event->time - chart->lasttime) > DEFAULT_DELAY)
+	if (chart->timer_tag == 0)
+	{
 		chart_tooltip_start_delay(chart);
-
-	chart->lasttime = event->time;
-
+	}
 
 	return TRUE;
 }
@@ -1395,7 +1421,7 @@ gint x, y;
 	if(chart->entries == 0)
 		return FALSE;
 
-	DB( g_print("button press\n") );
+	DB( g_print("\n(gtkchart) button press\n") );
    	DB( g_print(" active is %d\n", chart->active) );
 
 	if(chart->active < 0) return TRUE;
@@ -1422,12 +1448,9 @@ GtkChart *chart = GTK_CHART(user_data);
 	if(chart->entries == 0)
 		return FALSE;
 
-	DB( g_print("** release\n") );
+	DB( g_print("\n(gtkchart) release\n") );
 
-	if(chart->tooltipwin != NULL)
-		gtk_widget_hide(chart->tooltipwin);
-
-	//chart_tooltip_start_delay(chart);
+	chart_tooltip_hide(chart);
 
 	return TRUE;
 }
@@ -1436,14 +1459,30 @@ GtkChart *chart = GTK_CHART(user_data);
 static gboolean chart_enter(GtkWidget *widget, GdkEventCrossing *event, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
+gint x, y;
 
 	if(chart->entries == 0)
 		return FALSE;
 
-	DB( g_print("** enter\n") );
+	DB( g_print("++++++++++++++++\n(gtkchart) enter\n") );
 
-	chart_tooltip_start_delay(chart);
+	x = event->x;
+	y = event->y;
 
+	switch(chart->type)
+	{
+		case CHART_BAR_TYPE:
+			chart->active = barchart_get_active(widget, x, y, chart);
+			break;
+		case CHART_LINE_TYPE:
+			chart->active = linechart_get_active(widget, x, y, chart);
+			break;
+		case CHART_PIE_TYPE:
+			chart->active = piechart_get_active(widget, x, y, chart);
+			break;
+	}
+
+   	DB( g_print(" active is %d\n", chart->active) );
 
 	return TRUE;
 }
@@ -1455,16 +1494,23 @@ GtkChart *chart = GTK_CHART(user_data);
 	if(chart->entries == 0)
 		return FALSE;
 
-	DB( g_print("** leave\n") );
-
 	chart->active = -1;
-	gtk_widget_queue_draw( widget );
+	chart->lastactive = -1;
+
+	DB( g_print("\n(gtkchart) leave\n") );
+   	DB( g_print(" active is %d\n", chart->active) );
 
 	if (chart->timer_tag)
 	{
 		g_source_remove (chart->timer_tag);
 		chart->timer_tag = 0;
 	}
+
+	chart_tooltip_hide(chart);
+
+	gtk_widget_queue_draw(chart->drawarea);
+
+	DB( g_print("----------------\n") );
 
 	return TRUE;
 }
@@ -1478,7 +1524,7 @@ GtkWidget *widget = GTK_WIDGET(chart);
 
 	GDK_THREADS_ENTER ();
 
-	DB( g_print("** SHOULD TOOLTIP %x\n", (int)chart) );
+	DB( g_print("\n(gtkchart) SHOULD TOOLTIP %x\n", (int)chart) );
 
 
  	//debug
@@ -1497,27 +1543,32 @@ GtkWidget *widget = GTK_WIDGET(chart);
 void chart_tooltip_start_delay(GtkChart *chart)
 {
 
-	DB( g_print("** start delay %x\n", (int)chart) );
+	DB( g_print("\n(gtkchart) start delay %x\n", (int)chart) );
 
-/*
-      tooltips->timer_tag = g_timeout_add (delay,
-					   gtk_tooltips_timeout,
-					   (gpointer) tooltips);
-
-*/
 	if(chart->timer_tag == 0 )
 		chart->timer_tag = g_timeout_add( DEFAULT_DELAY, chart_tooltip_timeout, (gpointer)chart);
 
 }
 
-void chart_tooltip_show(GtkChart *chart, gint xpos, gint ypos)
+static void chart_tooltip_hide(GtkChart *chart)
 {
-GtkWidget *window, *frame, *label;
+	DB( g_print("\n(gtkchart) tooltip hide\n") );
+
+	DB( g_print(" - timertag=%d\n", chart->timer_tag) );
+
+	if(chart->tooltipwin != NULL)
+		gtk_widget_hide(chart->tooltipwin);
+}
+
+
+static void chart_tooltip_show(GtkChart *chart, gint xpos, gint ypos)
+{
+GtkWidget *window, *frame, *vbox, *label;
 GtkRequisition req;
 gint active;
 gchar *strval, *buffer;
 
-	DB( g_print("** tooltip show\n") );
+	DB( g_print("\n(gtkchart) tooltip show\n") );
    	DB( g_print(" x=%d, y=%d\n", xpos, ypos) );
 
 	if(!chart->tooltipwin)
@@ -1532,24 +1583,34 @@ gchar *strval, *buffer;
 	    gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
 		gtk_container_add (GTK_CONTAINER (window), frame);
 		//gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
+		gtk_widget_show(frame);
+		
+		vbox = gtk_vbox_new (FALSE, 0);
+		gtk_container_add( GTK_CONTAINER(frame), vbox);
+		gtk_widget_show(vbox);
+		
+		label = gtk_label_new (NULL);
+		gtk_widget_show(label);
+		chart->tttitle= label;
+		//gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+		gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+		//gtk_misc_set_padding(GTK_MISC(label), 2, 2);
+		//gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+		gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
 		label = gtk_label_new ("tooltip");
+		gtk_widget_show(label);
 		chart->ttlabel= label;
 		gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 		//gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
 		gtk_misc_set_padding(GTK_MISC(label), 2, 2);
 		gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
-	
-
-		gtk_container_add( GTK_CONTAINER(frame), label);
-
-		//gtk_container_add (GTK_CONTAINER (window), label);
+		gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 
 		//gtk_widget_reset_rc_styles (tooltipwin);
 
 		chart->tooltipwin = window;
 
-		gtk_widget_show_all(chart->tooltipwin);
 	}
 
 	/* create tooltip text */
@@ -1557,14 +1618,30 @@ gchar *strval, *buffer;
 
 	if( active >= 0 )
 	{
+		
+		DB( g_print("title = %s\n", chart->title) );
+		
+		
+		if( chart->title != NULL )
+		{
+			buffer = g_markup_printf_escaped("<b>%s</b>", chart->title);
+			gtk_label_set_markup(GTK_LABEL(chart->tttitle), buffer);
+			g_free(buffer);
+			gtk_widget_show(chart->tttitle);
+		}
+		else
+		{
+			gtk_widget_hide(chart->tttitle);
+		}
+	
 		if( !chart->dual )
 		{
 			strval = chart_print_double(chart, chart->datas1[active]);
 
 			if( chart->type == CHART_PIE_TYPE )			
-				buffer = g_strdup_printf("<b>%s</b>\n%s\n%.2f%%", chart->titles[active], strval, ABS(chart->datas1[active])*100/chart->total);
+				buffer = g_markup_printf_escaped("%s\n%s\n%.2f%%", chart->titles[active], strval, ABS(chart->datas1[active])*100/chart->total);
 			else
-				buffer = g_strdup_printf("<b>%s</b>\n%s", chart->titles[active], strval);
+				buffer = g_markup_printf_escaped("%s\n%s", chart->titles[active], strval);
 			
 			gtk_label_set_markup(GTK_LABEL(chart->ttlabel), buffer);
 			g_free(buffer);
@@ -1577,7 +1654,7 @@ gchar *strval, *buffer;
 			buf1 = g_strdup(strval);
 			strval = chart_print_double(chart, chart->datas2[active]);
 
-			buffer = g_strdup_printf("<b>%s</b>\n-%s\n+%s",
+			buffer = g_markup_printf_escaped("%s\n-%s\n+%s",
 				chart->titles[active],
 				buf1,
 				strval
@@ -1606,7 +1683,7 @@ gchar *strval, *buffer;
 
 		gtk_window_move(GTK_WINDOW(chart->tooltipwin), xpos - (req.width/2), ypos - req.height);
 
-		gtk_widget_show_all(chart->tooltipwin);
+		gtk_widget_show(chart->tooltipwin);
 
 	}
 

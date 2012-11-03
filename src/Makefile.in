@@ -86,12 +86,12 @@ VERSION = @VERSION@
 
 bin_PROGRAMS = homebank
 
-homebank_SOURCES =  gtkchart.c gtkdateentry.c amiga.c data_access.c def_account.c def_archive.c def_budget.c def_category.c def_filter.c def_lists.c def_operation.c def_payee.c def_pref.c def_wallet.c dsp_account.c dsp_wallet.c homebank.c list_account.c list_operation.c misc.c rep_budget.c rep_car.c rep_over.c rep_stats.c widgets.c wiz_import.c xml.c
+homebank_SOURCES =  gtkchart.c gtkdateentry.c amiga.c data_access.c def_account.c def_archive.c def_budget.c def_category.c def_filter.c def_lists.c def_operation.c def_payee.c def_pref.c def_wallet.c dsp_account.c dsp_wallet.c homebank.c list_account.c list_operation.c misc.c rep_budget.c rep_car.c rep_over.c rep_stats.c widgets.c wiz_import.c xml.c amiga.h data_access.h def_account.h def_archive.h def_budget.h def_category.h def_filter.h def_lists.h def_operation.h def_payee.h def_pref.h def_wallet.h dsp_account.h dsp_wallet.h enums.h gtkchart.h gtkdateentry.h homebank.h list_account.h list_operation.h misc.h rep_budget.h rep_car.h rep_over.h rep_stats.h widgets.h wiz_import.h xml.h
 
 
 homebank_LDADD = $(DEPS_LIBS)
 
-AM_CPPFLAGS = $(DEPS_CFLAGS) 	      -DLOCALE_DIR=\""$(datadir)/locale"\" 	      -DPIXMAPS_DIR=\""$(datadir)/homebank/images"\" 	      -DHELP_DIR=\""$(datadir)/homebank/help"\"
+AM_CPPFLAGS =  $(DEPS_CFLAGS) -DLOCALE_DIR=\""$(datadir)/locale"\" -DPIXMAPS_DIR=\""$(datadir)/homebank/images"\" -DHELP_DIR=\""$(datadir)/homebank/help"\"
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
@@ -122,15 +122,6 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/amiga.P .deps/data_access.P .deps/def_account.P \
-.deps/def_archive.P .deps/def_budget.P .deps/def_category.P \
-.deps/def_filter.P .deps/def_lists.P .deps/def_operation.P \
-.deps/def_payee.P .deps/def_pref.P .deps/def_wallet.P \
-.deps/dsp_account.P .deps/dsp_wallet.P .deps/gtkchart.P \
-.deps/gtkdateentry.P .deps/homebank.P .deps/list_account.P \
-.deps/list_operation.P .deps/misc.P .deps/rep_budget.P .deps/rep_car.P \
-.deps/rep_over.P .deps/rep_stats.P .deps/widgets.P .deps/wiz_import.P \
-.deps/xml.P
 SOURCES = $(homebank_SOURCES)
 OBJECTS = $(homebank_OBJECTS)
 
@@ -138,9 +129,9 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps src/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -169,6 +160,9 @@ uninstall-binPROGRAMS:
 	list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
+
+.c.o:
+	$(COMPILE) -c $<
 
 .s.o:
 	$(COMPILE) -c $<
@@ -224,11 +218,6 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = src
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -239,38 +228,44 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+amiga.o: amiga.c homebank.h ../config.h enums.h data_access.h widgets.h \
+	misc.h gtkdateentry.h gtkchart.h amiga.h
+data_access.o: data_access.c homebank.h ../config.h enums.h \
+	data_access.h widgets.h misc.h gtkdateentry.h gtkchart.h
+def_account.o: def_account.c homebank.h ../config.h enums.h \
+	data_access.h widgets.h misc.h gtkdateentry.h gtkchart.h \
+	def_lists.h def_account.h
+def_archive.o: def_archive.c homebank.h ../config.h enums.h \
+	data_access.h widgets.h misc.h gtkdateentry.h gtkchart.h \
+	def_lists.h def_archive.h
+def_budget.o: def_budget.c homebank.h ../config.h enums.h data_access.h \
+	widgets.h misc.h gtkdateentry.h gtkchart.h def_lists.h \
+	def_category.h def_budget.h
+def_category.o: def_category.c homebank.h ../config.h enums.h \
+	data_access.h widgets.h misc.h gtkdateentry.h gtkchart.h \
+	def_lists.h def_category.h
+def_filter.o: def_filter.c homebank.h ../config.h enums.h data_access.h \
+	widgets.h misc.h gtkdateentry.h gtkchart.h def_lists.h \
+	def_filter.h
+def_lists.o: def_lists.c homebank.h ../config.h enums.h data_access.h \
+	widgets.h misc.h gtkdateentry.h gtkchart.h def_lists.h
+def_operation.o: def_operation.c homebank.h ../config.h enums.h \
+	data_access.h widgets.h misc.h gtkdateentry.h gtkchart.h \
+	def_operation.h
+def_payee.o: def_payee.c homebank.h ../config.h enums.h data_access.h \
+	widgets.h misc.h gtkdateentry.h gtkchart.h def_lists.h \
+	def_payee.h
+def_pref.o: def_pref.c homebank.h ../config.h enums.h data_access.h \
+	widgets.h misc.h gtkdateentry.h gtkchart.h def_pref.h
+def_wallet.o: def_wallet.c homebank.h ../config.h enums.h data_access.h \
+	widgets.h misc.h gtkdateentry.h gtkchart.h def_wallet.h
+dsp_account.o: dsp_account.c homebank.h ../config.h enums.h \
+	data_access.h widgets.h misc.h gtkdateentry.h gtkchart.h \
+	dsp_account.h list_operation.h def_lists.h def_filter.h \
+	def_operation.h
+gtkchart.o: gtkchart.c gtkchart.h
+gtkdateentry.o: gtkdateentry.c gtkdateentry.h
 
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
 info-am:
 info: info-am
 dvi-am:
@@ -308,24 +303,23 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+		mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-binPROGRAMS clean-compile clean-tags clean-depend \
-		clean-generic mostlyclean-am
+clean-am:  clean-binPROGRAMS clean-compile clean-tags clean-generic \
+		mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-binPROGRAMS distclean-compile distclean-tags \
-		distclean-depend distclean-generic clean-am
+		distclean-generic clean-am
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-binPROGRAMS \
 		maintainer-clean-compile maintainer-clean-tags \
-		maintainer-clean-depend maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -335,13 +329,12 @@ maintainer-clean: maintainer-clean-am
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir mostlyclean-depend \
-distclean-depend clean-depend maintainer-clean-depend info-am info \
-dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs \
-mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+clean-tags maintainer-clean-tags distdir info-am info dvi-am dvi check \
+check-am installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

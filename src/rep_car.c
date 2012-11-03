@@ -540,7 +540,7 @@ GtkWidget *repcar_window_new(void)
 {
 struct repcar_data *data;
 GtkWidget *window, *mainvbox, *hbox, *vbox, *treeview;
-GtkWidget *label, *widget, *table, *alignment, *vbar;
+GtkWidget *label, *widget, *table, *alignment;
 gint row, col;
 
 	data = g_malloc0(sizeof(struct repcar_data));
