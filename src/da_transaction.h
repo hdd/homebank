@@ -17,8 +17,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#ifndef __HB_TRANSACTION_DATA_H__
-#define __HB_TRANSACTION_DATA_H__
+#ifndef __DA_TRANSACTION_H__
+#define __DA_TRANSACTION_H__
 
 
 typedef struct _operation	Operation;
@@ -26,19 +26,22 @@ typedef struct _operation	Operation;
 
 struct _operation
 {
-	guint	date;
+	guint32		date;
 
-	gdouble	amount;
-	guint	account;
-	guint	dst_account;
-	gushort	paymode;
-	gushort	flags;
-	guint	payee;
-	guint	category;
-	gchar	*wording;
-	gchar	*info;
-	guint32	*tags;
-	GList	*same;		//used for import todo: change this
+	gdouble		amount;
+	guint32		account;
+	guint32		dst_account;
+	gushort		paymode;
+	gushort		flags;
+	guint32		payee;
+	guint32		category;
+	gchar		*wording;
+	gchar		*info;
+	guint32		*tags;
+	guint32		kxfer;		//internal xfer key
+
+	//non saved datas
+	GList		*same;		//used for import todo: change this
 };
 
 #define OF_VALID	(1<<0)
@@ -60,6 +63,8 @@ void da_operation_destroy(GList *list);
 
 GList *da_operation_sort(GList *list);
 gboolean da_operation_append(Operation *item);
+
+guint32 da_operation_get_max_kxfer(void);
 
 #endif
 

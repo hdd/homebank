@@ -80,6 +80,7 @@ struct ui_acc_manage_data
 
 	GtkWidget	*LV_acc;
 	GtkWidget	*ST_name;
+//	GtkWidget	*CY_curr;
 	GtkWidget	*CY_type;
 	GtkWidget	*ST_bank;
 	GtkWidget	*ST_number;

@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -120,12 +120,12 @@ void da_filter_free(Filter *flt)
 /* = = = = = = = = = = = = = = = = = = = = */
 /* CarCost */
 
-CarCost *da_carcost_malloc(void)
+CarCost *da_vehiclecost_malloc(void)
 {
 	return g_malloc0(sizeof(CarCost));
 }
 
-void da_carcost_free(CarCost *item)
+void da_vehiclecost_free(CarCost *item)
 {
 	if(item != NULL)
 	{
@@ -133,14 +133,14 @@ void da_carcost_free(CarCost *item)
 	}
 }
 
-void da_carcost_destroy(GList *list)
+void da_vehiclecost_destroy(GList *list)
 {
 GList *tmplist = g_list_first(list);
 
 	while (tmplist != NULL)
 	{
 	CarCost *item = tmplist->data;
-		da_carcost_free(item);
+		da_vehiclecost_free(item);
 		tmplist = g_list_next(tmplist);
 	}
 	g_list_free(list);

@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -685,6 +685,10 @@ guint32 key;
 		gtk_entry_set_text(GTK_ENTRY(getwidget), item->name);
 		gtk_widget_grab_focus (getwidget);
 
+		gtk_entry_set_activates_default (GTK_ENTRY(getwidget), TRUE);
+
+		gtk_dialog_set_default_response(GTK_DIALOG( window ), GTK_RESPONSE_ACCEPT);
+		
 		//wait for the user
 		gint result = gtk_dialog_run (GTK_DIALOG (window));
 
@@ -941,8 +945,7 @@ gint row;
 	data.window = window;
 	data.change = 0;
 
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
-	
+
 	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "payee.svg");
 	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_PAYEE);
 

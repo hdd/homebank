@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal catounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -168,7 +168,7 @@ guint32 *new_key;
 /**
  * da_cat_append:
  * 
- * append a payee into the GHashTable
+ * append a category into the GHashTable
  * 
  * Return value: TRUE if inserted
  *
@@ -293,7 +293,7 @@ da_cat_name_grfunc(gpointer key, Category *cat, gchar *name)
  * 
  * Get a category key by its name
  * 
- * Return value: the payee key or -1 if not found
+ * Return value: the category key or -1 if not found
  *
  */
 guint32
@@ -361,16 +361,17 @@ Category *item = NULL;
 	typestr = g_strsplit(fullname, ":", 2);
 	if( g_strv_length(typestr) == 2 )
 	{
-		DB( g_print(" try to find parent '%s'\n", typestr[0]) );
+		ctx.parent = 0;
+		ctx.name = typestr[0];
+		DB( g_print(" [x:x] try to find the parent : '%s'\n", typestr[0]) );
 
-
-		Category *parent = 	g_hash_table_find(GLOBALS->h_cat, (GHRFunc)da_cat_name_grfunc, typestr[0]);
+		Category *parent = g_hash_table_find(GLOBALS->h_cat, (GHRFunc)da_cat_fullname_grfunc, &ctx);
 		if( parent != NULL )
 		{
 			ctx.parent = parent->key;
 			ctx.name = typestr[1];
 
-			DB( g_print(" searching %d '%s'\n", ctx.parent, ctx.name) );
+			DB( g_print(" [x:x] and searching sub %d '%s'\n", ctx.parent, ctx.name) );
 			
 			item = g_hash_table_find(GLOBALS->h_cat, (GHRFunc)da_cat_fullname_grfunc, &ctx);
 		}
@@ -380,12 +381,14 @@ Category *item = NULL;
 		ctx.parent = 0;
 		ctx.name = fullname;
 
+		DB( g_print(" [x] try to '%s'\n", fullname) );
+
 		item = g_hash_table_find(GLOBALS->h_cat, (GHRFunc)da_cat_fullname_grfunc, &ctx);
 	}
 
 	g_strfreev(typestr);
 
-	DB( g_print(" return value %d\n", item) );
+	DB( g_print(" return value %x\n", item) );
 
 	return item;
 }
@@ -522,7 +525,7 @@ guint32 *new_key;
 Category *
 da_cat_get(guint32 key)
 {
-	DB( g_print("da_cat_get_payee\n") );
+	DB( g_print("da_cat_get\n") );
 
 	return g_hash_table_lookup(GLOBALS->h_cat, &key);
 }

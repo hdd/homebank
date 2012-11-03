@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -44,11 +44,10 @@
 #include "rep_stats.h"
 #include "rep_time.h"
 #include "rep_budget.h"
-#include "rep_over.h"
-#include "rep_car.h"
+#include "rep_balance.h"
+#include "rep_vehicle.h"
 
 #include "import.h"
-#include "imp_amiga.h"
 #include "imp_qif.h"
 
 //#define HOMEBANK_URL_HELP           "http://homebank.free.fr/help/"
@@ -107,10 +106,8 @@ static void wallet_action_checkautomated(void);
 static void wallet_action_statistic(void);
 static void wallet_action_trendtime(void);
 static void wallet_action_budget(void);
-static void wallet_action_overdrawn(void);
+static void wallet_action_balance(void);
 static void wallet_action_carcost(void);
-
-static void wallet_action_importamiga(void);
 
 static void wallet_action_import(void);
 static void wallet_action_export(void);
@@ -142,7 +139,6 @@ void wallet_refresh_upcoming(GtkWidget *widget, gpointer user_data);
 void wallet_update(GtkWidget *widget, gpointer user_data);
 void wallet_check_automated(GtkWidget *widget, gpointer user_data);
 void wallet_addoperations(GtkWidget *widget, gpointer user_data);
-void wallet_import_amiga(GtkWidget *widget, gpointer user_data);
 
 void wallet_recent_add (struct wallet_data *data, const gchar *path);
 
@@ -159,7 +155,6 @@ static GtkActionEntry entries[] = {
   { "ManageMenu"   , NULL, N_("_Manage") },
   { "OperationMenu", NULL, N_("_Transactions") },
   { "ReportMenu"   , NULL, N_("_Reports")  },
-  { "ToolsMenu"    , NULL, N_("T_ools") },
   { "HelpMenu"     , NULL, N_("_Help") },
 
 //  { "Import"       , NULL, N_("Import") },
@@ -198,14 +193,11 @@ static GtkActionEntry entries[] = {
   { "Automated"  , NULL             , N_("Check automated..."), NULL,    N_("Insert pending automated transactions"),    G_CALLBACK (wallet_action_checkautomated) },
 
   /* ReportMenu */
-  { "Statistics" , HB_STOCK_REP_STATS , N_("_Statistics...") , NULL,    N_("Open the Statistics report"),    G_CALLBACK (wallet_action_statistic) },
-  { "TrendTime"   , HB_STOCK_REP_TIME , N_("_Trend Time...") , NULL,    N_("Open the Trend Time report"),    G_CALLBACK (wallet_action_trendtime) },
-  { "BudgetR"    , HB_STOCK_REP_BUDGET, N_("B_udget...")     , NULL,    N_("Open the Budget report"),    G_CALLBACK (wallet_action_budget) },
-  { "Overdrawn"  , HB_STOCK_REP_OVER  , N_("Ove_rdrawn...")  , NULL,    N_("Open the Overdrawn report"),    G_CALLBACK (wallet_action_overdrawn) },
-  { "Carcost"    , HB_STOCK_REP_CAR   , N_("_Car cost...")   , NULL,    N_("Open the Car cost report"),    G_CALLBACK (wallet_action_carcost) },
-
-  /* ToolsMenu */
-  { "ImportAmiga", NULL               , N_("Import Amiga..."), NULL, N_("Import a file in Amiga 3.0 format"),    G_CALLBACK (wallet_action_importamiga) },
+  { "RStatistics" , HB_STOCK_REP_STATS , N_("_Statistics...") , NULL,    N_("Open the Statistics report"),    G_CALLBACK (wallet_action_statistic) },
+  { "RTrendTime"   , HB_STOCK_REP_TIME , N_("_Trend Time...") , NULL,    N_("Open the Trend Time report"),    G_CALLBACK (wallet_action_trendtime) },
+  { "RBudget"    , HB_STOCK_REP_BUDGET, N_("B_udget...")     , NULL,    N_("Open the Budget report"),    G_CALLBACK (wallet_action_budget) },
+  { "RBalance"  , HB_STOCK_REP_BALANCE, N_("Balance...")  , NULL,    N_("Open the Balance report"),    G_CALLBACK (wallet_action_balance) },
+  { "RCarcost"    , HB_STOCK_REP_CAR   , N_("_Car cost...")   , NULL,    N_("Open the Car cost report"),    G_CALLBACK (wallet_action_carcost) },
 
   /* HelpMenu */
   { "Contents"   , GTK_STOCK_HELP    , N_("_Contents")                    , "F1", N_("Documentation about HomeBank"), G_CALLBACK (wallet_action_help) },
@@ -291,15 +283,11 @@ static const gchar *ui_info =
 "    </menu>"
 
 "    <menu action='ReportMenu'>"
-"      <menuitem action='Statistics'/>"
-"      <menuitem action='TrendTime'/>"
-"      <menuitem action='Overdrawn'/>"
-"      <menuitem action='BudgetR'/>"
-"      <menuitem action='Carcost'/>"
-"    </menu>"
-
-"    <menu action='ToolsMenu'>"
-"      <menuitem action='ImportAmiga'/>"
+"      <menuitem action='RStatistics'/>"
+"      <menuitem action='RTrendTime'/>"
+"      <menuitem action='RBalance'/>"
+"      <menuitem action='RBudget'/>"
+"      <menuitem action='RCarcost'/>"
 "    </menu>"
 
 "    <menu action='HelpMenu'>"
@@ -336,11 +324,11 @@ static const gchar *ui_info =
 
 "      <separator/>"
 
-"    <toolitem action='Statistics'/>"
-"    <toolitem action='TrendTime'/>"
-"    <toolitem action='Overdrawn'/>"
-"    <toolitem action='BudgetR'/>"
-"    <toolitem action='Carcost'/>"
+"    <toolitem action='RStatistics'/>"
+"    <toolitem action='RTrendTime'/>"
+"    <toolitem action='RBalance'/>"
+"    <toolitem action='RBudget'/>"
+"    <toolitem action='RCarcost'/>"
 
 "  </toolbar>"
 
@@ -575,19 +563,14 @@ static void wallet_action_budget(void)
 	repbudget_window_new();
 }
 
-static void wallet_action_overdrawn(void)
+static void wallet_action_balance(void)
 {
-	repover_window_new();
+	repbalance_window_new();
 }
 
 static void wallet_action_carcost(void)
 {
-	repcar_window_new();
-}
-
-static void wallet_action_importamiga(void)
-{
-	wallet_import_amiga(GLOBALS->mainwindow, NULL);
+	repcost_window_new();
 }
 
 static void wallet_action_import(void)
@@ -792,7 +775,7 @@ GdkPixbuf *pixbuf;
 		  "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, "
 		  "MA 02110-1301, USA.";
 		  
-	static const gchar *copyright = "Copyright \xc2\xa9 1995-2010 - Maxime DOYEN";
+	static const gchar *copyright = "Copyright \xc2\xa9 1995-2011 - Maxime DOYEN";
 
 
 	gtk_about_dialog_set_url_hook (activate_url, NULL, NULL);
@@ -851,7 +834,7 @@ GtkWidget *dialog = NULL;
 		);
 
 		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-			_("If you do not save, %d changes will be\ndefinitively lost."),
+			_("If you do not save, some changes will be\ndefinitively lost: %d."),
 			GLOBALS->change
 			);
 
@@ -861,6 +844,8 @@ GtkWidget *dialog = NULL;
 			GTK_STOCK_SAVE, 2,
 			NULL);
 
+		gtk_dialog_set_default_response(GTK_DIALOG( dialog ), 2);
+		
 	  result = gtk_dialog_run( GTK_DIALOG( dialog ) );
 	  gtk_widget_destroy( dialog );
 
@@ -1129,6 +1114,7 @@ gdouble total = 0;
 		  LST_DSPUPC_DATAS, NULL,
 	      LST_DSPUPC_WORDING, _("<b>Total</b>"),
 	      LST_DSPUPC_AMOUNT, total,
+	      LST_DSPUPC_REMAINING, G_MAXINT32,
 		  -1);
 
 	
@@ -1294,7 +1280,7 @@ nextarchive:
 		if(count == 0)
 			txt = _("No transaction to insert");
 		else
-			txt = _("%d transactions inserted");
+			txt = _("transaction inserted: %d");
 
 		homebank_message_dialog(GTK_WINDOW(GLOBALS->mainwindow), GTK_MESSAGE_INFO,
 			_("Check automated transactions result"),
@@ -1308,39 +1294,6 @@ nextarchive:
 
 
 
-
-/*
-**
-*/
-void wallet_import_amiga(GtkWidget *widget, gpointer user_data)
-{
-struct wallet_data *data;
-
-	DB( g_printf("(wallet) import amiga\n") );
-
-	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
-
-	if( wallet_check_change(widget,NULL) == TRUE )
-	{
-		if(homebank_alienfile_chooser(_("Import Amiga file")) == TRUE)
-		{
-			//clear all, but not the GLOBALS->filename
-			wallet_clear(GLOBALS->mainwindow, GINT_TO_POINTER(FALSE));
-
-			GLOBALS->wallet_is_new = TRUE;
-
-			DB( g_printf("- filename: %s\n", GLOBALS->filename) );
-
-			import_from_amiga(GLOBALS->filename);
-
-			wallet_populate_listview(GLOBALS->mainwindow, NULL);
-			wallet_check_automated(GLOBALS->mainwindow, GINT_TO_POINTER(FALSE));
-			wallet_refresh_upcoming(GLOBALS->mainwindow, NULL);
-			wallet_compute_balances(GLOBALS->mainwindow, NULL);
-			wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(UF_TITLE+UF_SENSITIVE+UF_BALANCE));
-		}
-	}
-}
 
 
 /*
@@ -1469,10 +1422,19 @@ gint r;
 		}
 		else
 		{
-		
+		gchar *msg = _("The file %s is not a valid HomeBank file.");
+
+			switch(r)
+			{
+				case XML_IO_ERROR:
+					msg = _("I/O error for file %s.");
+					break;
+			}
+
+			
 			homebank_message_dialog(GTK_WINDOW(data->window), GTK_MESSAGE_ERROR,
 				_("File error"),
-				_("The file %s is not a valid HomeBank file."),
+				msg,
 				GLOBALS->filename
 				);
 
@@ -1494,7 +1456,7 @@ void wallet_save(GtkWidget *widget, gpointer user_data)
 {
 struct wallet_data *data;
 gboolean saveas = GPOINTER_TO_INT(user_data);
-gboolean update = FALSE;
+gint r = XML_UNSET;
 
 	DB( g_printf("(wallet) save\n") );
 
@@ -1510,9 +1472,9 @@ gboolean update = FALSE;
 			DB( g_printf(" + should save as %s\n", GLOBALS->filename) );
 			homebank_backup_current_file(GLOBALS->filename);
 			homebank_file_ensure_xhb();
-			homebank_save_xml(GLOBALS->filename);
+			r = homebank_save_xml(GLOBALS->filename);
 			GLOBALS->wallet_is_new = FALSE;
-			update = TRUE;
+
 		}
 	}
 	else
@@ -1520,17 +1482,30 @@ gboolean update = FALSE;
 		DB( g_printf(" + should quick save %s\n", GLOBALS->filename) );
 		homebank_backup_current_file(GLOBALS->filename);
 		homebank_file_ensure_xhb();
-		homebank_save_xml(GLOBALS->filename);
-		update = TRUE;
+		r = homebank_save_xml(GLOBALS->filename);
 	}
 
-	if( update == TRUE )
+	
+	if(r == XML_OK)
 	{
 		wallet_recent_add(data, GLOBALS->filename);
 
 		GLOBALS->change = 0;
-		wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(UF_TITLE+UF_SENSITIVE));
+		wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(UF_TITLE+UF_SENSITIVE+UF_VISUAL));
 	}
+	else
+	{
+	gchar *msg = _("I/O error for file %s.");
+
+		homebank_message_dialog(GTK_WINDOW(data->window), GTK_MESSAGE_ERROR,
+			_("File error"),
+			msg,
+			GLOBALS->filename
+			);
+
+	}
+	
+
 }
 
 
@@ -1833,11 +1808,11 @@ gint flags;
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ManageMenu/Archive"), sensitive);
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/OperationMenu/AddOpe"), sensitive);
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/OperationMenu/ShowOpe"), sensitive);
-		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/Statistics"), sensitive);
-		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/TrendTime"), sensitive);
-		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/BudgetR"), sensitive);
-		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/Overdrawn"), sensitive);
-		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/Carcost"), sensitive);
+		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/RStatistics"), sensitive);
+		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/RTrendTime"), sensitive);
+		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/RBudget"), sensitive);
+		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/RBalance"), sensitive);
+		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->manager, "/MenuBar/ReportMenu/RCarcost"), sensitive);
 
 	// empty category list: disable Budget & Budget report
 		sensitive = da_cat_length() > 1 ? TRUE : FALSE;
@@ -2371,16 +2346,16 @@ GError *error = NULL;
 	action = gtk_action_group_get_action(action_group, "AddOpe");
 	g_object_set(action, "is_important", TRUE, "short_label", _("Add"), NULL);
 
-	action = gtk_action_group_get_action(action_group, "Statistics");
+	action = gtk_action_group_get_action(action_group, "RStatistics");
 	g_object_set(action, "short_label", _("Statistics"), NULL);
 
-	action = gtk_action_group_get_action(action_group, "BudgetR");
+	action = gtk_action_group_get_action(action_group, "RBudget");
 	g_object_set(action, "short_label", _("Budget"), NULL);
 
-	action = gtk_action_group_get_action(action_group, "Overdrawn");
-	g_object_set(action, "short_label", _("Overdrawn"), NULL);
+	action = gtk_action_group_get_action(action_group, "RBalance");
+	g_object_set(action, "short_label", _("Balance"), NULL);
 
-	action = gtk_action_group_get_action(action_group, "Carcost");
+	action = gtk_action_group_get_action(action_group, "RCarcost");
 	g_object_set(action, "short_label", _("Carcost"), NULL);
 
 	/* now load the UI definition */
@@ -2518,9 +2493,12 @@ GtkAction *action;
 	gtk_container_add (GTK_CONTAINER (window), mainvbox);
 
 	/* Add menubar and toolbar */
+	DB( g_printf("create menu\n") );
+
 	create_menu_bar_and_toolbar (data, mainvbox);
 
 	/* Add status bar */
+	DB( g_printf("create statusbar\n") );
 	create_statusbar (data, mainvbox);
 
 	/* Add the main area */
@@ -2586,6 +2564,9 @@ GtkAction *action;
 
 
 	//todo: move this elsewhere
+	DB( g_printf("init actions\n") );
+
+
 	if(PREFS->wal_vpaned > 0)
 		gtk_paned_set_position(GTK_PANED(data->vpaned), PREFS->wal_vpaned);
 
@@ -2612,6 +2593,7 @@ GtkAction *action;
 
 
 	//connect all our signals
+	DB( g_printf("connect signals\n") );
 
 
 	g_signal_connect (gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_acc)), "changed", G_CALLBACK (wallet_selection), NULL);

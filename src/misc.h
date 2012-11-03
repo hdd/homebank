@@ -20,9 +20,12 @@
 #ifndef __MISC__H__
 #define __MISC__H__
 
-gint real_mystrfmon(gchar *outstr, gint outlen, gchar *buf1, struct Currency *cur);
+double arrondi(const double x, unsigned n);
+
+gint real_mystrfmon(gchar *outstr, gint outlen, gchar *buf1, struct CurrencyFmt *cur);
 gint mystrfmon_int(gchar *outstr, gint outlen, gdouble value, gboolean minor);
 gint mystrfmon(gchar *outstr, gint outlen, gdouble value, gboolean minor);
+//gint mystrfmoncurr(gchar *outstr, gint outlen, gdouble value, guint32 currkey);
 
 gchar *get_normal_color_amount(gdouble value);
 gchar *get_minimum_color_amount(gdouble value, gdouble minvalue);

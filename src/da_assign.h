@@ -17,8 +17,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __HB_ASSIGN_DATA_H__
-#define __HB_ASSIGN_DATA_H__
+#ifndef __DA_ASSIGN_H__
+#define __DA_ASSIGN_H__
 
 
 typedef struct _assign		Assign;
@@ -26,11 +26,11 @@ typedef struct _assign		Assign;
 
 struct _assign
 {
-	guint   	key;
+	guint32   	key;
 	gchar   	*name;
 	gboolean	exact;
-	gint		payee;
-	gint		category;
+	guint32		payee;
+	guint32		category;
 };
 
 void 

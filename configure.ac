@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.52)
-AC_INIT([homebank], [4.3])
+AC_INIT([homebank], [4.4])
 
 
 AM_CONFIG_HEADER(config.h)
@@ -22,19 +22,19 @@ AC_PROG_INSTALL
 AC_PROG_INTLTOOL
 
 # Checks for libraries.
-PKG_CHECK_MODULES(DEPS, gtk+-2.0 >= 2.14 glib-2.0 >= 2.17)
+PKG_CHECK_MODULES(DEPS, gtk+-2.0 >= 2.20 glib-2.0 >= 2.24)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
 AC_CHECK_LIB(m, pow)
 
-# Pre-release strict cflags
-#CFLAGS="${CFLAGS} -Werror -Wmissing-prototypes "
-CFLAGS="${CFLAGS} -Wmissing-prototypes "
+# Usual flags
+CFLAGS="${CFLAGS} -Wall -Wmissing-prototypes "
 
+# pre-release #1 - GLib/Gtk deprecated flags
+#CFLAGS="${CFLAGS} -DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
 
-# Usual c & gtk cflags
-CFLAGS="${CFLAGS} -Wall -DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
-
+# pre-relase # 2 - error as warning for 
+#CFLAGS="${CFLAGS} -Werror "
 
 # Check for libofx
 AC_CHECK_HEADER(libofx/libofx.h,,noofx=true)

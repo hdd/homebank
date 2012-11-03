@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -618,8 +618,6 @@ gint row;
 					    GTK_RESPONSE_ACCEPT,
 					    NULL);
 
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
-	
 	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "archive.svg");
 	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_ARCHIVE);
 

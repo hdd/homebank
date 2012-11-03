@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -100,9 +100,11 @@ static   gint
 			
 				p1 = da_pay_get(ope1->payee);
 				p2 = da_pay_get(ope2->payee);
-				
-				if( p1->name && p2->name ) 
-					ret = g_utf8_collate(p1->name, p2->name);
+				if( p1 != NULL && p2 != NULL )
+				{
+					if( p1->name && p2->name ) 
+						ret = g_utf8_collate(p1->name, p2->name);
+				}
 			}
 			break;
 

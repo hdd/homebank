@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -137,6 +137,35 @@ da_operation_append(Operation *item)
 	}
 
 	return TRUE;
+}
+
+/* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
+
+guint32
+da_operation_get_max_kxfer(void)
+{
+guint32 max_key = 0;
+GList *list;
+Operation *item;
+
+	DB( g_print("da_operation_get_max_kxfer\n") );
+	
+	list = g_list_first(GLOBALS->ope_list);
+	while (list != NULL)
+	{
+		item = list->data;
+		if( item->paymode == PAYMODE_INTXFER)
+		{
+			if( item->kxfer > max_key)
+				max_key = item->kxfer;
+		}
+		list = g_list_next(list);
+	}		
+
+	DB( g_print(" max_key : %d \n", max_key) );
+	
+
+	return max_key;
 }
 
 

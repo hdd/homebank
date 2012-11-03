@@ -17,8 +17,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __HB_CATEGORY_DATA_H__
-#define __HB_CATEGORY_DATA_H__
+#ifndef __DA_CATEGORY_H__
+#define __DA_CATEGORY_H__
 
 
 typedef struct _category		Category;
@@ -26,8 +26,8 @@ typedef struct _category		Category;
 
 struct _category
 {
-	guint		key;
-	guint		parent;
+	guint32		key;
+	guint32		parent;
 	gushort		flags;
 	gchar		*name;
 	gdouble		budget[13];	//0:is same value, 1 ..12 are months
@@ -39,6 +39,7 @@ struct _category
 #define GF_INCOME	(1<<1)
 #define GF_CUSTOM	(1<<2)
 #define GF_BUDGET	(1<<3)
+#define GF_FORCED	(1<<4)
 
 Category *da_cat_clone(Category *src_item);
 void da_cat_free(Category *item);

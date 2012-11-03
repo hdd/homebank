@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -41,40 +41,6 @@ extern struct HomeBank *GLOBALS;
 
 
 
-enum
-{
-  COL_NAME = 0,
-  COL_OLDINDEX,
-  NUM_COLS
-};
-
-enum {
-	HID_CUSTOM,
-	MAX_HID
-};
-
-#define FIELD_TYPE 15
-
-struct defbudget_data
-{
-	GList		*tmp_list;
-	gint		change;
-	Category	*lastcatitem;
-	
-
-	GtkWidget	*window;
-
-	GtkWidget	*spinner[13];	//0 index is for All
-	GtkWidget	*LV_cat;
-	GtkWidget	*CM_type[2];
-
-	GtkWidget	*BT_clear;
-	GtkWidget	*BT_import, *BT_export;
-
-	Category	*cat;
-
-	gulong		handler_id[MAX_HID];
-};
 
 
 gchar *months[] = {
@@ -103,7 +69,7 @@ static void defbudget_selection(GtkTreeSelection *treeselection, gpointer user_d
 GtkWidget *defbudget_list_new(void);
 
 /*
-**
+** index 0 is all month, then 1 -> 12 are months
 */
 static gchar *defbudget_getcsvbudgetstr(Category *item)
 {
@@ -126,10 +92,10 @@ char buf[G_ASCII_DTOSTR_BUF_SIZE];
 	{
 	gint i;
 
-		for(i=1;i<13;i++)
+		for(i=1;i<=12;i++)
 		{
-			if( item->budget[i] )
-			{
+			//if( item->budget[i] )
+			//{
 			gchar *tmp = retval;
 
 				g_ascii_dtostr (buf, sizeof (buf), item->budget[i]);
@@ -144,7 +110,7 @@ char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
 				//DB( g_print(" => %d: %s\n", i, retval) );
 
-			}
+			//}
 		}
 	}
 
@@ -245,6 +211,7 @@ const gchar *encoding;
 			
 			model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_cat));
 
+			
 			for(;;)
 			{
 				io_stat = g_io_channel_read_line(io, &tmpstr, NULL, NULL, NULL);
@@ -261,12 +228,13 @@ const gchar *encoding;
 						str_array = g_strsplit (tmpstr, ";", 15);
 						// type; sign; name
 
-						if( g_strv_length (str_array) < 4 )
+						if( (g_strv_length (str_array) < 4 || *str_array[1] != '*') && (g_strv_length (str_array) < 15))
 						{
 							error = TRUE;
 							break;
 						}
-						DB( g_print(" read %s : %s : %s\n", str_array[0], str_array[1], str_array[2]) );
+						
+						DB( g_print(" csv read '%s : %s : %s ...'\n", str_array[0], str_array[1], str_array[2]) );
 
 						gint pos = defbudget_category_exists(model, str_array[0], str_array[1], str_array[2], &iter);
 
@@ -282,7 +250,7 @@ const gchar *encoding;
 								LST_DEFCAT_DATAS, &tmpitem,
 								-1);
 
-							DB( g_print(" should alter %s\n", tmpitem->name) );
+							DB( g_print(" found cat, updating '%s'\n", tmpitem->name) );
 
 							data->change++;
 
@@ -291,6 +259,7 @@ const gchar *encoding;
 							{
 								tmpitem->budget[0] = g_ascii_strtod(str_array[3], NULL);
 
+								DB( g_print(" monthly '%.2f'\n", tmpitem->budget[0]) );
 							}
 							else
 							{
@@ -299,6 +268,7 @@ const gchar *encoding;
 								for(i=1;i<=12;i++)
 								{
 									tmpitem->budget[i] = g_ascii_strtod(str_array[2+i], NULL);
+									DB( g_print(" month %d '%.2f'\n", i, tmpitem->budget[i]) );
 								}
 							}
 
@@ -324,6 +294,10 @@ const gchar *encoding;
 				}
 
 			}
+
+			//update the treeview
+			gtk_tree_selection_unselect_all (gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_cat)));
+
 			
 			g_io_channel_unref (io);
 
@@ -388,7 +362,7 @@ GIOChannel *io;
 						type = (category->flags & GF_CUSTOM) ? ' ' : '*';
 
 						outvalstr = defbudget_getcsvbudgetstr(category);
-						outstr = g_strdup_printf("1;%c;%s;%s", type, category->name, outvalstr);
+						outstr = g_strdup_printf("1;%c;%s;%s\n", type, category->name, outvalstr);
 						DB( g_print("%s", outstr) );
 						g_io_channel_write_chars(io, outstr, -1, NULL, NULL);
 						g_free(outstr);
@@ -403,10 +377,12 @@ GIOChannel *io;
 					{
 						gtk_tree_model_get(GTK_TREE_MODEL(model), &child, LST_DEFCAT_DATAS, &category, -1);
 
+						type = (category->flags & GF_CUSTOM) ? ' ' : '*';
+						
 						outvalstr = defbudget_getcsvbudgetstr(category);
 						if( outvalstr )
 						{
-							outstr = g_strdup_printf("2; ;%s;%s\n", category->name, outvalstr);
+							outstr = g_strdup_printf("2;%c;%s;%s\n", type, category->name, outvalstr);
 							DB( g_print("%s", outstr) );
 							g_io_channel_write_chars(io, outstr, -1, NULL, NULL);
 							g_free(outstr);
@@ -542,6 +518,8 @@ gint i;
 		//g_signal_handler_unblock(data->spinner[i], data->spinner_hid[i]);
 	}
 
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_force), (data->cat->flags & GF_FORCED) ? 1 : 0);
+	
 }
 
 /*
@@ -553,6 +531,7 @@ gboolean budget, change;
 gint i;
 Category *item;
 gdouble oldvalue;
+	gint active;
 
 	item = data->lastcatitem;
 
@@ -589,9 +568,14 @@ gdouble oldvalue;
 			}
 		}
 
-		if(budget == TRUE)
+		item->flags &= ~(GF_FORCED);
+		active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_force));
+		if(active == 1)
+			item->flags |= GF_FORCED;
+		
+		if(budget == TRUE || active == 1)
 			item->flags |= GF_BUDGET;
-
+		
 		// compute chnages
 		if( (old_flags != item->flags) || change )
 			data->change++;
@@ -723,7 +707,7 @@ static void defbudget_setup(struct defbudget_data *data)
 GtkWidget *create_defbudget_window (void)
 {
 struct defbudget_data data;
-GtkWidget *window, *bbox, *mainbox, *treeview, *scrollwin, *vbox, *radio, *table, *label;
+GtkWidget *window, *bbox, *mainbox, *treeview, *scrollwin, *vbox, *radio, *table, *label, *widget;
 GtkWidget *spinner;
 GtkWidget *alignment;
 guint i, row;
@@ -739,8 +723,6 @@ guint i, row;
 
 	data.window = window;
 
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
-	
 	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "budget.svg");
 	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_BUDGET);
 
@@ -781,7 +763,7 @@ guint i, row;
 	gtk_table_set_col_spacings (GTK_TABLE (table), HB_TABCOL_SPACING);
 
 	//			gtk_alignment_new(xalign, yalign, xscale, yscale)
-	alignment = gtk_alignment_new(0.5, 0.5, 1.0, 0.0);
+	alignment = gtk_alignment_new(0.5, 0.0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 	gtk_container_add (GTK_CONTAINER (vbox), alignment);
 
@@ -839,9 +821,15 @@ guint i, row;
 		DB( g_print("(defbudget) %s, col=%d, row=%d", months[i], col, row) );
 	}
 
+	row++;
+	widget = gtk_check_button_new_with_mnemonic (_("_Force monitoring this category"));
+	data.CM_force = widget;
+	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 5, row, row+1);
+
+	
 	// button box
 	bbox = gtk_hbox_new (FALSE, HB_BOX_SPACING);
-	gtk_box_pack_start (GTK_BOX (vbox), bbox, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
 	//gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
 	gtk_box_set_spacing (GTK_BOX (bbox), HB_BOX_SPACING);
 

@@ -13,7 +13,6 @@ src/dsp_account.c
 src/dsp_wallet.c
 src/homebank.c
 src/hb_category.c
-src/imp_amiga.c
 src/import.c
 src/list_account.c
 src/list_operation.c
@@ -21,8 +20,8 @@ src/list_upcoming.c
 src/misc.c
 src/preferences.c
 src/rep_budget.c
-src/rep_car.c
-src/rep_over.c
+src/rep_vehicle.c
+src/rep_balance.c
 src/rep_time.c
 src/rep_stats.c
 src/ui_account.c

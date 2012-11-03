@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -65,6 +65,17 @@ GList *list;
 		list = g_list_next(list);
 	}
 
+	list = g_hash_table_get_values(GLOBALS->h_rul);
+	while (list != NULL)
+	{
+	Assign *entry = list->data;
+
+		if( key == entry->category)
+			return TRUE;
+		list = g_list_next(list);
+	}
+	g_list_free(list);
+	
 	return FALSE;
 }
 
@@ -118,7 +129,10 @@ category_rename(Category *item, const gchar *newname)
 Category *parent, *existitem;
 gchar *fullname = NULL;
 gchar *stripname;
+gboolean retval;
 
+	DB( g_print("(category) rename\n") );
+	
 	stripname = g_strdup(newname);
 	g_strstrip(stripname);
 
@@ -134,28 +148,28 @@ gchar *stripname;
 		}
 	}
 
+	DB( g_print(" - search: %s\n", fullname) );
+	
 	existitem = da_cat_get_by_fullname( fullname );
-	g_free(fullname);
 
-	if( existitem != NULL )
+	if( existitem != NULL && existitem->key != item->key)
 	{
-		if( existitem->key == item->key )
-			return TRUE;
+		DB( g_print("error, same name already exist with other key %d <> %d\n",existitem->key, item->key) );
+		retval = FALSE;
 	}	
 	else
 	{
-		DB( g_print("ok, modifying\n") );
+		DB( g_print(" -renaming\n") );
 
 		g_free(item->name);
 		item->name = g_strdup(stripname);
-		return TRUE;	
+		retval = TRUE;	
 	}
 
-	DB( g_print("error, same name already exist\n") );
-
+	g_free(fullname);
 	g_free(stripname);
 
-	return FALSE;
+	return retval;
 }
 
 gboolean

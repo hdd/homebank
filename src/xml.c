@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -71,10 +71,11 @@ struct _ParseContext
 
 };
 
-static void homebank_ugrade_v01_to_v02(void);
-static void homebank_ugrade_v02_to_v03(void);
-static void homebank_ugrade_v04_to_v05(void);
-
+static void homebank_upgrade_v01_to_v02(void);
+static void homebank_upgrade_v02_to_v03(void);
+static void homebank_upgrade_v04_to_v05(void);
+static void homebank_upgrade_lower_v06(void);
+static void homebank_upgrade_v05_to_v06(void);
 
 static void
 start_element_handler (GMarkupParseContext *context,
@@ -123,6 +124,7 @@ gint i, j;
 					else if(!strcmp (attribute_names[i], "flags"   )) { entry->flags = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "pos"     )) { entry->pos   = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "type"    )) { entry->type = atoi(attribute_values[i]); }
+//					else if(!strcmp (attribute_names[i], "curr"    )) { entry->kcur = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "name"    )) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != NULL) entry->name = g_strdup(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "number"  )) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != NULL) entry->number = g_strdup(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "bankname")) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != NULL) entry->bankname = g_strdup(attribute_values[i]); }
@@ -158,7 +160,7 @@ gint i, j;
 			}
 			
 			//assign
-			if(!strcmp (element_name, "asg"))
+			else if(!strcmp (element_name, "asg"))
 			{
 			Assign *entry = da_asg_malloc();
 
@@ -206,7 +208,8 @@ gint i, j;
 				for (i = 0; attribute_names[i] != NULL; i++)
 				{
 					     if(!strcmp (attribute_names[i], "title"       )) { g_free(GLOBALS->title); GLOBALS->title = g_strdup(attribute_values[i]); }
-					else if(!strcmp (attribute_names[i], "car_category")) { GLOBALS->car_category = atoi(attribute_values[i]); }
+//					else if(!strcmp (attribute_names[i], "curr"        )) { GLOBALS->kcur = atoi(attribute_values[i]); }
+					else if(!strcmp (attribute_names[i], "car_category")) { GLOBALS->vehicle_category = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "auto_nbdays" )) { GLOBALS->auto_nbdays = atoi(attribute_values[i]); }
 				}
 			}
@@ -247,7 +250,6 @@ gint i, j;
 
 				//all attribute loaded: append
 				da_cat_insert( entry);
-
 			}
 		}
 		break;
@@ -305,10 +307,12 @@ gint i, j;
 		}
 		break;
 
+		/*
 		case 'r':
 		{
 		}
 		break;
+		*/
 
 
 		case 'o':
@@ -338,6 +342,7 @@ gint i, j;
 							transaction_set_tags(entry, attribute_values[i]);
 						}
 					}
+					else if(!strcmp (attribute_names[i], "kxfer"    )) { entry->kxfer = atoi(attribute_values[i]); }
 				}
 
 				//bugfix 303886
@@ -396,7 +401,7 @@ gboolean rc;
 	if (!g_file_get_contents (filename, &buffer, &length, &error))
 	{
 		//g_message ("%s", error->message);
-		retval = XML_LOAD_ERROR;
+		retval = XML_IO_ERROR;
 		g_error_free (error);
 	}
 	else
@@ -450,26 +455,27 @@ gboolean rc;
 			g_markup_parse_context_free (context);
 			g_free (buffer);
 
-
-			//upgrade to v0.2 file
-			if( version == 0.1 )
-				homebank_ugrade_v01_to_v02();
 			
-			//upgrade to v0.3 file
-			if( version == 0.2 )
-				homebank_ugrade_v02_to_v03();
-
-			//upgrade to v0.5 file
-			if( version == 0.4 )
-				homebank_ugrade_v04_to_v05();
-
-			//upgrade to prior v0.4 file
-			// we must sort the archive list
-			if( version < 0.4 )
-			{
+			if( version == 0.1 )	//upgrade to v0.2 file
+				homebank_upgrade_v01_to_v02();
+			
+			if( version == 0.2 )	//upgrade to v0.3 file
+				homebank_upgrade_v02_to_v03();
+			
+			if( version == 0.4 )	//upgrade to v0.5 file
+				homebank_upgrade_v04_to_v05();
+			
+			if( version < 0.4 )		//upgrade for pre v0.4 file
 			   GLOBALS->arc_list = da_archive_sort(GLOBALS->arc_list);
-			}
 
+			if( version == 0.5 )	//upgrade to v0.6 file
+				homebank_upgrade_v05_to_v06();
+			
+			if( version < 0.6 )		//upgrade for pre v0.6 file
+				homebank_upgrade_lower_v06();
+
+
+			
 			// next ?
 
 		}
@@ -482,7 +488,7 @@ gboolean rc;
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
 // v0.1 to v0.2 : we must change account reference by making a +1 to its index references
-static void homebank_ugrade_v01_to_v02(void)
+static void homebank_upgrade_v01_to_v02(void)
 {
 GList *list;
 	
@@ -506,7 +512,7 @@ GList *list;
 }
 
 // v0.2 to v0.3 : we must assume categories exists : bugs 303886, 303738
-static void homebank_ugrade_v02_to_v03(void)
+static void homebank_upgrade_v02_to_v03(void)
 {
 Category *cat;
 GList *list;
@@ -546,7 +552,7 @@ GList *list;
 // v0.4 to v0.5 : 
 // we must assume dst_account exists in archives for internal xfer : bug 528923
 // if not, remove automation from the archive
-static void homebank_ugrade_v04_to_v05(void)
+static void homebank_upgrade_v04_to_v05(void)
 {
 Account *acc;
 GList *list;
@@ -568,6 +574,102 @@ GList *list;
 	}
 }
 
+// v0.5 to v0.6 : we must change dst_account to 0 on non Xfer transactions
+//#677351
+static void homebank_upgrade_v05_to_v06(void)
+{
+GList *list;
+	
+	list = g_list_first(GLOBALS->ope_list);
+	while (list != NULL)
+	{
+	Operation *entry = list->data;
+		if( entry->paymode != PAYMODE_INTXFER )
+			entry->dst_account = 0;
+		list = g_list_next(list);
+	}
+
+	list = g_list_first(GLOBALS->arc_list);
+	while (list != NULL)
+	{
+	Archive *entry = list->data;
+		if( entry->paymode != PAYMODE_INTXFER )
+			entry->dst_account = 0;
+		list = g_list_next(list);
+	}
+}
+
+// lower v0.6 : we must assume categories/payee exists
+// and string link to xfer
+// #632496
+static void homebank_upgrade_lower_v06(void)
+{
+
+Category *cat;
+Payee *pay;
+GList *list;
+
+	list = g_list_first(GLOBALS->ope_list);
+	while (list != NULL)
+	{
+	Operation *entry = list->data;
+
+		cat = da_cat_get(entry->category);
+		if(cat == NULL)
+		{
+			DB( g_print(" !! fixing cat for ope: %d is unknow\n", entry->category) );
+			entry->category = 0;
+		}
+
+		pay = da_pay_get(entry->payee);
+		if(pay == NULL)
+		{
+			DB( g_print(" !! fixing pay for ope: %d is unknow\n", entry->payee) );
+			entry->payee = 0;
+		}
+
+		//also strong link internal xfer
+		if(entry->paymode == PAYMODE_INTXFER)
+		{
+		Operation *child = operation_old_get_child_transfer(entry);
+			if(child != NULL)
+			{
+				operation_xfer_change_to_child(entry, child);
+			}
+		}
+		
+		list = g_list_next(list);
+	}
+
+
+	list = g_hash_table_get_values(GLOBALS->h_rul);
+	while (list != NULL)
+	{
+	Assign *entry = list->data;
+
+		cat = da_cat_get(entry->category);
+		if(cat == NULL)
+		{
+			DB( g_print(" !! fixing cat for rul: %d is unknow\n", entry->category) );
+			entry->category = 0;
+		}
+
+		pay = da_pay_get(entry->payee);
+		if(pay == NULL)
+		{
+			DB( g_print(" !! fixing pay for rul: %d is unknow\n", entry->payee) );
+			entry->payee = 0;
+		}
+
+
+		list = g_list_next(list);
+	}
+	g_list_free(list);	
+
+
+}
+
+
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
 
@@ -583,7 +685,8 @@ gchar *title;
 
 	tmpstr = g_markup_printf_escaped("<properties title=\"%s\" car_category=\"%d\" auto_nbdays=\"%d\"/>\n",
 		title,
-		GLOBALS->car_category,
+//	    GLOBALS->kcur,
+		GLOBALS->vehicle_category,
 		GLOBALS->auto_nbdays
 	);
 
@@ -621,6 +724,7 @@ gchar *tmpstr;
 			item->flags,
 			item->pos,
 			item->type,
+//		    item->kcur,
 			item->name == NULL ? "" : item->name,
 			item->number == NULL ? "" : item->number,
 			item->bankname == NULL ? "" : item->bankname,
@@ -839,7 +943,7 @@ gchar *tagstr;
 
 		tmpstr = g_markup_printf_escaped(
 			"<ope date=\"%d\" amount=\"%s\" account=\"%d\" dst_account=\"%d\" paymode=\"%d\" flags=\"%d\" "
-			"payee=\"%d\" category=\"%d\" wording=\"%s\" info=\"%s\" tags=\"%s\"/>\n",
+			"payee=\"%d\" category=\"%d\" wording=\"%s\" info=\"%s\" tags=\"%s\" kxfer=\"%d\" />\n",
 			item->date,
 			g_ascii_dtostr (buf, sizeof (buf), item->amount),
 			item->account,
@@ -850,7 +954,8 @@ gchar *tagstr;
 			item->category,
 			item->wording == NULL ? "" : item->wording,
 			item->info == NULL ? "" : item->info,
-			item->tags == NULL ? "" : tagstr			
+			item->tags == NULL ? "" : tagstr,
+		    item->kxfer
 		);
 
 		g_free(tagstr);
@@ -865,16 +970,18 @@ gchar *tagstr;
 /*
 ** XML save homebank file: wallet
 */
-void homebank_save_xml(gchar *filename)
+gint homebank_save_xml(gchar *filename)
 {
 GIOChannel *io;
 char buf1[G_ASCII_DTOSTR_BUF_SIZE];
 gchar *outstr;
+gint retval = XML_OK;
 
 	io = g_io_channel_new_file(filename, "w", NULL);
 	if(io == NULL)
 	{
 		g_message("file error on: %s", filename);
+		retval = XML_IO_ERROR;
 	}
 	else
 	{
@@ -885,6 +992,7 @@ gchar *outstr;
 		g_free(outstr);
 
 		homebank_save_xml_prop(io);
+//		homebank_save_xml_cur(io);
 		homebank_save_xml_acc(io);
 		homebank_save_xml_pay(io);
 		homebank_save_xml_cat(io);
@@ -897,4 +1005,5 @@ gchar *outstr;
 
 		g_io_channel_unref (io);
 	}
+	return retval;
 }

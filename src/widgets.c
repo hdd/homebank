@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -154,6 +154,21 @@ gimp_label_set_attributes (GtkLabel *label,
   pango_attr_list_unref (attrs);
 }
 
+void ui_gtk_entry_set_text(GtkWidget *widget, gchar *text)
+{
+	DB( g_print(" set text to '%s'\n", text) );
+	
+	if( text != NULL )
+		gtk_entry_set_text(GTK_ENTRY(widget), text);
+	else
+		gtk_entry_set_text(GTK_ENTRY(widget), "");
+}
+
+
+
+
+
+
 /*
 **
 */
@@ -257,6 +272,7 @@ GtkWidget *entry;
 
 	return entry;
 }
+
 /*
 **
 */
@@ -267,7 +283,7 @@ GtkAdjustment *adj;
 
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -G_MAXDOUBLE, G_MAXDOUBLE, 0.1, 1.0, 0.0);
 	spinner = gtk_spin_button_new (adj, 1.0, 2);
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	//gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set(spinner, "xalign", 1.0, NULL);
 
@@ -285,7 +301,7 @@ GtkAdjustment *adj;
 
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -G_MAXDOUBLE, G_MAXDOUBLE, 0.1, 1.0, 0.0);
 	spinner = gtk_spin_button_new (adj, 1.0, 6);
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	//gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set(spinner, "xalign", 1.0, NULL);
 
@@ -554,18 +570,19 @@ char *paymode_label_names[NUM_PAYMODE_MAX] =
 };
 
 /*
-	
-	facture cb        / credit card
-	(carte de paiement / debit card) http://www.direct.gov.uk/en/MoneyTaxAndBenefits/ManagingMoney/BankAccountsAndBankingProducts/DG_10035158
-	cheque            / check
-	retrait espece    / withdrawal of cash
-	virement          / transfer
-	virement compte   / internal transfer
+	http://www.direct.gov.uk/en/MoneyTaxAndBenefits/ManagingMoney/BankAccountsAndBankingProducts/DG_10035158
 
-	prelevement	      / standing order/repeating payment
-	télépaiement      / electronic payment
-	dépôt             / deposit
-	frais bancaires   / FI fee
+0	aucun              / none
+1	facture cb         / credit card
+2	cheque             / check
+3   retrait espece     / withdrawal of cash
+4	virement           / transfer
+5	virement compte    / internal transfer
+6	(carte de paiement / debit card) 
+7	prelevement	       / standing order/repeating payment
+8	télépaiement       / electronic payment
+9	dépôt              / deposit
+10	frais bancaires    / FI fee
 	autre
 		
 */

@@ -59,9 +59,8 @@
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
 #define HB_UNSTABLE			0
-#define HB_VERSION			"4.3"
-
-#define FILE_VERSION		0.5
+#define HB_VERSION			"4.4"
+#define FILE_VERSION		0.6
 
 #if HB_UNSTABLE != 1
 	#define	PROGNAME		"HomeBank"
@@ -72,16 +71,16 @@
 #endif
 
 #ifdef G_OS_WIN32
-#define GETTEXT_PACKAGE "homebank"
-#define LOCALE_DIR      "locale"
-#define PIXMAPS_DIR     "images"
-#define HELP_DIR        "help"
-#define PACKAGE_VERSION HB_VERSION
-#define PACKAGE         "homebank"
-#define VERSION         HB_VERSION
-//#define NOOFX
+	#define GETTEXT_PACKAGE "homebank"
+	#define LOCALE_DIR      "locale"
+	#define PIXMAPS_DIR     "images"
+	#define HELP_DIR        "help"
+	#define PACKAGE_VERSION HB_VERSION
+	#define PACKAGE         "homebank"
+	#define VERSION         HB_VERSION
+	//#define NOOFX
 
-#define ENABLE_NLS 1
+	#define ENABLE_NLS 1
 #endif
 
 /* container spacing */
@@ -132,9 +131,9 @@ enum
 #define HB_STOCK_OPE_AUTO        "hb-ope-auto"
 #define HB_STOCK_REP_STATS       "hb-rep-stats"
 #define HB_STOCK_REP_TIME        "hb-rep-time"
-#define HB_STOCK_REP_OVER        "hb-rep-over"
+#define HB_STOCK_REP_BALANCE     "hb-rep-balance"
 #define HB_STOCK_REP_BUDGET      "hb-rep-budget"
-#define HB_STOCK_REP_CAR         "hb-rep-car"
+#define HB_STOCK_REP_CAR         "hb-rep-vehicle"
 
 
 /*
@@ -143,6 +142,7 @@ enum
 struct HomeBank
 {
 	// data storage
+//	GHashTable	*h_cur;			//currencies
 	GHashTable	*h_acc;			//accounts
 	GHashTable	*h_pay;			//payees
 	GHashTable	*h_cat;			//categories
@@ -158,8 +158,9 @@ struct HomeBank
 	
 	// wallet properties
 	gchar		*title;
-	guint		car_category;
+	guint32		vehicle_category;
 	guint		auto_nbdays;
+//	guint32		kcur;			// base currency
 
 	// current filename
 	gchar		*filename;

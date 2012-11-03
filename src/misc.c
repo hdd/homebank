@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -18,12 +18,8 @@
  */
 
 #include "homebank.h"
-
 #include "misc.h"
 
-/****************************************************************************/
-/* Debug macros                                                             */
-/****************************************************************************/
 #define MYDEBUG 0
 
 #if MYDEBUG
@@ -36,6 +32,7 @@
 extern struct HomeBank *GLOBALS;
 extern struct Preferences *PREFS;
 
+/* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
 static gdouble fint(gdouble amount)
 {
@@ -55,7 +52,7 @@ static unsigned dix_puissance_n(unsigned n)
     return res;
 }
 
-static double arrondi(const double x, unsigned n)
+double arrondi(const double x, unsigned n)
 {
     unsigned N = dix_puissance_n(n);
     return floor(x * N + 0.5) / N;
@@ -64,7 +61,7 @@ static double arrondi(const double x, unsigned n)
 /*
 gint mystrfmon_int(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
-struct Currency *cur;
+struct CurrencyFmt *cur;
 gint size = 0;
 gchar buf1[G_ASCII_DTOSTR_BUF_SIZE];
 gchar groupbuf[G_ASCII_DTOSTR_BUF_SIZE];
@@ -148,7 +145,7 @@ gchar *monstr;
 }
 */
 
-gint real_mystrfmon(gchar *outstr, gint outlen, gchar *buf1, struct Currency *cur)
+gint real_mystrfmon(gchar *outstr, gint outlen, gchar *buf1, struct CurrencyFmt *cur)
 {
 gint size = 0;
 gchar groupbuf[G_ASCII_DTOSTR_BUF_SIZE];
@@ -206,6 +203,7 @@ gchar *monstr;
 
 	g_strfreev(str_array);
 
+	/* insert our formated number with symbol */
 	g_snprintf(outstr, outlen, cur->monfmt, monstr);
 
 	/*
@@ -238,7 +236,7 @@ gchar *monstr;
 
 gint mystrfmon_int(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
-struct Currency *cur;
+struct CurrencyFmt *cur;
 gchar formatd_buf[G_ASCII_DTOSTR_BUF_SIZE];
 gdouble monval = value;
 gint size;
@@ -260,9 +258,124 @@ gint size;
 }
 
 
+/*
+gint mystrfmoncurr(gchar *outstr, gint outlen, gdouble value, guint32 currkey)
+{
+Currency *cur;
+gchar formatd_buf[G_ASCII_DTOSTR_BUF_SIZE];
+gdouble monval;
+gint size;
+
+	if(currkey == 0)
+	{
+		*outstr = 0;
+		return 0;
+	}
+
+	
+
+	
+	cur = da_cur_get(currkey);
+	
+	monval = arrondi(value, cur->frac_digits);
+	
+	//if(minor == TRUE)
+	//{
+
+	//todo: debug test
+	//	monval = (value * cur->rate);
+	//	monval += (monval > 0.0) ? 0.005 : -0.005;
+	//	monval = (fint(monval * 100) / 100);
+	//}
+
+	//todo: debug test
+	//cur = da_cur_get(GLOBALS->kcur);
+
+	
+	g_ascii_formatd(formatd_buf, sizeof (formatd_buf), cur->format, monval);
+
+	//g_print("k=%d, value %.2f, fd=%d, fmt=%s => %s\n", currkey, value, cur->frac_digits, cur->monfmt, formatd_buf);
+
+	
+	size = real_mystrfmoncurr(outstr, outlen, formatd_buf, cur);
+
+	return size;
+}
+
+
+gint real_mystrfmoncurr(gchar *outstr, gint outlen, gchar *buf1, Currency *cur)
+{
+gint size = 0;
+gchar groupbuf[G_ASCII_DTOSTR_BUF_SIZE];
+gchar **str_array;
+guint i, length;
+gchar *monstr;
+
+	str_array = g_strsplit(buf1, ".", 2);
+	monstr = NULL;
+
+	length = strlen(str_array[0]);
+	
+	if( cur->grouping_char == NULL || !strlen(cur->grouping_char) )
+	{
+		monstr = g_strjoinv(cur->decimal_char, str_array);
+	}
+	else
+	{
+	gchar *s = str_array[0];
+	gchar *d = groupbuf;
+
+		i = 0;
+		// avoid the - for negative amount
+		if( *s == '-')
+		{
+			*d++ = *s++;
+			length--;
+		}
+		
+		// do the grouping
+		do
+		{
+			if( i!=0 && (length % 3) == 0 )
+			{
+			gchar *gc = cur->grouping_char;
+			
+				while( *gc )
+					*d++ = *gc++;
+			}
+		
+			*d++ = *s;
+			length--;
+			i++;	
+		}
+		while (length && *s++ != '\0');
+		*d = 0;
+
+		monstr = g_strjoin(cur->decimal_char, groupbuf, str_array[1], NULL);
+
+	}
+
+	//debug
+	//g_print("**\nmystrfmon %.2f\n 0=%s\n 1=%s\n [%d]\n", value, str_array[0], str_array[1], length );
+	//g_print(" => %s :: %s\n", monstr, groupbuf);
+
+	g_strfreev(str_array);
+
+	// insert our formated number with symbol
+	g_snprintf(outstr, outlen, cur->monfmt, monstr);
+
+	g_free(monstr);
+	
+	return size;
+}
+*/
+
+
+
+
 gint mystrfmon(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
-struct Currency *cur;
+struct CurrencyFmt *cur;
 gchar formatd_buf[G_ASCII_DTOSTR_BUF_SIZE];
 gdouble monval;
 gint size;

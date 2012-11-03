@@ -17,9 +17,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __HOMEBANK_REPOVER_H__
-#define __HOMEBANK_REPOVER_H__
+#ifndef __HOMEBANK_REPVEHICLE_H__
+#define __HOMEBANK_REPVEHICLE_H__
 
-GtkWidget *repover_window_new(void);
+GtkWidget *repcost_window_new(void);
 
-#endif /* __HOMEBANK_REPOVER_H__ */
+#endif /* __HOMEBANK_REPVEHICLE_H__ */

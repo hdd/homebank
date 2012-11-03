@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -99,6 +99,12 @@ void deffilter_option_update(GtkWidget *widget, gpointer user_data);
 void deffilter_get(struct deffilter_data *data);
 void deffilter_set(struct deffilter_data *data);
 void deffilter_setup(struct deffilter_data *data);
+
+GtkWidget *deffilter_part_date(struct deffilter_data *data);
+GtkWidget *deffilter_part_text(struct deffilter_data *data);
+GtkWidget *deffilter_part_amount(struct deffilter_data *data);
+GtkWidget *deffilter_part_state(struct deffilter_data *data);
+GtkWidget *deffilter_part_paymode(struct deffilter_data *data);
 
 GtkWidget *deffilter_page_category (struct deffilter_data *data);
 GtkWidget *deffilter_page_payee (struct deffilter_data *data);
@@ -1057,25 +1063,12 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 	return(container);
 }
 
-
-/*
-** general page: date, amount, state, payment
-*/
-GtkWidget *deffilter_page_general (struct deffilter_data *data)
+GtkWidget *deffilter_part_date(struct deffilter_data *data)
 {
-GtkWidget *container, *table, *table1, *label, *widget, *image;
-GtkWidget *alignment, *vbox;
-gint row, i;
-
-	//container = gtk_hbox_new(FALSE, HB_BOX_SPACING);
-	//			gtk_alignment_new(xalign, yalign, xscale, yscale)
-	//gtk_container_set_border_width(GTK_CONTAINER(container), HB_BOX_SPACING);
-
-	container = gtk_table_new (2, 3, FALSE);
-	gtk_table_set_row_spacings (GTK_TABLE (container), HB_TABROW_SPACING*2);
-	gtk_table_set_col_spacings (GTK_TABLE (container), HB_TABCOL_SPACING*2);
-	gtk_container_set_border_width(GTK_CONTAINER(container), HB_BOX_SPACING);
-
+GtkWidget *table, *label;
+GtkWidget *alignment;
+gint row;
+	
 	// filter date
 	table = gtk_table_new (3, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), HB_TABROW_SPACING);
@@ -1086,8 +1079,6 @@ gint row, i;
 	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 	
-	// date: r=1, c=1
-	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 0, 1, 0, 1);
 
 	row = 0;
 	label = make_label(NULL, 0.0, 1.0);
@@ -1123,7 +1114,16 @@ gint row, i;
 		//gtk_table_attach_defaults (GTK_TABLE (table), data->PO_maxdate, 1, 2, row, row+1);
 		gtk_table_attach (GTK_TABLE (table), data->PO_maxdate, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
-	// Text section
+	return alignment;
+}
+
+
+GtkWidget *deffilter_part_text(struct deffilter_data *data)
+{
+GtkWidget *table, *label;
+GtkWidget *alignment;
+gint row;
+	
 	table = gtk_table_new (3, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), HB_TABROW_SPACING);
 	gtk_table_set_col_spacings (GTK_TABLE (table), HB_TABCOL_SPACING);
@@ -1133,8 +1133,6 @@ gint row, i;
 	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 
-	// date: r=2, c=1
-	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 0, 1, 1, 2);
 
 	row = 0;
 	label = make_label(NULL, 0.0, 1.0);
@@ -1174,10 +1172,16 @@ gint row, i;
 		data->ST_tag = make_string(label);
 		gtk_table_attach (GTK_TABLE (table), data->ST_tag, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
+	return alignment;
+}
+
+GtkWidget *deffilter_part_amount(struct deffilter_data *data)
+{
+GtkWidget *table, *label;
+GtkWidget *alignment;
+gint row;
 
 
-	// filter amount
-/*
 	table = gtk_table_new (3, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), HB_TABROW_SPACING);
 	gtk_table_set_col_spacings (GTK_TABLE (table), HB_TABCOL_SPACING);
@@ -1187,12 +1191,9 @@ gint row, i;
 	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 
-	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 0, 1, 2, 3);
-*/
 	// Amount section
-//	row = 0;
-	row++;
-	row++;
+	row = 0;
+
 	label = make_label(NULL, 0.0, 1.0);
 	gtk_label_set_markup (GTK_LABEL(label), _("<b>Filter Amount</b>"));
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
@@ -1222,8 +1223,20 @@ gint row, i;
 		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 		data->ST_maxamount = make_amount(label);
 		gtk_table_attach (GTK_TABLE (table), data->ST_maxamount, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+	
 
-	// column 2
+	return alignment;
+}
+
+
+GtkWidget *deffilter_part_state(struct deffilter_data *data)
+{
+GtkWidget *table, *label, *vbox, *widget;
+GtkWidget *alignment;
+gint row;
+
+
+		// column 2
 
 	// filter state
 	table = gtk_table_new (3, 3, FALSE);
@@ -1235,8 +1248,6 @@ gint row, i;
 	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 
-	// date: r=2, c=1
-	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 1, 2, 0, 1);
 
 	row = 0;
 	label = make_label(NULL, 0.0, 1.0);
@@ -1283,6 +1294,16 @@ gint row, i;
 		gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
 
 
+	return alignment;
+}
+
+
+GtkWidget *deffilter_part_paymode(struct deffilter_data *data)
+{
+GtkWidget *table, *label, *table1, *image;
+GtkWidget *alignment;
+gint i, row;
+	
 	// Filter Payment
 	table = gtk_table_new (3, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), HB_TABROW_SPACING);
@@ -1293,7 +1314,6 @@ gint row, i;
 	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 
-	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 1, 2, 1, 2);
 
 	row = 0;
 	label = make_label(NULL, 0.0, 1.0);
@@ -1337,6 +1357,46 @@ gint row, i;
 
 
 
+	return alignment;
+}
+
+
+/*
+** general page: date, amount, state, payment
+*/
+GtkWidget *deffilter_page_general (struct deffilter_data *data)
+{
+GtkWidget *container, *part;
+
+	//container = gtk_hbox_new(FALSE, HB_BOX_SPACING);
+	//			gtk_alignment_new(xalign, yalign, xscale, yscale)
+	//gtk_container_set_border_width(GTK_CONTAINER(container), HB_BOX_SPACING);
+
+	container = gtk_table_new (2, 3, FALSE);
+	gtk_table_set_row_spacings (GTK_TABLE (container), HB_TABROW_SPACING*2);
+	gtk_table_set_col_spacings (GTK_TABLE (container), HB_TABCOL_SPACING*2);
+	gtk_container_set_border_width(GTK_CONTAINER(container), HB_BOX_SPACING);
+
+	// date: r=1, c=1
+	part = deffilter_part_date(data);
+	gtk_table_attach_defaults(GTK_TABLE (container), part, 0, 1, 0, 1);
+	
+	// amount: r=2, c=2
+	part = deffilter_part_amount(data);
+	gtk_table_attach_defaults (GTK_TABLE (container), part, 0, 1, 1, 2);
+
+	// paymode:
+	part = deffilter_part_paymode(data);
+	gtk_table_attach_defaults (GTK_TABLE (container), part, 1, 2, 0, 2);
+
+	// state: r=2, c=1
+	part = deffilter_part_state(data);
+	gtk_table_attach_defaults (GTK_TABLE (container), part, 2, 3, 0, 1);
+
+	// text: r=2, c=1
+	part = deffilter_part_text(data);
+	gtk_table_attach_defaults (GTK_TABLE (container), part, 2, 3, 1, 2);
+	
 	return(container);
 }
 
@@ -1361,15 +1421,13 @@ GtkWidget *window, *mainbox, *notebook, *label, *page;
 					    //GTK_WINDOW (do_widget),
 					    NULL,
 					    0,
-					    GTK_STOCK_CANCEL,
-					    GTK_RESPONSE_REJECT,
 					    GTK_STOCK_CLEAR,
 					    55,
+					    GTK_STOCK_CANCEL,
+					    GTK_RESPONSE_REJECT,
 					    GTK_STOCK_OK,
 					    GTK_RESPONSE_ACCEPT,
 					    NULL);
-
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 
 	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "filter.svg");
 	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_FILTER);

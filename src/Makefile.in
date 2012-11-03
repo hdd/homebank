@@ -58,12 +58,13 @@ am_homebank_OBJECTS = $(am__objects_1) $(am__objects_2) \
 	def_archive.$(OBJEXT) def_budget.$(OBJEXT) \
 	def_filter.$(OBJEXT) def_operation.$(OBJEXT) \
 	def_pref.$(OBJEXT) def_wallet.$(OBJEXT) dsp_account.$(OBJEXT) \
-	dsp_wallet.$(OBJEXT) homebank.$(OBJEXT) imp_amiga.$(OBJEXT) \
-	import.$(OBJEXT) imp_qif.$(OBJEXT) list_account.$(OBJEXT) \
+	dsp_wallet.$(OBJEXT) homebank.$(OBJEXT) import.$(OBJEXT) \
+	imp_qif.$(OBJEXT) list_account.$(OBJEXT) \
 	list_operation.$(OBJEXT) list_upcoming.$(OBJEXT) \
 	misc.$(OBJEXT) preferences.$(OBJEXT) rep_budget.$(OBJEXT) \
-	rep_car.$(OBJEXT) rep_over.$(OBJEXT) rep_stats.$(OBJEXT) \
-	rep_time.$(OBJEXT) widgets.$(OBJEXT) xml.$(OBJEXT)
+	rep_vehicle.$(OBJEXT) rep_balance.$(OBJEXT) \
+	rep_stats.$(OBJEXT) rep_time.$(OBJEXT) widgets.$(OBJEXT) \
+	xml.$(OBJEXT)
 homebank_OBJECTS = $(am_homebank_OBJECTS)
 am__DEPENDENCIES_1 =
 homebank_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -141,6 +142,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
@@ -252,7 +255,6 @@ homebank_SOURCES = \
 	dsp_account.c \
 	dsp_wallet.c \
 	homebank.c \
-	imp_amiga.c \
 	import.c \
 	imp_qif.c \
 	list_account.c \
@@ -261,8 +263,8 @@ homebank_SOURCES = \
 	misc.c \
 	preferences.c \
 	rep_budget.c \
-	rep_car.c \
-	rep_over.c \
+	rep_vehicle.c \
+	rep_balance.c \
 	rep_stats.c \
 	rep_time.c \
 	widgets.c \
@@ -279,7 +281,6 @@ homebank_SOURCES = \
 	gtkchart.h \
 	gtkdateentry.h \
 	homebank.h \
-	imp_amiga.h \
 	import.h \
 	imp_qif.h \
 	list_account.h \
@@ -288,8 +289,8 @@ homebank_SOURCES = \
 	misc.h \
 	preferences.h \
 	rep_budget.h \
-	rep_car.h \
-	rep_over.h \
+	rep_vehicle.h \
+	rep_balance.h \
 	rep_stats.h \
 	rep_time.h \
 	widgets.h \
@@ -404,7 +405,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hb_payee.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hb_transaction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/homebank.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imp_amiga.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imp_qif.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/import.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list_account.Po@am__quote@
@@ -412,11 +412,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list_upcoming.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rep_balance.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rep_budget.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rep_car.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rep_over.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rep_stats.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rep_time.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rep_vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ui-assist-start.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ui_account.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ui_assign.Po@am__quote@

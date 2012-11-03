@@ -55,14 +55,14 @@ private_icons = \
 	hicolor_actions_22x22_hb-ope-remind.png \
 	hicolor_actions_16x16_hb-rep-stats.png \
 	hicolor_actions_22x22_hb-rep-stats.png \
-	hicolor_actions_16x16_hb-rep-over.png \
-	hicolor_actions_22x22_hb-rep-over.png \
+	hicolor_actions_16x16_hb-rep-balance.png \
+	hicolor_actions_22x22_hb-rep-balance.png \
 	hicolor_actions_16x16_hb-rep-time.png \
 	hicolor_actions_22x22_hb-rep-time.png \
 	hicolor_actions_16x16_hb-rep-budget.png \
 	hicolor_actions_22x22_hb-rep-budget.png \
-	hicolor_actions_16x16_hb-rep-car.png \
-	hicolor_actions_22x22_hb-rep-car.png \
+	hicolor_actions_16x16_hb-rep-vehicle.png \
+	hicolor_actions_22x22_hb-rep-vehicle.png \
 	hicolor_actions_22x22_hb-view-list.png \
 	hicolor_actions_22x22_hb-view-bar.png \
 	hicolor_actions_22x22_hb-view-pie.png \

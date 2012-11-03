@@ -61,7 +61,6 @@ homebank_SOURCES = \
 	dsp_account.c \
 	dsp_wallet.c \
 	homebank.c \
-	imp_amiga.c \
 	import.c \
 	imp_qif.c \
 	list_account.c \
@@ -70,8 +69,8 @@ homebank_SOURCES = \
 	misc.c \
 	preferences.c \
 	rep_budget.c \
-	rep_car.c \
-	rep_over.c \
+	rep_vehicle.c \
+	rep_balance.c \
 	rep_stats.c \
 	rep_time.c \
 	widgets.c \
@@ -88,7 +87,6 @@ homebank_SOURCES = \
 	gtkchart.h \
 	gtkdateentry.h \
 	homebank.h \
-	imp_amiga.h \
 	import.h \
 	imp_qif.h \
 	list_account.h \
@@ -97,8 +95,8 @@ homebank_SOURCES = \
 	misc.h \
 	preferences.h \
 	rep_budget.h \
-	rep_car.h \
-	rep_over.h \
+	rep_vehicle.h \
+	rep_balance.h \
 	rep_stats.h \
 	rep_time.h \
 	widgets.h \

@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal ruleing for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -627,8 +627,6 @@ gint row;
 				NULL);
 
 	data.window = window;
-
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 
 	//set the window icon
 	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "assign.svg");

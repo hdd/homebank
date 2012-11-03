@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -771,7 +771,7 @@ gboolean homebank_lastopenedfiles_load(void)
 {
 GKeyFile *keyfile;
 gboolean retval = FALSE;
-gchar *group, *filename;
+gchar *group, *filename, *lastfilename;
 
 	DB( g_print("\n(homebank) lastopenedfiles load\n") );
 
@@ -793,10 +793,19 @@ gchar *group, *filename;
 			{
                 DB( g_print(" -> keyfile has key ok\n") );
 
+				lastfilename = g_key_file_get_string  (keyfile, group, "LastOpenedFile", NULL);
 
-				GLOBALS->filename = g_strdup(g_key_file_get_string  (keyfile, group, "LastOpenedFile", NULL));
-				DB( g_print("lastfile loaded: %s\n", GLOBALS->filename ) );
-				retval = TRUE;
+				DB( g_print("lastfile loaded: %s\n", lastfilename ) );
+				// #593082
+				if (g_file_test (lastfilename, G_FILE_TEST_EXISTS) != FALSE)
+				{
+					DB( g_print(" -> file exists\n") );
+
+					g_free(GLOBALS->filename);
+					GLOBALS->filename = g_strdup(lastfilename);
+					
+					retval = TRUE;
+				}
 			}
 		}
 		g_free(filename);
@@ -1458,13 +1467,13 @@ gboolean openlast;
                       GTK_DIALOG_DESTROY_WITH_PARENT,
                       GTK_MESSAGE_WARNING,
                       GTK_BUTTONS_CLOSE,
-                      "This is an UNSTABLE version of HomeBank"
+                      "This is a beta version of HomeBank (UNSTABLE)"
                       );
 
 			gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), 
-						"DO NOT USE it with some important files.\n"
+						"DO NOT USE with important files or do a backup first.\n"
 						"This kind of release is for <b>TESTING ONLY</b>.\n"
-						"<u>It may be buggy, crash, or loose your datas</u>.\n\n"
+						"<u>It may be buggy, crash, or lose your data</u>.\n\n"
 
 						"For unstable bugs report, questions, suggestions:\n"
 			            " - <b>DO NOT USE LaunchPad</b>\n"

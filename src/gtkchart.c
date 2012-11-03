@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -83,15 +83,15 @@ void chart_tooltip_start_delay(GtkChart *chart);
 
 
 void barchart_calculation(GtkChart *chart);
-static void barchart_draw_scale(GtkWidget *widget, GdkGC *gc, gpointer user_data);
-static void barchart_draw_bars(GtkWidget *widget, GdkGC *gc, gpointer user_data);
+static void barchart_draw_scale(GtkWidget *widget, gpointer user_data);
+static void barchart_draw_bars(GtkWidget *widget, gpointer user_data);
 static gint barchart_get_active(GtkWidget *widget, gint x, gint y, gpointer user_data);
 static void barchart_first_changed( GtkAdjustment *adj, gpointer user_data);
 void barchart_scrollbar_setvalues(GtkChart *chart);
 void barchart_compute_range(GtkChart *chart);
 
 void piechart_calculation(GtkChart *chart);
-static void piechart_draw_slices(GtkWidget *widget, GdkGC *gc, gpointer user_data);
+static void piechart_draw_slices(GtkWidget *widget, gpointer user_data);
 static gint piechart_get_active(GtkWidget *widget, gint x, gint y, gpointer user_data);
 
 static void chart_tooltip_hide(GtkChart *chart);
@@ -885,7 +885,7 @@ gint blkw;
 /*
 ** draw the scale
 */
-static void barchart_draw_scale(GtkWidget *widget, GdkGC *gc, gpointer user_data)
+static void barchart_draw_scale(GtkWidget *widget, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
 gint i;
@@ -977,7 +977,7 @@ static const double dashed3[] = {2.0};
 
 }
 
-static void barchart_draw_scale_text(GtkWidget *widget, GdkGC *gc, gpointer user_data)
+static void barchart_draw_scale_text(GtkWidget *widget, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
 gint i;
@@ -1072,7 +1072,7 @@ cairo_text_extents_t extents;
 /*
 ** draw all visible bars
 */
-static void barchart_draw_bars(GtkWidget *widget, GdkGC *gc, gpointer user_data)
+static void barchart_draw_bars(GtkWidget *widget, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
 cairo_t *cr;
@@ -1267,7 +1267,7 @@ static void draw_plot(cairo_t *cr, double x, double y, double r)
 
 }
 
-static void linechart_draw_lines(GtkWidget *widget, GdkGC *gc, gpointer user_data)
+static void linechart_draw_lines(GtkWidget *widget, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
 cairo_t *cr;
@@ -1428,7 +1428,7 @@ gint w, h;
 	chart->top   = (h - chart->rayon) / 2;
 }
 
-static void piechart_draw_slices(GtkWidget *widget, GdkGC *gc, gpointer user_data)
+static void piechart_draw_slices(GtkWidget *widget, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
 
@@ -1676,7 +1676,6 @@ static gboolean chart_map( GtkWidget *widget, GdkEvent *event, gpointer user_dat
 static gboolean chart_expose( GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
-GdkGC	*gc1;
 
   if (event->count > 0)
     return FALSE;
@@ -1715,26 +1714,23 @@ cairo_t *cr;
 		      widget->allocation.width,
 		      widget->allocation.height);
 */
-	gc1 = gdk_gc_new(widget->window);
 
 	switch(chart->type)
 	{
 		case CHART_BAR_TYPE:
-			barchart_draw_scale(widget, gc1, chart);
-			barchart_draw_bars(widget, gc1, chart);
-			barchart_draw_scale_text(widget, gc1, chart);
+			barchart_draw_scale(widget, chart);
+			barchart_draw_bars(widget, chart);
+			barchart_draw_scale_text(widget, chart);
 			break;
 		case CHART_LINE_TYPE:
-			barchart_draw_scale(widget, gc1, chart);
-			linechart_draw_lines(widget, gc1, chart);
-			barchart_draw_scale_text(widget, gc1, chart);
+			barchart_draw_scale(widget, chart);
+			linechart_draw_lines(widget, chart);
+			barchart_draw_scale_text(widget, chart);
 			break;
 		case CHART_PIE_TYPE:
-			piechart_draw_slices(widget, gc1, chart);
+			piechart_draw_slices(widget, chart);
 			break;
 	}
-
-	g_object_unref(gc1);
 
 	return TRUE;
 }

@@ -21,12 +21,13 @@
 #define __HB_XML_H__
 
 gint homebank_load_xml(gchar *filename);
-void homebank_save_xml(gchar *filename);
+gint homebank_save_xml(gchar *filename);
 
 enum
 {
+	XML_UNSET,
 	XML_OK,
-	XML_LOAD_ERROR,
+	XML_IO_ERROR,
 	XML_FILE_ERROR,
 	XML_VERSION_ERROR,
 };

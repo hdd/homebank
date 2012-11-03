@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -209,12 +209,18 @@ struct accPopContext ctx;
 	gtk_list_store_clear (GTK_LIST_STORE(model));
 	g_hash_table_foreach(hash, (GHFunc)ui_acc_comboboxentry_populate_ghfunc, &ctx);
 
+	/* select first item */
+	
+
+	
 	/* reatach our model */
 	gtk_combo_box_set_model(GTK_COMBO_BOX(entry_box), model);
 	gtk_entry_completion_set_model (completion, model);
 	g_object_unref(model);
 
 	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(model), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+
+	gtk_combo_box_set_active (GTK_COMBO_BOX(entry_box), 0);
 	
 }
 
@@ -665,6 +671,7 @@ Account *item;
 
 			item->type = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_type));
 
+//			item->kcur = ui_cur_combobox_get_key(GTK_COMBO_BOX(data->CY_curr));
 
 			g_free(item->bankname);
 			item->bankname = g_strdup(gtk_entry_get_text(GTK_ENTRY(data->ST_bank)));
@@ -727,6 +734,9 @@ Account *item;
 		gtk_entry_set_text(GTK_ENTRY(data->ST_name), item->name);
 		
 		gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_type), item->type );
+
+//		ui_cur_combobox_set_active(GTK_COMBO_BOX(data->CY_curr), item->kcur);
+
 		
 		if(item->bankname != NULL)
 			gtk_entry_set_text(GTK_ENTRY(data->ST_bank), item->bankname);
@@ -828,6 +838,7 @@ guint32 key;
 	sensitive = (selected == TRUE) ? TRUE : FALSE;
 	gtk_widget_set_sensitive(data->ST_name, sensitive);
 	gtk_widget_set_sensitive(data->CY_type, sensitive);
+//	gtk_widget_set_sensitive(data->CY_curr, sensitive);
 	gtk_widget_set_sensitive(data->ST_number, sensitive);
 	gtk_widget_set_sensitive(data->ST_bank, sensitive);
 	gtk_widget_set_sensitive(data->CM_budget, sensitive);
@@ -889,7 +900,7 @@ Account *item;
 static void ui_acc_manage_remove(GtkWidget *widget, gpointer user_data)
 {
 struct ui_acc_manage_data *data;
-Account *item;
+//Account *item;
 guint32 key;
 gboolean do_remove;
 
@@ -902,7 +913,7 @@ gboolean do_remove;
 	{
 		if( account_is_used(key) == TRUE )
 		{		
-			item = da_acc_get(key);
+			//item = da_acc_get(key);
 			do_remove = FALSE;
 			homebank_message_dialog(GTK_WINDOW(data->window), GTK_MESSAGE_INFO,
 				_("Remove not allowed"),
@@ -1030,6 +1041,7 @@ static void ui_acc_manage_setup(struct ui_acc_manage_data *data)
 	data->lastkey = 0;
 
 	ui_acc_listview_populate(data->LV_acc);
+//	ui_cur_combobox_populate(data->CY_curr, GLOBALS->h_cur);
 	//populate_view_acc(data->LV_acc, GLOBALS->acc_list, TRUE);
 }
 
@@ -1054,8 +1066,6 @@ gint row;
 				NULL);
 
 	data.window = window;
-
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 
 	//set the window icon
 	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "account.svg");	
@@ -1136,7 +1146,14 @@ gint row;
 	entry1 = make_string(label);
 	data.ST_name = entry1;
 	gtk_table_attach (GTK_TABLE (table), entry1, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-
+/*
+	row++;
+	label = make_label(_("_Currency:"), 0.0, 0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+	widget = ui_cur_combobox_new(label);
+	data.CY_curr = widget;
+	gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+*/
 	row++;
 	label = make_label(_("_Type:"), 0.0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);

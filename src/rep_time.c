@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -65,6 +65,7 @@ struct trendtime_data
 	GtkWidget	*TB_bar;
 	
 	GtkWidget	*TX_info;
+	GtkWidget	*TX_daterange;
 	GtkWidget	*CY_for;
 	GtkWidget	*CY_view;
 	GtkWidget	*RG_zoomx;
@@ -112,15 +113,23 @@ static GtkActionEntry entries[] = {
   { "List"    , "hb-view-list" , N_("List")   , NULL,    N_("View results as list"), G_CALLBACK (trendtime_action_viewlist) },
   { "Line"    , "hb-view-line" , N_("Line")   , NULL,   N_("View results as lines"), G_CALLBACK (trendtime_action_viewline) },
 
-  { "Detail"  , "hb-ope-show"  , N_("Detail") , NULL,    N_("Toggle detail"), G_CALLBACK (trendtime_action_detail) },
-
 //  { "Filter"  , "hb-filter"    , N_("Filter") , NULL,   N_("Edit the filter"), G_CALLBACK (trendtime_action_filter) },
   { "Refresh" , GTK_STOCK_REFRESH   , N_("Refresh"), NULL,   N_("Refresh results"), G_CALLBACK (trendtime_action_refresh) },
 
   { "Export" , "hb-file-export", N_("Export")  , NULL,   N_("Export as CSV"), G_CALLBACK (trendtime_action_export) },
 };
-
 static guint n_entries = G_N_ELEMENTS (entries);
+
+static GtkToggleActionEntry toggle_entries[] = {
+  { "Detail", "hb-ope-show",                    /* name, stock id */
+     N_("Detail"), NULL,                    /* label, accelerator */     
+    N_("Toggle detail"),                                    /* tooltip */
+    G_CALLBACK (trendtime_action_detail), 
+    FALSE },                                    /* is_active */
+
+};
+static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
+
 
 static const gchar *ui_info =
 "<ui>"
@@ -177,6 +186,7 @@ static void trendtime_compute(GtkWidget *widget, gpointer user_data);
 static void trendtime_sensitive(GtkWidget *widget, gpointer user_data);
 static void trendtime_toggle_detail(GtkWidget *widget, gpointer user_data);
 static void trendtime_toggle_minor(GtkWidget *widget, gpointer user_data);
+static void trendtime_update_daterange(GtkWidget *widget, gpointer user_data);
 static GtkWidget *create_list_statistic(void);
 
 static gint stat_list_compare_func (GtkTreeModel *model, GtkTreeIter  *a, GtkTreeIter  *b, gpointer      userdata);
@@ -312,9 +322,9 @@ gint pos;
 	date1 = g_date_new_julian(from);
 	date2 = g_date_new_julian(opedate);
 
-	pos = (((g_date_get_year(date2) - g_date_get_year(date1)) * 12) + g_date_get_month(date2) - g_date_get_month(date1) + 1)/3;
+	pos = (((g_date_get_year(date2) - g_date_get_year(date1)) * 12) + g_date_get_month(date2) - g_date_get_month(date1))/3;
 
-	//g_print(" from=%d-%d ope=%d-%d => %d\n", g_date_get_month(date1), g_date_get_year(date1), g_date_get_month(date2), g_date_get_year(date2), pos);
+	g_print(" from=%d-%d ope=%d-%d => %d\n", g_date_get_month(date1), g_date_get_year(date1), g_date_get_month(date2), g_date_get_year(date2), pos);
 
 	g_date_free(date2);
 	g_date_free(date1);
@@ -353,7 +363,12 @@ struct trendtime_data *data;
 	data->filter->mindate = gtk_dateentry_get_date(GTK_DATE_ENTRY(data->PO_mindate));
 	data->filter->maxdate = gtk_dateentry_get_date(GTK_DATE_ENTRY(data->PO_maxdate));
 
+	g_signal_handler_block(data->CY_range, data->handler_id[HID_RANGE]);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_range), 0);
+	g_signal_handler_unblock(data->CY_range, data->handler_id[HID_RANGE]);
+
 	trendtime_compute(widget, NULL);
+	trendtime_update_daterange(widget, NULL);
 
 }
 
@@ -399,6 +414,7 @@ gint month, year;
 	data->filter->range = 0;
 
 	trendtime_compute(widget, NULL);
+	trendtime_update_daterange(widget, NULL);
 
 }
 
@@ -460,9 +476,36 @@ GDate *date;
 		g_date_free(date);
 
 		trendtime_compute(widget, NULL);
+		trendtime_update_daterange(widget, NULL);
 	}
 }
 
+static void trendtime_update_daterange(GtkWidget *widget, gpointer user_data)
+{
+struct trendtime_data *data;
+
+	DB( g_print("(trendtime) update daterange\n") );
+
+	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	gchar buffer1[128];
+	gchar buffer2[128];
+	GDate *date;
+	gchar *info;
+
+		date = g_date_new_julian(data->filter->mindate);
+		g_date_strftime (buffer1, 128-1, PREFS->date_format, date);
+		g_date_set_julian(date, data->filter->maxdate);
+		g_date_strftime (buffer2, 128-1, PREFS->date_format, date);
+		g_date_free(date);
+
+		info = g_strdup_printf(_("<i>from</i> %s <i>to</i> %s"), buffer1, buffer2);
+
+		gtk_label_set_markup(GTK_LABEL(data->TX_daterange), info);
+
+
+		g_free(info);
+}	
 
 
 static void trendtime_detail(GtkWidget *widget, gpointer user_data)
@@ -826,21 +869,21 @@ guint32 selkey;
 		case STAT_MONTH:
 			date1 = g_date_new_julian(from);
 			date2 = g_date_new_julian(to);
-			n_result = ((g_date_get_year(date2) - g_date_get_year(date1)) * 12) + g_date_get_month(date2) - g_date_get_month(date1) + 1;
+			n_result = 1 + ((g_date_get_year(date2) - g_date_get_year(date1)) * 12) + g_date_get_month(date2) - g_date_get_month(date1);
 			g_date_free(date2);
 			g_date_free(date1);
 			break;
 		case STAT_QUARTER:
 			date1 = g_date_new_julian(from);
 			date2 = g_date_new_julian(to);
-			n_result = (((g_date_get_year(date2) - g_date_get_year(date1)) * 12) + g_date_get_month(date2) - g_date_get_month(date1) + 1)/3;
+			n_result = 1 + (((g_date_get_year(date2) - g_date_get_year(date1)) * 12) + g_date_get_month(date2) - g_date_get_month(date1))/3;
 			g_date_free(date2);
 			g_date_free(date1);
 			break;
 		case STAT_YEAR:
 			date1 = g_date_new_julian(from);
 			date2 = g_date_new_julian(to);
-			n_result = g_date_get_year(date2) - g_date_get_year(date1) + 1;
+			n_result = 1 + g_date_get_year(date2) - g_date_get_year(date1);
 			g_date_free(date2);
 			g_date_free(date1);
 			break;
@@ -863,7 +906,7 @@ guint32 selkey;
 		Operation *ope = list->data;
 
 			//debug
-			//DB( g_print("** testing '%s', cat=%d==> %d\n", ope->wording, ope->category, filter_test(data->filter, ope)) );
+			DB( g_print("** testing '%s', cat=%d==> %d\n", ope->wording, ope->category, filter_test(data->filter, ope)) );
 
 			// add usage of payee or category
 			if( !(ope->flags & OF_REMIND) && ope->date >= from && ope->date <= to)
@@ -917,7 +960,7 @@ guint32 selkey;
 								break;
 						}
 
-						DB( g_print("** pos=%d\n", pos) );
+						DB( g_print("** pos=%d will add %.2f to \n", pos, ope->amount) );
 
 						if(pos >= 0)
 						{
@@ -949,7 +992,7 @@ guint32 selkey;
 			fullcatname = NULL;
 
 
-			//DB( g_print("try to insert item %d\n", i) );
+			DB( g_print("try to insert item %d\n", i) );
 
 			/* get the result name */
 			switch(tmpslice)
@@ -1262,7 +1305,7 @@ static void trendtime_setup(struct trendtime_data *data)
 
 	DB( g_print(" populate\n") );
 	ui_acc_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_acc), GLOBALS->h_acc);
-	ui_acc_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_acc), 1);
+	//ui_acc_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_acc), 1);
 
 
 	ui_pay_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_pay), GLOBALS->h_pay);
@@ -1429,7 +1472,7 @@ GError *error = NULL;
 	gtk_box_pack_start (GTK_BOX (hbox2), widget, TRUE, TRUE, 0);
 
 	row++;
-	widget = gtk_check_button_new_with_mnemonic (_("Show _all"));
+	widget = gtk_check_button_new_with_mnemonic (_("Select _all"));
 	data->CM_all = widget;
 	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 2, row, row+1);
 
@@ -1509,6 +1552,11 @@ GError *error = NULL;
 	// data to action callbacks is set here (data)
 	gtk_action_group_add_actions (actions, entries, n_entries, data);
 
+     gtk_action_group_add_toggle_actions (actions, 
+					   toggle_entries, n_toggle_entries, 
+					   data);
+
+	
 	/* set which action should have priority in the toolbar */
 	action = gtk_action_group_get_action(actions, "List");
 	g_object_set(action, "is_important", TRUE, NULL);
@@ -1540,16 +1588,18 @@ GError *error = NULL;
 	data->TB_bar = gtk_ui_manager_get_widget (ui, "/ToolBar");
 	gtk_box_pack_start (GTK_BOX (vbox), data->TB_bar, FALSE, FALSE, 0);
 
-	//infos + minor
+	//infos 
 	hbox = gtk_hbox_new (FALSE, HB_BOX_SPACING);
+	gtk_container_set_border_width (GTK_CONTAINER(hbox), HB_BOX_SPACING);
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
-	gtk_container_set_border_width (GTK_CONTAINER(hbox), HB_BOX_SPACING);
+
+	widget = make_label(NULL, 0.5, 0.5);
+	gimp_label_set_attributes (GTK_LABEL (widget), PANGO_ATTR_SCALE,  PANGO_SCALE_SMALL, -1);
+	data->TX_daterange = widget;
+	gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
 
 
-	//label = gtk_label_new(NULL);
-	//data->TX_info = label;
-	//gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
 	notebook = gtk_notebook_new();
 	data->GR_result = notebook;

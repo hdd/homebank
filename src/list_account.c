@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -91,7 +91,7 @@ gint dt;
 
 	if( dt == DSPACC_TYPE_NORMAL && acc->type > 0 )
 	{
-		g_object_set(renderer, "text", CYA_ACC_TYPE[acc->type], NULL);
+		g_object_set(renderer, "text", _(CYA_ACC_TYPE[acc->type]), NULL);
 	}
 	else
 		g_object_set(renderer, "text", NULL, NULL);
@@ -144,6 +144,7 @@ float_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, Gtk
 gdouble value;
 gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
 Account *acc;
+//guint32 kcur;
 gint dt;
 gint weight;
 gchar *color;
@@ -159,8 +160,11 @@ gchar *color;
 		g_object_set(renderer, "markup", NULL, NULL);
 	else
 	{
-		mystrfmon(buf, G_ASCII_DTOSTR_BUF_SIZE-1, value, GLOBALS->minor);
+		//kcur = acc != NULL ? acc->kcur : GLOBALS->kcur;
 
+		//mystrfmoncurr(buf, G_ASCII_DTOSTR_BUF_SIZE-1, value, kcur);
+		mystrfmon(buf, G_ASCII_DTOSTR_BUF_SIZE-1, value, GLOBALS->minor);
+		
 		color = NULL;
 		weight = PANGO_WEIGHT_NORMAL;
 

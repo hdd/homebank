@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -67,6 +67,7 @@ enum {
 	HID_RANGE,
 	MAX_HID
 };
+
 struct account_data
 {
 	gchar	*wintitle;
@@ -94,9 +95,9 @@ struct account_data
 
 	double	bank, today, future;
 
-	Operation cur_ope;
-	Operation bak_ope;
-	gint accnum;
+	Operation *cur_ope;
+
+	guint32		accnum;
 	Account *acc;
 
 	/* status counters */
@@ -323,7 +324,7 @@ gboolean usermode = TRUE;
 		if(count == 0)
 			txt = _("No transaction changed");
 		else
-			txt = _("%d transactions auto assigned");
+			txt = _("transaction auto assigned: %d");
 
 		homebank_message_dialog(GTK_WINDOW(data->window), GTK_MESSAGE_INFO,
 			_("Auto assigment result"),
@@ -598,7 +599,7 @@ Operation *ope;
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 	DB( g_printf("(account) add (data=%08x)\n", data) );
 
-	ope = &data->cur_ope;
+	ope = data->cur_ope;
 	if(ope->account == data->accnum)
 	{
 		DB( g_printf(" -> update balance %.2f\n", ope->amount) );
@@ -868,18 +869,16 @@ gboolean result;
 			date = GLOBALS->today;
 			account = data->accnum;
 
-			DB( g_printf(" -> ope=%8x\n", &data->cur_ope) );
-
-			window = create_defoperation_window(GTK_WINDOW(data->window), &data->cur_ope, OPERATION_EDIT_ADD, data->accnum);
+			window = create_defoperation_window(GTK_WINDOW(data->window), data->cur_ope, OPERATION_EDIT_ADD, data->accnum);
 			result = GTK_RESPONSE_ADD;
 			while(result == GTK_RESPONSE_ADD)
 			{
 				/* fill in the operation */
-				memset(&data->cur_ope, 0, sizeof(Operation));
-				data->cur_ope.date    = date;
-				data->cur_ope.account = data->accnum;
+				data->cur_ope = da_operation_malloc ();
+				data->cur_ope->date    = date;
+				data->cur_ope->account = data->accnum;
 
-				defoperation_set_operation(window, &data->cur_ope);
+				defoperation_set_operation(window, data->cur_ope);
 
 				result = gtk_dialog_run (GTK_DIALOG (window));
 
@@ -897,9 +896,12 @@ gboolean result;
 				}
 
 				//keep these values for next
-				date = data->cur_ope.date;
-				account = data->cur_ope.account;
+				date = data->cur_ope->date;
+				account = data->cur_ope->account;
 
+				// and free
+				da_operation_free (data->cur_ope);
+				
 				//DB( g_printf(" -> result %d\n", result) );
 			}
 			defoperation_dispose(window, NULL);
@@ -919,23 +921,20 @@ gboolean result;
 			ope = get_active_operation(GTK_TREE_VIEW(data->LV_ope));
 			if(ope)
 			{
-				window = create_defoperation_window(GTK_WINDOW(data->window), &data->cur_ope, OPERATION_EDIT_INHERIT, data->accnum);
+				window = create_defoperation_window(GTK_WINDOW(data->window), data->cur_ope, OPERATION_EDIT_INHERIT, data->accnum);
 				result = GTK_RESPONSE_ADD;
 				while(result == GTK_RESPONSE_ADD)
 				{
-					/* fill in the operation */
-
-					memcpy(&data->cur_ope, ope, sizeof(Operation));
-					data->cur_ope.wording = g_strdup(ope->wording);
-					data->cur_ope.info    = g_strdup(ope->info);
+					/* clone the operation */
+					data->cur_ope = da_operation_clone (ope);
 
 					//fix: 318733
 					if( PREFS->heritdate == FALSE )
 					{
-						data->cur_ope.date = GLOBALS->today;
+						data->cur_ope->date = GLOBALS->today;
 					}
 
-					defoperation_set_operation(window, &data->cur_ope);
+					defoperation_set_operation(window, data->cur_ope);
 
 					result = gtk_dialog_run (GTK_DIALOG (window));
 
@@ -950,6 +949,7 @@ gboolean result;
 						GLOBALS->change++;
 					}
 
+					da_operation_free (data->cur_ope);
 				}
 
 				defoperation_dispose(window, NULL);
@@ -962,15 +962,14 @@ gboolean result;
 		//edit
 		case ACTION_ACCOUNT_EDIT:
 	    {
-		Operation *ope, *oldope;
+		Operation *ope;
 		GtkWidget *window;
 
 			ope = get_active_operation(GTK_TREE_VIEW(data->LV_ope));
 			if(ope)
 			{
-				memcpy(&data->cur_ope, ope, sizeof(Operation));
+				data->cur_ope = da_operation_clone (ope);
 
-				oldope = &data->cur_ope;
 				window = create_defoperation_window(GTK_WINDOW(data->window), ope, OPERATION_EDIT_MODIFY, data->accnum);
 
 				defoperation_set_operation(window, ope);
@@ -980,23 +979,17 @@ gboolean result;
 				if(result == GTK_RESPONSE_ACCEPT)
 				{
 					//sub the old amount to balances
-					if(!(ope->flags & OF_REMIND))
+					if(!(data->cur_ope->flags & OF_REMIND))
 					{
-						data->future -= oldope->amount;
-						if(ope->date <= GLOBALS->today)
-							data->today -= oldope->amount;
-						if(ope->flags & OF_VALID)
-							data->bank -= oldope->amount;
-					}
-					//delete any child transfer
-					if( ope->paymode == PAYMODE_INTXFER )
-					{
-						operation_delete_child_transfer(ope);
+						data->future -= data->cur_ope->amount;
+						if(data->cur_ope->date <= GLOBALS->today)
+							data->today -= data->cur_ope->amount;
+						if(data->cur_ope->flags & OF_VALID)
+							data->bank -= data->cur_ope->amount;
 					}
 
-					
+					// get the new value into ope here
 					defoperation_get(window, NULL);
-
 
 					//add our new amount to balances if ope->account == this account
 					if( ope->account == data->accnum )
@@ -1014,27 +1007,45 @@ gboolean result;
 					{
 						//remove from the display
 						remove_active_operation(GTK_TREE_VIEW(data->LV_ope));
-				
 					}
 
-
-					if( ope->paymode == PAYMODE_INTXFER )
+					if( ope->paymode != PAYMODE_INTXFER )
+					{
+						//#677351: revert dst_account to 0
+						ope->dst_account = 0;
+					}
+					else
 					{
 					Operation *ct;
+
+						//nota: if kxfer is 0, the user has just changed the paymode to xfer
+
+						DB( g_printf(" - kxfer = %d\n", ope->kxfer) );
+
 						
-						ct = operation_get_child_transfer(ope);
-						if(ct == NULL)
+						//1) search a strong linked child
+						if(ope->kxfer > 0)
 						{
-							//todo:sould create the transeftr also
-							operation_add_transfer(ope, data->LV_ope);
+							DB( g_printf(" - found a strong link ?\n") );
+
+							ct = operation_strong_get_child_transfer(ope);
+							if(ct != NULL)	//should never be the case
+								operation_xfer_sync_child(ope, ct);
+						}
+						else
+						{
+							//2) any standard transaction that match ?
+							operation_xfer_search_or_add_child(ope, data->LV_ope);
 						}
 					}
+						
 
 					account_update(widget, GINT_TO_POINTER(UF_BALANCE));
 
 					data->acc->flags |= AF_CHANGED;
 					GLOBALS->change++;
 
+					da_operation_free (data->cur_ope);
 				}
 
 				defoperation_dispose(window, NULL);
@@ -1107,17 +1118,18 @@ gboolean result;
 					{
 						DB( printf("[account] line - sub\n") );
 
-						data->future += entry->amount;
+						//#662427 
+						data->future -= entry->amount;
 						if(entry->date <= GLOBALS->today)
-							data->today += entry->amount;
+							data->today -= entry->amount;
 						if(entry->flags & OF_VALID)
-							data->bank += entry->amount;
+							data->bank -= entry->amount;
 					}
 
 					/* v3.4: also remove child transfer */
 					if( entry->paymode == PAYMODE_INTXFER )
 					{
-						operation_delete_child_transfer( entry );
+						operation_xfer_delete_child( entry );
 					}
 
 					gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
@@ -1373,10 +1385,10 @@ gint count = 0;
 	gtk_statusbar_pop (GTK_STATUSBAR(data->statusbar), 0); /* clear any previous message, underflow is allowed */
 
 	if( count <= 1 )
-		msg = g_strdup_printf (_("%d transactions selected, %d hidden"), count, data->hidden);
+		msg = g_strdup_printf (_("transaction selected: %d, hidden: %d"), count, data->hidden);
 	else
 		//TRANSLATORS: detail of the 3 %s which are some amount of selected transaction, 1=total 2=income, 3=expense
-		msg = g_strdup_printf (_("%d transactions selected, %d hidden :: %s ( %s - %s)"), count, data->hidden, buf3, buf1, buf2);
+		msg = g_strdup_printf (_("transaction selected: %d, hidden: %d / %s ( %s - %s)"), count, data->hidden, buf3, buf1, buf2);
 
 	gtk_statusbar_push (GTK_STATUSBAR(data->statusbar), 0, msg);
 	g_free (msg);

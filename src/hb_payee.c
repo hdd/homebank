@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -64,6 +64,18 @@ GList *list;
 		list = g_list_next(list);
 	}
 
+	list = g_hash_table_get_values(GLOBALS->h_rul);
+	while (list != NULL)
+	{
+	Assign *entry = list->data;
+
+		if( key == entry->payee)
+			return TRUE;
+		list = g_list_next(list);
+	}
+	g_list_free(list);
+
+	
 	return FALSE;
 }
 

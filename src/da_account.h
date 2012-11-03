@@ -17,8 +17,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __HB_ACCOUNT_DATA_H__
-#define __HB_ACCOUNT_DATA_H__
+#ifndef __DA_ACCOUNT_H__
+#define __DA_ACCOUNT_H__
 
 
 typedef struct _account		Account;
@@ -26,27 +26,28 @@ typedef struct _account		Account;
 
 struct _account
 {
-	guint	key;
-	gushort	flags;
-	gushort	type;		//future use
-	gchar	*name;
-	gchar	*number;
-	gchar	*bankname;
-	gdouble	initial;
-	gdouble	minimum;
-	guint	cheque1;
-	guint	cheque2;
+	guint32		key;
+	gushort		flags;
+	gushort		type;		//future use
+//	guint32		kcur;		//future use
+	gchar		*name;
+	gchar		*number;
+	gchar		*bankname;
+	gdouble		initial;
+	gdouble		minimum;
+	guint32		cheque1;
+	guint32		cheque2;
 	//currency ?
 	//note ?
 	
 // non persitent datas
 	GtkWindow	*window;	//dsp_account opened
-	guint	pos;			//position in list
+	guint32		pos;			//position in list
 	gboolean	filter;
 	
 	// import datas
 	gboolean	imported;
-	guint		imp_key;
+	guint32		imp_key;
 	gchar		*imp_name;
 };
 

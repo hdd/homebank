@@ -38,6 +38,8 @@ void
 gimp_label_set_attributes (GtkLabel *label,
                            ...);
 
+void ui_gtk_entry_set_text(GtkWidget *widget, gchar *text);
+
 guint make_popaccount_populate(GtkComboBox *combobox, GList *srclist);
 GtkWidget *make_popaccount(GtkWidget *label);
 

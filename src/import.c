@@ -1,5 +1,5 @@
 /*	HomeBank -- Free, easy, personal accounting for everyone.
- *	Copyright (C) 1995-2010 Maxime DOYEN
+ *	Copyright (C) 1995-2011 Maxime DOYEN
  *
  *	This file is part of HomeBank.
  *
@@ -578,22 +578,40 @@ Operation *newope;
 	}
 
 //memo ( new for v4.2)
+
+	DB( g_print(" -> memo is='%d'\n", data.memo_valid) );
+
+	
 	if(data.memo_valid==true)
 	{
-		gchar *old = NULL;
-
+	gchar *old = NULL;
+		
 		switch(PREFS->dtex_ofxmemo)
 		{
 			case 1:	//add to info
 				old = newope->info;
-				newope->info = g_strjoin(" ", old, data.memo, NULL);
-				if(old) g_free(old);
+				if(old == NULL)
+					newope->info = g_strdup(data.memo);
+				else
+				{
+					newope->info = g_strjoin(" ", old, data.memo, NULL);
+					g_free(old);
+				}
 				break;
 				
 			case 2: //add to description
 				old = newope->wording;
-				newope->wording = g_strjoin(" ", old, data.memo, NULL);
-				if(old) g_free(old);
+				if(old == NULL)
+					newope->wording = g_strdup(data.memo);
+				else
+				{	
+					newope->wording = g_strjoin(" ", old, data.memo, NULL);
+					g_free(old);
+				}
+
+				DB( g_print(" -> should concatenate ='%s'\n", data.memo) );
+				DB( g_print(" -> old='%s', new ='%s'\n", old, newope->wording) );
+
 				break;
 		}
 	}

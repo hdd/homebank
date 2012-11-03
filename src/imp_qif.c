@@ -1,5 +1,5 @@
 /*	HomeBank -- Free, easy, personal accounting for everyone.
- *	Copyright (C) 1995-2010 Maxime DOYEN
+ *	Copyright (C) 1995-2011 Maxime DOYEN
  *
  *	This file is part of HomeBank.
  *
@@ -119,9 +119,9 @@ hb_qif_parser_get_amount(gchar *string)
 {
 gdouble amount;
 gint l, i;
-char *new_str, *p;
+gchar *new_str, *p;
 gint  ndcount = 0;
-char gc, dc;
+gchar gc, dc;
 
 	amount = 0.0;
 	gc = dc = '?';
@@ -167,7 +167,7 @@ char gc, dc;
 	*p++ = '\0';
 	amount = g_ascii_strtod(new_str, NULL);
 
-	DB( g_print(" -> amount is '%s' => '%s' %f\n", string, new_str, amount) );
+	DB( g_print(" -> amount was='%s' => to='%s' double='%f'\n", string, new_str, amount) );
 
 	g_free(new_str);
 

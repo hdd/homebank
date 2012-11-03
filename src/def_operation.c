@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -190,13 +190,14 @@ gint active;
 	entry->amount = value;
 
 	/* for internal transfer add, amount must be expense */
+	// #617936
+	/*
 	if( entry->paymode == PAYMODE_INTXFER && data->type == OPERATION_EDIT_ADD )
 	{
 		if( entry->amount > 0 )
 			entry->amount *= -1;
 	}
-
-
+	*/
 
 	//free any previous string
 	if(	entry->info )
@@ -296,6 +297,30 @@ struct defoperation_data *data;
 
 }
 
+static gboolean defoperation_amount_focusout(GtkWidget     *widget,
+                                                        GdkEventFocus *event,
+                                                        gpointer       user_data)
+{
+struct defoperation_data *data;
+gushort paymode;
+gdouble amount;
+	
+	DB( g_print("(ui_operation) amount focus-out-event %d\n", gtk_widget_is_focus(widget)) );
+
+	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	paymode    = gtk_combo_box_get_active(GTK_COMBO_BOX(data->NU_mode));
+
+	// for internal transfer add, amount must be expense by default
+	if( paymode == PAYMODE_INTXFER && data->type == OPERATION_EDIT_ADD )
+	{
+		amount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_amount));
+		if(amount > 0)
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->ST_amount), amount *= -1);		
+	}
+
+	return FALSE;
+}
 
 /*
 **
@@ -370,9 +395,34 @@ gint page;
 
 	if(payment == PAYMODE_CHECK)
 		page = 1;
+	
 	if(payment == PAYMODE_INTXFER)
+	{
 		page = 2;
+			// for internal transfer add, amount must be expense by default
+		if( data->type == OPERATION_EDIT_ADD )
+		{
+			gdouble amount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_amount));
+			if(amount > 0)
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->ST_amount), amount *= -1);		
+		}
 
+	}
+
+	/*
+	if( payment == PAYMODE_INTXFER && data->type == OPERATION_EDIT_ADD )
+	{
+		// #617936 : for internal trn: value must be seized > 0
+		gtk_spin_button_set_range(data->ST_amount, 0, G_MAXDOUBLE);
+		gtk_widget_set_sensitive(data->BT_amount, FALSE);
+	}
+	else
+	{
+		gtk_spin_button_set_range(data->ST_amount, -G_MAXDOUBLE, G_MAXDOUBLE);
+		gtk_widget_set_sensitive(data->BT_amount, TRUE);
+	}
+*/
+		
 	DB( g_printf(" payment: %d, page: %d\n", payment, page) );
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(data->notebook), page);
@@ -792,14 +842,12 @@ GtkWidget *alignment;
 	else
 	{
 		gtk_dialog_add_buttons (GTK_DIALOG(window),
-		    GTK_STOCK_ADD,
-		    GTK_RESPONSE_ADD,
 			GTK_STOCK_CLOSE,
 		    GTK_RESPONSE_REJECT,
+		    GTK_STOCK_ADD,
+		    GTK_RESPONSE_ADD,
 		NULL);
 	}
-
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 
 	switch(type)
 	{
@@ -876,6 +924,11 @@ GtkWidget *alignment;
 	//g_signal_connect (data->LV_arc, "cursor-changed", G_CALLBACK (defoperation_update), NULL);
 	//g_signal_connect (gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview)), "changed", G_CALLBACK (defoperation_toto), treeview);
 
+	g_signal_connect (GTK_OBJECT (data->ST_amount), "focus-out-event",
+				G_CALLBACK (defoperation_amount_focusout), data);
+
+	
+	
 	g_signal_connect (G_OBJECT (data->BT_amount), "clicked", G_CALLBACK (defoperation_toggleamount), NULL);
 
 	g_signal_connect (data->NU_mode, "changed", G_CALLBACK (defoperation_paymode), NULL);

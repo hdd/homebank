@@ -2,6 +2,8 @@ SUBDIRS = images
 
 helpdir   = $(datadir)/homebank/help
 help_DATA = \
+00new4.4.html \
+00new4.3.html \
 00new4.2.html \
 00new4.1.html \
 00new4.0.html \

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>What's new in v4.4</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY >
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=27>
+			<A HREF="main.html"><IMG SRC="images/go-home.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+		<TD WIDTH=27>
+			<A HREF="main.html"><IMG SRC="images/go-previous.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+		<TD WIDTH=27>
+			<A HREF="00new4.3.html"><IMG SRC="images/go-next.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+	</TR>
+</TABLE>
+<div class="head"></div>
+
+<h1>New features in v4.4</h1>
+<UL class="toc">
+	<LI> <A HREF="#balance">Balance report</A>
+	<LI> <A HREF="#intxfer">Internal transfer</A>
+	<LI> <A HREF="#vehicost">Vehicle cost</A>
+</UL>
+
+<h2><A NAME="balance"></A><!-- = = = = separator = = = = -->:: Balance report</h2>
+<P>
+I have rewritten the overdrawn report and renamed to Balance report. Now you can track your balance for each account
+individuallly, but also for all your accounts at a time.
+</p>
+<p>There is also an option to show every day, so you can see the real balance evolution during time.
+By default only days with a changed balance are displayed.<p>
+<p>As the operation has disapeared from the listview, I have added, like in other report, a detail feature to 
+display the transaction related to a secific day.
+</p>
+
+<h2><A NAME="intxfer"></A><!-- = = = = separator = = = = -->:: Internal transfer</h2>
+<p>
+I have also rethinked and rewritten the internal transfer management.</p>
+<p>the first improvement to this is that you should no more encounter sync problems with internal transfer</p>
+<p>the second cover the case were you import your file and then change the paymode to internal xfer. HomeBank was
+faultly create a new transaction in that case, this is no more, it will try to be smart and detect an existing transfer 
+target transaction, and if not, it will show you a list a transactions to choose or let you decide to create a target transaction.</p>
+
+
+
+
+<h2><A NAME="vehicost"></A><!-- = = = = separator = = = = -->:: Vehicle cost</h2>
+<P>
+The car cost was renamed vehicle cost.</p>
+<p>I have fixed a long time problem by adding support for a partial refuel. Now you can (and must) enter your refuel with:<br>
+<ul>
+	<LI>d=xxxxxx the odometer at refuel time
+	<LI>v=xx.xx  the fuel volume for a <b>full refuel</b>
+	<LI>v~xx.xx  the fuel volume for a <b>partial refuel</b>
+</ul>
+</p>
+
+<p>Also I added a new report data with distance by volume (km/l or miles/gal)</p>
+
+
+</BODY>
+</HTML>

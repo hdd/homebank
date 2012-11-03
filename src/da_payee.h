@@ -17,8 +17,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __HB_PAYEE_DATA_H__
-#define __HB_PAYEE_DATA_H__
+#ifndef __DA_PAYEE_H__
+#define __DA_PAYEE_H__
 
 
 typedef struct _payee		Payee;
@@ -26,7 +26,7 @@ typedef struct _payee		Payee;
 
 struct _payee
 {
-	guint   	key;
+	guint32   	key;
 	gushort 	flags;
 	gchar   	*name;
 	gboolean	filter;

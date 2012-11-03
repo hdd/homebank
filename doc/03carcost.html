@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Carcost</TITLE>
+	<TITLE>Vehicle cost</TITLE>
 	<link rel="stylesheet" href="help.css">
 </HEAD>
 <BODY >
@@ -20,7 +20,7 @@
 	</TR>
 </TABLE>
 <div class="head"></div>
-<h1>Carcost</h1>
+<h1>Vehicle cost</h1>
 <p>
 This feature allows you to monitor the expenses of one or more vehicles: fuel consumption and other costs.
 </p>
@@ -28,12 +28,12 @@ This feature allows you to monitor the expenses of one or more vehicles: fuel co
 <ul class="toc">
 	<li><a href="#category">Create the vehicles categories</a></li>
 	
-	<li><a href="#transactions">Fill some transaction with carcost data's</a></li>
-	<li><a href="#result">View the results in the car cost report</a></li>
+	<li><a href="#transactions">Fill some transaction with vehiclecost data's</a></li>
+	<li><a href="#result">View the results in the vehicle cost report</a></li>
 </ul>
 
 <h2><A NAME="category"></A>:: Create the vehicles categories</h2>
-<P>Let's imagine you have 2 cars:
+<P>Let's imagine you have 2 vehicles:
 <ul>
 	<li> open the <a href="04cate.html">category dialog</a>	
 	<li> create a category named 'Car'
@@ -41,17 +41,18 @@ This feature allows you to monitor the expenses of one or more vehicles: fuel co
 	<li> create a subcategory named 'Renault Twingo'
 </ul>
 
-<P>Optionally you can set the default car to be initialized into the
-car-cost report window from the <A HREF="04wall.html">wallet dialog</A>.
+<P>Optionally you can set the default vehicle to be initialized into the
+vehicle-cost report window from the <A HREF="04wall.html">wallet dialog</A>.
 </P>
 
-<h2><A NAME="transactions"></A>:: Fill some transaction with carcost data's</h2>
+<h2><A NAME="transactions"></A>:: Fill some transaction with vehiclecost data's</h2>
 <p>
-A carcost transaction for refuel must include in its description:
+A vehiclecost transaction for refuel must include in its description:
 </p>
 <ul>
 	<LI>d=xxxxxx the odometer at refuel time
-	<LI>v=xx.xx  the volume of fuel
+	<LI>v=xx.xx  the fuel volume for a <b>full refuel</b>
+	<LI>v~xx.xx  the fuel volume for a <b>partial refuel</b>
 </ul>
 
 <P>
@@ -61,13 +62,13 @@ Affect the category to all of your transactions for a vehicle, this includes ref
 Example refuel description data's:
 </P>
 <ul>
-	<li>'(d=92458 v=15.41)'
-	<li>'d=92458, v=15.41'
-	<li>'d=92458 v=15.41'
+	<li>'(d=92458 v=45.23)'
+	<li>'d=92458, v=45.23'
+	<li>'d=92458 v~15.41'
 </ul>
 
-<h2><A NAME="result"></A>:: View the results into the car cost report</h2>
-<P>Please see the <A HREF="05cost.html">car cost report</A> for the
+<h2><A NAME="result"></A>:: View the results into the vehicle cost report</h2>
+<P>Please see the <A HREF="05cost.html">vehicle cost report</A> for the
 details.
 </P>
 </BODY>

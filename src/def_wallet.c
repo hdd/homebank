@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -54,7 +54,7 @@ static void defwallet_get(GtkWidget *widget, gpointer user_data)
 {
 struct defwallet_data *data;
 gchar	*owner;
-gint	car;
+gint	vehicle;
 gint	days;
 
 	DB( g_printf("(defwallet) get\n") );
@@ -63,12 +63,12 @@ gint	days;
 
 	// get values
 	owner = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_owner));
-	car   = ui_cat_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_grp));
+	vehicle   = ui_cat_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_grp));
 	days  = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->NU_arc));
 
 	// check for changes
 	if(strcasecmp(owner, GLOBALS->title)) data->change++;
-	if(car != GLOBALS->car_category) data->change++;
+	if(vehicle != GLOBALS->vehicle_category) data->change++;
 	if(days != GLOBALS->auto_nbdays) data->change++;
 
 	// update
@@ -77,11 +77,11 @@ gint	days;
 		g_free(GLOBALS->title);
 		GLOBALS->title = g_strdup(owner);
 	}
-	GLOBALS->car_category = car;
+	GLOBALS->vehicle_category = vehicle;
 	GLOBALS->auto_nbdays  = days;
 
 	DB( g_printf(" -> owner %s\n", GLOBALS->title) );
-	DB( g_printf(" -> ccgrp %d\n", GLOBALS->car_category) );
+	DB( g_printf(" -> ccgrp %d\n", GLOBALS->vehicle_category) );
 	DB( g_printf(" -> autoinsert %d\n", GLOBALS->auto_nbdays) );
 
 }
@@ -99,13 +99,13 @@ struct defwallet_data *data;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
-	DB( g_printf(" -> ccgrp %d\n", GLOBALS->car_category) );
+	DB( g_printf(" -> ccgrp %d\n", GLOBALS->vehicle_category) );
 	DB( g_printf(" -> autoinsert %d\n", GLOBALS->auto_nbdays) );
 
 
 
 	if(GLOBALS->title) gtk_entry_set_text(GTK_ENTRY(data->ST_owner), GLOBALS->title);
-	ui_cat_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_grp), GLOBALS->car_category);
+	ui_cat_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_grp), GLOBALS->vehicle_category);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->NU_arc), GLOBALS->auto_nbdays);
 
 
@@ -174,8 +174,6 @@ gint row;
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);
 	DB( g_printf("(defaccount) window=%08lx, inst_data=%08lx\n", window, &data) );
 
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
-
 	gtk_window_set_icon_name(GTK_WINDOW (window), GTK_STOCK_PROPERTIES);
 
 	mainvbox = gtk_vbox_new (FALSE, 0);
@@ -231,7 +229,7 @@ gint row;
 // frame 3
 	row++;
 	label = make_label(NULL, 0.0, 0.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>Car cost</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Vehicle cost</b>"));
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
 
 	row++;

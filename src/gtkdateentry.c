@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -190,7 +190,7 @@ gint i;
             //case 76:
               //using_twodigit_years = TRUE; /* FALL THRU */
             case 1976:
-              dmy_order[i] = G_DATE_YEAR;
+              dmy_order[2] = G_DATE_YEAR;
               break;
             }
           ++i;
@@ -515,7 +515,7 @@ GtkDateEntry *dateentry = GTK_DATE_ENTRY (object);
 */
 static void gtk_dateentry_datetoentry(GtkDateEntry * dateentry)
 {
-char buffer[256];
+gchar buffer[256];
 
 	DB( g_print(" (dateentry) date2entry\n") );
 
@@ -546,6 +546,55 @@ char buffer[256];
 }
 
 
+static void gtk_dateentry_tokens(GtkWidget *gtkentry, gpointer user_data)
+{
+GtkDateEntry *dateentry = user_data;
+const gchar *str;
+GDateParseTokens pt;
+
+ 	str = gtk_entry_get_text (GTK_ENTRY (dateentry->entry));
+
+	g_date_fill_parse_tokens(str, &pt);
+	DB( g_print(" -> parsetoken return is %d values :%d %d %d\n", pt.num_ints, pt.n[0], pt.n[1], pt.n[2]) );
+
+	// initialize with today's date
+	g_date_set_time_t(dateentry->date, time(NULL));
+	
+	switch( pt.num_ints )
+	{
+		case 1:
+			DB( g_print(" -> seizured 1 number\n") );
+			if(g_date_valid_day(pt.n[0]))
+				g_date_set_day(dateentry->date, pt.n[0]);
+			break;
+		case 2:
+			DB( g_print(" -> seizured 2 numbers\n") );
+			if( dmy_order[0] != G_DATE_YEAR )
+			{
+				if( dmy_order[0] == G_DATE_DAY )
+				{
+					if(g_date_valid_day(pt.n[0]))
+					    g_date_set_day(dateentry->date, pt.n[0]);
+					if(g_date_valid_month(pt.n[1]))
+						g_date_set_month(dateentry->date, pt.n[1]);
+				}
+				else
+				{
+					if(g_date_valid_day(pt.n[1]))
+					    g_date_set_day(dateentry->date, pt.n[1]);
+					if(g_date_valid_month(pt.n[0]))
+						g_date_set_month(dateentry->date, pt.n[0]);
+				}
+			}
+			break;
+	}
+
+
+	
+}
+
+
+
 
 
 /*
@@ -555,43 +604,21 @@ static void gtk_dateentry_entry_new(GtkWidget *gtkentry, gpointer user_data)
 {
 GtkDateEntry *dateentry = user_data;
 const gchar *str;
-GDateParseTokens pt;
 
 	DB( g_print(" (dateentry) entry validation\n") );
 
  	str = gtk_entry_get_text (GTK_ENTRY (dateentry->entry));
 
-	g_date_fill_parse_tokens(str, &pt);
-	DB( g_print(" -> parsetoken return is %d values :%d %d %d\n", pt.num_ints, pt.n[0], pt.n[1], pt.n[2]) );
-
-	g_date_set_time_t(dateentry->date, time(NULL));
-
-	switch( pt.num_ints )
+	//1) we parse the string according to the locale
+	g_date_set_parse (dateentry->date, str);
+	if(g_date_valid(dateentry->date) == FALSE)
 	{
-		case 1:
-			DB( g_print(" -> seizured 1 number\n") );
-			g_date_set_day(dateentry->date, pt.n[0]);
-			break;
-		case 2:
-			DB( g_print(" -> seizured 2 numbers\n") );
-			if( dmy_order[0] != G_DATE_YEAR )
-			{
-				if( dmy_order[0] == G_DATE_DAY )
-				{
-					g_date_set_day(dateentry->date, pt.n[0]);
-					g_date_set_month(dateentry->date, pt.n[1]);
-				}
-				else
-				{
-					g_date_set_day(dateentry->date, pt.n[1]);
-					g_date_set_month(dateentry->date, pt.n[0]);
-				}
-			}
-			break;
-		default:
-			g_date_set_parse (dateentry->date, str);
-			break;			
-	}	
+		//2) give a try to tokens: day, day/month, month/day
+		gtk_dateentry_tokens(gtkentry, user_data);
+	}
+
+	//3) at last if date still invalid, put today's dateentry_signals
+	// we should consider just warn the user here
 	if(g_date_valid(dateentry->date) == FALSE)
 	{
 		/* today's date */
@@ -602,7 +629,7 @@ GDateParseTokens pt;
 
 }
 
-static void gtk_dateentry_calendar_year(GtkWidget * calendar, GtkDateEntry * dateentry)
+static void gtk_dateentry_calendar_year(GtkWidget *calendar, GtkDateEntry *dateentry)
 {
 guint year, month, day;
 

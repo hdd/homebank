@@ -17,9 +17,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __HOMEBANK_REPCAR_H__
-#define __HOMEBANK_REPCAR_H__
+#ifndef __HOMEBANK_REPBALANCE_H__
+#define __HOMEBANK_REPBALANCE_H__
 
-GtkWidget *repcar_window_new(void);
 
-#endif /* __HOMEBANK_REPCAR_H__ */
+
+
+
+GtkWidget *repbalance_window_new(void);
+
+#endif /* __HOMEBANK_REPBALANCE_H__ */

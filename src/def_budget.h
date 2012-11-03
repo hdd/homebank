@@ -20,6 +20,45 @@
 #ifndef __HOMEBANK_DEFBUDGET_H__
 #define __HOMEBANK_DEFBUDGET_H__
 
+enum
+{
+  COL_NAME = 0,
+  COL_OLDINDEX,
+  NUM_COLS
+};
+
+enum {
+	HID_CUSTOM,
+	MAX_HID
+};
+
+#define FIELD_TYPE 15
+
+struct defbudget_data
+{
+	GList		*tmp_list;
+	gint		change;
+	Category	*lastcatitem;
+	
+
+	GtkWidget	*window;
+
+	GtkWidget	*spinner[13];	//0 index is for All
+	GtkWidget	*LV_cat;
+	GtkWidget	*CM_type[2];
+
+	GtkWidget	*CM_force;
+	
+	GtkWidget	*BT_clear;
+	GtkWidget	*BT_import, *BT_export;
+
+	Category	*cat;
+
+	gulong		handler_id[MAX_HID];
+};
+
+
+
 GtkWidget *create_defbudget_window (void);
 
 #endif /* __HOMEBANK_DEFBUDGET_H__ */

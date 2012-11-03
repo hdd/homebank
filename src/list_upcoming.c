@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -89,6 +89,7 @@ gchar *txt;
 	gtk_tree_model_get(model, iter,
 		LST_DSPUPC_WORDING, &txt,
 		-1);
+
 	g_object_set(renderer, "markup", txt, NULL);
 
 }
@@ -128,8 +129,6 @@ Account *acc;
 	gtk_tree_model_get(model, iter, LST_DSPUPC_DATAS, &arc, -1);
 	if(arc)
 	{
-
-	
 		acc = da_acc_get(arc->account);
 		if( acc )
 		{
@@ -160,7 +159,7 @@ guint decay;
 
 		decay = arc->nextdate - GLOBALS->today;
 
-		markuptxt = g_strdup_printf("%d days", decay);
+		markuptxt = g_strdup_printf("%d %s", decay, _("days"));
 	
 
 		g_object_set(renderer, "markup", markuptxt, NULL);

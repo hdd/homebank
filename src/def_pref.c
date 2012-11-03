@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -363,7 +363,7 @@ GDate *date;
 static void defpref_numberbase_sample(GtkWidget *widget, gpointer user_data)
 {
 struct defpref_data *data;
-struct Currency cur;
+struct CurrencyFmt cur;
 gchar formatd_buf[G_ASCII_DTOSTR_BUF_SIZE];
 gchar  buf[128], *ptr;
 
@@ -407,7 +407,7 @@ gchar  buf[128], *ptr;
 static void defpref_numbereuro_sample(GtkWidget *widget, gpointer user_data)
 {
 struct defpref_data *data;
-struct Currency cur;
+struct CurrencyFmt cur;
 gchar formatd_buf[G_ASCII_DTOSTR_BUF_SIZE];
 gchar  buf[128], *ptr;
 
@@ -1650,10 +1650,10 @@ GtkWidget *hbox, *vbox, *sw, *widget, *notebook, *page, *frame, *image, *label;
       window = gtk_dialog_new_with_buttons (_("Preferences"),
 				GTK_WINDOW(GLOBALS->mainwindow),
 				0,
-				GTK_STOCK_CANCEL,
-				GTK_RESPONSE_REJECT,
 				GTK_STOCK_CLEAR,
 				666,
+				GTK_STOCK_CANCEL,
+				GTK_RESPONSE_REJECT,
 				GTK_STOCK_OK,
 				GTK_RESPONSE_ACCEPT,
 				NULL);
@@ -1661,8 +1661,6 @@ GtkWidget *hbox, *vbox, *sw, *widget, *notebook, *page, *frame, *image, *label;
 	//store our window private data
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);
 
-	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
-	
 	gtk_window_set_icon_name(GTK_WINDOW (window), GTK_STOCK_PREFERENCES);
 	
 	mainvbox = gtk_vbox_new (FALSE, 8);

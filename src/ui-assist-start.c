@@ -1,5 +1,5 @@
 /*	HomeBank -- Free, easy, personal accounting for everyone.
- *	Copyright (C) 1995-2010 Maxime DOYEN
+ *	Copyright (C) 1995-2011 Maxime DOYEN
  *
  *	This file is part of HomeBank.
  *
@@ -400,13 +400,13 @@ ui_start_assistant_create_page4 (GtkWidget *assistant, struct assist_start_data 
   GtkWidget *label;
   GdkPixbuf *pixbuf;
 
-  label = gtk_label_new ("This is a confirmation page, press 'Apply' to apply changes");
+  label = gtk_label_new (_("This is a confirmation page, press 'Apply' to apply changes"));
 
   gtk_widget_show (label);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), label);
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), label, GTK_ASSISTANT_PAGE_CONFIRM);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), label, TRUE);
-  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), label, "Confirmation");
+  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), label, _("Confirmation"));
 
   pixbuf = gtk_widget_render_icon (assistant, GTK_STOCK_FILE, GTK_ICON_SIZE_DIALOG, NULL);
   gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), label, pixbuf);

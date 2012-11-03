@@ -105,6 +105,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
@@ -211,14 +213,14 @@ private_icons = \
 	hicolor_actions_22x22_hb-ope-remind.png \
 	hicolor_actions_16x16_hb-rep-stats.png \
 	hicolor_actions_22x22_hb-rep-stats.png \
-	hicolor_actions_16x16_hb-rep-over.png \
-	hicolor_actions_22x22_hb-rep-over.png \
+	hicolor_actions_16x16_hb-rep-balance.png \
+	hicolor_actions_22x22_hb-rep-balance.png \
 	hicolor_actions_16x16_hb-rep-time.png \
 	hicolor_actions_22x22_hb-rep-time.png \
 	hicolor_actions_16x16_hb-rep-budget.png \
 	hicolor_actions_22x22_hb-rep-budget.png \
-	hicolor_actions_16x16_hb-rep-car.png \
-	hicolor_actions_22x22_hb-rep-car.png \
+	hicolor_actions_16x16_hb-rep-vehicle.png \
+	hicolor_actions_22x22_hb-rep-vehicle.png \
 	hicolor_actions_22x22_hb-view-list.png \
 	hicolor_actions_22x22_hb-view-bar.png \
 	hicolor_actions_22x22_hb-view-pie.png \

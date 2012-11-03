@@ -45,19 +45,19 @@ struct _budget
 
 struct _archive
 {
-	gdouble	amount;
-	guint	account;
-	guint	dst_account;
-	gushort	paymode;
-	gushort	flags;
-	guint	payee;
-	guint	category;
-	gchar	*wording;
+	gdouble		amount;
+	guint32		account;
+	guint32		dst_account;
+	gushort		paymode;
+	gushort		flags;
+	guint32		payee;
+	guint32		category;
+	gchar		*wording;
 
-	guint32	nextdate;
-	gushort	every;
-	gushort	unit;
-	gushort	limit;
+	guint32		nextdate;
+	gushort		every;
+	gushort		unit;
+	gushort		limit;
 };
 
 /*
@@ -98,6 +98,7 @@ struct _filter
 struct _carcost
 {
 	Operation	*ope;
+	gboolean	partial;
 	guint		meter;
 	gdouble		fuel;
 	guint		dist;
@@ -123,8 +124,8 @@ GList *da_archive_sort(GList *list);
 Filter *da_filter_malloc(void);
 void da_filter_free(Filter *flt);
 
-CarCost *da_carcost_malloc(void);
-void da_carcost_free(CarCost *item);
-void da_carcost_destroy(GList *list);
+CarCost *da_vehiclecost_malloc(void);
+void da_vehiclecost_free(CarCost *item);
+void da_vehiclecost_destroy(GList *list);
 
 #endif /* __HOMEBANK_DATAACCESS_H__ */

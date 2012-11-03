@@ -17,8 +17,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __HB_TAG_DATA_H__
-#define __HB_TAG_DATA_H__
+#ifndef __DA_TAG_H__
+#define __DA_TAG_H__
 
 
 typedef struct _tag		Tag;
@@ -26,7 +26,7 @@ typedef struct _tag		Tag;
 
 struct _tag
 {
-	guint   	key;
+	guint32   	key;
 	gchar   	*name;
 };
 

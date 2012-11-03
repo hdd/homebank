@@ -48,15 +48,15 @@
 /*
 ** Preference datas
 */
-struct Currency
+struct CurrencyFmt
 {
 	gchar		*prefix_symbol;		/* max symbol is 3 digits in unicode */
 	gchar		*suffix_symbol;		/* but mostly is 1 digit */
 	gchar		*decimal_char;	
 	gchar		*grouping_char;	
 	gshort		frac_digits;
-	gchar		format[8];
-	gchar		monfmt[32];
+	gchar		format[8];			/* hold decimal format: '%.xf' */
+	gchar		monfmt[32];			/* hold monetary format: 'prefix %s suffix' */ 
 };
 
 struct WinGeometry
@@ -88,7 +88,7 @@ struct Preferences
 	//display format
 	gchar		*date_format;
 
-	struct	Currency base_cur;
+	struct	CurrencyFmt base_cur;
 
 	//gshort	num_nbdecimal;
 	//gboolean	num_separator;
@@ -105,7 +105,7 @@ struct Preferences
 	gint		euro_country;
 	gdouble		euro_value;
 
-	struct	Currency minor_cur;
+	struct	CurrencyFmt minor_cur;
 
 	//gshort		euro_nbdec;
 	//gboolean	euro_thsep;
@@ -136,7 +136,7 @@ struct Preferences
 	struct WinGeometry	tme_wg;
 	struct WinGeometry	ove_wg;
 	struct WinGeometry	bud_wg;
-	struct WinGeometry	car_wg;
+	struct WinGeometry	cst_wg;
 	
 	gboolean	wal_toolbar;
 	gboolean	wal_statusbar;
@@ -144,10 +144,11 @@ struct Preferences
 	
 	gint		wal_vpaned;
 	
-	//carcost units (mile/gal or km/liters
-	gchar	*car_unit_dist;
-	gchar	*car_unit_vol;
-	gchar	*car_unit_100;
+	//vehiclecost units (mile/gal or km/liters
+	gchar	*vehicle_unit_dist;
+	gchar	*vehicle_unit_vol;
+	gchar	*vehicle_unit_100;
+	gchar	*vehicle_unit_distbyvol;
 	
 	
 };

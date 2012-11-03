@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2010 Maxime DOYEN
+ *  Copyright (C) 1995-2011 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -134,24 +134,32 @@ void homebank_pref_init_measurement_units(void)
 	if(PREFS->imperial_unit == TRUE)
 	{
 		////TRANSLATORS: carcost for distance (Miles)
-		PREFS->car_unit_dist = "%d m.";
+		PREFS->vehicle_unit_dist = "%d m.";
 
-		////TRANSLATORS: carcost for volume (Galons)
-		PREFS->car_unit_vol  = "%.2f gal";
+		////TRANSLATORS: vehiclecost for volume (Galons)
+		PREFS->vehicle_unit_vol  = "%.2f gal";
 	
-		////TRANSLATORS: carcost label for '100 miles'
-		PREFS->car_unit_100  = "100 miles";
+		////TRANSLATORS: vehiclecost label for '100 miles'
+		PREFS->vehicle_unit_100  = "100 miles";
+
+		////TRANSLATORS: vehiclecost label for 'miles/gal'
+		PREFS->vehicle_unit_distbyvol  = "miles/gal";
+
 	}
 	else
 	{
-		////TRANSLATORS: carcost for distance (Kilometer)
-		PREFS->car_unit_dist = "%d km";
+		////TRANSLATORS: vehiclecost for distance (Kilometer)
+		PREFS->vehicle_unit_dist = "%d km";
 
-		////TRANSLATORS: carcost for volume (Liters)
-		PREFS->car_unit_vol  = "%.2f L";
+		////TRANSLATORS: vehiclecost for volume (Liters)
+		PREFS->vehicle_unit_vol  = "%.2f L";
 	
-		////TRANSLATORS: carcost label for '100 km'
-		PREFS->car_unit_100  = "100 Km";
+		////TRANSLATORS: vehiclecost label for '100 km'
+		PREFS->vehicle_unit_100  = "100 Km";
+
+		////TRANSLATORS: vehiclecost label for 'km/l'
+		PREFS->vehicle_unit_distbyvol  = "Km/L";
+
 	}
 
 }
@@ -219,7 +227,7 @@ gint i;
 	homebank_pref_init_wingeometry(&PREFS->tme_wg, 0, 0, 640, 480);
 	homebank_pref_init_wingeometry(&PREFS->ove_wg, 0, 0, 640, 480);
 	homebank_pref_init_wingeometry(&PREFS->bud_wg, 0, 0, 640, 480);
-	homebank_pref_init_wingeometry(&PREFS->car_wg, 0, 0, 640, 480);
+	homebank_pref_init_wingeometry(&PREFS->cst_wg, 0, 0, 640, 480);
 
 	PREFS->acc_wg.l = 20;
 	PREFS->acc_wg.t = 20;
@@ -283,7 +291,7 @@ gint i;
 */
 void homebank_pref_createformat(void)
 {
-struct Currency *cur;
+struct CurrencyFmt *cur;
 gchar *ptr;
 
 	DB( g_print("\n** (preferences) pref create format\n") );
@@ -366,6 +374,12 @@ static void homebank_pref_get_wingeometry(
 		wg = g_key_file_get_integer_list(key_file, group_name, key, &length, NULL);
 		memcpy(storage, wg, 4*sizeof(gint));
 		g_free(wg);
+		// #606613 ensure left/top to be > 0
+		if(storage->l < 0)
+			storage->l = 0;
+		
+		if(storage->t < 0)
+			storage->t = 0;
 	}
 }
 
@@ -581,7 +595,7 @@ GError *error = NULL;
 				homebank_pref_get_wingeometry(keyfile, group, "Tme", &PREFS->tme_wg);
 				homebank_pref_get_wingeometry(keyfile, group, "Ove", &PREFS->ove_wg);
 				homebank_pref_get_wingeometry(keyfile, group, "Bud", &PREFS->bud_wg);
-				homebank_pref_get_wingeometry(keyfile, group, "Car", &PREFS->car_wg);
+				homebank_pref_get_wingeometry(keyfile, group, "Car", &PREFS->cst_wg);
 
 				homebank_pref_get_integer(keyfile, group, "WalVPaned", &PREFS->wal_vpaned);
 				homebank_pref_get_boolean(keyfile, group, "WalToolbar", &PREFS->wal_toolbar);
@@ -758,7 +772,7 @@ gsize length;
 		g_key_file_set_integer_list(keyfile, group, "Tme", (gint *)&PREFS->tme_wg, 4);
 		g_key_file_set_integer_list(keyfile, group, "Ove", (gint *)&PREFS->ove_wg, 4);
 		g_key_file_set_integer_list(keyfile, group, "Bud", (gint *)&PREFS->bud_wg, 4);
-		g_key_file_set_integer_list(keyfile, group, "Car", (gint *)&PREFS->car_wg, 4);
+		g_key_file_set_integer_list(keyfile, group, "Car", (gint *)&PREFS->cst_wg, 4);
 
 		g_key_file_set_integer (keyfile, group, "WalVPaned" , PREFS->wal_vpaned);
 		g_key_file_set_boolean (keyfile, group, "WalToolbar", PREFS->wal_toolbar);

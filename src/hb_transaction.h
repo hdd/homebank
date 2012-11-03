@@ -22,10 +22,16 @@
 
 void operation_add_treeview(Operation *ope, GtkWidget *treeview, gint accnum);
 void operation_add(Operation *ope, GtkWidget *treeview, gint accnum);
-Operation *operation_get_child_transfer(Operation *src);
-void operation_warn_transfer(Operation *src, gchar *msg2);
-void operation_add_transfer(Operation *ope, GtkWidget *treeview);
-void operation_delete_child_transfer(Operation *src);
+
+Operation *operation_strong_get_child_transfer(Operation *src);
+GList *operation_match_get_child_transfer(Operation *src);
+Operation *operation_xfer_select_child(GList *matchlist);
+void operation_xfer_search_or_add_child(Operation *ope, GtkWidget *treeview);
+void operation_xfer_create_child(Operation *ope, GtkWidget *treeview);
+void operation_xfer_change_to_child(Operation *ope, Operation *child);
+void operation_xfer_sync_child(Operation *ope, Operation *child);
+void operation_xfer_delete_child(Operation *src);
+Operation *operation_old_get_child_transfer(Operation *src);
 
 guint transaction_count_tags(Operation *ope);
 guint transaction_set_tags(Operation *ope, const gchar *tagstring);
