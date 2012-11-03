@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __HOMEBANK_WIZIMPORT_H__
-#define __HOMEBANK_WIZIMPORT_H__
+#ifndef __HOMEBANK_IMPOFX_H__
+#define __HOMEBANK_IMPOFX_H__
 
-GtkWidget *create_wizimport_window (void);
+GtkWidget *create_impofx_window (void);
 
-#endif /* __HOMEBANK_WIZIMPORT_H__ */
+#endif /* __HOMEBANK_IMPOFX_H__ */

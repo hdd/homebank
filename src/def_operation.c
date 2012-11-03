@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,9 +122,12 @@ gint page;
 	{
 	gboolean expense = (gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_amount)) > 0 ? FALSE : TRUE);
 
+		DB( g_print(" -> payment: %d\n", PAYMODE_CHEQUE) );
+		DB( g_print(" -> expense: %d\n", expense) );
+		DB( g_print(" -> acc is: %d\n", gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_acc)) ) );
+
 		if(payment == PAYMODE_CHEQUE)
 		{
-			DB( g_printf(" -> cheque ") );
 
 
 			if(expense == TRUE)
@@ -134,7 +137,7 @@ gint page;
 			guint cheque;
 			gchar *cheque_str;
 
-				DB( g_printf(" -> should fill cheque number for account %d ", active) );
+				DB( g_printf(" -> should fill cheque number for account %d\n", active) );
 
 				if( active != -1 )
 				{
@@ -255,14 +258,18 @@ gchar *txt;
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_remind), (entry->flags & OF_REMIND) ? 1 : 0);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_cheque), (entry->flags & OF_CHEQ2) ? 1 : 0);
 
-	gtk_combo_box_set_active(GTK_COMBO_BOX(data->NU_mode), entry->paymode);
-
 	txt = (entry->info != NULL) ? entry->info : "";
 	gtk_entry_set_text(GTK_ENTRY(data->ST_info), txt);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_grp), entry->category);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_pay), entry->payee);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_acc), entry->account);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_accto), entry->dst_account);
+	
+	//as we trigger an event on this
+	//let's place it at the end to avoid misvalue on the trigger function
+	gtk_combo_box_set_active(GTK_COMBO_BOX(data->NU_mode), entry->paymode);
+	
+	DB( g_print(" acc is: %d\n", gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_acc)) ) );
 }
 
 /*
@@ -282,22 +289,24 @@ gint active;
 
 	entry = data->ope;
 
+	DB( g_printf(" -> ope = %x\n", entry) );
+
 	//DB( g_printf(" get date to %d\n", entry->ope_Date) );
 	entry->date = gtk_dateentry_get_date(GTK_DATE_ENTRY(data->PO_date));
 	//g_object_get(GTK_DATE_ENTRY(data->PO_date), "date", entry->ope_Date);
 
+	//free any previous string
+	if(	entry->wording )
+	{
+		g_free(entry->wording);
+		entry->wording = NULL;
+	}
 	txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_word));
 	// ignore if entry is empty
 	if (txt && *txt)
 	{
 		entry->wording = g_strdup(txt);
 	}
-	else
-	{
-		g_free(entry->wording);
-		entry->wording = NULL;
-	}
-	
 
 	value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_amount));
 	entry->amount = value;
@@ -325,40 +334,23 @@ gint active;
 
 	entry->paymode    = gtk_combo_box_get_active(GTK_COMBO_BOX(data->NU_mode));
 
+	//free any previous string
+	if(	entry->info )
+	{
+		g_free(entry->info);
+		entry->info = NULL;
+	}
 	txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_info));
 	// ignore if entry is empty
 	if (txt && *txt)
 	{
 		entry->info = g_strdup(txt);
 	}
-	else
-	{
-		g_free(entry->info);
-		entry->info = NULL;
-	}
 
 	entry->category   = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_grp));
 	entry->payee   = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_pay));
 	entry->account = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_acc));
 	entry->dst_account = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_accto));
-
-
-	/* store a new cheque number into account ? */
-	if( (entry->paymode == PAYMODE_CHEQUE) && !(entry->flags & OF_INCOME) )
-	{
-	Account *acc;
-	guint cheque;
-
-		/* get the active account and the corresponding cheque number */
-		acc = g_list_nth_data(GLOBALS->acc_list, entry->account);
-		cheque = atol(entry->info);
-
-		DB( g_printf(" -> should store cheque number %d to %d", cheque, entry->account) );
-		if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_cheque)))
-			acc->cheque2 = cheque;
-		else
-			acc->cheque1 = cheque;
-	}
 
 }
 
@@ -657,7 +649,7 @@ GtkWidget *alignment;
 		NULL);
 
 		//set the window icon
-		gtk_window_set_icon_from_file(GTK_WINDOW (window), PIXMAPS_DIR "/ope_edit.svg", NULL);
+		homebank_window_set_icon_from_file(GTK_WINDOW (window), "ope_edit.svg");
 	}
 	else
 	{
@@ -671,7 +663,7 @@ GtkWidget *alignment;
 		NULL);
 
 		//set the window icon
-		gtk_window_set_icon_from_file(GTK_WINDOW (window), PIXMAPS_DIR "/ope_add.svg", NULL);
+		homebank_window_set_icon_from_file(GTK_WINDOW (window), "ope_add.svg");
 	}
 
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
@@ -734,6 +726,8 @@ GtkWidget *alignment;
 	g_signal_connect (G_OBJECT (data->BT_amount), "clicked", G_CALLBACK (defoperation_toggleamount), NULL);
 
 	g_signal_connect (data->NU_mode, "changed", G_CALLBACK (defoperation_paymode), NULL);
+
+	g_signal_connect (data->CM_cheque, "toggled", G_CALLBACK (defoperation_paymode), NULL);
 
 	g_signal_connect (data->CM_valid, "toggled", G_CALLBACK (defoperation_update), NULL);
 

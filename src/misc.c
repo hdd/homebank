@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,9 +45,97 @@ gdouble fi;
 	return(fi);
 }
 
+
+gint mystrfmon(gchar *outstr, gint outlen, gdouble value, gboolean minor)
+{
+struct Currency *cur;
+gint size;
+
+	cur = minor ? &PREFS->minor_cur : &PREFS->base_cur;	
+	size = real_mystrfmon(outstr, outlen, value, cur);
+	return size;
+}
+
+gint real_mystrfmon(gchar *outstr, gint outlen, gdouble value, struct Currency *cur)
+{
+gint size = 0;
+gchar buf1[G_ASCII_DTOSTR_BUF_SIZE];
+gchar groupbuf[G_ASCII_DTOSTR_BUF_SIZE];
+gchar **str_array;
+guint i, length;
+gchar *monstr;
+
+	g_ascii_formatd(buf1, sizeof (buf1), cur->format, value);
+
+	str_array = g_strsplit(buf1, ".", 0);
+	monstr = NULL;
+
+	length = strlen(str_array[0]);
+	
+	if( cur->grouping_char == NULL )
+	{
+		monstr = g_strjoinv(cur->decimal_char, str_array);
+	}
+	else
+	{
+	gchar *s = str_array[0];
+	gchar *d = groupbuf;
+
+		i = 0;
+		// avoid the - for negative amount
+		if( *s == '-')
+		{
+			*d++ = *s++;
+			length--;
+		}
+		
+		// do the grouping
+		do
+		{
+			if( i!=0 && (length % 3) == 0 )
+				*d++ = *cur->grouping_char;
+		
+			*d++ = *s;
+			length--;
+			i++;	
+		}
+		while (length && *s++ != '\0');
+		*d = 0;
+
+		monstr = g_strjoin(cur->decimal_char, groupbuf, str_array[1], NULL);
+
+	}
+
+	//debug
+	//g_print("mystrfmon %.2f %s [%d] %s\n", value, str_array[0], length, str_array[1] );
+	//g_print(" => %s :: %s\n", monstr, groupbuf);
+
+	g_strfreev(str_array);
+	if(monstr!=NULL)
+	{
+	gchar *ptr = outstr;
+	
+		//todo: improve this
+		if(cur->prefix_symbol != NULL) ptr = g_stpcpy(ptr, cur->prefix_symbol);
+		ptr = g_stpcpy(ptr, " ");
+		if(monstr != NULL) ptr = g_stpcpy(ptr, monstr);
+		ptr = g_stpcpy(ptr, " ");
+		if(cur->suffix_symbol != NULL) ptr = g_stpcpy(ptr, cur->suffix_symbol);
+	
+		
+		//strncpy(outstr, monstr, outlen-1);
+		
+		g_free(monstr);
+	}
+	
+	
+	return size;
+}
+
 /*
 ** format a monetary number major/minor (null value return empty string)
 */
+/*
 gint hb_strfmon(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
 gint size = 0;
@@ -60,30 +148,31 @@ gint size = 0;
 	}
 	return size;
 }
+*/
 
 /*
 ** format a monetary number major/minor (null value return a 0)
 */
-gint hb_strfmonall(gchar *outstr, gint outlen, gdouble value, gboolean minor)
+/*gint hb_strfmonall(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
 gint size = 0;
+gchar *monfmt = GLOBALS->fmt_maj_number;
+gdouble monval = value;
 
-	if(minor != TRUE)
+	if(minor == TRUE)
 	{
-		size = strfmon(outstr, outlen-1, GLOBALS->fmt_maj_number, value);
+		monval = (value * PREFS->euro_value);
+		monval += (monval > 0.0) ? 0.005 : -0.005;
+		monval = (fint(monval * 100) / 100);
+		monfmt = GLOBALS->fmt_min_number;
 	}
-	else
-	{
-	gdouble minorvalue;
 
-		minorvalue = (value * PREFS->euro_value);
-		minorvalue += (minorvalue > 0.0) ? 0.005 : -0.005;
-		minorvalue = (fint(minorvalue * 100) / 100);
-		size = strfmon(outstr, outlen-1, GLOBALS->fmt_min_number, minorvalue);
-	}
+	//size = strfmon(outstr, outlen-1, monfmt, monval);
+	size = mystrfmon(outstr, outlen-1, monval, minor);
 
 	return size;
 }
+*/
 
 /*
 ** format/color and set a label text with a amount value
@@ -94,7 +183,7 @@ gchar strbuffer[64];
 gchar *markuptxt;
 guint32 color;
 
-	hb_strfmon(strbuffer, 64-1, value, minor);
+	mystrfmon(strbuffer, 64-1, value, minor);
 
 	color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
 
@@ -284,7 +373,7 @@ extern int errno;
 				break;
 			case CSV_DOUBLE	:
 				g_ascii_strtod(str_array[i], NULL);
-				//todo 
+				//todo : see this
 				if( errno )
 				{
 					DB( g_print("errno: %d\n", errno) );

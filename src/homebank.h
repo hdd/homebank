@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@
 
 #include <errno.h>
 #include <math.h>
-#include <monetary.h>	/* strfmon */
 #include <stdlib.h>		/* atoi, atof, atol */
 #include <string.h>		/* memset, memcpy, strcmp, strcpy */
 
@@ -38,6 +37,7 @@
 #include "data_access.h"
 #include "widgets.h"
 #include "misc.h"
+#include "preferences.h"
 
 #include "gtkdateentry.h"
 #include "gtkchart.h"
@@ -59,7 +59,7 @@
 
 
 #define FILE_VERSION	"0.1"
-#define PREF_VERSION	"0.1"
+#define PREF_VERSION	"0.2"
 
 #define DEFAULT_PATH_WALLET			"/home/max/dev/gnomebank/accounts"
 #define DEFAULT_PATH_NAVIGATOR		"mozilla"
@@ -102,17 +102,18 @@ struct HomeBank
 	guint		auto_nbdays;
 
 	// current filename
-	gchar		*lastfilename;
 	gchar		*filename;
+	gchar		*oldfilename;
 	gboolean	wallet_is_new;
+	gboolean	exists_old;
 
 	gint		change;
 
 	gint		define_off;		//>0 when a stat, account window is opened
 	gboolean	minor;
 
-	gchar		fmt_maj_number[16];
-	gchar		fmt_min_number[16];
+	//gchar		fmt_maj_number[16];
+	//gchar		fmt_min_number[16];
 
 	// pixbuf datas
 	GdkPixbuf	*lst_pixbuf[NUM_LST_PIXBUF];
@@ -123,66 +124,10 @@ struct HomeBank
 };
 
 
-
-
-/*
-** Preference datas
-*/
-struct Preferences
-{
-	//general
-	gchar		*path_wallet;
-	gboolean	runwizard;
-	gint		filter_range;
-
-	//interface
-	gshort		toolbar_style;
-	//gint		image_size;
-	guint32		color_exp;
-	guint32		color_inc;
-	guint32		color_warn;
-
-	//display format
-	gchar		*date_format;
-	gshort		num_nbdecimal;
-	gboolean	num_separator;
-	gboolean	british_unit;
-
-	//help system
-	//gboolean	show_tooltips;
-	//gboolean	show_help_button;
-	//gboolean	show_tipofday;
-	gchar		*path_navigator;
-
-	//euro zone
-	gboolean	euro_active;
-	gint		euro_country;
-	gdouble		euro_value;
-
-	gshort		euro_nbdec;
-	gboolean	euro_thsep;
-	gchar		*euro_symbol;
-
-	//report options
-	gboolean	stat_byamount;
-	gboolean	stat_showrate;
-	gboolean	stat_showdetail;
-	gboolean	budg_showdetail;
-
-	//chart options
-	gboolean	chart_legend;
-
-	/* internal */
-	//gint		last_page;
-};
-
 void homebank_message_dialog(GtkWindow *parent, GtkMessageType type, gchar *title, gchar *message_format, ...);
 gboolean homebank_csv_file_chooser(GtkWindow *parent, GtkFileChooserAction action, gchar **storage_ptr);
 gboolean homebank_alienfile_chooser(gchar *title);
 
-void homebank_init_prefs(void);
-void homebank_pref_createformat(void);
-gboolean homebank_pref_load(void);
-gboolean homebank_pref_save(void);
+gchar *homebank_get_filename_with_extension(gchar *path, gchar *extension);
 
 #endif /* __HOMEBANK_H__ */

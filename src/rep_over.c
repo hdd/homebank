@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,11 @@ enum {
 struct repover_data
 {
 	GtkWidget	*window;
+
+	gint	busy;
+
 	GtkUIManager	*ui;
+	GtkActionGroup *actions;
 
 	GtkWidget	*TB_bar;
 	
@@ -130,6 +134,7 @@ void repover_setup(struct repover_data *data);
 gboolean repover_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data);
 GtkWidget *create_list_repover(void);
 
+void repover_busy(GtkWidget *widget, gboolean state);
 
 
 /* action functions -------------------- */
@@ -291,7 +296,7 @@ gchar   buf[128];
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
-	hb_strfmonall(buf, 127, data->minimum, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor)) );
+	mystrfmon(buf, 127, data->minimum, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor)) );
 
 	info = g_strdup_printf("%d/%d under %s", data->nbover, data->nbope, buf);
 	gtk_label_set_text(GTK_LABEL(data->TX_info), info);
@@ -362,13 +367,14 @@ Account *acc;
 
 		if( (ope->account == acckey) && !(ope->flags & OF_REMIND) )
 		{
+		gdouble expense = ope->amount < 0 ? ope->amount : 0;
+		gdouble income  = ope->amount > 0 ? ope->amount : 0;
+
+			balance += ope->amount;
+
 			if( (ope->date >= data->mindate) && (ope->date <= data->maxdate) )
 			{
-			gdouble expense = ope->amount < 0 ? ope->amount : 0;
-			gdouble income  = ope->amount > 0 ? ope->amount : 0;
 			gboolean is_over;
-
-				balance += ope->amount;
 
 				is_over = balance < acc->minimum ? TRUE : FALSE;
 
@@ -384,9 +390,9 @@ Account *acc;
 
 				if(is_over == TRUE)
 					data->nbover++;
+			
+				data->nbope++;
 			}
-
-			data->nbope++;
 		}
 		list = g_list_next(list);
 	}
@@ -404,10 +410,46 @@ Account *acc;
 	gtk_chart_set_datas(GTK_CHART(data->RE_line), model, LST_OVER_BALANCE);
 	//gtk_chart_set_line_datas(GTK_CHART(data->RE_line), model, LST_OVER_BALANCE, LST_OVER_DATE);
 
-
 }
 
 
+void repover_busy(GtkWidget *widget, gboolean state)
+{
+struct repover_data *data;
+GtkWidget *window;
+GdkCursor *cursor;
+
+	DB( g_printf("(repover) busy\n") );
+
+	window = gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW);
+	data = g_object_get_data(G_OBJECT(window), "inst_data");
+
+	// should busy ?
+	if(state == TRUE)
+	{
+		cursor = gdk_cursor_new(GDK_WATCH);
+		gdk_window_set_cursor(GTK_WIDGET(window)->window, cursor);
+		gdk_cursor_unref(cursor);
+		
+		//gtk_grab_add(data->busy_popup);
+		
+		gtk_widget_set_sensitive(window, FALSE);
+		gtk_action_group_set_sensitive(data->actions, FALSE);
+
+		  /* make sure chnages is up */
+		  while (gtk_events_pending ())
+		    gtk_main_iteration ();
+	}
+	// unbusy
+	else
+	{
+		gtk_widget_set_sensitive(window, TRUE);
+		gtk_action_group_set_sensitive(data->actions, TRUE);	
+		
+		gdk_window_set_cursor(GTK_WIDGET(window)->window, NULL);
+		//gtk_grab_remove(data->busy_popup);
+	}
+}
 
 
 
@@ -510,7 +552,7 @@ GError *error = NULL;
 	gtk_window_set_title (GTK_WINDOW (window), _("Overdrawn report"));
 
 	//set the window icon
-	gtk_window_set_icon_from_file(GTK_WINDOW (window), PIXMAPS_DIR "/report_overdrawn.svg", NULL);
+	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_overdrawn.svg");
 
 
 
@@ -613,7 +655,8 @@ GError *error = NULL;
 		g_error_free (error);
 	}
 
-	data->ui = ui;	
+	data->ui = ui;
+	data->actions = actions;	
 
 	//toolbar
 	data->TB_bar = gtk_ui_manager_get_widget (ui, "/ToolBar");
@@ -652,7 +695,7 @@ GError *error = NULL;
 	//page: 2d lines
 	widget = gtk_chart_new(CHART_LINE_TYPE);
 	data->RE_line = widget;
-	gtk_chart_set_minor_prefs(GTK_CHART(widget), PREFS->euro_value, PREFS->euro_symbol);
+	gtk_chart_set_minor_prefs(GTK_CHART(widget), PREFS->euro_value, PREFS->minor_cur.suffix_symbol);
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), widget, NULL);
 
 
@@ -666,12 +709,15 @@ GError *error = NULL;
 	/* attach our minor to treeview */
 	g_object_set_data(G_OBJECT(gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_report))), "minor", (gpointer)data->CM_minor);
 
+
+
+
+
 	/* signal connect */
     g_signal_connect (window, "delete-event", G_CALLBACK (repover_window_dispose), (gpointer)data);
 
 	g_signal_connect (data->CM_minor, "toggled", G_CALLBACK (repover_toggle_minor), NULL);
 
-	g_signal_connect (data->PO_acc, "changed", G_CALLBACK (repover_compute), NULL);
 
     data->handler_id[HID_MINDATE] = g_signal_connect (data->PO_mindate, "changed", G_CALLBACK (repover_date_change), (gpointer)data);
     data->handler_id[HID_MAXDATE] = g_signal_connect (data->PO_maxdate, "changed", G_CALLBACK (repover_date_change), (gpointer)data);
@@ -683,19 +729,26 @@ GError *error = NULL;
 
 //	g_signal_connect (gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_report)), "changed", G_CALLBACK (statistic_selection), NULL);
 
-
 	//setup, init and show window
 	repover_setup(data);
 
+	//letthis here or the setup trigger a compute...
+	g_signal_connect (data->PO_acc, "changed", G_CALLBACK (repover_compute), NULL);
 
 
+	/* toolbar */
+	if(PREFS->toolbar_style == 0)
+		gtk_toolbar_unset_style(GTK_TOOLBAR(data->TB_bar));
+	else
+		gtk_toolbar_set_style(GTK_TOOLBAR(data->TB_bar), PREFS->toolbar_style-1);
 
 
     /* finish & show */
     gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
 
-
 	gtk_widget_show_all (window);
+
+	repover_busy(window, TRUE);
 
 
 	//minor ?
@@ -708,6 +761,8 @@ GError *error = NULL;
 	//repover_compute(window, NULL);
 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_range), PREFS->filter_range);
+
+	repover_busy(window, FALSE);
 
 
 	return(window);
@@ -731,7 +786,7 @@ gboolean is_over;
 		-1);
 
 	date = g_date_new_julian (julian);
-	g_date_strftime (buf, 256-1, "%x", date);
+	g_date_strftime (buf, 256-1, PREFS->date_format, date);
 	g_date_free(date);
 
 	if(is_over==TRUE)
@@ -787,29 +842,36 @@ gboolean is_over;
 		user_data, &value,
 		-1);
 
-	widget = g_object_get_data(G_OBJECT(model), "minor");
-	if(GTK_IS_TOGGLE_BUTTON(widget))
+	if( value )
 	{
-		minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = g_object_get_data(G_OBJECT(model), "minor");
+		if(GTK_IS_TOGGLE_BUTTON(widget))
+		{
+			minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		}
+		else
+			minor = 0;
+
+		mystrfmon(buf, 127, value, minor);
+
+		color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
+		if(is_over==TRUE) color = PREFS->color_warn;
+
+		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
+
+		//debug
+		/*gboolean toto = g_utf8_validate(buf, -1, NULL);
+		gboolean toto2 = g_utf8_validate(markuptxt, -1, NULL);
+		g_print("DEBUG: '%s' (isutf8=%d) :: '%s' (isutf8=%d)\n", buf, toto, markuptxt, toto2);
+		*/
+		g_object_set(renderer, "markup", markuptxt, NULL);
+		g_free(markuptxt);
 	}
 	else
-		minor = 0;
-
-	hb_strfmon(buf, 127, value, minor);
-
-	color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
-	if(is_over==TRUE) color = PREFS->color_warn;
-
-	markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
-
-	//debug
-	//todo
-	/*gboolean toto = g_utf8_validate(buf, -1, NULL);
-	gboolean toto2 = g_utf8_validate(markuptxt, -1, NULL);
-	g_print("DEBUG: '%s' (isutf8=%d) :: '%s' (isutf8=%d)\n", buf, toto, markuptxt, toto2);
-	*/
-	g_object_set(renderer, "markup", markuptxt, NULL);
-	g_free(markuptxt);
+	{
+		g_object_set(renderer, "text", "", NULL);
+	}
 
 }
 
@@ -884,6 +946,7 @@ GtkTreeViewColumn  *column;
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	//gtk_tree_view_column_add_attribute(column, renderer, "text", LST_OVER_WORDING);
+	gtk_tree_view_column_set_resizable(column, TRUE);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, repover_text_cell_data_function, NULL, NULL);
 
 	/* column: Expense */

@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -566,7 +566,7 @@ gint row;
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 
 	//set the window icon
-	gtk_window_set_icon_from_file(GTK_WINDOW (window), PIXMAPS_DIR "/account.svg", NULL);
+	homebank_window_set_icon_from_file(GTK_WINDOW (window), "account.svg");
 
 	//store our window private data
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);

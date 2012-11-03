@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -813,7 +813,7 @@ GError *error = NULL;
 	gtk_window_set_title (GTK_WINDOW (window), _("Budget report"));
 
 	//set the window icon
-	gtk_window_set_icon_from_file(GTK_WINDOW (window), PIXMAPS_DIR "/report_budget.svg", NULL);
+	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_budget.svg");
 
 
 	//window contents
@@ -991,7 +991,7 @@ GError *error = NULL;
 	data->GR_detail = widget;
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
-	treeview = create_list_operation();
+	treeview = create_list_operation(PREFS->lst_ope_columns);
 	data->LV_detail = treeview;
 	gtk_container_add (GTK_CONTAINER(widget), treeview);
 
@@ -1000,7 +1000,7 @@ GError *error = NULL;
 	//page: 2d bar
 	widget = gtk_chart_new(CHART_BAR_TYPE);
 	data->RE_bar = widget;
-	gtk_chart_set_minor_prefs(GTK_CHART(widget), PREFS->euro_value, PREFS->euro_symbol);
+	gtk_chart_set_minor_prefs(GTK_CHART(widget), PREFS->euro_value, PREFS->minor_cur.suffix_symbol);
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), widget, NULL);
 
 	//todo:should move this
@@ -1031,7 +1031,11 @@ GError *error = NULL;
 	//setup, init and show window
 	//repbudget_setup(data);
 
-
+	/* toolbar */
+	if(PREFS->toolbar_style == 0)
+		gtk_toolbar_unset_style(GTK_TOOLBAR(data->TB_bar));
+	else
+		gtk_toolbar_set_style(GTK_TOOLBAR(data->TB_bar), PREFS->toolbar_style-1);
 
 
     /* finish & show */
@@ -1116,20 +1120,28 @@ guint32 color;
 	//get datas
 	gtk_tree_model_get(model, iter, user_data, &value, -1);
 
-	widget = g_object_get_data(G_OBJECT(model), "minor");
-	if(GTK_IS_TOGGLE_BUTTON(widget))
+	if( value )
 	{
-		minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = g_object_get_data(G_OBJECT(model), "minor");
+		if(GTK_IS_TOGGLE_BUTTON(widget))
+		{
+			minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		}
+		else
+			minor = 0;
+
+		mystrfmon(buf, 127, value, minor);
+
+		color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
+		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
+		g_object_set(renderer, "markup", markuptxt, NULL);
+		g_free(markuptxt);
+
 	}
 	else
-		minor = 0;
-
-	hb_strfmon(buf, 127, value, minor);
-
-	color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
-	markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
-	g_object_set(renderer, "markup", markuptxt, NULL);
-	g_free(markuptxt);
+	{
+		g_object_set(renderer, "text", "", NULL);
+	}
 
 }
 
@@ -1184,6 +1196,7 @@ GtkTreeViewColumn  *column;
 	//gtk_tree_view_column_set_cell_data_func(column, renderer, ope_result_cell_data_function, NULL, NULL);
 	gtk_tree_view_column_add_attribute(column, renderer, "text", LST_BUDGET_NAME);
 	//gtk_tree_view_column_set_sort_column_id (column, LST_STAT_NAME);
+	gtk_tree_view_column_set_resizable(column, TRUE);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 	/* column: Expense */

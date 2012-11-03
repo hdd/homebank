@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -166,6 +166,19 @@ gtk_dateentry_class_init (GtkDateEntryClass * klass)
 	*/
 }
 
+static gboolean gtk_dateentry_focus(GtkWidget     *widget,
+                                                        GdkEventFocus *event,
+                                                        gpointer       user_data)
+{
+GtkDateEntry *dateentry = user_data;
+
+	DB( g_print(" (dateentry) focus-out-event %d\n", gtk_widget_is_focus(dateentry)) );
+
+	gtk_dateentry_entry_new(dateentry, dateentry);
+
+	return FALSE;
+}
+
 static void
 gtk_dateentry_init (GtkDateEntry * dateentry)
 {
@@ -199,6 +212,10 @@ GtkWidget *arrow;
 
 	g_signal_connect (GTK_OBJECT (dateentry->entry), "activate",
 				(GtkSignalFunc) gtk_dateentry_entry_new, dateentry);
+
+	g_signal_connect (GTK_OBJECT (dateentry->entry), "focus-out-event",
+				(GtkSignalFunc) gtk_dateentry_focus, dateentry);
+
 
 	g_signal_connect (GTK_OBJECT (dateentry->entry), "key_press_event",
 				G_CALLBACK (gtk_dateentry_entry_key), dateentry);
@@ -375,6 +392,8 @@ char buffer[256];
 	{
 		g_date_strftime (buffer, 256 - 1, "%x", dateentry->date);
 		gtk_entry_set_text (GTK_ENTRY (dateentry->entry), buffer);
+		
+		DB( g_print(" = %s\n", buffer) );
 	}
 	else
 		gtk_entry_set_text (GTK_ENTRY (dateentry->entry), "??");
@@ -391,6 +410,9 @@ char buffer[256];
 	dateentry->lastdate = g_date_get_julian(dateentry->date);
 
 }
+
+
+
 
 /*
 ** parse the gtkentry and store the GDate
@@ -451,63 +473,59 @@ GtkDateEntry *dateentry = user_data;
 }
 
 
-
-
 static gint
 gtk_dateentry_entry_key (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
 GtkDateEntry *dateentry = user_data;
 
-	DB( g_print(" (dateentry) entry key pressed: state=%d, keyval=%d\n", event->state, event->keyval) );
+	DB( g_print(" (dateentry) entry key pressed: state=%04x, keyval=%04x\n", event->state, event->keyval) );
 
-	if(event->state & GDK_SHIFT_MASK)
+	if( event->keyval == GDK_Up )
 	{
-		switch(event->keyval)
+		if( !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) )
 		{
-			case GDK_Up:
-				g_date_add_days (dateentry->date, 1);
-				gtk_dateentry_datetoentry(dateentry);
-				break;
-			case GDK_Down:
-				g_date_subtract_days (dateentry->date, 1);
-				gtk_dateentry_datetoentry(dateentry);
-				break;
+			g_date_add_days (dateentry->date, 1);
+			gtk_dateentry_datetoentry(dateentry);
 		}
-
-
-
+		else
+		if( event->state & GDK_SHIFT_MASK )
+		{
+			g_date_add_months (dateentry->date, 1);
+			gtk_dateentry_datetoentry(dateentry);
+		}
+		else
+		if( event->state & GDK_CONTROL_MASK )
+		{
+			g_date_add_years (dateentry->date, 1);
+			gtk_dateentry_datetoentry(dateentry);
+		}
+		return TRUE;
 	}
-
-
-
-
-/*
-	switch(event->keyval)
+	else
+	if( event->keyval == GDK_Down )
 	{
-		case GDK_Up:
-			if(!event->state)
-				g_date_add_days (dateentry->date, 1);
-			else
-				if((event->state==GDK_SHIFT_MASK))
-					g_date_add_months (dateentry->date, 1);
+		if( !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) )
+		{
+			g_date_subtract_days (dateentry->date, 1);
 			gtk_dateentry_datetoentry(dateentry);
-			break;
-
-		case GDK_Down:
-			if(!event->state)
-				g_date_subtract_days (dateentry->date, 1);
-			else
-				if((event->state==GDK_SHIFT_MASK))
-					g_date_subtract_months (dateentry->date, 1);
+		}
+		else
+		if( event->state & GDK_SHIFT_MASK )
+		{
+			g_date_subtract_months (dateentry->date, 1);
 			gtk_dateentry_datetoentry(dateentry);
-			break;
+		}
+		else
+		if( event->state & GDK_CONTROL_MASK )
+		{
+			g_date_subtract_years (dateentry->date, 1);
+			gtk_dateentry_datetoentry(dateentry);
+		}
+		return TRUE;
 	}
-*/
+
 	return FALSE;
 }
-
-
-
 
 
 static void

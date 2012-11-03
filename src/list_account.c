@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 
 #include "homebank.h"
-
+#include "preferences.h"
 
 /* our global datas */
 extern struct HomeBank *GLOBALS;
@@ -60,7 +60,7 @@ gint i = 0;
 /*
 ** draw some icons according to the stored data structure
 */
-void
+static void
 status_cell_data_function (GtkTreeViewColumn *col,
                            GtkCellRenderer   *renderer,
                            GtkTreeModel      *model,
@@ -71,21 +71,27 @@ Account *acc;
 
 	gtk_tree_model_get(model, iter, LST_DSPACC_DATAS, &acc, -1);
 
-	switch((gint)user_data)
+	if( acc != NULL )
 	{
-		case 1:
-			g_object_set(renderer, "pixbuf", (acc->flags & AF_ADDED) ? GLOBALS->lst_pixbuf[LST_PIXBUF_ADD] : NULL, NULL);
-			break;
-		case 2:
-			g_object_set(renderer, "pixbuf", (acc->flags & AF_CHANGED) ? GLOBALS->lst_pixbuf[LST_PIXBUF_EDIT] : NULL, NULL);
-			break;
+	
+		switch((gint)user_data)
+		{
+			case 1:
+				g_object_set(renderer, "pixbuf", (acc->flags & AF_ADDED) ? GLOBALS->lst_pixbuf[LST_PIXBUF_ADD] : NULL, NULL);
+				break;
+			case 2:
+				g_object_set(renderer, "pixbuf", (acc->flags & AF_CHANGED) ? GLOBALS->lst_pixbuf[LST_PIXBUF_EDIT] : NULL, NULL);
+				break;
+		}
 	}
+	else
+		g_object_set(renderer, "pixbuf", NULL, NULL);
 }
 
 /*
 ** draw some text from the stored data structure
 */
-void
+static void
 text_cell_data_function (GtkTreeViewColumn *col,
 				GtkCellRenderer *renderer,
 				GtkTreeModel *model,
@@ -93,23 +99,31 @@ text_cell_data_function (GtkTreeViewColumn *col,
 				gpointer user_data)
 {
 Account *acc;
+gchar *groupname;
 
-	gtk_tree_model_get(model, iter, LST_DSPACC_DATAS, &acc, -1);
+	gtk_tree_model_get(model, iter,
+		LST_DSPACC_DATAS, &acc,
+		LST_DSPACC_NAME, &groupname,
+		-1);
 
-	switch((gint)user_data)
+	if( acc != NULL )
 	{
-		case 1:
-			g_object_set(renderer, "text", acc->name, NULL);
-			break;
-		case 2:
-			g_object_set(renderer, "text", acc->number, NULL);
-			break;
+		switch((gint)user_data)
+		{
+			case 1:
+				g_object_set(renderer, "text", acc->name, NULL);
+				break;
+			case 2:
+				g_object_set(renderer, "text", acc->number, NULL);
+				break;
 
+		}
 	}
-	//g_object_set(renderer, "text", "toto", NULL);
+	else
+		g_object_set(renderer, "markup", groupname, NULL);
 }
 
-void
+static void
 float_cell_data_function (GtkTreeViewColumn *col,
                            GtkCellRenderer   *renderer,
                            GtkTreeModel      *model,
@@ -137,6 +151,7 @@ gdouble value;
 	gchar *markuptxt;
 	guint32 color;
 
+		/*
 		widget = g_object_get_data(G_OBJECT(model), "minor");
 		if(GTK_IS_TOGGLE_BUTTON(widget))
 		{
@@ -144,14 +159,19 @@ gdouble value;
 		}
 		else
 			minor = 0;
+		*/
+		
 
-
-		hb_strfmon(buf, 127, value, minor);
+		mystrfmon(buf, 127, value, GLOBALS->minor);
 
 		color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
-		if(value < acc->minimum) color = DEFAULT_WARN_COLOR;
+		if(acc && value < acc->minimum) color = DEFAULT_WARN_COLOR;
 
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
+		if( acc )
+			markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
+		else
+			markuptxt = g_strdup_printf("<span color='#%06x'><b>%s</b></span>", color, buf);
+
 		g_object_set(renderer, "markup", markuptxt, NULL);
 		g_free(markuptxt);
 
@@ -160,19 +180,59 @@ gdouble value;
 
 
 
+static GtkTreeViewColumn *amount_list_account_column(gchar *name, gint id)
+{
+GtkTreeViewColumn  *column;
+GtkCellRenderer    *renderer;
+
+	column = gtk_tree_view_column_new();
+	gtk_tree_view_column_set_title(column, name);
+
+	renderer = gtk_cell_renderer_text_new ();
+	g_object_set(renderer, "xalign", 1.0, NULL);
+	gtk_tree_view_column_pack_start(column, renderer, TRUE);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, float_cell_data_function, (gpointer)id, NULL);
+	//gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_alignment (column, 1.0);
+	gtk_tree_view_column_set_spacing( column, 16 );
+	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_BANK);
+
+	return column;
+}
+
+
+/*
+ *
+ */ 
+static gboolean list_account_selectionfunc(GtkTreeSelection *selection,
+                                             GtkTreeModel *model,
+                                             GtkTreePath *path,
+                                             gboolean path_currently_selected,
+                                             gpointer data)
+{
+gboolean retval = TRUE;
+
+	if( gtk_tree_path_get_depth( path ) < 2 )
+		retval = FALSE;
+
+	return retval;
+}
+
+
 GtkWidget *create_list_account(void)
 {
-GtkListStore *store;
+GtkTreeStore *store;
 GtkWidget *view;
 GtkCellRenderer    *renderer;
 GtkTreeViewColumn  *column;
 
 	/* create list store */
-	store = gtk_list_store_new(
+	store = gtk_tree_store_new(
 	  	NUM_LST_DSPACC,
 		G_TYPE_POINTER,
 		G_TYPE_BOOLEAN,	/* fake column */
-		G_TYPE_BOOLEAN,	/* fake column */
+		G_TYPE_STRING,	/* fake column */
 		G_TYPE_DOUBLE,
 		G_TYPE_DOUBLE,
 		G_TYPE_DOUBLE
@@ -187,6 +247,22 @@ GtkTreeViewColumn  *column;
 	//			       COLUMN_DESCRIPTION);
 
 	gtk_tree_selection_set_mode(gtk_tree_view_get_selection(GTK_TREE_VIEW(view)), GTK_SELECTION_SINGLE);
+
+
+
+	/* column 2: Account */
+	column = gtk_tree_view_column_new();
+	gtk_tree_view_column_set_title(column, _("Account"));
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_column_pack_start(column, renderer, TRUE);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, text_cell_data_function, (gpointer)1, NULL);
+	gtk_tree_view_column_set_resizable(column, TRUE);
+	//gtk_tree_view_column_set_expand(column, TRUE);
+	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_NAME);
+	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+
+	/*set expander */
+	gtk_tree_view_set_expander_column(GTK_TREE_VIEW (view), column);
 
   /* column 1: status */
   column = gtk_tree_view_column_new();
@@ -207,66 +283,29 @@ GtkTreeViewColumn  *column;
   //gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), 50);
   gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
-
-	/* column 2: Account */
-	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Account name"));
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, text_cell_data_function, (gpointer)1, NULL);
-	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_NAME);
-	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
-
-	/* column 3: Number */
-	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Account number"));
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, text_cell_data_function, (gpointer)2, NULL);
-	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_NUMBER);
-	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
-
   /* column 4: Bank */
-	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Bank"));
-	renderer = gtk_cell_renderer_text_new ();
-	g_object_set(renderer, "xalign", 1.0, NULL);
-	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, float_cell_data_function, (gpointer)LST_DSPACC_BANK, NULL);
-	gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-	//gtk_tree_view_column_set_resizable(column, TRUE);
-	gtk_tree_view_column_set_alignment (column, 1.0);
-	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_BANK);
+	column = amount_list_account_column(_("Bank"), LST_DSPACC_BANK);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
   /* column 5: Today */
-	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Today"));
-	renderer = gtk_cell_renderer_text_new ();
-	g_object_set(renderer, "xalign", 1.0, NULL);
-	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, float_cell_data_function, (gpointer)LST_DSPACC_TODAY, NULL);
-	gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
-	//gtk_tree_view_column_set_resizable(column, TRUE);
-	gtk_tree_view_column_set_alignment (column,1.0);
-	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_TODAY);
+	column = amount_list_account_column(_("Today"), LST_DSPACC_TODAY);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
   /* column 6: Future */
-	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Future"));
-	renderer = gtk_cell_renderer_text_new ();
-	g_object_set(renderer, "xalign", 1.0, NULL);
-	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, float_cell_data_function, (gpointer)LST_DSPACC_FUTURE, NULL);
-	//gtk_tree_view_column_set_resizable(column, TRUE);
-	gtk_tree_view_column_set_alignment (column,1.0);
-	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_FUTURE);
+	column = amount_list_account_column(_("Future"), LST_DSPACC_FUTURE);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
   /* column 7: empty */
 	column = gtk_tree_view_column_new();
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+
+
+	/* disbale selection for level 1 of the tree */
+	
+	gtk_tree_selection_set_select_function(gtk_tree_view_get_selection(GTK_TREE_VIEW(view)), list_account_selectionfunc, NULL, NULL);
+	
+
+
 
 	return(view);
 }

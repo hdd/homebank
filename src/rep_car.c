@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -562,7 +562,7 @@ gint row, col;
 	gtk_window_set_title (GTK_WINDOW (window), _("Car report"));
 
 	//set the window icon
-	gtk_window_set_icon_from_file(GTK_WINDOW (window), PIXMAPS_DIR "/report_car.svg", NULL);
+	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_car.svg");
 
 
 
@@ -756,9 +756,13 @@ gint row, col;
 	//setup, init and show window
 	repcar_setup(data);
 
-
-
-
+	/* toolbar */
+	/*
+	if(PREFS->toolbar_style == 0)
+		gtk_toolbar_unset_style(GTK_TOOLBAR(data->TB_bar));
+	else
+		gtk_toolbar_set_style(GTK_TOOLBAR(data->TB_bar), PREFS->toolbar_style-1);
+	*/
 
     /* finish & show */
     gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
@@ -796,7 +800,7 @@ gchar buf[256];
 		-1);
 
 	date = g_date_new_julian (julian);
-	g_date_strftime (buf, 256-1, "%x", date);
+	g_date_strftime (buf, 256-1, PREFS->date_format, date);
 	g_date_free(date);
 
 	g_object_set(renderer, "text", buf, NULL);
@@ -862,7 +866,7 @@ guint32 color;
 	else
 		minor = 0;
 
-	hb_strfmon(buf, 127, value, minor);
+	mystrfmon(buf, 127, value, minor);
 
 	color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
 

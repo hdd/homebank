@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,15 +104,15 @@ enum
 enum
 {
 	LST_DSPACC_DATAS,
+	LST_DSPACC_STATE,	/* fake column */
 	LST_DSPACC_NAME,	/* fake column */
-	LST_DSPACC_NUMBER,	/* fake column */
 	LST_DSPACC_BANK,
 	LST_DSPACC_TODAY,
 	LST_DSPACC_FUTURE,
 	NUM_LST_DSPACC
 };
 
-/* list display operation (account) */
+/* list display operation (dsp_account) */
 enum
 {
 	LST_DSPOPE_DATAS,
@@ -121,11 +121,28 @@ enum
 	LST_DSPOPE_INFO,	/* fake column */
 	LST_DSPOPE_PAYEE,	/* fake column */
 	LST_DSPOPE_WORDING,	/* fake column */
+	LST_DSPOPE_AMOUNT,	/* fake column */
 	LST_DSPOPE_EXPENSE,	/* fake column */
 	LST_DSPOPE_INCOME,	/* fake column */
 	LST_DSPOPE_CATEGORY,	/* fake column */
 	NUM_LST_DSPOPE
 };
+
+enum
+{
+	COL_OPE_STATUS,
+	COL_OPE_DATE,
+	COL_OPE_INFO,
+	COL_OPE_PAYEE,
+	COL_OPE_WORDING,
+	COL_OPE_AMOUNT,
+	COL_OPE_EXPENSE,
+	COL_OPE_INCOME,
+	COL_OPE_CATEGORY,
+	NUM_COL_OPE
+};
+
+
 
 /* list define account (defaccount) */
 enum

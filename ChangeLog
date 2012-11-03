@@ -1,7 +1,53 @@
+2007-05-24  Maxime Doyen  <mdoyen@free.fr>
+
+	* Made 3.3 release.
+	* bugfix: minor currency settings was not loaded
+	* bugfix: compilation without OFX support was ignored
+	* bugfix: operation add cheque number prefill for pad2 was not working
+	* bugfix: inherit operation with empty info or wording was severely cashing
+	* bugfix: date format set in preferences was ignored
+	* bugfix: import ofx with multiple accounts was adding all the operations to the 1st wallet account
+	* bugfix: date widget string input was always revert to calendar date
+	* change: main window is now maximized at start
+	* change: account window is now horizontaly resizable
+	* change: operation list columns can now be resized
+	* change: new icon for the toolbar 'view as list' button
+	* add   : preference format sample preview for date and amounts
+	* add   : operation list columns visibility can be configured in preferences
+	* add   : operation list 'Amount' column
+	* add   : preference folder chooser button and dialog (for path)
+	* add   : preference clear button that reset all preferences to default
+    * add   : backup of files: saved to <filename>.old 
+	* add   : mainwindow menu tooltips are now displayed in the statusbar
+	* add   : standard args are supported now (--version and a filename to load)
+	* add   : menu list of recent files (GTK native one)
+	* add   : menu to revert file to the last saved
+	* add   : gnome complete menu integration
+	* add   : mime integration of .xhb files
+	* add   : launchpad.net integration
+
+2007-02-23  Maxime Doyen  <mdoyen@free.fr>
+
+	* Made 3.3 unstable release.
+	* bugfix: overdrawn balance was false in partial view (when not displaying all date)
+	* bugfix: budget category name with entities (& < > ...) was displayed wrong in budget list
+	* bugfix: toolbar style was wrong in report windows
+	* bugfix: fixed a possible segfault caused by automated insert on new, open, or at close time
+	* bugfix: operation list was badly sorted on income/expense
+	* bugfix: cheque auto increments was not working on operation heritance
+	* change: gtkdatentry: up/down keys change days, with shift for months, with ctrl for years
+	* change: list of account is now display as a tree with total
+	* change: moved the total balance in the account list
+	* change: minor currency checkbox moved to a menu with a shortcut
+	* change: number format is fully configurable in the settings
+	* change: get rid the use of strfmon func, amount number format is now HomeBank internal
+	* add   : list summary of upcoming automated operations to the main window
+	* add   : import path in the preferences
+	* add   : OFX format is now supported via an import wizard
 
 2006-11-27  Maxime Doyen  <mdoyen@free.fr>
 
-	* Made 3.2-1 release.
+	* Made 3.2.1 release.
 	* bugfix: inherit a cheque operation was crashing
 	* bugfix: overdrawn balance column was shifted 1 line down
 	* bugfix: charts tooltip was a little buggy
@@ -14,7 +60,7 @@
 
 2006-09-26  Maxime Doyen  <mdoyen@free.fr>
 
-	* Made 3.2 (final) release.
+	* Made 3.2 release.
 	* add   : sum of multi selected operation in account window statusbar (missing from amiga version)
 	* add   : statistics report dual barchart display for income/expense (missing from amiga version)
 	* add   : budget report dual barchart display for spend/budget (missing from amiga version)

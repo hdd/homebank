@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -551,7 +551,7 @@ GdkColor colour;
 	DB( g_print(" nb=%d\n", chart->entries) );
 
 
-	chart->id     = g_malloc0(chart->entries * sizeof(gint));
+	chart->id     = g_malloc0(chart->entries * sizeof(gint));	//todo:not used ?
 	chart->titles = g_malloc0(chart->entries * sizeof(gchar *));
 	chart->datas1 = g_malloc0(chart->entries * sizeof(gdouble));
 	chart->datas2 = g_malloc0(chart->entries * sizeof(gdouble));
@@ -1753,7 +1753,7 @@ create_color_pixbuf (GdkColor *col)
 
         pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
                                  FALSE, 8, //bits
-                                 12, 12);		//width,height
+                                 20, 10);		//width,height
 
         rowstride = gdk_pixbuf_get_rowstride (pixbuf);
         p = pixels = gdk_pixbuf_get_pixels (pixbuf);
@@ -1793,6 +1793,27 @@ GtkTreeViewColumn  *column;
 	view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 
+#if MYDEBUG == 1
+	GtkStyle *style;
+	PangoFontDescription *font_desc;
+	
+	style = gtk_widget_get_style(GTK_WIDGET(view));
+	font_desc = style->font_desc;
+	
+	g_print("family: %s\n", pango_font_description_get_family(font_desc) );
+	g_print("size: %d (%d)\n", pango_font_description_get_size (font_desc), pango_font_description_get_size (font_desc )/PANGO_SCALE );
+	
+	
+#endif
+	
+	// change the font size to a smaller one
+	PangoFontDescription *font = pango_font_description_new();
+	pango_font_description_set_size (font, 8 * PANGO_SCALE);
+	gtk_widget_modify_font(GTK_WIDGET(view), font);
+	pango_font_description_free( font );
+
+
+
 	//gtk_tree_selection_set_mode(gtk_tree_view_get_selection(GTK_TREE_VIEW(view)), GTK_SELECTION_NONE);
 
 	// column 1
@@ -1816,10 +1837,12 @@ GtkTreeViewColumn  *column;
 
 	//gtk_widget_style_set(view, "vertical-separator", 0);
 
+//	g_object_set(view, "vertical_separator", 0, NULL);
+
 /*
 	GValue value = { 0, };
 	g_value_init (&value, G_TYPE_INT);
-	g_value_set_int (&value, 0);
+	g_value_set_int (&value, 20);
 	g_object_set_property(view, "vertical-separator", &value);
 	g_value_unset (&value);
 */

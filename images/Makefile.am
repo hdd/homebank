@@ -1,7 +1,10 @@
 
-pixmapsdir   = $(datadir)/homebank/images
+pixmapsdir   = $(datadir)/pixmaps
+pixmaps_DATA = homebank.svg
 
-pixmaps_DATA = \
+imagesdir   = $(datadir)/homebank/images
+
+images_DATA = \
 account.svg \
 archive.svg \
 budget.svg \
@@ -32,6 +35,7 @@ ope_herit.svg \
 ope_show.svg \
 ope_valid.svg \
 prf_display.svg \
+prf_columns.svg \
 prf_euro.svg \
 prf_report.svg \
 prf_general.svg \
@@ -46,6 +50,9 @@ view_bar.svg \
 view_line.svg \
 view_list.svg \
 view_pie.svg \
-splash.png 
+splash.png \
+lpi-help.png \
+lpi-translate.png \
+lpi-bug.png
 
-EXTRA_DIST   = $(pixmaps_DATA)
+EXTRA_DIST   = $(pixmaps_DATA) $(images_DATA)

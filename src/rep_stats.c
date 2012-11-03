@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,11 @@ enum {
 struct statistic_data
 {
 	GtkWidget	*window;
+
+	gint	busy;
+
 	GtkUIManager	*ui;
+	GtkActionGroup *actions;
 
 	GtkWidget	*TB_bar;
 	
@@ -112,6 +116,9 @@ static void statistic_action_legend(GtkAction *action, gpointer user_data);
 static void statistic_action_rate(GtkAction *action, gpointer user_data);
 static void statistic_action_filter(GtkAction *action, gpointer user_data);
 static void statistic_action_refresh(GtkAction *action, gpointer user_data);
+
+void statistic_busy(GtkWidget *widget, gboolean state);
+
 
 static GtkActionEntry entries[] = {
   { "List"    , "hb-stock-view-list" , N_("List")   , NULL,    N_("View results as list"), G_CALLBACK (statistic_action_viewlist) },
@@ -1044,6 +1051,44 @@ gboolean minor;
 }
 
 
+void statistic_busy(GtkWidget *widget, gboolean state)
+{
+struct statistic_data *data;
+GtkWidget *window;
+GdkCursor *cursor;
+
+	DB( g_printf("(statistic) busy\n") );
+
+	window = gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW);
+	data = g_object_get_data(G_OBJECT(window), "inst_data");
+
+	// should busy ?
+	if(state == TRUE)
+	{
+		cursor = gdk_cursor_new(GDK_WATCH);
+		gdk_window_set_cursor(GTK_WIDGET(window)->window, cursor);
+		gdk_cursor_unref(cursor);
+		
+		//gtk_grab_add(data->busy_popup);
+		
+		gtk_widget_set_sensitive(window, FALSE);
+		gtk_action_group_set_sensitive(data->actions, FALSE);
+
+		  /* make sure chnages is up */
+		  while (gtk_events_pending ())
+		    gtk_main_iteration ();
+	}
+	// unbusy
+	else
+	{
+		gtk_widget_set_sensitive(window, TRUE);
+		gtk_action_group_set_sensitive(data->actions, TRUE);	
+		
+		gdk_window_set_cursor(GTK_WIDGET(window)->window, NULL);
+		//gtk_grab_remove(data->busy_popup);
+	}
+}
+
 /*
 **
 */
@@ -1180,7 +1225,7 @@ GError *error = NULL;
 	gtk_window_set_title (GTK_WINDOW (window), _("Statistics Report"));
 
 	//set the window icon
-	gtk_window_set_icon_from_file(GTK_WINDOW (window), PIXMAPS_DIR "/report_stats.svg", NULL);
+	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_stats.svg");
 
 
 	//window contents
@@ -1298,7 +1343,8 @@ GError *error = NULL;
 		g_error_free (error);
 	}
 
-	data->ui = ui;	
+	data->ui = ui;
+	data->actions = actions;
 
 	//toolbar
 	data->TB_bar = gtk_ui_manager_get_widget (ui, "/ToolBar");
@@ -1369,7 +1415,7 @@ GError *error = NULL;
 	//gtk_scrolled_window_set_placement(GTK_SCROLLED_WINDOW (widget), GTK_CORNER_TOP_RIGHT);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
-	treeview = create_list_operation();
+	treeview = create_list_operation(PREFS->lst_ope_columns);
 	data->LV_detail = treeview;
 	gtk_container_add (GTK_CONTAINER(widget), treeview);
 
@@ -1379,13 +1425,13 @@ GError *error = NULL;
 	//page: 2d bar
 	widget = gtk_chart_new(CHART_BAR_TYPE);
 	data->RE_bar = widget;
-	gtk_chart_set_minor_prefs(GTK_CHART(widget), PREFS->euro_value, PREFS->euro_symbol);
+	gtk_chart_set_minor_prefs(GTK_CHART(widget), PREFS->euro_value, PREFS->minor_cur.suffix_symbol);
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), widget, NULL);
 
 	//page: 2d pie
 	widget = gtk_chart_new(CHART_PIE_TYPE);
 	data->RE_pie = widget;
-	gtk_chart_set_minor_prefs(GTK_CHART(widget), PREFS->euro_value, PREFS->euro_symbol);
+	gtk_chart_set_minor_prefs(GTK_CHART(widget), PREFS->euro_value, PREFS->minor_cur.suffix_symbol);
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), widget, NULL);
 
 
@@ -1422,10 +1468,21 @@ GError *error = NULL;
 	//setup, init and show window
 	statistic_setup(data);
 
+	/* toolbar */
+	if(PREFS->toolbar_style == 0)
+		gtk_toolbar_unset_style(GTK_TOOLBAR(data->TB_bar));
+	else
+		gtk_toolbar_set_style(GTK_TOOLBAR(data->TB_bar), PREFS->toolbar_style-1);
+
     /* finish & show */
     gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
 
+
 	gtk_widget_show_all (window);
+
+
+	statistic_busy(window, TRUE);
+
 
 
 	//minor ?
@@ -1447,6 +1504,8 @@ GError *error = NULL;
 		gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_range), PREFS->filter_range);
 	else
 		statistic_compute(window, NULL);
+
+	statistic_busy(window, FALSE);
 
 
 	return window;
@@ -1504,21 +1563,28 @@ guint32 color;
 	//get datas
 	gtk_tree_model_get(model, iter, user_data, &value, -1);
 
-	widget = g_object_get_data(G_OBJECT(model), "minor");
-	if(GTK_IS_TOGGLE_BUTTON(widget))
+	if( value )
 	{
-		minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = g_object_get_data(G_OBJECT(model), "minor");
+		if(GTK_IS_TOGGLE_BUTTON(widget))
+		{
+			minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		}
+		else
+			minor = 0;
+
+		mystrfmon(buf, 127, value, minor);
+
+		color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
+
+		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
+		g_object_set(renderer, "markup", markuptxt, NULL);
+		g_free(markuptxt);
 	}
 	else
-		minor = 0;
-
-	hb_strfmon(buf, 127, value, minor);
-
-	color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
-
-	markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
-	g_object_set(renderer, "markup", markuptxt, NULL);
-	g_free(markuptxt);
+	{
+		g_object_set(renderer, "text", "", NULL);
+	}
 
 }
 
@@ -1597,6 +1663,7 @@ GtkTreeViewColumn  *column;
 	//gtk_tree_view_column_set_cell_data_func(column, renderer, ope_result_cell_data_function, NULL, NULL);
 	gtk_tree_view_column_add_attribute(column, renderer, "text", LST_STAT_NAME);
 	//gtk_tree_view_column_set_sort_column_id (column, LST_STAT_NAME);
+	gtk_tree_view_column_set_resizable(column, TRUE);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 	/* column: Expense */

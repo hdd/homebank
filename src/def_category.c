@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1088,7 +1088,8 @@ gint row;
 
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 	
-	gtk_window_set_icon_from_file(GTK_WINDOW (window), PIXMAPS_DIR "/category.svg", NULL);
+
+	homebank_window_set_icon_from_file(GTK_WINDOW (window), "category.svg");
 
 	//store our window private data
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);
@@ -1114,7 +1115,7 @@ gint row;
 	gtk_table_attach (GTK_TABLE (table), hbox, 0, 1, row, row+1, (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 	data.ST_name1 = gtk_entry_new ();
 	gtk_box_pack_start (GTK_BOX (hbox), data.ST_name1, TRUE, TRUE, 0);
-	data.CM_type = gtk_check_button_new_with_mnemonic(_("I_s income"));
+	data.CM_type = gtk_check_button_new_with_mnemonic(_("I_ncome"));
 	gtk_box_pack_start (GTK_BOX (hbox), data.CM_type, FALSE, FALSE, 0);
 
 	data.BT_add1 = gtk_button_new_from_stock(GTK_STOCK_ADD);

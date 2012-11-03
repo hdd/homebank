@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #ifndef __LIST_OPERATION__H__
 #define __LIST_OPERATION__H__
 
-GtkWidget *create_list_operation(void);
+GtkWidget *create_list_operation(gboolean *columns);
 GtkWidget *create_list_import_operation(void);
 
 #endif /* __LIST_OPERATION__H__ */

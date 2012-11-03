@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,17 +41,28 @@ enum
 	NUM_LST_PAYMODE
 };
 
+extern *homebank_pixmaps_dir;
 
 GdkPixbuf *paymode_icons[NUM_PAYMODE_MAX];
 
 char *paymode_pixbuf_names[NUM_PAYMODE_MAX] =
 {
-	"0none", "creditcard", "cheque", "cash" , "banktransfert", "personaltransfert"
+	"0none.svg",
+	"creditcard.svg",
+	"cheque.svg",
+	"cash.svg" ,
+	"banktransfert.svg",
+	"personaltransfert.svg"
 };
 
 char *paymode_label_names[NUM_PAYMODE_MAX] =
 {
-	N_("(none)"), N_("Credit card"), N_("Cheque"), N_("Cash"), N_("Bank transfer"), N_("Internal transfer")
+	N_("(none)"),
+	N_("Credit card"),
+	N_("Cheque"),
+	N_("Cash"),
+	N_("Bank transfer"),
+	N_("Internal transfer")
 
 /*	"none", "credit card", "standing order", "cheque", "withdrawal of cash", "transfer", "internal transfer",
 	"deposit of cheque", "deposit of cash" */
@@ -72,25 +83,20 @@ char *paymode_label_names[NUM_PAYMODE_MAX] =
 void load_paymode_icons(void)
 {
 //GError        *error = NULL;
+gchar *pathfilename;
 guint i;
 
 	for(i=0;i<NUM_PAYMODE_MAX;i++)
 	{
-		gchar *pathname = g_strdup_printf ( PIXMAPS_DIR "/%s.svg", paymode_pixbuf_names[i]);
+		pathfilename = g_build_filename((const gchar *)homebank_pixmaps_dir, paymode_pixbuf_names[i], NULL);
 
-		//paymode_icons[i] = gdk_pixbuf_new_from_file(pathname, NULL);
-		paymode_icons[i] = gdk_pixbuf_new_from_file_at_size(pathname, 22, 22, NULL);
-		/*
-		if (error)
-		{
-			g_warning ("Could not load icon: %s\n", error->message);
-			g_error_free(error);
-			error = NULL;
-		}
-		*/
-		g_free (pathname);
+		DB( g_print("loading %s\n", pathfilename) );
+
+		paymode_icons[i] = gdk_pixbuf_new_from_file_at_size(pathfilename, 22, 22, NULL);
+		g_free (pathfilename);
 	}
 }
+
 
 void free_paymode_icons(void)
 {
@@ -269,7 +275,7 @@ GtkWidget *make_string_maxlength(GtkWidget *label, guint max_length)
 GtkWidget *entry;
 
 	entry = make_string(label);
-	gtk_entry_set_max_length(GTK_ENTRY(entry), (max_length-1));
+	gtk_entry_set_max_length(GTK_ENTRY(entry), max_length);
 
 	return entry;
 }

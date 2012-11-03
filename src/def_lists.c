@@ -1,5 +1,5 @@
 /* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2006 Maxime DOYEN
+ * Copyright (C) 1995-2007 Maxime DOYEN
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -586,12 +586,12 @@ gint oldpos;
 		#else
 			if(entry->flags & GF_BUDGET)
 			{
-				markuptxt = g_strdup_printf("<b>%s</b>", name);
+				markuptxt = g_markup_printf_escaped("<b>%s</b>", name);
 				g_object_set(renderer, "markup", markuptxt, NULL);
 				g_free(markuptxt);
 			}
 			else
-				g_object_set(renderer, "markup", name, NULL);
+				g_object_set(renderer, "text", name, NULL);
 		#endif
 	}
 
