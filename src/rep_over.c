@@ -1,26 +1,28 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 #include "homebank.h"
-
+#include "gtkchart.h"
+#include "dsp_wallet.h"
 #include "rep_over.h"
-
+#include "ui_account.h"
 /****************************************************************************/
 /* Debug macros                                                             */
 /****************************************************************************/
@@ -111,6 +113,7 @@ enum
 {
 	LST_OVER_OVER,
 	LST_OVER_DATE,
+	LST_OVER_DATESTR,
 	LST_OVER_WORDING,
 	LST_OVER_EXPENSE,
 	LST_OVER_INCOME,
@@ -122,19 +125,17 @@ extern gchar *CYA_RANGE[];
 extern gchar *CYA_SELECT[];
 
 /* prototypes */
-void repover_date_change(GtkWidget *widget, gpointer user_data);
-void repover_period_change(GtkWidget *widget, gpointer user_data);
-void repover_range_change(GtkWidget *widget, gpointer user_data);
-void repover_action(GtkWidget *widget, gpointer user_data);
-void repover_update_info(GtkWidget *widget, gpointer user_data);
-void repover_toggle_minor(GtkWidget *widget, gpointer user_data);
-void repover_compute(GtkWidget *widget, gpointer user_data);
-GtkWidget *create_repover_toolbar(struct repover_data *data);
-void repover_setup(struct repover_data *data);
-gboolean repover_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data);
-GtkWidget *create_list_repover(void);
+static void repover_date_change(GtkWidget *widget, gpointer user_data);
+static void repover_period_change(GtkWidget *widget, gpointer user_data);
+static void repover_range_change(GtkWidget *widget, gpointer user_data);
+static void repover_update_info(GtkWidget *widget, gpointer user_data);
+static void repover_toggle_minor(GtkWidget *widget, gpointer user_data);
+static void repover_compute(GtkWidget *widget, gpointer user_data);
+static void repover_setup(struct repover_data *data);
+static gboolean repover_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data);
+static GtkWidget *create_list_repover(void);
 
-void repover_busy(GtkWidget *widget, gboolean state);
+static void repover_busy(GtkWidget *widget, gboolean state);
 
 
 /* action functions -------------------- */
@@ -170,7 +171,7 @@ struct repover_data *data = user_data;
 
 
 
-void repover_date_change(GtkWidget *widget, gpointer user_data)
+static void repover_date_change(GtkWidget *widget, gpointer user_data)
 {
 struct repover_data *data;
 
@@ -186,7 +187,7 @@ struct repover_data *data;
 }
 
 
-void repover_period_change(GtkWidget *widget, gpointer user_data)
+static void repover_period_change(GtkWidget *widget, gpointer user_data)
 {
 struct repover_data *data;
 gint month, year;
@@ -226,7 +227,7 @@ gint month, year;
 
 }
 
-void repover_range_change(GtkWidget *widget, gpointer user_data)
+static void repover_range_change(GtkWidget *widget, gpointer user_data)
 {
 struct repover_data *data;
 GList *list;
@@ -286,7 +287,7 @@ GDate *date;
 
 
 
-void repover_update_info(GtkWidget *widget, gpointer user_data)
+static void repover_update_info(GtkWidget *widget, gpointer user_data)
 {
 struct repover_data *data;
 gchar *info;
@@ -298,7 +299,7 @@ gchar   buf[128];
 
 	mystrfmon(buf, 127, data->minimum, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor)) );
 
-	info = g_strdup_printf("%d/%d under %s", data->nbover, data->nbope, buf);
+	info = g_strdup_printf(_("%d/%d under %s"), data->nbover, data->nbope, buf);
 	gtk_label_set_text(GTK_LABEL(data->TX_info), info);
 	g_free(info);
 }
@@ -306,7 +307,7 @@ gchar   buf[128];
 
 
 
-void repover_toggle_minor(GtkWidget *widget, gpointer user_data)
+static void repover_toggle_minor(GtkWidget *widget, gpointer user_data)
 {
 struct repover_data *data;
 gboolean minor;
@@ -320,14 +321,14 @@ gboolean minor;
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW(data->LV_report));
 
 	minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
-	gtk_chart_set_minor(GTK_CHART(data->RE_line), minor);
+	gtk_chart_show_minor(GTK_CHART(data->RE_line), minor);
 }
 
 
 
 
 
-void repover_compute(GtkWidget *widget, gpointer user_data)
+static void repover_compute(GtkWidget *widget, gpointer user_data)
 {
 struct repover_data *data;
 GtkTreeModel *model;
@@ -336,6 +337,7 @@ GList *list;
 gdouble balance;
 gint acckey;
 Account *acc;
+guint32 lastdate;
 
 	DB( g_print("(repover) compute\n") );
 
@@ -345,75 +347,136 @@ Account *acc;
 	if(g_list_length(GLOBALS->ope_list) == 0) return;
 
 	// get the account key
-	acckey = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_acc));
+	acckey = ui_acc_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_acc));
 	data->nbope = 0;
 	data->nbover = 0;
 
+	DB( g_print(" acc key = %d\n", acckey) );
+
+
+		/* clear and detach our model */
+		model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_report));
+		gtk_list_store_clear (GTK_LIST_STORE(model));
+		g_object_ref(model); /* Make sure the model stays with us after the tree view unrefs it */
+		gtk_tree_view_set_model(GTK_TREE_VIEW(data->LV_report), NULL); /* Detach model from view */
+
+
 	// get the initial balance
-	acc = g_list_nth_data(GLOBALS->acc_list, acckey);
-	data->minimum = acc->minimum;
-	balance = acc->initial;
-
-	/* clear and detach our model */
-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_report));
-	gtk_list_store_clear (GTK_LIST_STORE(model));
-	g_object_ref(model); /* Make sure the model stays with us after the tree view unrefs it */
-	gtk_tree_view_set_model(GTK_TREE_VIEW(data->LV_report), NULL); /* Detach model from view */
-
-	list = g_list_first(GLOBALS->ope_list);
-	while (list != NULL)
+	acc = da_acc_get(acckey);
+	if( acc != NULL )
 	{
-	Operation *ope = list->data;
+		data->minimum = acc->minimum;
+		balance = acc->initial;
 
-		if( (ope->account == acckey) && !(ope->flags & OF_REMIND) )
+
+		list = g_list_first(GLOBALS->ope_list);
+		while (list != NULL)
 		{
-		gdouble expense = ope->amount < 0 ? ope->amount : 0;
-		gdouble income  = ope->amount > 0 ? ope->amount : 0;
+		Operation *ope = list->data;
 
-			balance += ope->amount;
-
-			if( (ope->date >= data->mindate) && (ope->date <= data->maxdate) )
+			if( (ope->account == acckey) && !(ope->flags & OF_REMIND) )
 			{
-			gboolean is_over;
+			gdouble expense = ope->amount < 0 ? ope->amount : 0;
+			gdouble income  = ope->amount > 0 ? ope->amount : 0;
 
-				is_over = balance < acc->minimum ? TRUE : FALSE;
+				balance += ope->amount;
 
-		    	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-		    		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-					LST_OVER_OVER, is_over,
-					LST_OVER_DATE, ope->date,
-					LST_OVER_WORDING, ope->wording,
-					LST_OVER_EXPENSE, expense,
-					LST_OVER_INCOME, income,
-					LST_OVER_BALANCE, balance,
-					-1);
+				if( (ope->date >= data->mindate) && (ope->date <= data->maxdate) )
+				{
+				gboolean is_over;
+				GDate *date;
+				gchar buf[256];
+				//guint32 decay;
 
-				if(is_over == TRUE)
-					data->nbover++;
-			
-				data->nbope++;
+					is_over = balance < acc->minimum ? TRUE : FALSE;
+
+					//todo
+					/*
+					decay = ope->date - lastdate;
+					if(data->nbope > 0 && decay > 1)
+					{
+						while(decay > 1)
+						{
+							lastdate++;
+
+							date = g_date_new_julian (lastdate);
+							g_date_strftime (buf, 256-1, PREFS->date_format, date);
+							g_date_free(date);
+						
+							gtk_list_store_append (GTK_LIST_STORE(model), &iter);
+							gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+								LST_OVER_OVER, is_over,
+								LST_OVER_DATE, lastdate,
+								LST_OVER_DATESTR, buf,
+								LST_OVER_BALANCE, balance,
+								-1);
+					
+						
+						
+							decay--;						
+						}
+					}
+					*/
+
+					date = g_date_new_julian (ope->date);
+					g_date_strftime (buf, 256-1, PREFS->date_format, date);
+					g_date_free(date);
+
+
+		/* column 0: pos (gint) */
+		/* not used: column 1: key (gint) */
+		/* column 2: name (gchar) */
+		/* column x: values (double) */
+
+			    	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
+			    	gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+						LST_OVER_OVER, is_over,
+						LST_OVER_DATE, ope->date,
+						LST_OVER_DATESTR, buf,
+						LST_OVER_WORDING, ope->wording,
+						LST_OVER_EXPENSE, expense,
+						LST_OVER_INCOME, income,
+						LST_OVER_BALANCE, balance,
+						-1);
+
+					if(is_over == TRUE)
+						data->nbover++;
+				
+					data->nbope++;
+					lastdate = ope->date;
+				}
 			}
+			list = g_list_next(list);
 		}
-		list = g_list_next(list);
+
+
+		repover_update_info(widget, NULL);
+
+
+		gtk_chart_show_legend(GTK_CHART(data->RE_line), FALSE);
+		gtk_chart_show_xval(GTK_CHART(data->RE_line), TRUE);
+		gtk_chart_set_overdrawn(GTK_CHART(data->RE_line), acc->minimum);
+		gtk_chart_show_overdrawn(GTK_CHART(data->RE_line), TRUE);
+		
+		
+
+
 	}
 
 	/* Re-attach model to view */
 	gtk_tree_view_set_model(GTK_TREE_VIEW(data->LV_report), model);
 	g_object_unref(model);
 
-	repover_update_info(widget, NULL);
+		/* update bar chart */
+		//DB( g_print(" set bar to %d\n\n", LST_STAT_EXPENSE+tmpkind) );
+		gtk_chart_set_datas(GTK_CHART(data->RE_line), model, LST_OVER_BALANCE);
+		//gtk_chart_set_line_datas(GTK_CHART(data->RE_line), model, LST_OVER_BALANCE, LST_OVER_DATE);
 
-	/* update bar chart */
-	//DB( g_print(" set bar to %d\n\n", LST_STAT_EXPENSE+tmpkind) );
-	gtk_chart_set_legend(GTK_CHART(data->RE_line), FALSE);
-	
-	gtk_chart_set_datas(GTK_CHART(data->RE_line), model, LST_OVER_BALANCE);
-	//gtk_chart_set_line_datas(GTK_CHART(data->RE_line), model, LST_OVER_BALANCE, LST_OVER_DATE);
 
 }
 
 
-void repover_busy(GtkWidget *widget, gboolean state)
+static void repover_busy(GtkWidget *widget, gboolean state)
 {
 struct repover_data *data;
 GtkWidget *window;
@@ -456,7 +519,7 @@ GdkCursor *cursor;
 /*
 **
 */
-void repover_setup(struct repover_data *data)
+static void repover_setup(struct repover_data *data)
 {
 	DB( g_print("(repover) setup\n") );
 
@@ -497,8 +560,8 @@ void repover_setup(struct repover_data *data)
 
 	}
 
-	make_popaccount_populate(GTK_COMBO_BOX(data->PO_acc), GLOBALS->acc_list);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_acc), 0);
+	ui_acc_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_acc), GLOBALS->h_acc);
+	ui_acc_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_acc), 1);
 
 }
 
@@ -506,7 +569,7 @@ void repover_setup(struct repover_data *data)
 /*
 **
 */
-gboolean repover_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+static gboolean repover_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct repover_data *data = user_data;
 struct WinGeometry *wg;
@@ -524,7 +587,7 @@ struct WinGeometry *wg;
 
 	//enable define windows
 	GLOBALS->define_off--;
-	wallet_update(GLOBALS->mainwindow, (gpointer)2);
+	wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(2));
 
 	return FALSE;
 }
@@ -549,7 +612,7 @@ GError *error = NULL;
 
 	//disable define windows
 	GLOBALS->define_off++;
-	wallet_update(GLOBALS->mainwindow, (gpointer)2);
+	wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(2));
 
     /* create window, etc */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -593,8 +656,9 @@ GError *error = NULL;
 	row++;
 	label = make_label(_("A_ccount:"), 0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-	widget = make_popaccount(label);
+	widget = ui_acc_comboboxentry_new(label);
 	data->PO_acc = widget;
+	gtk_widget_set_size_request (widget, 10, -1);
 	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 2, row, row+1);
 
 	row++;
@@ -741,7 +805,7 @@ GError *error = NULL;
 	//setup, init and show window
 	repover_setup(data);
 
-	//letthis here or the setup trigger a compute...
+	//let this here or the setup trigger a compute...
 	g_signal_connect (data->PO_acc, "changed", G_CALLBACK (repover_compute), NULL);
 
 
@@ -783,35 +847,30 @@ GError *error = NULL;
 ** ============================================================================
 */
 
-void repover_date_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+
+static void repover_date_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
-GDate *date;
-guint32 julian;
-gchar buf[256];
+gchar *datestr;
 gchar *markuptxt;
 gboolean is_over;
 
 	gtk_tree_model_get(model, iter,
-		LST_OVER_DATE, &julian,
+		LST_OVER_DATESTR, &datestr,
 		LST_OVER_OVER, &is_over,
 		-1);
 
-	date = g_date_new_julian (julian);
-	g_date_strftime (buf, 256-1, PREFS->date_format, date);
-	g_date_free(date);
-
 	if(is_over==TRUE)
 	{
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", PREFS->color_warn, buf);
+		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", PREFS->color_warn, datestr);
 		g_object_set(renderer, "markup", markuptxt, NULL);
 		g_free(markuptxt);
 	}
 	else
-	g_object_set(renderer, "markup", buf, NULL);
+	g_object_set(renderer, "markup", datestr, NULL);
 
 }
 
-void repover_text_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+static void repover_text_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
 gchar *buf;
 gchar *markuptxt;
@@ -833,7 +892,7 @@ gboolean is_over;
 
 }
 
-void repover_amount_cell_data_function (GtkTreeViewColumn *col,
+static void repover_amount_cell_data_function (GtkTreeViewColumn *col,
                            GtkCellRenderer   *renderer,
                            GtkTreeModel      *model,
                            GtkTreeIter       *iter,
@@ -850,7 +909,7 @@ gboolean is_over;
 	//get datas
 	gtk_tree_model_get(model, iter,
 		LST_OVER_OVER, &is_over,
-		user_data, &value,
+		GPOINTER_TO_INT(user_data), &value,
 		-1);
 
 	if( value )
@@ -886,7 +945,7 @@ gboolean is_over;
 
 }
 
-GtkTreeViewColumn *amount_list_repover_column(gchar *name, gint id)
+static GtkTreeViewColumn *amount_list_repover_column(gchar *name, gint id)
 {
 GtkTreeViewColumn  *column;
 GtkCellRenderer    *renderer;
@@ -896,8 +955,8 @@ GtkCellRenderer    *renderer;
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set(renderer, "xalign", 1.0, NULL);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, repover_amount_cell_data_function, (gpointer)id, NULL);
-	gtk_tree_view_column_set_alignment (column, 1.0);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, repover_amount_cell_data_function, GINT_TO_POINTER(id), NULL);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	//gtk_tree_view_column_set_sort_column_id (column, id);
 	return column;
 }
@@ -906,7 +965,7 @@ GtkCellRenderer    *renderer;
 /*
 ** create our statistic list
 */
-GtkWidget *create_list_repover(void)
+static GtkWidget *create_list_repover(void)
 {
 GtkListStore *store;
 GtkWidget *view;
@@ -918,6 +977,7 @@ GtkTreeViewColumn  *column;
 	  	NUM_LST_OVER,
 		G_TYPE_BOOLEAN,
 		G_TYPE_INT,
+		G_TYPE_STRING,
 		G_TYPE_STRING,
 		G_TYPE_DOUBLE,
 		G_TYPE_DOUBLE,
@@ -947,6 +1007,7 @@ GtkTreeViewColumn  *column;
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	//gtk_tree_view_column_add_attribute(column, renderer, "text", LST_OVER_DATE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, repover_date_cell_data_function, NULL, NULL);
 
 
@@ -958,6 +1019,7 @@ GtkTreeViewColumn  *column;
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	//gtk_tree_view_column_add_attribute(column, renderer, "text", LST_OVER_WORDING);
 	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, repover_text_cell_data_function, NULL, NULL);
 
 	/* column: Expense */

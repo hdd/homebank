@@ -1,19 +1,20 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __PREFERENCES_H__
@@ -46,7 +47,6 @@
 #define DEFAULT_INC_COLOR		0x4e9a36	//Chameleon
 #define DEFAULT_WARN_COLOR		0Xa40000	//Scarlett Red
 
-
 /*
 ** Preference datas
 */
@@ -58,6 +58,7 @@ struct Currency
 	gchar		*grouping_char;	
 	gshort		frac_digits;
 	gchar		format[8];
+	gchar		monfmt[32];
 };
 
 struct WinGeometry
@@ -71,6 +72,9 @@ struct Preferences
 	//general
 	gchar		*path_wallet;
 	gchar		*path_import;
+	gchar		*path_export;
+
+	gboolean	loadlast;
 	gboolean	runwizard;
 	gint		filter_range;
 
@@ -88,7 +92,7 @@ struct Preferences
 
 	//gshort	num_nbdecimal;
 	//gboolean	num_separator;
-	gboolean	british_unit;
+	gboolean	imperial_unit;
 
 	//help system
 	//gboolean	show_tooltips;
@@ -135,5 +139,6 @@ void homebank_pref_free(void);
 void homebank_pref_createformat(void);
 gboolean homebank_pref_load(void);
 gboolean homebank_pref_save(void);
+void homebank_pref_setdefault(void);
 
 #endif /* __PREFERENCES_H__ */

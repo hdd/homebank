@@ -1,162 +1,192 @@
-<html>
-<head>
-  <title>Filter</title>
-  <meta name="Generator" content="GuideML 2.2">
-  <meta http-equiv="Content-Type" content="text/html">
-  <link rel="stylesheet" href="help.css">
-</head>
-<body bgcolor="#ffffff">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td>&nbsp;<!--<a href="javascript:window.history.go(-1);">&lt;&lt; back</a>--></td>
-    <td width="27"><a href="main.html"><img src="images/home.gif" width="27" height="27" border="0"></a></td>
-    <td width="27"><a href="04bud1.html"><img src="images/prev.gif" width="27" height="27" border="0"></a></td>
-    <td width="27"><a href="04pref.html"><img src="images/next.gif" width="27" height="27" border="0"></a></td>
-  </tr>
-</table>
-<hr size="1" color="#000000">
-
-<h2>Filter dialog</h2>
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Filter</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY >
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=27>
+			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="04bud1.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="04pref.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=1 COLOR="#000000">
+<H2>Filter dialog</H2>
 <div class="gtkshot">
-<img src="images/04filter1.png">
+	<IMG SRC="images/04filter1.png">
 </div>
+<P>The filter dialog is used to adjust the filter for transaction
+from the account window and the statistics window.
+</P>
+<H3>Dialog call</H3>
+<P>This dialog can be called in the following way:
+</P>
+<UL>
+	<LI> from the account window-menu: Edit
+	/ Filter...
 
-<p>
-The filter dialog is used to adjust the filter for transaction from the account window and the statistics window.
-</p>
+	<LI> from the account window-tool-bar.
 
+	<LI> from the statistics window-tool-bar.
 
-<h3>Dialog call</h3>
-This dialog can be called in the following way:
-<ul>
-<li>from the account window-menu: Edit / Filter...
-<li>from the account window-toolbar.
-<li>from the statistics window-toolbar.
-</ul>
-
-<h3>Using filter dialog : General tab</h3>
-
-<h4><img src="images/1.png"> Filter Date</h4>
-<div class="gtkgroup">
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Option</td>
-      <td class="winfo">
-      set this filter state: inactive, include, exclude
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">From</td>
-      <td class="winfo">
-      the date minimum value
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">To</td>
-      <td class="winfo">
-      the date maximum value
-      </td>
-    </tr>
-  </table>
-</div>
-
-<h4><img src="images/2.png"> Filter State</h4>
-<div class="gtkgroup">
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Validated</td>
-      <td class="winfo">
-      set this filter state: inactive, include, exclude
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Force display 'Added'</td>
-      <td class="winfo">
-      force transaction in 'added' state to always be displayed
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Force display 'Edited'</td>
-      <td class="winfo">
-      force transaction in 'edited' state to always be displayed
-      </td>
-    </tr>
-  </table>
-</div>
-
-<h4><img src="images/3.png"> Filter Amount</h4>
-<div class="gtkgroup">
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Option</td>
-      <td class="winfo">
-      set this filter state: inactive, include, exclude
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">From</td>
-      <td class="winfo">
-      the amount minimum value
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">To</td>
-      <td class="winfo">
-      the amount maximum value
-      </td>
-    </tr>
-  </table>
-</div>
-
-<h4><img src="images/4.png"> Filter Payement</h4>
-<div class="gtkgroup">
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Option</td>
-      <td class="winfo">
-      set this filter state: inactive, include, exclude
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">payement</td>
-      <td class="winfo">
-
-      </td>
-    </tr>
-  </table>
-</div>
-
-<h3>Using filter dialog : Other tabs (Category / Payee / Account)</h3>
-
-<p>
-These tabs all functionthe same manner. You can filter these using a list of item, including or exluding the selected items.<br>
-The account tab is not showed when you filter from the account window, it is showed only from the statistics dialog.<br>
-</p>
-
-<div class="gtkgroup">
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Option</td>
-      <td class="winfo">
-      set this filter state: inactive, include, exclude
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">All</td>
-      <td class="winfo">
-      will select all the items in the list
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">None</td>
-      <td class="winfo">
-      will unselect all the items in the list
-      </td>
-    </tr>
-  </table>
-</div>
-
-
-</body>
-</html>
+</UL>
+<H3>Using filter dialog : General tab</H3>
+<H4><IMG SRC="images/1.png" NAME="graphics5" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Filter Date</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Option</P>
+		</TD>
+		<td class="winfo">
+			<P>set this filter state: inactive, include, exclude
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>From</P>
+		</TD>
+		<td class="winfo">
+			<P>the date minimum value
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>To</P>
+		</TD>
+		<td class="winfo">
+			<P>the date maximum value
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<H4><IMG SRC="images/2.png" NAME="graphics6" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Filter State</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Validated</P>
+		</TD>
+		<td class="winfo">
+			<P>set this filter state: inactive, include, exclude
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>Force display 'Added'</P>
+		</TD>
+		<td class="winfo">
+			<P>force transaction in 'added' state to always be displayed
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>Force display 'Edited'</P>
+		</TD>
+		<td class="winfo">
+			<P>force transaction in 'edited' state to always be displayed
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<H4><IMG SRC="images/3.png" NAME="graphics7" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Filter Amount</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Option</P>
+		</TD>
+		<td class="winfo">
+			<P>set this filter state: inactive, include, exclude
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>From</P>
+		</TD>
+		<td class="winfo">
+			<P>the amount minimum value
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>To</P>
+		</TD>
+		<td class="winfo">
+			<P>the amount maximum value
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<H4><IMG SRC="images/4.png" NAME="graphics8" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Filter Payment</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Option</P>
+		</TD>
+		<td class="winfo">
+			<P>set this filter state: inactive, include, exclude
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>payment</P>
+		</TD>
+		<td class="winfo"></TD>
+	</TR>
+</TABLE>
+<H3>Using filter dialog : Other tabs (Category / Payee / Account)</H3>
+<P>These tabs all function-the same manner. You can filter these
+using a list of item, including or excluding the selected items.<BR>The
+account tab is not showed when you filter from the account window, it
+is showed only from the statistics dialog.</P>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Option</P>
+		</TD>
+		<td class="winfo">
+			<P>set this filter state: inactive, include, exclude
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>All</P>
+		</TD>
+		<td class="winfo">
+			<P>will select all the items in the list
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>None</P>
+		</TD>
+		<td class="winfo">
+			<P>will unselected all the items in the list
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+</BODY>
+</HTML>

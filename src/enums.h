@@ -1,19 +1,20 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* wallet/account/import update flags */
@@ -127,6 +128,7 @@ enum
 	LST_DSPOPE_EXPENSE,	/* fake column */
 	LST_DSPOPE_INCOME,	/* fake column */
 	LST_DSPOPE_CATEGORY,	/* fake column */
+	LST_DSPOPE_TAGS,	/* fake column */
 	NUM_LST_DSPOPE
 };
 
@@ -141,38 +143,8 @@ enum
 	COL_OPE_EXPENSE,
 	COL_OPE_INCOME,
 	COL_OPE_CATEGORY,
+	COL_OPE_TAGS,
 	NUM_COL_OPE
-};
-
-
-
-/* list define account (defaccount) */
-enum
-{
-	LST_DEFACC_TOGGLE,
-	LST_DEFACC_DATAS,
-	LST_DEFACC_OLDPOS,
-	//todo: for stock account	
-	//LST_DEFACC_NEW,
-	NUM_LST_DEFACC
-};
-
-/* list define payee (defpayee) */
-enum
-{
-	LST_DEFPAY_TOGGLE,
-	LST_DEFPAY_DATAS,
-	LST_DEFPAY_OLDPOS,
-	NUM_LST_DEFPAY
-};
-
-/* list define category (defcategory) */
-enum
-{
-	LST_DEFCAT_TOGGLE,
-	LST_DEFCAT_DATAS,
-	LST_DEFCAT_OLDPOS,
-	NUM_LST_DEFCAT
 };
 
 /* list define archive (defarchive) */
@@ -193,14 +165,6 @@ enum
 	CSV_DOUBLE
 };
 
-enum
-{
-	FILETYPE_UNKNOW,
-	FILETYPE_AMIGA_HB,
-	FILETYPE_CSV_HB,
-	FILETYPE_OFX,
-	NUM_FILETYPE
-};
 
 #define LST_OPE_IMPTOGGLE 2
 

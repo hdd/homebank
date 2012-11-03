@@ -1,72 +1,103 @@
 
+common_defines = \
+	-DHOMEBANK_PIXMAPSDIR=\""$(datadir)/homebank/images"\" \
+	-DHOMEBANK_LOCALEDIR=\""$(datadir)/locale"\" \
+	-DHOMEBANK_HELPDIR=\""$(datadir)/homebank/help"\"
+
+
 bin_PROGRAMS = homebank
 
+DATA_ACCESS = \
+	da_account.c  \
+	da_account.h \
+	da_payee.c  \
+	da_payee.h \
+	da_category.c \
+	da_category.h \
+	da_other.c \
+	da_other.h \
+	da_transaction.c \
+	da_transaction.h \
+	da_tag.c \
+	da_tag.h
+
+BUSINESS_CORE = \
+	hb_account.c \
+	hb_account.h \
+	hb_category.c \
+	hb_category.h \
+	hb_payee.c \
+	hb_payee.h \
+	hb_transaction.c \
+	hb_transaction.h
+
+USER_INTERFACE = \
+	ui_account.c \
+	ui_account.h \
+	ui_payee.c \
+	ui_payee.h \
+	ui_category.c \
+	ui_category.h
+
 homebank_SOURCES = \
-gtkchart.c \
-gtkdateentry.c \
-data_access.c \
-def_account.c \
-def_archive.c \
-def_budget.c \
-def_category.c \
-def_filter.c \
-def_lists.c \
-def_operation.c \
-def_payee.c \
-def_pref.c \
-def_wallet.c \
-dsp_account.c \
-dsp_wallet.c \
-homebank.c \
-imp_amiga.c \
-import.c \
-list_account.c \
-list_operation.c \
-list_upcoming.c \
-misc.c \
-preferences.c \
-rep_budget.c \
-rep_car.c \
-rep_over.c \
-rep_stats.c \
-widgets.c \
-xml.c \
-data_access.h \
-def_account.h \
-def_archive.h \
-def_budget.h \
-def_category.h \
-def_filter.h \
-def_lists.h \
-def_operation.h \
-def_payee.h \
-def_pref.h \
-def_wallet.h \
-dsp_account.h \
-dsp_wallet.h \
-enums.h \
-gtkchart.h \
-gtkdateentry.h \
-homebank.h \
-imp_amiga.h \
-import.h \
-list_account.h \
-list_operation.h \
-list_upcoming.h \
-misc.h \
-preferences.h \
-rep_budget.h \
-rep_car.h \
-rep_over.h \
-rep_stats.h \
-widgets.h \
-xml.h
+	$(DATA_ACCESS) \
+	$(BUSINESS_CORE) \
+	$(USER_INTERFACE) \
+	gtkchart.c \
+	gtkdateentry.c \
+	def_archive.c \
+	def_budget.c \
+	def_filter.c \
+	def_operation.c \
+	def_pref.c \
+	def_wallet.c \
+	dsp_account.c \
+	dsp_wallet.c \
+	homebank.c \
+	imp_amiga.c \
+	import.c \
+	imp_qif.c \
+	list_account.c \
+	list_operation.c \
+	list_upcoming.c \
+	misc.c \
+	preferences.c \
+	rep_budget.c \
+	rep_car.c \
+	rep_over.c \
+	rep_stats.c \
+	widgets.c \
+	xml.c \
+	def_archive.h \
+	def_budget.h \
+	def_filter.h \
+	def_operation.h \
+	def_pref.h \
+	def_wallet.h \
+	dsp_account.h \
+	dsp_wallet.h \
+	enums.h \
+	gtkchart.h \
+	gtkdateentry.h \
+	homebank.h \
+	imp_amiga.h \
+	import.h \
+	imp_qif.h \
+	list_account.h \
+	list_operation.h \
+	list_upcoming.h \
+	misc.h \
+	preferences.h \
+	rep_budget.h \
+	rep_car.h \
+	rep_over.h \
+	rep_stats.h \
+	widgets.h \
+	xml.h
 
 homebank_LDADD = $(DEPS_LIBS)
 
 AM_CPPFLAGS = \
-$(DEPS_CFLAGS) \
--DLOCALE_DIR=\""$(datadir)/locale"\" \
--DPIXMAPS_DIR=\""$(datadir)/homebank/images"\" \
--DHELP_DIR=\""$(datadir)/homebank/help"\"
+	$(DEPS_CFLAGS) \
+	$(common_defines)
 

@@ -1,7 +1,7 @@
-# generated automatically by aclocal 1.9.6 -*- Autoconf -*-
+# generated automatically by aclocal 1.10.1 -*- Autoconf -*-
 
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-# 2005  Free Software Foundation, Inc.
+# 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -10,6 +10,14 @@
 # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
+
+m4_ifndef([AC_AUTOCONF_VERSION],
+  [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
+m4_if(AC_AUTOCONF_VERSION, [2.61],,
+[m4_warning([this file was generated for autoconf 2.61.
+You have another version of autoconf.  It may work, but is not guaranteed to.
+If you have problems, you may need to regenerate the build system entirely.
+To do so, use the procedure documented by the package, typically `autoreconf'.])])
 
 # Copyright (C) 1995-2002 Free Software Foundation, Inc.
 # Copyright (C) 2001-2003,2004 Red Hat, Inc.
@@ -114,8 +122,7 @@ AC_SUBST($1)dnl
 #-----------------
 glib_DEFUN([GLIB_WITH_NLS],
   dnl NLS is obligatory
-  [AC_REQUIRE([AC_CANONICAL_HOST])dnl
-    USE_NLS=yes
+  [USE_NLS=yes
     AC_SUBST(USE_NLS)
 
     gt_cv_have_gettext=no
@@ -221,7 +228,7 @@ glib_DEFUN([GLIB_WITH_NLS],
 	  AC_CHECK_FUNCS(dcgettext)
 	  MSGFMT_OPTS=
 	  AC_MSG_CHECKING([if msgfmt accepts -c])
-	  GLIB_RUN_PROG([msgfmt -c -o /dev/null],[
+	  GLIB_RUN_PROG([$MSGFMT -c -o /dev/null],[
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -447,9 +454,10 @@ fi])
 
 
 dnl IT_PROG_INTLTOOL([MINIMUM-VERSION], [no-xml])
-# serial 35 IT_PROG_INTLTOOL
-AC_DEFUN([IT_PROG_INTLTOOL],
-[AC_PREREQ([2.50])dnl
+# serial 40 IT_PROG_INTLTOOL
+AC_DEFUN([IT_PROG_INTLTOOL], [
+AC_PREREQ([2.50])dnl
+AC_REQUIRE([AM_NLS])dnl
 
 case "$am__api_version" in
     1.[01234])
@@ -460,15 +468,22 @@ case "$am__api_version" in
 esac
 
 if test -n "$1"; then
-    AC_MSG_CHECKING(for intltool >= $1)
+    AC_MSG_CHECKING([for intltool >= $1])
 
     INTLTOOL_REQUIRED_VERSION_AS_INT=`echo $1 | awk -F. '{ print $ 1 * 1000 + $ 2 * 100 + $ 3; }'`
-    INTLTOOL_APPLIED_VERSION=`awk -F\" '/\\$VERSION / { print $ 2; }' ${ac_aux_dir}/intltool-update.in`
-    [INTLTOOL_APPLIED_VERSION_AS_INT=`awk -F\" '/\\$VERSION / { split($ 2, VERSION, "."); print VERSION[1] * 1000 + VERSION[2] * 100 + VERSION[3];}' ${ac_aux_dir}/intltool-update.in`
+    INTLTOOL_APPLIED_VERSION=`intltool-update --version | head -1 | cut -d" " -f3`
+    [INTLTOOL_APPLIED_VERSION_AS_INT=`echo $INTLTOOL_APPLIED_VERSION | awk -F. '{ print $ 1 * 1000 + $ 2 * 100 + $ 3; }'`
     ]
     AC_MSG_RESULT([$INTLTOOL_APPLIED_VERSION found])
     test "$INTLTOOL_APPLIED_VERSION_AS_INT" -ge "$INTLTOOL_REQUIRED_VERSION_AS_INT" ||
 	AC_MSG_ERROR([Your intltool is too old.  You need intltool $1 or later.])
+fi
+
+AC_PATH_PROG(INTLTOOL_UPDATE, [intltool-update])
+AC_PATH_PROG(INTLTOOL_MERGE, [intltool-merge])
+AC_PATH_PROG(INTLTOOL_EXTRACT, [intltool-extract])
+if test -z "$INTLTOOL_UPDATE" -o -z "$INTLTOOL_MERGE" -o -z "$INTLTOOL_EXTRACT"; then
+    AC_MSG_ERROR([The intltool scripts were not found. Please install intltool.])
 fi
 
   INTLTOOL_DESKTOP_RULE='%.desktop:   %.desktop.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@' 
@@ -489,6 +504,7 @@ INTLTOOL_SOUNDLIST_RULE='%.soundlist: %.soundlist.in $(INTLTOOL_MERGE) $(wildcar
   INTLTOOL_SCHEMAS_RULE='%.schemas:   %.schemas.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -s -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@' 
     INTLTOOL_THEME_RULE='%.theme:     %.theme.in     $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@' 
     INTLTOOL_SERVICE_RULE='%.service: %.service.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
+   INTLTOOL_POLICY_RULE='%.policy:    %.policy.in    $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -x -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
 
 AC_SUBST(INTLTOOL_DESKTOP_RULE)
 AC_SUBST(INTLTOOL_DIRECTORY_RULE)
@@ -508,13 +524,24 @@ AC_SUBST(INTLTOOL_CAVES_RULE)
 AC_SUBST(INTLTOOL_SCHEMAS_RULE)
 AC_SUBST(INTLTOOL_THEME_RULE)
 AC_SUBST(INTLTOOL_SERVICE_RULE)
+AC_SUBST(INTLTOOL_POLICY_RULE)
 
-# Use the tools built into the package, not the ones that are installed.
-AC_SUBST(INTLTOOL_EXTRACT, '$(top_builddir)/intltool-extract')
-AC_SUBST(INTLTOOL_MERGE, '$(top_builddir)/intltool-merge')
-AC_SUBST(INTLTOOL_UPDATE, '$(top_builddir)/intltool-update')
+# Check the gettext tools to make sure they are GNU
+AC_PATH_PROG(XGETTEXT, xgettext)
+AC_PATH_PROG(MSGMERGE, msgmerge)
+AC_PATH_PROG(MSGFMT, msgfmt)
+AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
+if test -z "$XGETTEXT" -o -z "$MSGMERGE" -o -z "$MSGFMT"; then
+    AC_MSG_ERROR([GNU gettext tools not found; required for intltool])
+fi
+xgversion="`$XGETTEXT --version|grep '(GNU ' 2> /dev/null`"
+mmversion="`$MSGMERGE --version|grep '(GNU ' 2> /dev/null`"
+mfversion="`$MSGFMT --version|grep '(GNU ' 2> /dev/null`"
+if test -z "$xgversion" -o -z "$mmversion" -o -z "$mfversion"; then
+    AC_MSG_ERROR([GNU gettext tools not found; required for intltool])
+fi
 
-AC_PATH_PROG(INTLTOOL_PERL, perl)
+AC_PATH_PROG(INTLTOOL_PERL, [perl])
 if test -z "$INTLTOOL_PERL"; then
    AC_MSG_ERROR([perl not found; required for intltool])
 fi
@@ -530,19 +557,16 @@ if test "x$2" != "xno-xml"; then
    fi
 fi
 
-AC_PATH_PROG(INTLTOOL_ICONV, iconv, iconv)
-AC_PATH_PROG(INTLTOOL_MSGFMT, msgfmt, msgfmt)
-AC_PATH_PROG(INTLTOOL_MSGMERGE, msgmerge, msgmerge)
-AC_PATH_PROG(INTLTOOL_XGETTEXT, xgettext, xgettext)
-
 # Substitute ALL_LINGUAS so we can use it in po/Makefile
 AC_SUBST(ALL_LINGUAS)
 
 # Set DATADIRNAME correctly if it is not set yet
 # (copied from glib-gettext.m4)
 if test -z "$DATADIRNAME"; then
-  AC_TRY_LINK(, [extern int _nl_msg_cat_cntr;
-                 return _nl_msg_cat_cntr],
+  AC_LINK_IFELSE(
+    [AC_LANG_PROGRAM([[]],
+                     [[extern int _nl_msg_cat_cntr;
+                       return _nl_msg_cat_cntr]])],
     [DATADIRNAME=share],
     [case $host in
     *-*-solaris*)
@@ -563,48 +587,6 @@ AC_SUBST(DATADIRNAME)
 
 IT_PO_SUBDIR([po])
 
-dnl The following is very similar to
-dnl
-dnl	AC_CONFIG_FILES([intltool-extract intltool-merge intltool-update])
-dnl
-dnl with the following slight differences:
-dnl  - the *.in files are in ac_aux_dir,
-dnl  - if the file haven't changed upon reconfigure, it's not touched,
-dnl  - the evaluation of the third parameter enables a hack which computes
-dnl    the actual value of $libdir,
-dnl  - the user sees "executing intltool commands", instead of
-dnl    "creating intltool-extract" and such.
-dnl
-dnl Nothing crucial here, and we could use AC_CONFIG_FILES, if there were
-dnl a reason for it.
-
-AC_CONFIG_COMMANDS([intltool], [
-
-for file in intltool-extract intltool-merge intltool-update; do
-  sed -e "s|@INTLTOOL_EXTRACT@|`pwd`/intltool-extract|g" \
-      -e "s|@INTLTOOL_LIBDIR@|${INTLTOOL_LIBDIR}|g" \
-      -e "s|@INTLTOOL_ICONV@|${INTLTOOL_ICONV}|g" \
-      -e "s|@INTLTOOL_MSGFMT@|${INTLTOOL_MSGFMT}|g" \
-      -e "s|@INTLTOOL_MSGMERGE@|${INTLTOOL_MSGMERGE}|g" \
-      -e "s|@INTLTOOL_XGETTEXT@|${INTLTOOL_XGETTEXT}|g" \
-      -e "s|@INTLTOOL_PERL@|${INTLTOOL_PERL}|g" \
-	< ${ac_aux_dir}/${file}.in > ${file}.out
-  if cmp -s ${file} ${file}.out 2>/dev/null; then
-    rm -f ${file}.out
-  else
-    mv -f ${file}.out ${file}
-  fi
-  chmod ugo+x ${file}
-  chmod u+w ${file}
-done
-
-],
-[INTLTOOL_PERL='${INTLTOOL_PERL}' ac_aux_dir='${ac_aux_dir}'
-prefix="$prefix" exec_prefix="$exec_prefix" INTLTOOL_LIBDIR="$libdir" 
-INTLTOOL_EXTRACT='${INTLTOOL_EXTRACT}' INTLTOOL_ICONV='${INTLTOOL_ICONV}'
-INTLTOOL_MSGFMT='${INTLTOOL_MSGFMT}' INTLTOOL_MSGMERGE='${INTLTOOL_MSGMERGE}'
-INTLTOOL_XGETTEXT='${INTLTOOL_XGETTEXT}'])
-
 ])
 
 
@@ -620,6 +602,9 @@ dnl The following CONFIG_COMMANDS should be exetuted at the very end
 dnl of config.status.
 AC_CONFIG_COMMANDS_PRE([
   AC_CONFIG_COMMANDS([$1/stamp-it], [
+    if [ ! grep "^# INTLTOOL_MAKEFILE$" "$1/Makefile.in" ]; then
+       AC_MSG_ERROR([$1/Makefile.in.in was not created by intltoolize.])
+    fi
     rm -f "$1/stamp-it" "$1/stamp-it.tmp" "$1/POTFILES" "$1/Makefile.tmp"
     >"$1/stamp-it.tmp"
     [sed '/^#/d
@@ -628,27 +613,54 @@ AC_CONFIG_COMMANDS_PRE([
 	'"s|^|	$ac_top_srcdir/|" \
       "$srcdir/$1/POTFILES.in" | sed '$!s/$/ \\/' >"$1/POTFILES"
     ]
-    if test ! -f "$1/Makefile"; then
-      AC_MSG_ERROR([$1/Makefile is not ready.])
-    fi
-    mv "$1/Makefile" "$1/Makefile.tmp"
     [sed '/^POTFILES =/,/[^\\]$/ {
 		/^POTFILES =/!d
 		r $1/POTFILES
 	  }
-	 ' "$1/Makefile.tmp" >"$1/Makefile"]
+	 ' "$1/Makefile.in" >"$1/Makefile"]
     rm -f "$1/Makefile.tmp"
     mv "$1/stamp-it.tmp" "$1/stamp-it"
   ])
 ])dnl
 ])
 
-
 # deprecated macros
 AU_ALIAS([AC_PROG_INTLTOOL], [IT_PROG_INTLTOOL])
 # A hint is needed for aclocal from Automake <= 1.9.4:
 # AC_DEFUN([AC_PROG_INTLTOOL], ...)
 
+
+# nls.m4 serial 3 (gettext-0.15)
+dnl Copyright (C) 1995-2003, 2005-2006 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+dnl
+dnl This file can can be used in projects which are not available under
+dnl the GNU General Public License or the GNU Library General Public
+dnl License but which still want to provide support for the GNU gettext
+dnl functionality.
+dnl Please note that the actual code of the GNU gettext library is covered
+dnl by the GNU Library General Public License, and the rest of the GNU
+dnl gettext package package is covered by the GNU General Public License.
+dnl They are *not* in the public domain.
+
+dnl Authors:
+dnl   Ulrich Drepper <drepper@cygnus.com>, 1995-2000.
+dnl   Bruno Haible <haible@clisp.cons.org>, 2000-2003.
+
+AC_PREREQ(2.50)
+
+AC_DEFUN([AM_NLS],
+[
+  AC_MSG_CHECKING([whether NLS is requested])
+  dnl Default is enabled NLS
+  AC_ARG_ENABLE(nls,
+    [  --disable-nls           do not use Native Language Support],
+    USE_NLS=$enableval, USE_NLS=yes)
+  AC_MSG_RESULT($USE_NLS)
+  AC_SUBST(USE_NLS)
+])
 
 # pkg.m4 - Macros to locate and utilise pkg-config.            -*- Autoconf -*-
 # 
@@ -798,7 +810,7 @@ path to pkg-config.
 
 _PKG_TEXT
 
-To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.])],
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.])],
 		[$4])
 else
 	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
@@ -808,7 +820,7 @@ else
 fi[]dnl
 ])# PKG_CHECK_MODULES
 
-# Copyright (C) 2002, 2003, 2005  Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2005, 2006, 2007  Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -818,14 +830,31 @@ fi[]dnl
 # ----------------------------
 # Automake X.Y traces this macro to ensure aclocal.m4 has been
 # generated from the m4 files accompanying Automake X.Y.
-AC_DEFUN([AM_AUTOMAKE_VERSION], [am__api_version="1.9"])
+# (This private macro should not be called outside this file.)
+AC_DEFUN([AM_AUTOMAKE_VERSION],
+[am__api_version='1.10'
+dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
+dnl require some minimum version.  Point them to the right macro.
+m4_if([$1], [1.10.1], [],
+      [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
+])
+
+# _AM_AUTOCONF_VERSION(VERSION)
+# -----------------------------
+# aclocal traces this macro to find the Autoconf version.
+# This is a private macro too.  Using m4_define simplifies
+# the logic in aclocal, which can simply ignore this definition.
+m4_define([_AM_AUTOCONF_VERSION], [])
 
 # AM_SET_CURRENT_AUTOMAKE_VERSION
 # -------------------------------
-# Call AM_AUTOMAKE_VERSION so it can be traced.
+# Call AM_AUTOMAKE_VERSION and AM_AUTOMAKE_VERSION so they can be traced.
 # This function is AC_REQUIREd by AC_INIT_AUTOMAKE.
 AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
-	 [AM_AUTOMAKE_VERSION([1.9.6])])
+[AM_AUTOMAKE_VERSION([1.10.1])dnl
+m4_ifndef([AC_AUTOCONF_VERSION],
+  [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
+_AM_AUTOCONF_VERSION(AC_AUTOCONF_VERSION)])
 
 # AM_AUX_DIR_EXPAND                                         -*- Autoconf -*-
 
@@ -882,14 +911,14 @@ am_aux_dir=`cd $ac_aux_dir && pwd`
 
 # AM_CONDITIONAL                                            -*- Autoconf -*-
 
-# Copyright (C) 1997, 2000, 2001, 2003, 2004, 2005
+# Copyright (C) 1997, 2000, 2001, 2003, 2004, 2005, 2006
 # Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
-# serial 7
+# serial 8
 
 # AM_CONDITIONAL(NAME, SHELL-CONDITION)
 # -------------------------------------
@@ -898,8 +927,10 @@ AC_DEFUN([AM_CONDITIONAL],
 [AC_PREREQ(2.52)dnl
  ifelse([$1], [TRUE],  [AC_FATAL([$0: invalid condition: $1])],
 	[$1], [FALSE], [AC_FATAL([$0: invalid condition: $1])])dnl
-AC_SUBST([$1_TRUE])
-AC_SUBST([$1_FALSE])
+AC_SUBST([$1_TRUE])dnl
+AC_SUBST([$1_FALSE])dnl
+_AM_SUBST_NOTMAKE([$1_TRUE])dnl
+_AM_SUBST_NOTMAKE([$1_FALSE])dnl
 if $2; then
   $1_TRUE=
   $1_FALSE='#'
@@ -913,15 +944,14 @@ AC_CONFIG_COMMANDS_PRE(
 Usually this means the macro was only invoked conditionally.]])
 fi])])
 
-
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006
 # Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
-# serial 8
+# serial 9
 
 # There are a few dirty hacks below to avoid letting `AC_PROG_CC' be
 # written in clear, in which case automake, when reading aclocal.m4,
@@ -949,6 +979,7 @@ AC_REQUIRE([AM_DEP_TRACK])dnl
 ifelse([$1], CC,   [depcc="$CC"   am_compiler_list=],
        [$1], CXX,  [depcc="$CXX"  am_compiler_list=],
        [$1], OBJC, [depcc="$OBJC" am_compiler_list='gcc3 gcc'],
+       [$1], UPC,  [depcc="$UPC"  am_compiler_list=],
        [$1], GCJ,  [depcc="$GCJ"  am_compiler_list='gcc3 gcc'],
                    [depcc="$$1"   am_compiler_list=])
 
@@ -1014,6 +1045,7 @@ AC_CACHE_CHECK([dependency style of $depcc],
        depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
        $SHELL ./depcomp $depcc -c -o sub/conftest.${OBJEXT-o} sub/conftest.c \
          >/dev/null 2>conftest.err &&
+       grep sub/conftst1.h sub/conftest.Po > /dev/null 2>&1 &&
        grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
        grep sub/conftest.${OBJEXT-o} sub/conftest.Po > /dev/null 2>&1 &&
        ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
@@ -1066,7 +1098,8 @@ if test "x$enable_dependency_tracking" != xno; then
   AMDEPBACKSLASH='\'
 fi
 AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
-AC_SUBST([AMDEPBACKSLASH])
+AC_SUBST([AMDEPBACKSLASH])dnl
+_AM_SUBST_NOTMAKE([AMDEPBACKSLASH])dnl
 ])
 
 # Generate code to set up dependency tracking.              -*- Autoconf -*-
@@ -1091,8 +1124,9 @@ AC_DEFUN([_AM_OUTPUT_DEPENDENCY_COMMANDS],
   # some people rename them; so instead we look at the file content.
   # Grep'ing the first line is not enough: some people post-process
   # each Makefile.in and add a new line on top of each file to say so.
-  # So let's grep whole file.
-  if grep '^#.*generated by automake' $mf > /dev/null 2>&1; then
+  # Grep'ing the whole file is not good either: AIX grep has a line
+  # limit of 2048, but all sed's we know have understand at least 4000.
+  if sed -n 's,^#.*generated by automake.*,X,p' "$mf" | grep X >/dev/null 2>&1; then
     dirpart=`AS_DIRNAME("$mf")`
   else
     continue
@@ -1151,14 +1185,14 @@ AU_DEFUN([AM_CONFIG_HEADER], [AC_CONFIG_HEADERS($@)])
 
 # Do all the work for Automake.                             -*- Autoconf -*-
 
-# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005
-# Free Software Foundation, Inc.
+# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+# 2005, 2006, 2008 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
-# serial 12
+# serial 13
 
 # This macro actually does too much.  Some checks are only needed if
 # your package does certain things.  But this isn't really a big deal.
@@ -1175,16 +1209,20 @@ AU_DEFUN([AM_CONFIG_HEADER], [AC_CONFIG_HEADERS($@)])
 # arguments mandatory, and then we can depend on a new Autoconf
 # release and drop the old call support.
 AC_DEFUN([AM_INIT_AUTOMAKE],
-[AC_PREREQ([2.58])dnl
+[AC_PREREQ([2.60])dnl
 dnl Autoconf wants to disallow AM_ names.  We explicitly allow
 dnl the ones we care about.
 m4_pattern_allow([^AM_[A-Z]+FLAGS$])dnl
 AC_REQUIRE([AM_SET_CURRENT_AUTOMAKE_VERSION])dnl
 AC_REQUIRE([AC_PROG_INSTALL])dnl
-# test to see if srcdir already configured
-if test "`cd $srcdir && pwd`" != "`pwd`" &&
-   test -f $srcdir/config.status; then
-  AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+if test "`cd $srcdir && pwd`" != "`pwd`"; then
+  # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
+  # is not polluted with repeated "-I."
+  AC_SUBST([am__isrc], [' -I$(srcdir)'])_AM_SUBST_NOTMAKE([am__isrc])dnl
+  # test to see if srcdir already configured
+  if test -f $srcdir/config.status; then
+    AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+  fi
 fi
 
 # test whether we have cygpath
@@ -1204,6 +1242,9 @@ m4_ifval([$2],
  AC_SUBST([PACKAGE], [$1])dnl
  AC_SUBST([VERSION], [$2])],
 [_AM_SET_OPTIONS([$1])dnl
+dnl Diagnose old-style AC_INIT with new-style AM_AUTOMAKE_INIT.
+m4_if(m4_ifdef([AC_PACKAGE_NAME], 1)m4_ifdef([AC_PACKAGE_VERSION], 1), 11,,
+  [m4_fatal([AC_INIT should be called with package and version arguments])])dnl
  AC_SUBST([PACKAGE], ['AC_PACKAGE_TARNAME'])dnl
  AC_SUBST([VERSION], ['AC_PACKAGE_VERSION'])])dnl
 
@@ -1239,6 +1280,10 @@ AC_PROVIDE_IFELSE([AC_PROG_CXX],
                   [_AM_DEPENDENCIES(CXX)],
                   [define([AC_PROG_CXX],
                           defn([AC_PROG_CXX])[_AM_DEPENDENCIES(CXX)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+                  [_AM_DEPENDENCIES(OBJC)],
+                  [define([AC_PROG_OBJC],
+                          defn([AC_PROG_OBJC])[_AM_DEPENDENCIES(OBJC)])])dnl
 ])
 ])
 
@@ -1252,16 +1297,17 @@ AC_PROVIDE_IFELSE([AC_PROG_CXX],
 # our stamp files there.
 AC_DEFUN([_AC_AM_CONFIG_HEADER_HOOK],
 [# Compute $1's index in $config_headers.
+_am_arg=$1
 _am_stamp_count=1
 for _am_header in $config_headers :; do
   case $_am_header in
-    $1 | $1:* )
+    $_am_arg | $_am_arg:* )
       break ;;
     * )
       _am_stamp_count=`expr $_am_stamp_count + 1` ;;
   esac
 done
-echo "timestamp for $1" >`AS_DIRNAME([$1])`/stamp-h[]$_am_stamp_count])
+echo "timestamp for $_am_arg" >`AS_DIRNAME(["$_am_arg"])`/stamp-h[]$_am_stamp_count])
 
 # Copyright (C) 2001, 2003, 2005  Free Software Foundation, Inc.
 #
@@ -1274,7 +1320,7 @@ echo "timestamp for $1" >`AS_DIRNAME([$1])`/stamp-h[]$_am_stamp_count])
 # Define $install_sh.
 AC_DEFUN([AM_PROG_INSTALL_SH],
 [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
-install_sh=${install_sh-"$am_aux_dir/install-sh"}
+install_sh=${install_sh-"\$(SHELL) $am_aux_dir/install-sh"}
 AC_SUBST(install_sh)])
 
 # Copyright (C) 2003, 2005  Free Software Foundation, Inc.
@@ -1352,14 +1398,14 @@ rm -f confinc confmf
 
 # Fake the existence of programs that GNU maintainers use.  -*- Autoconf -*-
 
-# Copyright (C) 1997, 1999, 2000, 2001, 2003, 2005
+# Copyright (C) 1997, 1999, 2000, 2001, 2003, 2004, 2005
 # Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
-# serial 4
+# serial 5
 
 # AM_MISSING_PROG(NAME, PROGRAM)
 # ------------------------------
@@ -1375,6 +1421,7 @@ AC_SUBST($1)])
 # If it does, set am_missing_run to use it, otherwise, to nothing.
 AC_DEFUN([AM_MISSING_HAS_RUN],
 [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+AC_REQUIRE_AUX_FILE([missing])dnl
 test x"${MISSING+set}" = xset || MISSING="\${SHELL} $am_aux_dir/missing"
 # Use eval to expand $SHELL
 if eval "$MISSING --run true"; then
@@ -1385,7 +1432,7 @@ else
 fi
 ])
 
-# Copyright (C) 2003, 2004, 2005  Free Software Foundation, Inc.
+# Copyright (C) 2003, 2004, 2005, 2006  Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -1393,60 +1440,23 @@ fi
 
 # AM_PROG_MKDIR_P
 # ---------------
-# Check whether `mkdir -p' is supported, fallback to mkinstalldirs otherwise.
-#
-# Automake 1.8 used `mkdir -m 0755 -p --' to ensure that directories
-# created by `make install' are always world readable, even if the
-# installer happens to have an overly restrictive umask (e.g. 077).
-# This was a mistake.  There are at least two reasons why we must not
-# use `-m 0755':
-#   - it causes special bits like SGID to be ignored,
-#   - it may be too restrictive (some setups expect 775 directories).
-#
-# Do not use -m 0755 and let people choose whatever they expect by
-# setting umask.
-#
-# We cannot accept any implementation of `mkdir' that recognizes `-p'.
-# Some implementations (such as Solaris 8's) are not thread-safe: if a
-# parallel make tries to run `mkdir -p a/b' and `mkdir -p a/c'
-# concurrently, both version can detect that a/ is missing, but only
-# one can create it and the other will error out.  Consequently we
-# restrict ourselves to GNU make (using the --version option ensures
-# this.)
+# Check for `mkdir -p'.
 AC_DEFUN([AM_PROG_MKDIR_P],
-[if mkdir -p --version . >/dev/null 2>&1 && test ! -d ./--version; then
-  # We used to keeping the `.' as first argument, in order to
-  # allow $(mkdir_p) to be used without argument.  As in
-  #   $(mkdir_p) $(somedir)
-  # where $(somedir) is conditionally defined.  However this is wrong
-  # for two reasons:
-  #  1. if the package is installed by a user who cannot write `.'
-  #     make install will fail,
-  #  2. the above comment should most certainly read
-  #     $(mkdir_p) $(DESTDIR)$(somedir)
-  #     so it does not work when $(somedir) is undefined and
-  #     $(DESTDIR) is not.
-  #  To support the latter case, we have to write
-  #     test -z "$(somedir)" || $(mkdir_p) $(DESTDIR)$(somedir),
-  #  so the `.' trick is pointless.
-  mkdir_p='mkdir -p --'
-else
-  # On NextStep and OpenStep, the `mkdir' command does not
-  # recognize any option.  It will interpret all options as
-  # directories to create, and then abort because `.' already
-  # exists.
-  for d in ./-p ./--version;
-  do
-    test -d $d && rmdir $d
-  done
-  # $(mkinstalldirs) is defined by Automake if mkinstalldirs exists.
-  if test -f "$ac_aux_dir/mkinstalldirs"; then
-    mkdir_p='$(mkinstalldirs)'
-  else
-    mkdir_p='$(install_sh) -d'
-  fi
-fi
-AC_SUBST([mkdir_p])])
+[AC_PREREQ([2.60])dnl
+AC_REQUIRE([AC_PROG_MKDIR_P])dnl
+dnl Automake 1.8 to 1.9.6 used to define mkdir_p.  We now use MKDIR_P,
+dnl while keeping a definition of mkdir_p for backward compatibility.
+dnl @MKDIR_P@ is magic: AC_OUTPUT adjusts its value for each Makefile.
+dnl However we cannot define mkdir_p as $(MKDIR_P) for the sake of
+dnl Makefile.ins that do not define MKDIR_P, so we do our own
+dnl adjustment using top_builddir (which is defined more often than
+dnl MKDIR_P).
+AC_SUBST([mkdir_p], ["$MKDIR_P"])dnl
+case $mkdir_p in
+  [[\\/$]]* | ?:[[\\/]]*) ;;
+  */*) mkdir_p="\$(top_builddir)/$mkdir_p" ;;
+esac
+])
 
 # Helper functions for option handling.                     -*- Autoconf -*-
 
@@ -1558,8 +1568,20 @@ dnl Don't test for $cross_compiling = yes, because it might be `maybe'.
 if test "$cross_compiling" != no; then
   AC_CHECK_TOOL([STRIP], [strip], :)
 fi
-INSTALL_STRIP_PROGRAM="\${SHELL} \$(install_sh) -c -s"
+INSTALL_STRIP_PROGRAM="\$(install_sh) -c -s"
 AC_SUBST([INSTALL_STRIP_PROGRAM])])
+
+# Copyright (C) 2006  Free Software Foundation, Inc.
+#
+# This file is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# _AM_SUBST_NOTMAKE(VARIABLE)
+# ---------------------------
+# Prevent Automake from outputting VARIABLE = @VARIABLE@ in Makefile.in.
+# This macro is traced by Automake.
+AC_DEFUN([_AM_SUBST_NOTMAKE])
 
 # Check how to create a tarball.                            -*- Autoconf -*-
 

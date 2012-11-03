@@ -1,0 +1,1896 @@
+# Turkish translation for homebank
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the homebank package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: homebank\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-09-13 23:35+0200\n"
+"PO-Revision-Date: 2008-09-28 22:05+0000\n"
+"Last-Translator: Özgür Kuru <ozgur@ozgurkuru.net>\n"
+"Language-Team: Turkish <tr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-11-22 13:12+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. "translator-credits"	, "trans",
+#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:720
+msgid "Free, easy, personal accounting for everyone."
+msgstr "Herkes için özgür, kolay kişisel muhasebe"
+
+#: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:29
+msgid "HomeBank"
+msgstr "Ev Bankası"
+
+#: ../src/def_archive.c:114
+msgid "Day"
+msgstr "Gün"
+
+#: ../src/def_archive.c:114
+msgid "Week"
+msgstr "Hafta"
+
+#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+msgid "Month"
+msgstr "Ay"
+
+#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+msgid "Year"
+msgstr "Yıl"
+
+#: ../src/def_archive.c:139 ../src/dsp_account.c:659
+msgid "(new archive)"
+msgstr "(yeni arşiv)"
+
+#: ../src/def_archive.c:603
+msgid "Manage Archives"
+msgstr "Arşiv Yöneticisi"
+
+#: ../src/def_archive.c:667
+msgid "<b>General infos</b>"
+msgstr "<b>Genel Bilgiler</b>"
+
+#: ../src/def_archive.c:675
+msgid "_Wording:"
+msgstr "_Takma Ad:"
+
+#: ../src/def_archive.c:683 ../src/def_operation.c:684
+msgid "_Amount:"
+msgstr "_Miktar:"
+
+#: ../src/def_archive.c:699 ../src/def_operation.c:700 ../src/import.c:1725
+#: ../src/rep_over.c:621
+msgid "A_ccount:"
+msgstr "H_esap:"
+
+#: ../src/def_archive.c:707 ../src/def_operation.c:708
+msgid "_Validated"
+msgstr "_Onaylandı"
+
+#: ../src/def_archive.c:715
+msgid "<b>Optional infos</b>"
+msgstr "<b>Ek bilgi</b>"
+
+#: ../src/def_archive.c:719 ../src/def_operation.c:740
+msgid "Pay_ment:"
+msgstr "Ö_deme"
+
+#: ../src/def_archive.c:738 ../src/def_operation.c:759
+msgid "Of notebook _2"
+msgstr "_2. Sayfanın"
+
+#: ../src/def_archive.c:744 ../src/def_operation.c:765
+msgid "_To account:"
+msgstr "_Hesaba:"
+
+#: ../src/def_archive.c:751 ../src/def_operation.c:781
+msgid "_Payee:"
+msgstr "_Ödeyen:"
+
+#: ../src/def_archive.c:759 ../src/def_operation.c:791 ../src/def_wallet.c:235
+msgid "_Category:"
+msgstr "_Kategori:"
+
+#: ../src/def_archive.c:771
+msgid "<b>Automated insertion</b>"
+msgstr "<b>Otomatik Ekleme</b>"
+
+#: ../src/def_archive.c:775
+msgid "_Activate"
+msgstr "_Aktif"
+
+#: ../src/def_archive.c:782
+msgid "_Limit to:"
+msgstr "_Sınırlandır:"
+
+#: ../src/def_archive.c:790
+msgid "t_imes"
+msgstr "_kez"
+
+#: ../src/def_archive.c:795
+msgid "Ever_y:"
+msgstr "_Her:"
+
+#: ../src/def_archive.c:804
+msgid "_Unit:"
+msgstr "_Birim:"
+
+#: ../src/def_archive.c:811
+msgid "_Next on:"
+msgstr "_Bir Sonraki:"
+
+#: ../src/def_budget.c:322 ../src/ui_category.c:866
+msgid "File format error"
+msgstr "Dosya biçimi hatası"
+
+#: ../src/def_budget.c:323
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, read the help for more details."
+msgstr ""
+"CSV dosyası, noktalı virgülle birbirinden ayrılmış,\n"
+"tam sayıda sütün içermelidir. Detaylı bilgi için\n"
+"yardıma başvurun."
+
+#: ../src/def_budget.c:691
+msgid "Manage Budget"
+msgstr "Bütçe Yöneticisi"
+
+#: ../src/def_budget.c:749
+msgid "<b>Budget for each month</b>"
+msgstr "<b>Aylık Bütçe</b>"
+
+#: ../src/def_budget.c:757
+msgid "is the same"
+msgstr "aynı"
+
+#: ../src/def_budget.c:775
+msgid "is different"
+msgstr "farklı"
+
+#: ../src/def_budget.c:806 ../src/ui_category.c:1523 ../src/ui_payee.c:895
+msgid "_Import"
+msgstr "_İçe aktar"
+
+#: ../src/def_budget.c:810 ../src/ui_category.c:1527 ../src/ui_payee.c:899
+msgid "E_xport"
+msgstr "D_ışa Aktar"
+
+#: ../src/def_budget.c:921 ../src/rep_stats.c:939 ../src/rep_stats.c:955
+#: ../src/rep_stats.c:962 ../src/ui_account.c:344 ../src/ui_category.c:187
+#: ../src/ui_category.c:441 ../src/ui_payee.c:147 ../src/ui_payee.c:319
+#: ../src/widgets.c:64
+msgid "(none)"
+msgstr "(hiçbiri)"
+
+#: ../src/def_filter.c:54
+msgid "Inactive"
+msgstr "Pasif"
+
+#: ../src/def_filter.c:54
+msgid "Include"
+msgstr "İçer"
+
+#: ../src/def_filter.c:54
+msgid "Exclude"
+msgstr "İçerme"
+
+#: ../src/def_filter.c:801 ../src/def_filter.c:850 ../src/def_filter.c:899
+#: ../src/def_filter.c:977 ../src/def_filter.c:1072 ../src/def_filter.c:1116
+msgid "_Option:"
+msgstr "_Secenek:"
+
+#: ../src/def_filter.c:822 ../src/def_filter.c:871 ../src/def_filter.c:920
+msgid "All"
+msgstr "Hepsi"
+
+#: ../src/def_filter.c:826 ../src/def_filter.c:875 ../src/def_filter.c:924
+msgid "None"
+msgstr "Hiçbiri"
+
+#: ../src/def_filter.c:830 ../src/def_filter.c:879 ../src/def_filter.c:928
+msgid "Invert"
+msgstr "Tersine çevir"
+
+#: ../src/def_filter.c:968
+msgid "<b>Filter Date</b>"
+msgstr "<b>Süzme Tarihi</b>"
+
+#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:915
+#: ../src/rep_car.c:649 ../src/rep_over.c:642 ../src/rep_stats.c:1466
+msgid "_From:"
+msgstr "_Kaynak:"
+
+#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:921
+#: ../src/rep_car.c:656 ../src/rep_over.c:648 ../src/rep_stats.c:1472
+msgid "_To:"
+msgstr "_Hedef:"
+
+#: ../src/def_filter.c:1015
+msgid "<b>Filter State</b>"
+msgstr "<b>Süzgeç Durumu</b>"
+
+#: ../src/def_filter.c:1023
+msgid "Validated:"
+msgstr "Doğrulandı:"
+
+#: ../src/def_filter.c:1032
+msgid "Force:"
+msgstr "Zorla:"
+
+#. label = gtk_label_new(NULL);
+#. ----------------------------------------- l, r, t, b
+#. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
+#: ../src/def_filter.c:1038
+msgid "display 'Added'"
+msgstr "display 'Eklendi'"
+
+#. label = gtk_label_new(NULL);
+#. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
+#: ../src/def_filter.c:1045
+msgid "display 'Edited'"
+msgstr "display 'Düzeltildi'"
+
+#: ../src/def_filter.c:1064
+msgid "<b>Filter Amount</b>"
+msgstr "<b>Süzme Miktarı</b>"
+
+#: ../src/def_filter.c:1107
+msgid "<b>Filter Payment</b>"
+msgstr "<b>Süzme Ödemesi</b>"
+
+#: ../src/def_filter.c:1167
+msgid "Edit Filter"
+msgstr "Filtreyi Düzenle"
+
+#. common (date + state + amount)
+#: ../src/def_filter.c:1201 ../src/def_pref.c:154
+msgid "General"
+msgstr "Genel"
+
+#: ../src/def_filter.c:1207 ../src/def_pref.c:1773 ../src/list_operation.c:378
+#: ../src/list_operation.c:762 ../src/rep_budget.c:1239 ../src/rep_stats.c:198
+msgid "Category"
+msgstr "Kategori"
+
+#: ../src/def_filter.c:1212 ../src/def_pref.c:1768 ../src/list_operation.c:316
+#: ../src/list_operation.c:751 ../src/list_upcoming.c:172
+#: ../src/rep_stats.c:198
+msgid "Payee"
+msgstr "Alacaklı"
+
+#: ../src/def_filter.c:1221 ../src/list_operation.c:691
+msgid "Account"
+msgstr "Hesap"
+
+#: ../src/def_operation.c:90 ../src/dsp_wallet.c:226
+msgid "Add transaction"
+msgstr "işlem ekle"
+
+#: ../src/def_operation.c:91
+msgid "Inherit transaction"
+msgstr "kalan işlem"
+
+#: ../src/def_operation.c:92
+msgid "Modify transaction"
+msgstr "işlemi değiştir"
+
+#. warn the user we have not found the child internal transfert
+#: ../src/def_operation.c:181
+#, c-format
+msgid ""
+"Could not propagate changes to child transfert:\n"
+"\n"
+"account:  %s\n"
+"date:  %s\n"
+"amount:  %s\n"
+"\n"
+"You should fix the problem manually."
+msgstr ""
+
+#: ../src/def_operation.c:655
+msgid "<b>General information</b>"
+msgstr "<b>Genel Bilgi</b>"
+
+#: ../src/def_operation.c:663
+msgid "_Date:"
+msgstr "_Tarih:"
+
+#: ../src/def_operation.c:671
+msgid ""
+"Date accepted here are:\n"
+"day,\n"
+"day/month or month/day,\n"
+"and complete date into your locale"
+msgstr ""
+
+#: ../src/def_operation.c:674
+msgid "_Description:"
+msgstr "_Açıklama:"
+
+#: ../src/def_operation.c:713
+msgid "_Remind"
+msgstr "_Hatırlat"
+
+#: ../src/def_operation.c:732
+msgid "<b>Optional information</b>"
+msgstr "<b>Seçmeli Bilgi</b>"
+
+#: ../src/def_operation.c:772
+msgid "_Info:"
+msgstr "_Bilgi"
+
+#: ../src/def_operation.c:788
+msgid ""
+"Autocompletion and direct saise\n"
+"is available for Payee"
+msgstr ""
+
+#: ../src/def_operation.c:798
+msgid ""
+"Autocompletion and direct saise\n"
+"is available for Category"
+msgstr ""
+
+#: ../src/def_operation.c:801
+msgid "_Tags:"
+msgstr ""
+
+#: ../src/def_operation.c:906
+msgid "_Fill with archive:"
+msgstr "_arşivle doldur:"
+
+#: ../src/def_pref.c:155
+msgid "Interface"
+msgstr "Arayüz"
+
+#: ../src/def_pref.c:156
+msgid "Columns"
+msgstr "Sütunlar"
+
+#: ../src/def_pref.c:157
+msgid "Display format"
+msgstr "Görüntü Formatı"
+
+#. N_("Help system"),
+#: ../src/def_pref.c:159
+msgid "Euro options"
+msgstr "Avro ayarları"
+
+#: ../src/def_pref.c:160
+msgid "Report options"
+msgstr "Rapor Seçenekleri"
+
+#: ../src/def_pref.c:165
+msgid "System defaults"
+msgstr "Sistem Varsayılanları"
+
+#: ../src/def_pref.c:166
+msgid "Icons only"
+msgstr "Sadece simge"
+
+#: ../src/def_pref.c:167
+msgid "Text only"
+msgstr "Sadece metin"
+
+#: ../src/def_pref.c:168
+msgid "Text under icons"
+msgstr "Simge altındaki metin"
+
+#: ../src/def_pref.c:169
+msgid "Text beside icons"
+msgstr "Simge yanında metin"
+
+#: ../src/def_pref.c:762
+msgid "<b>Statistics options</b>"
+msgstr "<b>İstatistik Ayarları</b>"
+
+#: ../src/def_pref.c:770
+msgid "Show by _amount"
+msgstr "_tutarı tarafından göster"
+
+#: ../src/def_pref.c:775
+msgid "Show _rate column"
+msgstr "_Oran sütununu göster"
+
+#: ../src/def_pref.c:780 ../src/def_pref.c:790
+msgid "Show _details"
+msgstr "_detaylarını göster"
+
+#: ../src/def_pref.c:786
+msgid "<b>Budget options</b>"
+msgstr "<b>Bütçe seçenekleri</b>"
+
+#: ../src/def_pref.c:819 ../src/def_pref.c:1181 ../src/def_wallet.c:195
+msgid "<b>General</b>"
+msgstr "<b>Genel</b>"
+
+#: ../src/def_pref.c:828
+msgid "Fill from:"
+msgstr "tarafından doldur:"
+
+#: ../src/def_pref.c:837
+msgid "Country:"
+msgstr "Ülke:"
+
+#: ../src/def_pref.c:846
+msgid "Value:"
+msgstr "Değer:"
+
+#: ../src/def_pref.c:856
+msgid "<b>Numbers format</b>"
+msgstr "Rakam Formatı"
+
+#: ../src/def_pref.c:860 ../src/def_pref.c:1016
+msgid "Prefix symbol:"
+msgstr "Önek sembolü:"
+
+#: ../src/def_pref.c:867 ../src/def_pref.c:1023
+msgid "Suffix symbol:"
+msgstr "Sonek sembolü:"
+
+#: ../src/def_pref.c:874 ../src/def_pref.c:1030
+msgid "Decimal char:"
+msgstr "Ondalık karakter:"
+
+#: ../src/def_pref.c:881 ../src/def_pref.c:1037
+msgid "Grouping char:"
+msgstr "Küme karakteri:"
+
+#: ../src/def_pref.c:888 ../src/def_pref.c:1044
+msgid "_Frac digits:"
+msgstr ""
+
+#: ../src/def_pref.c:987
+msgid "<b>Date options</b>"
+msgstr "<b>Tarih Seçenekleri</b>"
+
+#: ../src/def_pref.c:995
+msgid "_Date format:"
+msgstr "_Tarih Tipi:"
+
+#: ../src/def_pref.c:1012
+msgid "<b>Numbers options</b>"
+msgstr "<b>Sayı ayarları</b>"
+
+#: ../src/def_pref.c:1075
+msgid "<b>Measurement units</b>"
+msgstr "<b>Ölçü Birimi</b>"
+
+#: ../src/def_pref.c:1079
+msgid "Use _Imperial units"
+msgstr "İngiliz birimlerini kullan"
+
+#: ../src/def_pref.c:1105
+msgid "<b>Transaction list</b>"
+msgstr "<b>İşlem Listesi</b>"
+
+#: ../src/def_pref.c:1185
+msgid "_Toolbar:"
+msgstr "_Araç çubuğu:"
+
+#: ../src/def_pref.c:1209
+msgid "<b>Amount colors</b>"
+msgstr "<b>Tutar renkleri</b>"
+
+#: ../src/def_pref.c:1213
+msgid "_Expense:"
+msgstr "_Gider:"
+
+#: ../src/def_pref.c:1223
+msgid "_Income:"
+msgstr "_Gelir:"
+
+#: ../src/def_pref.c:1233
+msgid "_Warning:"
+msgstr "_Uyarı:"
+
+#: ../src/def_pref.c:1262
+msgid "<b>Folders</b>"
+msgstr "<b>Klasörler</b>"
+
+#: ../src/def_pref.c:1270
+msgid "_Wallet:"
+msgstr "_Cüzdan:"
+
+#: ../src/def_pref.c:1286
+msgid "_Import:"
+msgstr "_İthal:"
+
+#: ../src/def_pref.c:1302
+msgid "_Export:"
+msgstr "Dışa Aktar"
+
+#: ../src/def_pref.c:1320
+msgid "_Run the wizard"
+msgstr "_Sihirbazı çalıştır"
+
+#: ../src/def_pref.c:1329
+msgid "<b>Initial date filter</b>"
+msgstr "Başlangıç tarih süzgeci"
+
+#: ../src/def_pref.c:1333 ../src/dsp_account.c:2034 ../src/rep_budget.c:927
+#: ../src/rep_car.c:662 ../src/rep_over.c:654 ../src/rep_stats.c:1478
+msgid "_Range:"
+msgstr "Aralık"
+
+#: ../src/def_pref.c:1343
+msgid "<b>Start behaviour</b>"
+msgstr ""
+
+#: ../src/def_pref.c:1347
+msgid "Load last opened file"
+msgstr "Son açılan dosyayı yükle"
+
+#: ../src/def_pref.c:1448
+msgid "Preferences"
+msgstr "Tercihler"
+
+#. {	N_(""), COL_OPE_STATUS,		},
+#. {	N_(""), COL_OPE_DATE,		},
+#: ../src/def_pref.c:1767 ../src/list_operation.c:291
+#: ../src/list_operation.c:735
+msgid "Info"
+msgstr "Bilgi"
+
+#: ../src/def_pref.c:1769 ../src/list_operation.c:334
+#: ../src/list_operation.c:713 ../src/list_upcoming.c:184
+#: ../src/rep_over.c:979
+msgid "Description"
+msgstr "Tanımlama"
+
+#. column: Amount
+#: ../src/def_pref.c:1770 ../src/list_operation.c:509
+#: ../src/list_operation.c:723 ../src/list_upcoming.c:196
+#: ../src/rep_car.c:1039
+msgid "Amount"
+msgstr "Miktar"
+
+#. column: Expense
+#: ../src/def_pref.c:1771 ../src/list_operation.c:512 ../src/rep_budget.c:101
+#: ../src/rep_over.c:989 ../src/rep_stats.c:202 ../src/rep_stats.c:1842
+msgid "Expense"
+msgstr "Gider"
+
+#. column: Income
+#: ../src/def_pref.c:1772 ../src/list_operation.c:515 ../src/rep_budget.c:101
+#: ../src/rep_over.c:993 ../src/rep_stats.c:202 ../src/rep_stats.c:1848
+msgid "Income"
+msgstr "Gelir"
+
+#: ../src/def_pref.c:1774 ../src/list_operation.c:396
+msgid "Tags"
+msgstr "Etiketler"
+
+#: ../src/def_pref.c:1893 ../src/ui_account.c:495 ../src/ui_payee.c:449
+msgid "Visible"
+msgstr "Görünür"
+
+#: ../src/def_pref.c:1904
+msgid "Column"
+msgstr "Sütun"
+
+#: ../src/def_wallet.c:164
+msgid "Wallet properties"
+msgstr "Cüzdan ayarları"
+
+#: ../src/def_wallet.c:203
+msgid "_Owner:"
+msgstr "_Sahibi:"
+
+#: ../src/def_wallet.c:212
+msgid "<b>Automatic transactions</b>"
+msgstr "<b>Otomatik işlemler</b>"
+
+#: ../src/def_wallet.c:219
+msgid "_Insert:"
+msgstr "_yerleştir:"
+
+#: ../src/def_wallet.c:224
+msgid "days into the future"
+msgstr "gelecekteki günlere"
+
+#: ../src/def_wallet.c:231
+msgid "<b>Car cost</b>"
+msgstr "<b>Otomobil Fiyatı</b>"
+
+#. name, stock id, label
+#: ../src/dsp_account.c:155
+msgid "_Account"
+msgstr "_Hesap"
+
+#: ../src/dsp_account.c:156
+msgid "Transacti_on"
+msgstr "İşle_m"
+
+#: ../src/dsp_account.c:157
+msgid "_Tools"
+msgstr "_Araçlar"
+
+#: ../src/dsp_account.c:159 ../src/dsp_wallet.c:210
+msgid "_Close"
+msgstr "_Kapat"
+
+#: ../src/dsp_account.c:159
+msgid "Close the current account"
+msgstr "Geçerli hesabı kapat"
+
+#. name, stock id, label, accelerator, tooltip
+#: ../src/dsp_account.c:162
+msgid "_Filter..."
+msgstr "_Süzgeç..."
+
+#: ../src/dsp_account.c:162
+msgid "Open the list filter"
+msgstr "liste filitrelemeyi aç"
+
+#: ../src/dsp_account.c:164
+msgid "_Add..."
+msgstr "_Ekle..."
+
+#: ../src/dsp_account.c:164
+msgid "Add a new transaction"
+msgstr "yeni bir işlem ekle"
+
+#: ../src/dsp_account.c:165
+msgid "_Inherit..."
+msgstr "_devir almak (miras vb.)..."
+
+#: ../src/dsp_account.c:165
+msgid "Inherit from the active transaction"
+msgstr "aktif işlemden devralınan"
+
+#: ../src/dsp_account.c:166
+msgid "_Edit..."
+msgstr "_Düzenle..."
+
+#: ../src/dsp_account.c:166
+msgid "Edit the active transaction"
+msgstr "aktif işlemi düzenle"
+
+#: ../src/dsp_account.c:167
+msgid "(In)_Validate..."
+msgstr "Onaylamada"
+
+#: ../src/dsp_account.c:167
+msgid "Validate the active transactions"
+msgstr "aktif işlemi onayla"
+
+#: ../src/dsp_account.c:168
+msgid "_Remove..."
+msgstr "_Kaldır..."
+
+#: ../src/dsp_account.c:168
+msgid "Remove the active transactions"
+msgstr "aktif işlemi kaldır"
+
+#: ../src/dsp_account.c:169
+msgid "Make an archive..."
+msgstr "bir arşiv yap..."
+
+#: ../src/dsp_account.c:171
+msgid "Export CSV..."
+msgstr "İhraç CSV..."
+
+#: ../src/dsp_account.c:348
+msgid "No corresponding transfert can be found."
+msgstr "İlgili aktarım bulunamadı."
+
+#. warn the useer we have notfound the child internal transfert
+#: ../src/dsp_account.c:368
+#, c-format
+msgid ""
+"Could not delete child transfert:\n"
+"\n"
+"account:  %s\n"
+"date:  %s\n"
+"amount:  %s\n"
+"\n"
+"You should fix the problem manually."
+msgstr ""
+
+#: ../src/dsp_account.c:614
+msgid ""
+"Do you want to create an Archive with\n"
+"each of the selected transaction ?"
+msgstr ""
+"Seçilen her işlemle bir arşiv oluşturulmasını\n"
+"istiyor musunuz ?"
+
+#: ../src/dsp_account.c:1212
+msgid ""
+"Do you want to delete\n"
+"each of the selected transaction ?"
+msgstr ""
+"Seçilen her işlemi silmek\n"
+"istiyor musunuz ?"
+
+#: ../src/dsp_account.c:1516
+#, c-format
+msgid "%d transactions selected, %d hidden"
+msgstr "%d seçilen işlemler, %d gizlenen"
+
+#: ../src/dsp_account.c:1518
+#, c-format
+msgid "%d transactions selected, %d hidden :: %s ( %s - %s)"
+msgstr "%d seçilen işlemler, %d gizlenen :: %s ( %s - %s)"
+
+#: ../src/dsp_account.c:1583
+msgid "Modify date..."
+msgstr "Tarihi Düzenle..."
+
+#: ../src/dsp_account.c:1588
+msgid "Modify info..."
+msgstr "Bilgiyi Düzenle..."
+
+#: ../src/dsp_account.c:1595
+msgid "Modify payee..."
+msgstr "Alacaklıyı Düzenle..."
+
+#: ../src/dsp_account.c:1601
+msgid "Modify description..."
+msgstr "Tanımlamayı Düzenle..."
+
+#: ../src/dsp_account.c:1607
+msgid "Modify amount..."
+msgstr "Tutarı değiştir..."
+
+#: ../src/dsp_account.c:1612
+msgid "Modify category..."
+msgstr "Kategoriyi değiştir..."
+
+#: ../src/dsp_account.c:2039 ../src/rep_budget.c:933 ../src/rep_car.c:668
+#: ../src/rep_over.c:660 ../src/rep_stats.c:1484
+msgid "_Month:"
+msgstr "_Ay:"
+
+#: ../src/dsp_account.c:2044 ../src/rep_budget.c:939 ../src/rep_car.c:674
+#: ../src/rep_over.c:666 ../src/rep_stats.c:1490
+msgid "_Year:"
+msgstr "_Yıl:"
+
+#: ../src/dsp_account.c:2064
+msgid "Future:"
+msgstr "Gelecek:"
+
+#: ../src/dsp_account.c:2073
+msgid "Today:"
+msgstr "Bugün:"
+
+#: ../src/dsp_account.c:2082
+msgid "Bank:"
+msgstr "Banka:"
+
+#: ../src/dsp_account.c:2088
+msgid "Minor"
+msgstr "Basit"
+
+#. name, stock id, label
+#: ../src/dsp_wallet.c:189
+msgid "_File"
+msgstr "_Dosya"
+
+#: ../src/dsp_wallet.c:190
+msgid "_Edit"
+msgstr "_Düzenleme"
+
+#: ../src/dsp_wallet.c:191
+msgid "_View"
+msgstr "_Görünüm"
+
+#: ../src/dsp_wallet.c:192
+msgid "_Transactions"
+msgstr "Raporlar"
+
+#: ../src/dsp_wallet.c:193
+msgid "_Reports"
+msgstr "_Raporlar"
+
+#: ../src/dsp_wallet.c:194
+msgid "T_ools"
+msgstr "_Araçlar"
+
+#: ../src/dsp_wallet.c:195
+msgid "_Help"
+msgstr "_Yardım"
+
+#: ../src/dsp_wallet.c:197
+msgid "Open _Recent"
+msgstr "_Son Kullanılanı Aç"
+
+#: ../src/dsp_wallet.c:198
+msgid "Export to"
+msgstr "Şuraya aktar"
+
+#. name, stock id, label, accelerator, tooltip
+#. FileMenu
+#: ../src/dsp_wallet.c:202
+msgid "_New"
+msgstr "_Yeni"
+
+#: ../src/dsp_wallet.c:202
+msgid "Create a new wallet"
+msgstr "Yeni bir cüzdan yarat"
+
+#: ../src/dsp_wallet.c:203
+msgid "_Open..."
+msgstr "_Aç..."
+
+#: ../src/dsp_wallet.c:203
+msgid "Open a wallet"
+msgstr "Bir cüzdan aç"
+
+#: ../src/dsp_wallet.c:204
+msgid "_Save"
+msgstr "_Kaydet"
+
+#: ../src/dsp_wallet.c:204
+msgid "Save the current wallet"
+msgstr "Şimdiki cüzdanı kaydet"
+
+#: ../src/dsp_wallet.c:205
+msgid "Save As..."
+msgstr "Farklı Kaydet..."
+
+#: ../src/dsp_wallet.c:205
+msgid "Save the current wallet with a different name"
+msgstr "Geçerli cüzdanı farklı isimle kaydet."
+
+#: ../src/dsp_wallet.c:206
+msgid "Revert"
+msgstr "Eskiye dön"
+
+#: ../src/dsp_wallet.c:206
+msgid "Revert to a saved version of this file"
+msgstr "Bu dosyanın daha önce kayıtlı bir sürümüne dön"
+
+#: ../src/dsp_wallet.c:207
+msgid "Import..."
+msgstr "İçe Aktar..."
+
+#: ../src/dsp_wallet.c:207
+msgid "Open the import assistant"
+msgstr "İçe aktarma yardımcısını aç"
+
+#: ../src/dsp_wallet.c:209
+msgid "_Properties..."
+msgstr "Ö_zellikler..."
+
+#: ../src/dsp_wallet.c:209
+msgid "Configure wallet"
+msgstr "Cüzdanı yapılandır"
+
+#: ../src/dsp_wallet.c:210
+msgid "Close the current wallet"
+msgstr "Geçerli cüzdanı kapat"
+
+#: ../src/dsp_wallet.c:211
+msgid "_Quit"
+msgstr "Çı_k"
+
+#: ../src/dsp_wallet.c:211
+msgid "Quit homebank"
+msgstr "Ev bankasından çık"
+
+#. Export Menu
+#: ../src/dsp_wallet.c:214
+msgid "QIF Format..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:214
+msgid "Open the export to QIF assistant"
+msgstr ""
+
+#. EditMenu
+#: ../src/dsp_wallet.c:217
+msgid "Acc_ounts..."
+msgstr "He_saplar..."
+
+#: ../src/dsp_wallet.c:217
+msgid "Configure the accounts"
+msgstr "Hesapları yapılandır"
+
+#: ../src/dsp_wallet.c:218
+msgid "_Payees..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:218
+msgid "Configure the payees"
+msgstr ""
+
+#: ../src/dsp_wallet.c:219
+msgid "Categories..."
+msgstr "Kategoriler..."
+
+#: ../src/dsp_wallet.c:219
+msgid "Configure the categories"
+msgstr "Kategorileri yapılandır"
+
+#: ../src/dsp_wallet.c:220
+msgid "Arc_hives..."
+msgstr "Ar_şiv..."
+
+#: ../src/dsp_wallet.c:220
+msgid "Configure the archives"
+msgstr "Arşivi yapılandır"
+
+#: ../src/dsp_wallet.c:221
+msgid "Budget..."
+msgstr "Bütçe..."
+
+#: ../src/dsp_wallet.c:221
+msgid "Configure the budget"
+msgstr "Bütçeyi yapılandır"
+
+#: ../src/dsp_wallet.c:222
+msgid "Preferences..."
+msgstr "Yeğlenenler..."
+
+#: ../src/dsp_wallet.c:222
+msgid "Configure homebank"
+msgstr "Ev bankasını yapılandır"
+
+#. OperationMenu
+#: ../src/dsp_wallet.c:225
+msgid "Show..."
+msgstr "Göster..."
+
+#: ../src/dsp_wallet.c:225
+msgid "Shows selected account transactions"
+msgstr ""
+
+#: ../src/dsp_wallet.c:226
+msgid "Add..."
+msgstr "Ekle ..."
+
+#: ../src/dsp_wallet.c:227
+msgid "Check automated..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:227
+msgid "Insert pending automated transactions"
+msgstr ""
+
+#. ReportMenu
+#: ../src/dsp_wallet.c:230
+msgid "_Statistics..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:230
+msgid "Open the Statistics report"
+msgstr ""
+
+#: ../src/dsp_wallet.c:231
+msgid "B_udget..."
+msgstr "B_ütçe..."
+
+#: ../src/dsp_wallet.c:231
+msgid "Open the Budget report"
+msgstr "Bütçe raporunu aç"
+
+#: ../src/dsp_wallet.c:232
+msgid "Ove_rdrawn..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:232
+msgid "Open the Overdrawn report"
+msgstr ""
+
+#: ../src/dsp_wallet.c:233
+msgid "_Car cost..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:233
+msgid "Open the Car cost report"
+msgstr ""
+
+#. ToolsMenu
+#: ../src/dsp_wallet.c:236
+msgid "Import Amiga..."
+msgstr "Amiga'yı içe aktar..."
+
+#: ../src/dsp_wallet.c:236
+msgid "Import a file in Amiga 3.0 format"
+msgstr "Amiga 3.0 biçimindeki bir dosyayı içe aktar"
+
+#. HelpMenu
+#: ../src/dsp_wallet.c:239
+msgid "_Contents"
+msgstr "İçinde_kiler"
+
+#: ../src/dsp_wallet.c:239
+msgid "Documentation about HomeBank"
+msgstr "Ev bankası hakkındaki belgeleme"
+
+#: ../src/dsp_wallet.c:240
+msgid "Get Help Online..."
+msgstr "Çevrimiçi Yardım Al..."
+
+#: ../src/dsp_wallet.c:240
+msgid "Connect to the LaunchPad website for online help"
+msgstr "LaunchPad sitesine çevrim içi yardım için bağlan"
+
+#: ../src/dsp_wallet.c:241
+msgid "Translate this Application..."
+msgstr "Bu uygulamayı çevir..."
+
+#: ../src/dsp_wallet.c:241
+msgid "Connect to the LaunchPad website to help translate this application"
+msgstr "LaunchPad sitesine bu uygulamayı çevirmede yardım etmek için bağlan"
+
+#: ../src/dsp_wallet.c:242
+msgid "Report a Problem..."
+msgstr "Bir problem bildir..."
+
+#: ../src/dsp_wallet.c:242
+msgid "Connect to the LaunchPad website to help fix problems"
+msgstr "LaunchPad sitesine problemleri çözmek için bağlan"
+
+#: ../src/dsp_wallet.c:244
+msgid "_About"
+msgstr "_Hakkında"
+
+#: ../src/dsp_wallet.c:244
+msgid "About HomeBank"
+msgstr "Ev bankası hakkında"
+
+#. name         , stockid, label, accelerator, tooltip, callback, is_active
+#: ../src/dsp_wallet.c:252
+msgid "Minor currency"
+msgstr ""
+
+#: ../src/dsp_wallet.c:596 ../src/dsp_wallet.c:649 ../src/dsp_wallet.c:665
+msgid "No suitable web browser executable could be found."
+msgstr ""
+
+#: ../src/dsp_wallet.c:597 ../src/dsp_wallet.c:618 ../src/dsp_wallet.c:634
+#: ../src/dsp_wallet.c:650 ../src/dsp_wallet.c:666
+#, c-format
+msgid "Could not display the URL '%s'"
+msgstr ""
+
+#: ../src/dsp_wallet.c:617 ../src/dsp_wallet.c:633
+msgid "No suitable web browser application could be found."
+msgstr ""
+
+#: ../src/dsp_wallet.c:754
+msgid ""
+"Do you want to save the changes\n"
+"in the current file ?"
+msgstr ""
+
+#: ../src/dsp_wallet.c:758
+#, c-format
+msgid ""
+"If you do not save, %d changes will be\n"
+"definitively lost."
+msgstr ""
+
+#: ../src/dsp_wallet.c:763
+msgid "Do _not save"
+msgstr "Kaydet_me"
+
+#. fix: v4.0
+#: ../src/dsp_wallet.c:835 ../src/homebank.c:1135
+msgid "(Nobody)"
+msgstr "(Hiçkimse)"
+
+#: ../src/dsp_wallet.c:1139
+msgid "No transaction to insert"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1141
+#, c-format
+msgid "%d transactions inserted"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1144
+msgid "Check automated transactions result"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1169
+msgid "Import Amiga file"
+msgstr "Amiga dosyasını içe aktar"
+
+#: ../src/dsp_wallet.c:1211
+#, c-format
+msgid "Revert to the previously saved file of '%s'?"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1217
+msgid ""
+"- Changes made to the wallet will be permanently lost\n"
+"- Wallet will be restored to the last save (.old)"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1315
+msgid "File error"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1316
+#, c-format
+msgid "The file %s is not a valid HomeBank file."
+msgstr ""
+
+#: ../src/dsp_wallet.c:2297
+msgid "<b>Accounts summary</b>"
+msgstr "<b>Hesap özeti</b>"
+
+#: ../src/dsp_wallet.c:2313
+msgid "<b>Upcoming automated transactions</b>"
+msgstr ""
+
+#: ../src/homebank.c:106
+msgid "Output version information and exit"
+msgstr "Sürüm bilgilerini yaz ve çık"
+
+#: ../src/homebank.c:109
+msgid "[FILE]"
+msgstr "[DOSYA]"
+
+#: ../src/homebank.c:196
+msgid "Export as QIF"
+msgstr ""
+
+#: ../src/homebank.c:207
+msgid "QIF files"
+msgstr ""
+
+#: ../src/homebank.c:212 ../src/homebank.c:277 ../src/homebank.c:342
+#: ../src/homebank.c:463
+msgid "All files"
+msgstr ""
+
+#: ../src/homebank.c:251
+msgid "Import from CSV"
+msgstr "CSV'den içe aktar"
+
+#: ../src/homebank.c:257
+msgid "Export as CSV"
+msgstr "CSV olarak dışa aktar"
+
+#: ../src/homebank.c:272
+msgid "CSV files"
+msgstr ""
+
+#: ../src/homebank.c:320
+msgid "Open homebank file"
+msgstr ""
+
+#: ../src/homebank.c:325
+msgid "Save homebank file as"
+msgstr ""
+
+#: ../src/homebank.c:337
+msgid "HomeBank files"
+msgstr ""
+
+#: ../src/homebank.c:458
+msgid "Amiga files"
+msgstr ""
+
+#: ../src/homebank.c:1244 ../src/homebank.c:1245
+msgid "HomeBank options"
+msgstr ""
+
+#: ../src/homebank.c:1363
+#, c-format
+msgid "Unable to open '%s', the file does not exist.\n"
+msgstr ""
+
+#: ../src/imp_amiga.c:105
+msgid "Import HomeBank Amiga File"
+msgstr ""
+
+#: ../src/imp_amiga.c:106
+#, c-format
+msgid ""
+"Wrong Amiga file version %d.%d\n"
+"( must be > 3.0 )"
+msgstr ""
+
+#: ../src/import.c:58
+msgid "Import assistant"
+msgstr ""
+
+#: ../src/import.c:59
+msgid "Select a file to import"
+msgstr ""
+
+#: ../src/import.c:60
+msgid "File content"
+msgstr ""
+
+#: ../src/import.c:61
+msgid "Transaction selection"
+msgstr ""
+
+#: ../src/import.c:62
+msgid "Update your accounts"
+msgstr ""
+
+#: ../src/import.c:672
+msgid "Please select a file..."
+msgstr ""
+
+#: ../src/import.c:683
+msgid "Unknown/Invalid file..."
+msgstr ""
+
+#: ../src/import.c:687
+msgid "QIF file recognised !"
+msgstr ""
+
+#: ../src/import.c:694
+msgid "OFX file recognised !"
+msgstr ""
+
+#: ../src/import.c:697
+msgid "** OFX support is disabled **"
+msgstr ""
+
+#: ../src/import.c:702
+msgid "CSV operation file recognised !"
+msgstr ""
+
+#: ../src/import.c:1239
+#, c-format
+msgid ""
+"%d accounts\n"
+"%d transactions\n"
+"%d payees\n"
+"%d categories\n"
+msgstr ""
+
+#: ../src/import.c:1362
+#, c-format
+msgid ""
+"%d accounts will be created.\n"
+"\n"
+"%d transactions will be imported.\n"
+"%d transactions will be rejected."
+msgstr ""
+
+#: ../src/import.c:1379
+#, c-format
+msgid "Import assistant (%d of %d)"
+msgstr ""
+
+#: ../src/import.c:1518
+msgid ""
+"HomeBank can import transactions from several file formats:\n"
+"\n"
+"- QIF\n"
+"- OFX/QFX (optional at compilation time)\n"
+"- CSV (Homebank transaction CSV export format only)\n"
+"\n"
+"Other formats or not supported at the moment.\n"
+"\n"
+"The import process has several steps. Your HomeBank accounts\n"
+"will not be changed until you click \"Apply\" at the end of this assistant.\n"
+"\n"
+"Now, click \"forward\" to start importing a file."
+msgstr ""
+
+#: ../src/import.c:1658
+msgid "<b>File analysis summary</b>"
+msgstr ""
+
+#: ../src/import.c:1666
+msgid "Filename:"
+msgstr ""
+
+#: ../src/import.c:1674
+msgid "Details:"
+msgstr ""
+
+#: ../src/import.c:1685
+msgid "<b>Unamed account selection</b>"
+msgstr ""
+
+#: ../src/import.c:1697
+msgid ""
+"The file that you just loaded appears to contain transactions for an account "
+"without specifying\n"
+"the name of that account. Please select the account to which these "
+"transactions can be attached."
+msgstr ""
+
+#: ../src/import.c:1707
+msgid "new account"
+msgstr ""
+
+#: ../src/import.c:1712
+msgid "_Name:"
+msgstr ""
+
+#: ../src/import.c:1720
+msgid "existing account"
+msgstr ""
+
+#: ../src/import.c:1775
+msgid "<b>Duplicate match options</b>"
+msgstr ""
+
+#: ../src/import.c:1787
+msgid "Date _tolerance:"
+msgstr ""
+
+#: ../src/import.c:1797
+msgid "days"
+msgstr ""
+
+#: ../src/import.c:1814
+msgid ""
+"The match is done in order: by account, amount and date.\n"
+"A date tolerance of 0 days means an exact match"
+msgstr ""
+
+#: ../src/import.c:1827
+msgid "<b>Transactions to import</b>"
+msgstr ""
+
+#: ../src/import.c:1847
+msgid "<b>Possible duplicate for the above selected transaction</b>"
+msgstr ""
+
+#. Create the expander
+#: ../src/import.c:1851
+msgid "Details"
+msgstr ""
+
+#: ../src/import.c:1916
+msgid ""
+"Click \"Apply\" to update your accounts.\n"
+"\n"
+msgstr ""
+
+#: ../src/list_account.c:253 ../src/list_operation.c:468
+msgid "State"
+msgstr ""
+
+#. column 4: Bank
+#: ../src/list_account.c:273
+msgid "Bank"
+msgstr ""
+
+#. column 5: Today
+#: ../src/list_account.c:277
+msgid "Today"
+msgstr ""
+
+#. column 6: Future
+#: ../src/list_account.c:281
+msgid "Future"
+msgstr ""
+
+#: ../src/list_operation.c:491 ../src/list_operation.c:702
+#: ../src/rep_car.c:995 ../src/rep_over.c:968
+msgid "Date"
+msgstr ""
+
+#: ../src/list_upcoming.c:208
+msgid "Next on"
+msgstr ""
+
+#: ../src/list_upcoming.c:220
+msgid "Remaining"
+msgstr ""
+
+#: ../src/rep_budget.c:99
+msgid "Spent & Budget"
+msgstr ""
+
+#. column: Expense
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1250
+msgid "Spent"
+msgstr ""
+
+#. column: Income
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1254
+msgid "Budget"
+msgstr ""
+
+#. column: Balance
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1258
+msgid "Decay"
+msgstr ""
+
+#: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
+msgid "List"
+msgstr ""
+
+#: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
+msgid "View results as list"
+msgstr ""
+
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:127
+msgid "Bar"
+msgstr ""
+
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:127
+msgid "View results as bars"
+msgstr ""
+
+#: ../src/rep_budget.c:110 ../src/rep_stats.c:130
+msgid "Detail"
+msgstr ""
+
+#: ../src/rep_budget.c:110 ../src/rep_stats.c:130
+msgid "Toggle detail"
+msgstr ""
+
+#: ../src/rep_budget.c:111 ../src/rep_stats.c:131
+msgid "Legend"
+msgstr ""
+
+#: ../src/rep_budget.c:111 ../src/rep_stats.c:131
+msgid "Toggle legend"
+msgstr ""
+
+#: ../src/rep_budget.c:113 ../src/rep_over.c:96 ../src/rep_stats.c:135
+msgid "Refresh"
+msgstr ""
+
+#: ../src/rep_budget.c:113 ../src/rep_over.c:96 ../src/rep_stats.c:135
+msgid "Refresh results"
+msgstr ""
+
+#: ../src/rep_budget.c:857
+msgid "Budget report"
+msgstr ""
+
+#: ../src/rep_budget.c:883 ../src/rep_car.c:623 ../src/rep_over.c:617
+#: ../src/rep_stats.c:1423
+msgid "<b>Display</b>"
+msgstr ""
+
+#: ../src/rep_budget.c:887
+msgid "_Kind:"
+msgstr ""
+
+#: ../src/rep_budget.c:894 ../src/rep_stats.c:1434
+msgid "_View:"
+msgstr ""
+
+#: ../src/rep_budget.c:901 ../src/rep_car.c:635 ../src/rep_over.c:628
+#: ../src/rep_stats.c:1446
+msgid "_Minor currency"
+msgstr ""
+
+#: ../src/rep_budget.c:911 ../src/rep_car.c:645 ../src/rep_over.c:638
+#: ../src/rep_stats.c:1462
+msgid "<b>Date filter</b>"
+msgstr ""
+
+#: ../src/rep_budget.c:987
+msgid "Decay:"
+msgstr ""
+
+#: ../src/rep_budget.c:996
+msgid "Budget:"
+msgstr ""
+
+#: ../src/rep_budget.c:1005
+msgid "Spent:"
+msgstr ""
+
+#: ../src/rep_car.c:596
+msgid "Car report"
+msgstr ""
+
+#: ../src/rep_car.c:627
+msgid "_Car category:"
+msgstr ""
+
+#. column: consumption for 100Km
+#: ../src/rep_car.c:711 ../src/rep_car.c:1047
+msgid "100 Km"
+msgstr ""
+
+#: ../src/rep_car.c:714
+msgid "Total"
+msgstr ""
+
+#: ../src/rep_car.c:718
+msgid "Meter:"
+msgstr ""
+
+#: ../src/rep_car.c:722
+msgid "Consumption:"
+msgstr ""
+
+#: ../src/rep_car.c:726
+msgid "Fuel cost:"
+msgstr ""
+
+#: ../src/rep_car.c:730
+msgid "Other cost:"
+msgstr ""
+
+#: ../src/rep_car.c:734
+msgid "Total cost:"
+msgstr ""
+
+#. 
+#. LST_CAR_DATE,
+#. LST_CAR_WORDING,
+#. LST_CAR_METER,
+#. LST_CAR_FUEL,
+#. LST_CAR_PRICE,
+#. LST_CAR_AMOUNT,
+#. LST_CAR_DIST,
+#. LST_CAR_100KM
+#. 
+#. 
+#. column: Wording
+#. 
+#. column = gtk_tree_view_column_new();
+#. gtk_tree_view_column_set_title(column, _("Wording"));
+#. gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+#. renderer = gtk_cell_renderer_text_new();
+#. gtk_tree_view_column_pack_start(column, renderer, TRUE);
+#. gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_WORDING);
+#. //gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_text_cell_data_function, NULL, NULL);
+#. 
+#. column: Meter
+#: ../src/rep_car.c:1027
+msgid "Meter"
+msgstr ""
+
+#. column: Fuel load
+#: ../src/rep_car.c:1031
+msgid "Fuel"
+msgstr ""
+
+#. column: Price by unit
+#: ../src/rep_car.c:1035
+msgid "Price"
+msgstr ""
+
+#. column: Distance done
+#: ../src/rep_car.c:1043
+msgid "Dist."
+msgstr ""
+
+#: ../src/rep_over.c:94
+msgid "Line"
+msgstr ""
+
+#: ../src/rep_over.c:94
+msgid "View results as lines"
+msgstr ""
+
+#: ../src/rep_over.c:302
+#, c-format
+msgid "%d/%d under %s"
+msgstr ""
+
+#: ../src/rep_over.c:588
+msgid "Overdrawn report"
+msgstr ""
+
+#. column: Balance
+#: ../src/rep_over.c:997 ../src/rep_stats.c:202 ../src/rep_stats.c:1854
+msgid "Balance"
+msgstr ""
+
+#: ../src/rep_stats.c:128
+msgid "Pie"
+msgstr ""
+
+#: ../src/rep_stats.c:128
+msgid "View results as pies"
+msgstr ""
+
+#: ../src/rep_stats.c:132
+msgid "Rate"
+msgstr ""
+
+#: ../src/rep_stats.c:132
+msgid "Toggle rate"
+msgstr ""
+
+#: ../src/rep_stats.c:134
+msgid "Filter"
+msgstr ""
+
+#: ../src/rep_stats.c:134
+msgid "Edit the filter"
+msgstr ""
+
+#: ../src/rep_stats.c:198
+msgid "Subcategory"
+msgstr ""
+
+#: ../src/rep_stats.c:198
+msgid "Tag"
+msgstr ""
+
+#: ../src/rep_stats.c:202
+msgid "Exp. & Inc."
+msgstr ""
+
+#: ../src/rep_stats.c:206
+msgid "All date"
+msgstr ""
+
+#: ../src/rep_stats.c:207
+msgid "Current month"
+msgstr ""
+
+#: ../src/rep_stats.c:208
+msgid "Current year"
+msgstr ""
+
+#: ../src/rep_stats.c:209
+msgid "Previous month"
+msgstr ""
+
+#: ../src/rep_stats.c:210
+msgid "Previous year"
+msgstr ""
+
+#: ../src/rep_stats.c:211
+msgid "Last 30 days"
+msgstr ""
+
+#: ../src/rep_stats.c:212
+msgid "Last 2 months"
+msgstr ""
+
+#: ../src/rep_stats.c:213
+msgid "Last 3 months"
+msgstr ""
+
+#: ../src/rep_stats.c:214
+msgid "Last 4 months"
+msgstr ""
+
+#: ../src/rep_stats.c:215
+msgid "Last 6 months"
+msgstr ""
+
+#: ../src/rep_stats.c:216
+msgid "Last 12 months"
+msgstr ""
+
+#: ../src/rep_stats.c:223
+msgid "All month"
+msgstr ""
+
+#: ../src/rep_stats.c:224 ../src/rep_stats.c:242
+msgid "January"
+msgstr ""
+
+#: ../src/rep_stats.c:225 ../src/rep_stats.c:243
+msgid "February"
+msgstr ""
+
+#: ../src/rep_stats.c:226 ../src/rep_stats.c:244
+msgid "March"
+msgstr ""
+
+#: ../src/rep_stats.c:227 ../src/rep_stats.c:245
+msgid "April"
+msgstr ""
+
+#: ../src/rep_stats.c:228 ../src/rep_stats.c:246
+msgid "May"
+msgstr ""
+
+#: ../src/rep_stats.c:229 ../src/rep_stats.c:247
+msgid "June"
+msgstr ""
+
+#: ../src/rep_stats.c:230 ../src/rep_stats.c:248
+msgid "July"
+msgstr ""
+
+#: ../src/rep_stats.c:231 ../src/rep_stats.c:249
+msgid "August"
+msgstr ""
+
+#: ../src/rep_stats.c:232 ../src/rep_stats.c:250
+msgid "September"
+msgstr ""
+
+#: ../src/rep_stats.c:233 ../src/rep_stats.c:251
+msgid "October"
+msgstr ""
+
+#: ../src/rep_stats.c:234 ../src/rep_stats.c:252
+msgid "November"
+msgstr ""
+
+#: ../src/rep_stats.c:235 ../src/rep_stats.c:253
+msgid "December"
+msgstr ""
+
+#: ../src/rep_stats.c:1397
+msgid "Statistics Report"
+msgstr ""
+
+#: ../src/rep_stats.c:1427
+msgid "_For:"
+msgstr ""
+
+#: ../src/rep_stats.c:1441
+msgid "By _amount"
+msgstr ""
+
+#: ../src/rep_stats.c:1539
+msgid "Balance:"
+msgstr ""
+
+#: ../src/rep_stats.c:1548
+msgid "Income:"
+msgstr ""
+
+#: ../src/rep_stats.c:1557
+msgid "Expense:"
+msgstr ""
+
+#: ../src/rep_stats.c:1831
+msgid "Result"
+msgstr ""
+
+#: ../src/ui_account.c:864
+#, c-format
+msgid "(account %d)"
+msgstr ""
+
+#: ../src/ui_account.c:896
+msgid "Remove not allowed"
+msgstr ""
+
+#: ../src/ui_account.c:897
+msgid "This account is used and cannot be removed."
+msgstr ""
+
+#: ../src/ui_account.c:1004
+msgid "Manage Accounts"
+msgstr ""
+
+#: ../src/ui_account.c:1077
+msgid "<b>Informations</b>"
+msgstr "<b>Bilgiler</b>"
+
+#: ../src/ui_account.c:1085
+msgid "_Heading:"
+msgstr "_Başlık:"
+
+#: ../src/ui_account.c:1102
+msgid "_Number:"
+msgstr "_Sayı:"
+
+#: ../src/ui_account.c:1109
+msgid "_Bank name:"
+msgstr "_Banka adı:"
+
+#: ../src/ui_account.c:1116
+msgid "Include in the budget"
+msgstr "Bütçeye dahil et"
+
+#: ../src/ui_account.c:1121
+msgid "This account was closed"
+msgstr "Bu hesap kapatılmıştır."
+
+#: ../src/ui_account.c:1133
+msgid "<b>Balances</b>"
+msgstr "<b>Borç Bakiyesi</b>"
+
+#: ../src/ui_account.c:1137
+msgid "_Initial:"
+msgstr "_Başlangıç:"
+
+#: ../src/ui_account.c:1148
+msgid "_Overdrawn at:"
+msgstr "_den fazla çekilmiş:"
+
+#: ../src/ui_account.c:1162
+msgid "<b>Cheque number</b>"
+msgstr "<b>Çek Numarası</b>"
+
+#: ../src/ui_account.c:1166
+msgid "Notebook _1:"
+msgstr "Defter_1"
+
+#: ../src/ui_account.c:1180
+msgid "Notebook _2:"
+msgstr "Defter_2"
+
+#: ../src/ui_category.c:867
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, please see the help for more details."
+msgstr ""
+"CSV dosyası, noktalı virgülle birbirinden ayrılmış,\n"
+"tam sayıda sütün içermelidir. Detaylı bilgi için\n"
+"yardıma başvurun."
+
+#: ../src/ui_category.c:996 ../src/ui_payee.c:579
+msgid "Modify..."
+msgstr "Düzenle..."
+
+#: ../src/ui_category.c:1018
+msgid "_Income"
+msgstr "_Gelir"
+
+#: ../src/ui_category.c:1100 ../src/ui_payee.c:620
+msgid "Error"
+msgstr ""
+
+#: ../src/ui_category.c:1101
+#, c-format
+msgid ""
+"Cannot rename this Category,\n"
+"from '%s' to '%s',\n"
+"this name already exists."
+msgstr ""
+
+#: ../src/ui_category.c:1219
+msgid "Remove a category ?"
+msgstr ""
+
+#: ../src/ui_category.c:1220
+#, c-format
+msgid ""
+"If you remove '%s', archive and operation referencing this category\n"
+"will set place to 'no category'"
+msgstr ""
+
+#: ../src/ui_category.c:1428
+msgid "Manage Categories"
+msgstr ""
+
+#: ../src/ui_category.c:1466
+msgid "I_ncome"
+msgstr "G_elir"
+
+#: ../src/ui_payee.c:621
+#, c-format
+msgid ""
+"Cannot rename this Payee,\n"
+"from '%s' to '%s',\n"
+"this name already exists."
+msgstr ""
+
+#: ../src/ui_payee.c:741
+msgid "Remove a payee ?"
+msgstr ""
+
+#: ../src/ui_payee.c:742
+#, c-format
+msgid ""
+"If you remove '%s', archive and operation referencing this payee\n"
+"will set place to 'no payee'"
+msgstr ""
+
+#: ../src/ui_payee.c:826
+msgid "Manage Payees"
+msgstr ""
+
+#: ../src/widgets.c:65
+msgid "Credit card"
+msgstr ""
+
+#: ../src/widgets.c:66
+msgid "Cheque"
+msgstr ""
+
+#: ../src/widgets.c:67
+msgid "Cash"
+msgstr ""
+
+#: ../src/widgets.c:68
+msgid "Bank transfer"
+msgstr "Banka Transferi"
+
+#: ../src/widgets.c:69
+msgid "Internal transfer"
+msgstr "Hesaplararası Transfer"

@@ -1,26 +1,26 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 #include "homebank.h"
-#include "preferences.h"
-
 #include "def_pref.h"
+#include "dsp_wallet.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -36,8 +36,6 @@
 /* our global datas */
 extern struct HomeBank *GLOBALS;
 extern struct Preferences *PREFS;
-
-extern *homebank_pixmaps_dir;
 
 struct defpref_data
 {
@@ -61,6 +59,9 @@ struct defpref_data
 
 	GtkWidget	*ST_path_wallet, *BT_path_wallet;
 	GtkWidget	*ST_path_import, *BT_path_import;
+	GtkWidget	*ST_path_export, *BT_path_export;
+
+	GtkWidget	*CM_load_last;
 
 	//GtkWidget	*ST_path_navigator;
 
@@ -76,7 +77,7 @@ struct defpref_data
 
 	//GtkWidget	*NB_numnbdec;
 	//GtkWidget	*CM_numseparator;
-	GtkWidget	*CM_british;
+	GtkWidget	*CM_imperial;
 
 	GtkWidget	*CY_range;
 
@@ -210,10 +211,10 @@ static EuroParams euro_params[] =
 /* 2007 */
 	{ "SIT", "Slovenia"      , 239.640	, "tol", ""    , ",", ".", 2  },	//
 /* 2008 */
-//-	{ "EEK", "Estonia"       , 15.6466  , ""   , "kr"  , ",", " ", 2  },	//
-//-	{ "LVL", "Lettonia"      , 0.702804 , ""   , ""    , ",", "", 2  },	//
-//-	{ "CYP", "Cyprus"        , 0.585274 , ""   , ""    , ",", "", 2  },	//
-//-	{ "MTL", "Malta"         , 0.429300 , ""   , ""    , ",", "", 2  },	//
+	{ "EEK", "Estonia"       , 15.6466  , ""   , "kr"  , ",", " ", 2  },	//
+	{ "LVL", "Lettonia"      , 0.702804 , ""   , ""    , ",", "" , 2  },	//
+	{ "CYP", "Cyprus"        , 0.585274 , ""   , ""    , ",", "" , 2  },	//
+	{ "MTL", "Malta"         , 0.429300 , ""   , ""    , ",", "" , 2  },	//
 /* 2009 */
 //	{ "SKK", "Slovaquia"     , 38.4550  , ""   , "Sk"  , ",", " ", 2  },	//
 //	{ "BGN", "Bulgaria"      , 1.00000	, "лв.", ""    , ",", " ", 2  },	//
@@ -230,14 +231,12 @@ static EuroParams euro_params[] =
 GtkWidget *pref_list_create(void);
 GtkWidget *list_opecolumncreate(void);
 
-static defpref_entry_get_text(GtkWidget *widget, gchar **storage);
 static void list_opecolumn_get(GtkTreeView *treeview, gboolean *columns);
-static void list_opecolumn_set(GtkListStore *store, gint *columns);
 
 /*
 **
 */
-GtkWidget *make_euro_presets(GtkWidget *label)
+static GtkWidget *make_euro_presets(GtkWidget *label)
 {
 GtkWidget *combobox;
 guint i;
@@ -258,7 +257,7 @@ guint i;
 }
 
 
-void defpref_pathselect(GtkWidget *widget, gpointer user_data)
+static void defpref_pathselect(GtkWidget *widget, gpointer user_data)
 {
 struct defpref_data *data;
 gint type = GPOINTER_TO_INT(user_data);
@@ -280,20 +279,27 @@ gboolean r;
 			path = &PREFS->path_import;
 			entry = data->ST_path_import;
 			break;
+		case 3:
+			path = &PREFS->path_export;
+			entry = data->ST_path_export;
+			break;
+		default:
+			return;
 	}		
 
 	DB( g_print(" - wallet %x %s at %x\n" , PREFS->path_wallet, PREFS->path_wallet, &PREFS->path_wallet) );
 	DB( g_print(" - import %x %s at %x\n" , PREFS->path_import, PREFS->path_import, &PREFS->path_import) );
+	DB( g_print(" - export %x %s at %x\n" , PREFS->path_export, PREFS->path_export, &PREFS->path_export) );
 
 
 	DB( g_print(" - before: %s %x\n" , *path, path) );
 
-	r = homebank_folder_chooser(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW), "title", path);
+	r = homebank_folder_chooser(GTK_WINDOW(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "title", path);
 
 
 	DB( g_print(" - after: %s\n", *path) );
 
-	if( r = TRUE )
+	if( r == TRUE )
 		gtk_entry_set_text(GTK_ENTRY(entry), *path);
 	
 
@@ -303,7 +309,7 @@ gboolean r;
 /*
 ** update the date sample label
 */
-void defpref_date_sample(GtkWidget *widget, gpointer user_data)
+static void defpref_date_sample(GtkWidget *widget, gpointer user_data)
 {
 struct defpref_data *data;
 gchar buffer[256];
@@ -328,12 +334,12 @@ GDate *date;
 /*
 ** update the number samlpe label
 */
-void defpref_numberbase_sample(GtkWidget *widget, gpointer user_data)
+static void defpref_numberbase_sample(GtkWidget *widget, gpointer user_data)
 {
 struct defpref_data *data;
 struct Currency cur;
-gint   frac_digits; 
-gchar  buf[128];
+gchar formatd_buf[G_ASCII_DTOSTR_BUF_SIZE];
+gchar  buf[128], *ptr;
 
 	DB( g_print("(defpref) number sample\n") );
 
@@ -346,9 +352,25 @@ gchar  buf[128];
 	cur.frac_digits   = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->NB_num_fracdigits));
 	g_snprintf(cur.format, 8-1, "%%.%df", cur.frac_digits);
 	
-	DB( g_print("fmt: %s\n", cur.format) );
+	ptr = cur.monfmt;
+	if(cur.prefix_symbol != NULL)
+	{
+		ptr = g_stpcpy(ptr, cur.prefix_symbol);
+		ptr = g_stpcpy(ptr, " ");
+	}
+	ptr = g_stpcpy(ptr, "%s");
+	if(cur.suffix_symbol != NULL)
+	{
+		ptr = g_stpcpy(ptr, " ");
+		ptr = g_stpcpy(ptr, cur.suffix_symbol);
+	}
 	
-	real_mystrfmon(buf, 127, 12345.67, &cur);
+	DB( g_print("fmt: %s\n", cur.format) );
+	DB( g_print("monfmt: %s\n", cur.monfmt) );
+
+	g_ascii_formatd(formatd_buf, sizeof (formatd_buf), cur.format, 12345.67);
+	
+	real_mystrfmon(buf, 127, formatd_buf, &cur);
 	gtk_label_set_text(GTK_LABEL(data->LB_numberbase), buf);
 
 }
@@ -356,12 +378,12 @@ gchar  buf[128];
 /*
 ** update the number samlpe label
 */
-void defpref_numbereuro_sample(GtkWidget *widget, gpointer user_data)
+static void defpref_numbereuro_sample(GtkWidget *widget, gpointer user_data)
 {
 struct defpref_data *data;
 struct Currency cur;
-gint   frac_digits; 
-gchar  buf[128];
+gchar formatd_buf[G_ASCII_DTOSTR_BUF_SIZE];
+gchar  buf[128], *ptr;
 
 	DB( g_print("(defpref) number sample\n") );
 
@@ -374,9 +396,25 @@ gchar  buf[128];
 	cur.frac_digits   = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->NB_euro_fracdigits));
 	g_snprintf(cur.format, 8-1, "%%.%df", cur.frac_digits);
 	
-	DB( g_print("fmt: %s\n", cur.format) );
+	ptr = cur.monfmt;
+	if(cur.prefix_symbol != NULL)
+	{
+		ptr = g_stpcpy(ptr, cur.prefix_symbol);
+		ptr = g_stpcpy(ptr, " ");
+	}
+	ptr = g_stpcpy(ptr, "%s");
+	if(cur.suffix_symbol != NULL)
+	{
+		ptr = g_stpcpy(ptr, " ");
+		ptr = g_stpcpy(ptr, cur.suffix_symbol);
+	}
 	
-	real_mystrfmon(buf, 127, 12345.67, &cur);
+	DB( g_print("fmt: %s\n", cur.format) );
+	DB( g_print("monfmt: %s\n", cur.monfmt) );
+	
+	g_ascii_formatd(formatd_buf, sizeof (formatd_buf), cur.format, 12345.67);
+	
+	real_mystrfmon(buf, 127, formatd_buf, &cur);
 	gtk_label_set_text(GTK_LABEL(data->LB_numbereuro), buf);
 
 }
@@ -389,7 +427,7 @@ gchar  buf[128];
 /*
 ** enable/disable euro
 */
-void defpref_eurotoggle(GtkWidget *widget, gpointer user_data)
+static void defpref_eurotoggle(GtkWidget *widget, gpointer user_data)
 {
 struct defpref_data *data;
 gboolean bool;
@@ -420,7 +458,7 @@ gboolean bool;
 /*
 ** set euro value widget from a country
 */
-void defpref_europreset(GtkWidget *widget, gpointer user_data)
+static void defpref_europreset(GtkWidget *widget, gpointer user_data)
 {
 struct defpref_data *data;
 gint country;
@@ -446,7 +484,7 @@ gint country;
 
 
 
-void setGdkColor_from_RGB(GdkColor *color, guint32 value)
+static void setGdkColor_from_RGB(GdkColor *color, guint32 value)
 {
 guint	tmp;
 
@@ -465,7 +503,7 @@ guint	tmp;
 /*
 ** set :: fill in widgets from PREFS structure
 */
-static defpref_entry_set_text(GtkWidget *widget, gchar *text)
+static void defpref_entry_set_text(GtkWidget *widget, gchar *text)
 {
 	DB( g_print(" set text to '%s'\n", text) );
 	
@@ -475,7 +513,7 @@ static defpref_entry_set_text(GtkWidget *widget, gchar *text)
 	}
 }
 
-void defpref_set(struct defpref_data *data)
+static void defpref_set(struct defpref_data *data)
 {
 GdkColor color;
 
@@ -499,7 +537,11 @@ GdkColor color;
 
 	gtk_entry_set_text(GTK_ENTRY(data->ST_path_wallet), PREFS->path_wallet);
 	gtk_entry_set_text(GTK_ENTRY(data->ST_path_import), PREFS->path_import);
+	gtk_entry_set_text(GTK_ENTRY(data->ST_path_export), PREFS->path_export);
 	//gtk_entry_set_text(GTK_ENTRY(data->ST_path_navigator), PREFS->path_navigator);
+
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_load_last), PREFS->loadlast);
+
 
 	/* display */
 	gtk_entry_set_text(GTK_ENTRY(data->ST_datefmt), PREFS->date_format);
@@ -512,7 +554,7 @@ GdkColor color;
 
 	//gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->NB_numnbdec), PREFS->num_nbdecimal);
 	//gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_numseparator), PREFS->num_separator);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_british), PREFS->british_unit);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_imperial), PREFS->imperial_unit);
 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_range), PREFS->filter_range);
 
@@ -553,10 +595,12 @@ GdkColor color;
 */
 
 
-static defpref_entry_get_text(GtkWidget *widget, gchar **storage)
+static void defpref_entry_get_text(GtkWidget *widget, gchar **storage)
 {
 const gchar *text;
-gchar *duptext;
+
+
+	DB( g_print("defpref_entry_get_text\n") );
 
 	DB( g_print(" storage is '%x' at '%x'\n", *storage, storage) );
 	
@@ -566,22 +610,20 @@ gchar *duptext;
 		DB( g_print(" storage was not null, freeing\n") );
 		
 		g_free(*storage);
-		*storage = NULL;
-	}
 		
-	/* store if nom epty string */
-	text = gtk_entry_get_text(GTK_ENTRY(widget));
-	if( text != "" )
-	{
-		*storage = g_strdup(text);
-		DB( g_print(" storing %s at %x\n", *storage, storage) );
 	}
+
+	*storage = NULL;
+
+	text = gtk_entry_get_text(GTK_ENTRY(widget));
+	*storage = g_strdup(text);
+	DB( g_print(" storing %s at %x\n", *storage, storage) );
 	
 	DB( g_print(" get text to '%s' '%s'\n", text, *storage) );
 }
 
 
-void defpref_get(struct defpref_data *data)
+static void defpref_get(struct defpref_data *data)
 {
 GdkColor color;
 
@@ -611,6 +653,10 @@ GdkColor color;
 
 	defpref_entry_get_text(data->ST_path_import, &PREFS->path_import);
 
+	defpref_entry_get_text(data->ST_path_export, &PREFS->path_export);
+
+	PREFS->loadlast = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_load_last));
+
 	//g_free(PREFS->path_navigator);
 	//PREFS->path_navigator = g_strdup(gtk_entry_get_text(GTK_ENTRY(data->ST_path_navigator)));
 
@@ -625,7 +671,7 @@ GdkColor color;
 
 	//PREFS->num_nbdecimal = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->NB_numnbdec));
 	//PREFS->num_separator = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_numseparator));
-	PREFS->british_unit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_british));
+	PREFS->imperial_unit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_imperial));
 
 	PREFS->filter_range = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_range));
 
@@ -696,7 +742,7 @@ gint row;
 
 
 
-GtkWidget *defpref_page_reports (struct defpref_data *data)
+static GtkWidget *defpref_page_reports (struct defpref_data *data)
 {
 GtkWidget *container;
 GtkWidget *table, *label, *widget;
@@ -749,7 +795,7 @@ gint row;
 }
 
 
-GtkWidget *defpref_page_euro (struct defpref_data *data)
+static GtkWidget *defpref_page_euro (struct defpref_data *data)
 {
 GtkWidget *container;
 GtkWidget *table, *label, *widget;
@@ -921,7 +967,7 @@ gint row;
 }
 */
 
-GtkWidget *defpref_page_display (struct defpref_data *data)
+static GtkWidget *defpref_page_display (struct defpref_data *data)
 {
 GtkWidget *container;
 GtkWidget *table, *label, *widget;
@@ -1030,8 +1076,8 @@ gint row;
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
 
 	row++;
-	widget = gtk_check_button_new_with_mnemonic (_("Use _British units"));
-	data->CM_british = widget;
+	widget = gtk_check_button_new_with_mnemonic (_("Use _Imperial units"));
+	data->CM_imperial = widget;
 	gtk_table_attach (GTK_TABLE (table), widget, 1, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
 
@@ -1039,10 +1085,10 @@ gint row;
 }
 
 
-GtkWidget *defpref_page_columns (struct defpref_data *data)
+static GtkWidget *defpref_page_columns (struct defpref_data *data)
 {
 GtkWidget *container;
-GtkWidget *table, *hbox, *vbox, *label, *sw, *widget;
+GtkWidget *table, *hbox, *label, *sw, *widget;
 gint row;
 
 	container = gtk_vbox_new(FALSE, 0);
@@ -1111,10 +1157,10 @@ gint row;
 
 
 
-GtkWidget *defpref_page_interface (struct defpref_data *data)
+static GtkWidget *defpref_page_interface (struct defpref_data *data)
 {
 GtkWidget *container;
-GtkWidget *table, *hbox, *vbox, *label, *sw, *widget;
+GtkWidget *table, *hbox, *label, *widget;
 gint row;
 
 	container = gtk_vbox_new(FALSE, 0);
@@ -1196,7 +1242,7 @@ gint row;
 	return(container);
 }
 
-GtkWidget *defpref_page_general (struct defpref_data *data)
+static GtkWidget *defpref_page_general (struct defpref_data *data)
 {
 GtkWidget *container;
 GtkWidget *table, *label, *widget, *hbox;
@@ -1252,6 +1298,22 @@ gint row;
 	data->BT_path_import = widget;
 	gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
+	row++;
+	label = make_label(_("_Export:"), 0, 0.5);
+	//----------------------------------------- l, r, t, b
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+
+	hbox = gtk_hbox_new(FALSE, HB_BOX_SPACING);
+	gtk_table_attach (GTK_TABLE (table), hbox, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+
+	widget = make_string(label);
+	data->ST_path_export = widget;
+	gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+	widget = gtk_button_new_with_label("...");
+	data->BT_path_export = widget;
+	gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+
 
 	#if DOWIZARD == 1
 	row++;
@@ -1276,6 +1338,16 @@ gint row;
 	//gtk_table_attach_defaults (GTK_TABLE (table), data->CY_option[FILTER_DATE], 1, 2, row, row+1);
 	gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
+	row++;
+	label = make_label(NULL, 0.0, 0.0);
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Start behaviour</b>"));
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
+
+	row++;
+	widget = gtk_check_button_new_with_mnemonic (_("Load last opened file"));
+	data->CM_load_last = widget;
+	gtk_table_attach (GTK_TABLE (table), widget, 1, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+
 
 /*
 	row++;
@@ -1293,7 +1365,7 @@ gint row;
 	return(container);
 }
 
-void defpref_selection(GtkTreeSelection *treeselection, gpointer user_data)
+static void defpref_selection(GtkTreeSelection *treeselection, gpointer user_data)
 {
 struct defpref_data *data;
 GtkWidget *notebook;
@@ -1374,8 +1446,7 @@ GtkWidget *window, *mainvbox;
 GtkWidget *hbox, *vbox, *sw, *widget, *notebook, *page, *frame, *image, *label;
 
       window = gtk_dialog_new_with_buttons (_("Preferences"),
-				//GTK_WINDOW (do_widget),
-				NULL,
+				GTK_WINDOW(GLOBALS->mainwindow),
 				0,
 				GTK_STOCK_CANCEL,
 				GTK_RESPONSE_REJECT,
@@ -1404,7 +1475,7 @@ GtkWidget *hbox, *vbox, *sw, *widget, *notebook, *page, *frame, *image, *label;
 	//list
 	sw = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     gtk_box_pack_start (GTK_BOX (hbox), sw, FALSE, TRUE, 0);
 	widget = pref_list_create();
 	data.LV_page = widget;
@@ -1501,6 +1572,7 @@ GtkWidget *hbox, *vbox, *sw, *widget, *notebook, *page, *frame, *image, *label;
 	//path selector
 	g_signal_connect (data.BT_path_wallet, "pressed", G_CALLBACK (defpref_pathselect), GINT_TO_POINTER(1));
 	g_signal_connect (data.BT_path_import, "pressed", G_CALLBACK (defpref_pathselect), GINT_TO_POINTER(2));
+	g_signal_connect (data.BT_path_export, "pressed", G_CALLBACK (defpref_pathselect), GINT_TO_POINTER(3));
 
 
 	g_signal_connect (gtk_tree_view_get_selection(GTK_TREE_VIEW(data.LV_page)), "changed", G_CALLBACK (defpref_selection), notebook);
@@ -1538,6 +1610,16 @@ GtkWidget *hbox, *vbox, *sw, *widget, *notebook, *page, *frame, *image, *label;
 
 	gtk_window_resize(GTK_WINDOW(window), 640, 256);
 
+
+	//select first row
+	GtkTreePath *path = gtk_tree_path_new_first ();
+
+	gtk_tree_selection_select_path (gtk_tree_view_get_selection(GTK_TREE_VIEW(data.LV_page)), path);
+
+	
+	
+	gtk_tree_path_free(path);
+
 	gtk_widget_show_all (window);
 
 	gint result = 666;
@@ -1551,7 +1633,7 @@ GtkWidget *hbox, *vbox, *sw, *widget, *notebook, *page, *frame, *image, *label;
 		{
 			case GTK_RESPONSE_ACCEPT:
 				defpref_get(&data);
-				wallet_update(GLOBALS->mainwindow, (gpointer)UF_BALANCE+UF_VISUAL);
+				wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(UF_BALANCE+UF_VISUAL));
 				homebank_pref_save();
 				break;
 			case 666:
@@ -1656,7 +1738,7 @@ guint i;
 	{
 	gchar *pathfilename;
 
-	pathfilename = g_build_filename((const gchar *)homebank_pixmaps_dir, pref_pixname[i], NULL);
+	pathfilename = g_build_filename(homebank_app_get_pixmaps_dir(), pref_pixname[i], NULL);
 
 	DB( g_print("loading %s\n", pathfilename) );
 
@@ -1689,6 +1771,7 @@ static struct {
 	{	N_("Expense" ), COL_OPE_EXPENSE,	},
 	{	N_("Income"  ), COL_OPE_INCOME,		},
 	{	N_("Category"), COL_OPE_CATEGORY,	},
+	{	N_("Tags"), COL_OPE_TAGS,	},
 };
 
 static gint n_ope_list_columns = G_N_ELEMENTS (ope_list_columns);

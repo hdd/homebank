@@ -1,21 +1,23 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>	
 #include <string.h>
 #include <time.h>
 
@@ -89,6 +91,118 @@ static GtkHBoxClass *parent_class = NULL;
 static guint dateentry_signals[LAST_SIGNAL] = {0,};
 
 
+// todo:finish this
+// this is to be able to saise d or d/m or m/d in the gtkdateentry
+
+/* order of these in the current locale */
+static GDateDMY dmy_order[3] = 
+{
+   G_DATE_DAY, G_DATE_MONTH, G_DATE_YEAR
+};
+
+struct _GDateParseTokens {
+  gint num_ints;
+  gint n[3];
+  guint month;
+};
+
+typedef struct _GDateParseTokens GDateParseTokens;
+
+#define NUM_LEN 10
+
+static void
+g_date_fill_parse_tokens (const gchar *str, GDateParseTokens *pt)
+{
+  gchar num[4][NUM_LEN+1];
+  gint i;
+  const guchar *s;
+  
+  DB( g_print(" (dateentry) fill parse token\n") );
+  
+  /* We count 4, but store 3; so we can give an error
+   * if there are 4.
+   */
+  num[0][0] = num[1][0] = num[2][0] = num[3][0] = '\0';
+  
+  s = (const guchar *) str;
+  pt->num_ints = 0;
+  while (*s && pt->num_ints < 4) 
+    {
+      
+      i = 0;
+      while (*s && g_ascii_isdigit (*s) && i < NUM_LEN)
+        {
+          num[pt->num_ints][i] = *s;
+          ++s; 
+          ++i;
+        }
+      
+      if (i > 0) 
+        {
+          num[pt->num_ints][i] = '\0';
+          ++(pt->num_ints);
+        }
+      
+      if (*s == '\0') break;
+      
+      ++s;
+    }
+  
+  pt->n[0] = pt->num_ints > 0 ? atoi (num[0]) : 0;
+  pt->n[1] = pt->num_ints > 1 ? atoi (num[1]) : 0;
+  pt->n[2] = pt->num_ints > 2 ? atoi (num[2]) : 0;
+
+}
+
+static void g_date_determine_dmy(void)
+{
+GDate d;
+gchar buf[128];
+GDateParseTokens testpt;
+gint i;
+
+  DB( g_print(" (dateentry) determine dmy\n") );
+
+
+  g_date_clear (&d, 1);              /* clear for scratch use */
+  
+  
+      /* had to pick a random day - don't change this, some strftimes
+       * are broken on some days, and this one is good so far. */
+      g_date_set_dmy (&d, 4, 7, 1976);
+      
+      g_date_strftime (buf, 127, "%x", &d);
+      
+      g_date_fill_parse_tokens (buf, &testpt);
+      
+      i = 0;
+      while (i < testpt.num_ints)
+        {
+          switch (testpt.n[i])
+            {
+            case 7:
+              dmy_order[i] = G_DATE_MONTH;
+              break;
+            case 4:
+              dmy_order[i] = G_DATE_DAY;
+              break;
+            //case 76:
+              //using_twodigit_years = TRUE; /* FALL THRU */
+            case 1976:
+              dmy_order[i] = G_DATE_YEAR;
+              break;
+            }
+          ++i;
+        }
+
+       DB( g_print(" dmy legend: 0=day, 1=month, 2=year\n") );   
+       DB( g_print(" dmy is: %d %d %d\n", dmy_order[0], dmy_order[1], dmy_order[2]) );   
+}        
+        
+
+//end 
+
+
 GType
 gtk_dateentry_get_type ()
 {
@@ -149,6 +263,8 @@ gtk_dateentry_class_init (GtkDateEntryClass * klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+	g_date_determine_dmy();
+
  /*
 	gobject_class->set_property = gtk_dateentry_set_property;
 	gobject_class->get_property = gtk_dateentry_get_property;
@@ -174,7 +290,7 @@ GtkDateEntry *dateentry = user_data;
 
 	DB( g_print(" (dateentry) focus-out-event %d\n", gtk_widget_is_focus(dateentry)) );
 
-	gtk_dateentry_entry_new(dateentry, dateentry);
+	gtk_dateentry_entry_new(GTK_WIDGET(dateentry), dateentry);
 
 	return FALSE;
 }
@@ -193,7 +309,7 @@ GtkWidget *arrow;
 
 	dateentry->date = g_date_new();
 	/* today's date */
-	g_date_set_time(dateentry->date, time(NULL));
+	g_date_set_time_t(dateentry->date, time(NULL));
 
 	dateentry->entry = gtk_entry_new ();
 	gtk_widget_set_size_request(dateentry->entry, 90, -1);
@@ -208,13 +324,13 @@ GtkWidget *arrow;
 	gtk_widget_show (dateentry->arrow);
 
 	g_signal_connect (GTK_OBJECT (dateentry->arrow), "toggled",
-				(GtkSignalFunc) gtk_dateentry_arrow_press, dateentry);
+				G_CALLBACK (gtk_dateentry_arrow_press), dateentry);
 
 	g_signal_connect (GTK_OBJECT (dateentry->entry), "activate",
-				(GtkSignalFunc) gtk_dateentry_entry_new, dateentry);
+				G_CALLBACK (gtk_dateentry_entry_new), dateentry);
 
 	g_signal_connect (GTK_OBJECT (dateentry->entry), "focus-out-event",
-				(GtkSignalFunc) gtk_dateentry_focus, dateentry);
+				G_CALLBACK (gtk_dateentry_focus), dateentry);
 
 
 	g_signal_connect (GTK_OBJECT (dateentry->entry), "key_press_event",
@@ -309,7 +425,7 @@ void gtk_dateentry_set_date(GtkDateEntry * dateentry, guint julian_days)
 	}
 	else
 	{
-		g_date_set_time(dateentry->date, time(NULL));
+		g_date_set_time_t(dateentry->date, time(NULL));
 	}
 	gtk_dateentry_datetoentry(dateentry);
 }
@@ -420,27 +536,49 @@ char buffer[256];
 static void gtk_dateentry_entry_new(GtkWidget *gtkentry, gpointer user_data)
 {
 GtkDateEntry *dateentry = user_data;
-GDate *date;
 const gchar *str;
+GDateParseTokens pt;
 
 	DB( g_print(" (dateentry) entry validation\n") );
 
  	str = gtk_entry_get_text (GTK_ENTRY (dateentry->entry));
 
-	date = g_date_new ();
-	g_date_set_parse (date, str);
+	g_date_fill_parse_tokens(str, &pt);
+	DB( g_print(" -> parsetoken return is %d values :%d %d %d\n", pt.num_ints, pt.n[0], pt.n[1], pt.n[2]) );
 
-	if(g_date_valid(date) == TRUE)
+	g_date_set_time_t(dateentry->date, time(NULL));
+
+	switch( pt.num_ints )
 	{
-		g_date_free(dateentry->date);
-		dateentry->date = date;
-
+		case 1:
+			DB( g_print(" -> saised 1 number\n") );
+			g_date_set_day(dateentry->date, pt.n[0]);
+			break;
+		case 2:
+			DB( g_print(" -> saised 2 numbers\n") );
+			if( dmy_order[0] != G_DATE_YEAR )
+			{
+				if( dmy_order[0] == G_DATE_DAY )
+				{
+					g_date_set_day(dateentry->date, pt.n[0]);
+					g_date_set_month(dateentry->date, pt.n[1]);
+				}
+				else
+				{
+					g_date_set_day(dateentry->date, pt.n[1]);
+					g_date_set_month(dateentry->date, pt.n[0]);
+				}
+			}
+			break;
+		default:
+			g_date_set_parse (dateentry->date, str);
+			break;			
 	}
-	else
+
+	if(g_date_valid(dateentry->date) == FALSE)
 	{
-		g_date_free (date);
 		/* today's date */
-		g_date_set_time(dateentry->date, time(NULL));
+		g_date_set_time_t(dateentry->date, time(NULL));
 	}
 
 	gtk_dateentry_datetoentry(dateentry);

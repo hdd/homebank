@@ -1,17 +1,129 @@
-2007-08-16  Maxime Doyen  <mdoyen@free.fr>
+2008-12-04  Maxime Doyen
 
-	* Made 3.4 release.
+	Made 4.0.1 release.
+	* bugfix: 303886 after a multiple change of categories in account window, stats and budget report crash
+	* bugfix: 294755 win32 saving of file is not working with non ascii folder name
+	* bugfix: 303738 after removing payees or categories, statistics and buget reports crash
+	* bugfix: 303666 removing an internal transfert transaction was causing a crash
+	* bugfix: 304484 does not build on either GCC 3.4x or amd64 on FreeBSD
+
+2008-11-22  Maxime Doyen
+
+	Made 4.0 release.
+	* bugfix: 187952 spinbutton in manage account dialog do not persist saise sometimes
+	* bugfix: 201704 closing the main window was possible in despite there was changes made in an account window
+	* bugfix: 188236 monetary display - the grouping char was causing bad display for some countries
+	* bugfix: 210497 import csv - lines containing UTF-8 characters were ignored
+	* bugfix: 244365 in account window future transaction were badly also summed for today total
+	* bugfix: 256703 win32 crash on saving when no owner set into wallet properties
+	* bugfix: 226122 crash when exporting payee
+	* bugfix: 260973 filter by amount doesn't work
+	* bugfix: 238571 balances sometimes wrong in account operation window
+	* bugfix: 152556 balance for new ofx created account using import feature was not computed
+	* bugfix: 238571 account window bank balances was false when modifying transaction amount
+	* bugfix: 239939 crash was occured when loading file with orphans transactions (deleted account)
+	* bugfix: 240247 editing a transaction to transfert, the invert transaction was not created
+	* bugfix: 244621 transfert inverted transaction was not validated if the source was
+	* bugfix: 263024 removed obsolete GtkType and GtkSignalFunc *
+	* bugfix: 207203 unstranslatable string "Bank Account" and "%/%d under %s"
+	* bugfix: 244365 future transaction were faultly added to today's balance also
+	* bugfix: 244622 zero balance are sometimes displayed in red color
+	* bugfix: 253390 fixed the build break when linked with --as needed
+	* bugfix: 267473 lastopened file feature was no more working
+	* bugfix: transfert transaction was possible with same source and target account
+	* bugfix: preference display format empty value where ignored
+	* bugfix: statistic sort by amount income/balance was wrong
+	* change: removed the account window csv import function, global import menu must be used instead
+	* change: inherits transaction also inherit date and permit multiple add at once
+	* change: internal datamodel + refactoring of source code
+	* change: account/payee/category dialog changes applies directly
+	* change: xhb data file format (v0.2)
+	* change: forced dialog windows to center on their parent window
+	* change: reworked and clarified the import process
+	* change: listview title columns are now centered
+	* change: subcategories are displayed in italics
+	* change: full category name is now displayed in listview
+	* change: rewritten the charts using cairographics
+	* add   : QIF import/export feature
+	* add   : tag can be assigned to transaction and used as a new report axis
+	* add   : statistic report is now possible distinctly for Category and Subcategory 
+	* add   : date saised can now be day, day/month or month/day, or complete date
+	* add   : direct creation of Payee from the transaction dialog
+	* add   : direct creation of Category from the transaction dialog
+	* add   : autocompletion for account selection widget
+	* add   : autocompletion for payee selection widget
+	* add   : autocompletion for category selection widget
+	* add   : autocompletion for description/memo widget (transaction dialog)
+	* add   : drag'n'drop of homebank file is now possible on the main window
+	* add   : preference to choose or not to load the last opened file at start
+	* add   : preference export path
+
+2008-09-14  Maxime Doyen
+
+	Made 4.0 beta release.
+
+2008-08-18  Maxime Doyen
+
+	Made 4.0 alpha2 release.
+
+2008-06-29  Maxime Doyen
+
+	Made 4.0 alpha1 release.
+
+2008-04-01  Maxime Doyen
+
+	Made 3.8 release.
+	* bugfix: removed the -Werror compile option
+	* bugfix: transaction window in add mode was having button add and close action inverted
+	* bugfix: ofx file with a blank line were not recognised
+
+2008-03-22  Maxime Doyen
+
+	Made 3.7 release.
+	* bugfix: archive changes were not considered for save changes 
+	* bugfix: strings change (British units to Imperial units)
+	* bugfix: remind transaction were not displayed after save
+	* bugfix: transaction window close button was faultly add a transaction
+	* bugfix: string in account window status bar was not localized
+	* bugfix: making an archive with empty name from a transaction was possible
+	* bugfix: statistics rate columns were sometimes displaying 'nan' as rate
+	* change: removed transaction register amount herits from the category sign automatically
+
+2007-12-14  Maxime Doyen
+
+	Made 3.6 release.
+	* bugfix: prototypes declaration check (for 64bits machines especially)
+	* bugfix: statistic 'by amount' widget doesn't work at first
+	* bugfix: internal transfer changes were not propagated to opposite transaction
+	* bugfix: filter force option to include added/changed transactions is now off by default
+	* bugfix: reordering the accounts was causing a mixup in target account for internal transfert
+	* bugfix: specific month budget report display problem (decay with the previous month)
+	* bugfix: detail list was not refreshed after a filter or deselection of a result item
+	* change: transaction register dialog buttons to follow gnome/gtk+ hig
+	* change: charts now uses theme color (no more forced white background)
+	* add   : transaction register amount herits from the category sign automatically
+
+2007-08-22  Maxime Doyen
+
+	Made 3.5 release.
+	* bugfix: FreeBSD crash when 'lastopenedfiles' configuration file does not exists
+	* bugfix: MacOS amount display problem due to uninitialized preferences
+	* change: GPL headers update of each source files
+
+2007-08-16  Maxime Doyen
+
+	Made 3.4 release.
 	* bugfix: csv import/export for category, payee, budget and account was crashing
 	* change: new GPL icon set based on gnome 2.18 icons
-	* change: new splash scrren
+	* change: new splash screen
 	* change: native en_US strings translation changed as requested by some users
 	* change: statistics does no more include internal transfert transaction by default
 	* add   : local on disk program help documentation
 	* add   : a menu to close the account window
 
-2007-06-28  Maxime Doyen  <mdoyen@free.fr>
+2007-06-28  Maxime Doyen
 
-	* Made 3.4 unstable release.
+	Made 3.4 unstable release.
 	* bugfix: .desktop file menu Categories was wrong (GNOME instead of GTK)
 	* bugfix: charts amount display was not affected by the user preferences
 	* bugfix: account window for a same account could be opened several times
@@ -23,9 +135,9 @@
 	* change: converted amounts colors to Tango palette colors
 	* add   : windows position/size are now saved
 
-2007-05-24  Maxime Doyen  <mdoyen@free.fr>
+2007-05-24  Maxime Doyen
 
-	* Made 3.3 release.
+	Made 3.3 release.
 	* bugfix: minor currency settings was not loaded
 	* bugfix: compilation without OFX support was ignored
 	* bugfix: transaction add cheque number prefill for pad2 was not working
@@ -51,9 +163,9 @@
 	* add   : mime integration of .xhb files
 	* add   : launchpad.net integration
 
-2007-02-23  Maxime Doyen  <mdoyen@free.fr>
+2007-02-23  Maxime Doyen
 
-	* Made 3.3 unstable release.
+	Made 3.3 unstable release.
 	* bugfix: overdrawn balance was false in partial view (when not displaying all date)
 	* bugfix: budget category name with entities (& < > ...) was displayed wrong in budget list
 	* bugfix: toolbar style was wrong in report windows
@@ -70,9 +182,9 @@
 	* add   : import path in the preferences
 	* add   : OFX format is now supported via an import wizard
 
-2006-11-27  Maxime Doyen  <mdoyen@free.fr>
+2006-11-27  Maxime Doyen
 
-	* Made 3.2.1 release.
+	Made 3.2.1 release.
 	* bugfix: inherit a cheque transaction was crashing
 	* bugfix: overdrawn balance column was shifted 1 line down
 	* bugfix: charts tooltip was a little buggy
@@ -83,9 +195,9 @@
 	* add   : title in chart tooltype
 	* add   : preferences statistic rate column display
 
-2006-09-26  Maxime Doyen  <mdoyen@free.fr>
+2006-09-26  Maxime Doyen
 
-	* Made 3.2 release.
+	Made 3.2 release.
 	* add   : sum of multi selected transaction in account window statusbar (missing from amiga version)
 	* add   : statistics report dual barchart display for income/expense (missing from amiga version)
 	* add   : budget report dual barchart display for spend/budget (missing from amiga version)
@@ -95,15 +207,15 @@
 	* add   : statistics report toggle rate toolbutton
 	* add   : splash window
 
-2006-07-12  Maxime Doyen  <mdoyen@free.fr>
+2006-07-12  Maxime Doyen
 
-	* Made 3.2 alpha2 release.
+	Made 3.2 alpha2 release.
 	* bugfix: transaction lost problem, due to xml entities not escaped. Data using "'>&< in name were well saved the 1st time but
 	          the glib xmlparser was crashing and not warn about it at reload, so if saved again, the data were lost :-/
 	* bugfix: description & info transaction field were impossible to blank
 	* bugfix: empty field were badly saved with '(null)' instead of ''
 	* bugfix: a change in the wallet dialog was not enabling to save
 
-2006-06-21  Maxime Doyen  <mdoyen@free.fr>
+2006-06-21  Maxime Doyen
 
-	* Made 3.2 alpha1 release.
+	Made 3.2 alpha1 release.

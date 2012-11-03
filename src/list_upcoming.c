@@ -1,21 +1,21 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 #include "homebank.h"
 #include "preferences.h"
@@ -58,7 +58,7 @@ Payee *pay;
 	gtk_tree_model_get(model, iter,
 		LST_DSPUPC_DATAS, &arc,
 		-1);
-	pay = g_list_nth_data(GLOBALS->pay_list, arc->payee);
+	pay = da_pay_get(arc->payee);
     //g_object_set(renderer, "text", pay->name, NULL);
 }
 
@@ -176,6 +176,7 @@ GtkTreeViewColumn  *column;
 	//gtk_tree_view_column_add_attribute(column, renderer, "text", 1);
 	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_NAME);
 	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 	/* column: Wording */
@@ -187,6 +188,7 @@ GtkTreeViewColumn  *column;
 	//gtk_tree_view_column_add_attribute(column, renderer, "text", 2);
 	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_NAME);
 	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 	/* column: Amount */
@@ -196,9 +198,9 @@ GtkTreeViewColumn  *column;
 	g_object_set(renderer, "xalign", 1.0, NULL);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, amount_cell_data_function, NULL, NULL);
-	gtk_tree_view_column_set_alignment (column, 1.0);
 	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_NAME);
 	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 	/* column: Next on */
@@ -208,9 +210,9 @@ GtkTreeViewColumn  *column;
 	g_object_set(renderer, "xalign", 1.0, NULL);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, date_cell_data_function, NULL, NULL);
-	gtk_tree_view_column_set_alignment (column, 1.0);
 	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPACC_NAME);
 	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 	/* column: Next on */
@@ -220,9 +222,9 @@ GtkTreeViewColumn  *column;
 	g_object_set(renderer, "xalign", 1.0, NULL);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, remaining_cell_data_function, NULL, NULL);
-	gtk_tree_view_column_set_alignment (column, 1.0);
 	gtk_tree_view_column_set_sort_column_id (column, LST_DSPUPC_REMAINING);
 	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 

@@ -1,34 +1,50 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <math.h>
-#include <monetary.h>	/* strfmon */
 #include <string.h>
 
 #include <gtk/gtk.h>
 
 #include "gtkchart.h"
+#include "homebank.h"
 
 #define DEFAULT_DELAY 500           /* Default delay in ms */
 
 #define MASKCOL 255
 #define COLTO16(col8) ( (col8 | col8<<8 ) )
 #define COLTOOVER(col8) ( (col8 + MASKCOL) / 2 )
+
+/* new stuff */
+#define HELPDRAW 0
+
+#define MARGIN 12
+#define BARW 24
+
+#define OVER_ALPHA .25
+#define OVER_COLOR (MASKCOL * OVER_ALPHA)
+
+#define COLTOCAIRO(col8) 	 ( (col8 / 255.0) )
+
+#define COLTOCAIROOVER(col8) ( ((col8 * (1 - OVER_ALPHA)) + OVER_COLOR ) / 255.0 )
+
+/* end */
 
 #define MYDEBUG 0
 
@@ -45,6 +61,10 @@ static void         gtk_chart_class_init      (GtkChartClass *klass);
 static void         gtk_chart_init            (GtkChart      *chart);
 static void         gtk_chart_destroy         (GtkObject     *chart);
 
+// for cairo pie
+#define SOFT_LIGHT 0
+#define GRADIENT 0
+
 
 double GetBase10(double num);
 double GetUnit(double value);
@@ -52,7 +72,7 @@ gchar *chart_printval(GtkChart *chart, gdouble value);
 void chart_clear(GtkChart *chart, gboolean store);
 void chart_setup_with_model(GtkChart *chart, GtkTreeModel *list_store, guint column1, guint column2);
 void chart_sizeallocate(GtkWidget *widget, GtkAllocation *allocation, gpointer user_data);
-static gboolean chart_map( GtkWidget *widget, GdkEvent *event, gpointer user_data);
+//static gboolean chart_map( GtkWidget *widget, GdkEvent *event, gpointer user_data);
 static gboolean chart_expose( GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
 static gboolean chart_motion(GtkWidget *widget, GdkEventMotion *event, gpointer user_data);
 static gboolean chart_button_press (GtkWidget *widget, GdkEventButton *event, gpointer user_data);
@@ -85,6 +105,8 @@ GtkWidget *legend_list_new(void);
 
 void chart_recompute(GtkChart *chart);
 
+gchar *chart_print_int(GtkChart *chart, gint value);
+gchar *chart_print_double(GtkChart *chart, gdouble value);
 
 static GtkHBoxClass *parent_class = NULL;
 
@@ -355,10 +377,64 @@ void gtk_chart_set_type(GtkChart * chart, gint type)
 	chart_recompute(chart);
 }
 
+/* = = = = = = = = = = parameters = = = = = = = = = = */
+
+/*
+** set the minor parameters
+*/
+void gtk_chart_set_minor_prefs(GtkChart * chart, gdouble rate, gchar *symbol)
+{
+	g_return_if_fail (GTK_IS_CHART (chart));
+
+	chart->minor_rate   = rate;
+	chart->minor_symbol = symbol;
+}
+
+/*
+** set the overdrawn minimum
+*/
+void gtk_chart_set_overdrawn(GtkChart * chart, gdouble minimum)
+{
+	g_return_if_fail (GTK_IS_CHART (chart));
+
+	chart->minimum = minimum;
+
+	if(chart->type == CHART_LINE_TYPE)
+		chart_recompute(chart);
+}
+
+/*
+** set the decy_xval
+*/
+void gtk_chart_set_decy_xval(GtkChart * chart, gint decay)
+{
+	g_return_if_fail (GTK_IS_CHART (chart));
+
+	chart->decy_xval = decay;
+
+	if(chart->type != CHART_PIE_TYPE)
+		chart_recompute(chart);
+}
+/*
+** set the barw
+*/
+void gtk_chart_set_barw(GtkChart * chart, gdouble barw)
+{
+	g_return_if_fail (GTK_IS_CHART (chart));
+
+	chart->barw = barw;
+
+	if(chart->type != CHART_PIE_TYPE)
+		chart_recompute(chart);
+}
+
+
+/* = = = = = = = = = = visibility = = = = = = = = = = */
+
 /*
 ** change the legend visibility
 */
-void gtk_chart_set_legend(GtkChart * chart, gboolean visible)
+void gtk_chart_show_legend(GtkChart * chart, gboolean visible)
 {
 	g_return_if_fail (GTK_IS_CHART (chart));
 
@@ -369,9 +445,36 @@ void gtk_chart_set_legend(GtkChart * chart, gboolean visible)
 }
 
 /*
+** change the x-value visibility
+*/
+void gtk_chart_show_xval(GtkChart * chart, gboolean visible)
+{
+	g_return_if_fail (GTK_IS_CHART (chart));
+
+	chart->show_xval = visible;
+
+	if(chart->type != CHART_PIE_TYPE)
+		chart_recompute(chart);
+}
+
+/*
+** chnage the overdrawn visibility
+*/
+void gtk_chart_show_overdrawn(GtkChart * chart, gboolean visible)
+{
+	g_return_if_fail (GTK_IS_CHART (chart));
+
+	chart->show_over = visible;
+
+	if(chart->type == CHART_LINE_TYPE)
+		chart_recompute(chart);
+}
+
+
+/*
 ** change the minor visibility
 */
-void gtk_chart_set_minor(GtkChart * chart, gboolean minor)
+void gtk_chart_show_minor(GtkChart * chart, gboolean minor)
 {
 	g_return_if_fail (GTK_IS_CHART (chart));
 
@@ -382,20 +485,7 @@ void gtk_chart_set_minor(GtkChart * chart, gboolean minor)
 
 }
 
-/*
-** change the legend visibility
-*/
-void gtk_chart_set_minor_prefs(GtkChart * chart, gdouble rate, gchar *symbol)
-{
-	g_return_if_fail (GTK_IS_CHART (chart));
 
-	chart->minor_rate   = rate;
-	chart->minor_symbol = symbol;
-
-
-
-
-}
 
 // ---------------------------------------------
 /*
@@ -539,7 +629,8 @@ guint i;
 	chart->range = 0;
 	chart->min = 0;
 	chart->max = 0;
-	chart->minimum = -250;
+	chart->barw = BARW;
+	chart->decy_xval = 7;
 
 }
 
@@ -580,7 +671,7 @@ GdkColor colour;
 	while (valid)
     {
 	gint id;
-	gchar *str_data;
+	gchar *title;
 	gdouble	value1, value2;
 
 		/* column 0: pos (gint) */
@@ -592,7 +683,7 @@ GdkColor colour;
 		{
 			gtk_tree_model_get (GTK_TREE_MODEL(list_store), &iter,
 				0, &id,
-				2, &str_data,
+				2, &title,
 				column1, &value1,
 				-1);
 		}
@@ -600,7 +691,7 @@ GdkColor colour;
 		{
 			gtk_tree_model_get (GTK_TREE_MODEL(list_store), &iter,
 				0, &id,
-				2, &str_data,
+				2, &title,
 				column1, &value1,
 				column2, &value2,
 				-1);
@@ -611,12 +702,12 @@ GdkColor colour;
 		if(id < 0)
 		{
 			chart->entries--;
-	     	 //DB( g_print ("ignoring Row %d: (%s, %2.f)\n", id, str_data, value) );
+	     	 //DB( g_print ("ignoring Row %d: (%s, %2.f)\n", id, title, value) );
 		}
 		else
 		{
 			chart->id[i] = id;
-			chart->titles[i] = str_data;
+			chart->titles[i] = title;
 
 			/* data1 value storage & min, max compute */
 			chart->datas1[i] = (chart->dual) ? ABS(value1) : value1;
@@ -640,7 +731,7 @@ GdkColor colour;
 			//color = i%NUM_COLORMAP_MAX;
 			color = id%NUM_COLORMAP_MAX;
 
-			//DB( g_print ("Row %d: (%s, %2.f) color %d\n", id, str_data, value, color) );
+			//DB( g_print ("Row %d: (%s, %2.f) color %d\n", id, title, value, color) );
 
 			colour.red   = COLTO16(colors[color].r);
 			colour.green = COLTO16(colors[color].g);
@@ -649,7 +740,7 @@ GdkColor colour;
 	        gtk_list_store_append (GTK_LIST_STORE(chart->legend), &l_iter);
 	        gtk_list_store_set (GTK_LIST_STORE(chart->legend), &l_iter,
 	                            0, create_color_pixbuf (&colour),
-	                            1, str_data,
+	                            1, title,
 	                            -1);
 
 			i++;
@@ -740,51 +831,53 @@ gint div;
 void barchart_calculation(GtkChart *chart)
 {
 GtkWidget *drawarea = chart->drawarea;
-	PangoLayout *layout;
-	gint w, h;
-	gchar *valstr;
+cairo_surface_t *s;
+cairo_t *cr;
+cairo_text_extents_t extents;
+gint blkw;
 
 	DB( g_print("\n(gtkchart) bar calculation\n") );
 
-	/* compute width inc pixel of x scale text */
-	valstr = chart_print_int(chart, (gint)MAX(-chart->min, chart->max) * -1);
+	chart->l = MARGIN;
+	chart->t = MARGIN;
+	chart->w = drawarea->allocation.width - (MARGIN*2);
+	chart->h = drawarea->allocation.height - (MARGIN*2);
+	chart->r = drawarea->allocation.width - MARGIN;
+	chart->b = drawarea->allocation.height - MARGIN;
 
-	layout = gtk_widget_create_pango_layout(chart->drawarea, NULL);
-	pango_layout_set_text(layout, valstr, strlen(valstr));
-	pango_layout_get_pixel_size(layout, &w, &h);
-	g_object_unref(layout);
+	//debug
+	//chart->legend_w = 100;
 
-	chart->scale_width = w + 4;
-	chart->scale_height = h;
+	//todo: seems not working well...
+	s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 100, 100);
 
-	chart->graph_width  = drawarea->allocation.width - chart->scale_width;
-	chart->graph_height = drawarea->allocation.height - chart->scale_height - 4;
+	cr = cairo_create (s);
+	cairo_text_extents(cr, "ajpq12", &extents);
+	cairo_destroy(cr);
+	cairo_surface_destroy(s);
+
+	DB( g_print(" + text w=%f h=%f\n", extents.width, extents.height) );
+
+	chart->font_h = extents.height;
+	chart->graph_width  = chart->w - chart->legend_w;
+	chart->graph_height = chart->h - extents.height - 4;
 
 	//if expand : we compute available space
 	//chart->barw = MAX(32, (chart->graph_width)/chart->entries);
-	chart->barw = 32;
+	//chart->barw = 32; // usr setted or defaut to BARW
 
-	if( chart->dual == TRUE )
-		chart->barw *= 2;
+	blkw = chart->barw;
 
+	if( chart->dual )
+		blkw = blkw * 2;
 
-	chart->visible = chart->graph_width / chart->barw;
+	chart->visible = chart->graph_width / blkw;
 	chart->visible = MIN(chart->visible, chart->entries);
 
-	chart->unit_height = (chart->unit / chart->range) * chart->graph_height;
+	chart->ox = chart->l;
+	chart->oy = chart->t + (chart->max/chart->range) * chart->graph_height;
 
-	chart->ox = 0 + chart->scale_width;
-	chart->oy = 0 + chart->scale_height + (chart->max/chart->range) * chart->div * chart->unit_height;
-
-	chart->posbarh = (chart->max/chart->range) * chart->div * chart->unit_height;
-	chart->negbarh = (-chart->min/chart->range) * chart->div * chart->unit_height;
-
-	//debug
-	//DB(g_print("scale  :: w=%d, h=%d\n", scale_width, scale_height) );
-	//DB(g_print("graph  :: w=%d, h=%d\n", graph_width, graph_height) );
-
-	//DB(g_print("unit_height=%d\n", unit_height) );
-	//DB(g_print("ox=%d, oy=%d\n", ox, oy) );
+	DB( g_print(" + ox=%f oy=%f\n", chart->ox, chart->oy) );
 
 
 }
@@ -796,84 +889,174 @@ GtkWidget *drawarea = chart->drawarea;
 static void barchart_draw_scale(GtkWidget *widget, GdkGC *gc, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
-PangoLayout *layout;
-GdkColor colour;
-gint w, h;
-gint i, y;
+gint i;
+double x, y;
 gdouble curxval;
-gchar *valstr;
+gint first;
 
-	DB( g_print("\n(gtkchart) bar draw scale\n") );
+	DB( g_print("----------------------\n(gtkline) draw scale\n") );
 
-	/* draw minimum ? */
-	//DB( g_print(" %f > %f\n", chart->minimum , chart->min) );
+cairo_t *cr;
+static const double dashed3[] = {1.0};
 
-	if(chart->type == CHART_LINE_TYPE && chart->minimum != 0 && chart->minimum >= chart->min)
+	cr = gdk_cairo_create (widget->window);
+
+	/* for drawing 1px line get rid off antialias */
+	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
+	cairo_set_line_width(cr, 1);
+
+	/* clip */
+	cairo_rectangle(cr, MARGIN, 0, chart->w, chart->h + MARGIN);
+	cairo_clip(cr);
+
+
+	/* draw vertical lines + legend */
+	if(chart->show_xval)
 	{
-		//todo: use a colormap
-		colour.red   = COLTO16(200);
-		colour.green = COLTO16(0);
-		colour.blue  = COLTO16(0);
-		gdk_gc_set_rgb_fg_color(gc, &colour);
+		x = chart->ox + 1 + (chart->barw/2);
+		y = chart->oy;
+		first = (gint)gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
 
-		//DB( g_print(" \n", chart->minimum , chart->min) );
+		for(i=first; i<(first+chart->visible) ;i++)
+		{
+			if( !(i % chart->decy_xval) )
+			{
 
-		y = chart->oy + (ABS(chart->minimum)/chart->range) * chart->div * chart->unit_height;
+				cairo_set_source_rgb(cr, COLTOCAIRO(238), COLTOCAIRO(238), COLTOCAIRO(238)); 
 
-		gdk_draw_line (widget->window, gc,
-                    chart->ox-2, y, chart->ox+chart->graph_width, y);
+				cairo_move_to(cr, x, chart->t);	
+				cairo_line_to(cr, x, chart->b);
+				cairo_stroke(cr);
 
-		//todo: use a colormap
-		colour.red   = COLTO16(241);
-		colour.green = COLTO16(192);
-		colour.blue  = COLTO16(192);
-		gdk_gc_set_rgb_fg_color(gc, &colour);
+			}
 
-
-		gdk_draw_rectangle (widget->window,
-			      gc,
-			      TRUE,
-			      chart->ox+1,
-			      y+1,
-			      chart->ox+chart->graph_width,
-			      chart->oy+chart->negbarh - y - 1);
-
-
+			x += chart->barw;
+		}
 	}
 
-	/* -- draw the y-axis (horizontal lines + scale) -- */
-
-	//todo: use a colormap
-	colour.red   = COLTO16(200);
-	colour.green = COLTO16(200);
-	colour.blue  = COLTO16(200);
-	gdk_gc_set_rgb_fg_color(gc, &colour);
-
-	layout = gtk_widget_create_pango_layout(widget, NULL);
+	/* horizontal lines */
 
 	curxval = chart->max;
 	for(i=0;i<=chart->div;i++)
 	{
-		y = chart->scale_height + (i * chart->unit_height);
-		gdk_draw_line (widget->window, curxval ? gc : widget->style->fg_gc[widget->state],
-                    chart->ox-2, y, chart->ox+chart->graph_width, y);
 
-		valstr = chart_print_int(chart, (gint)curxval);
-		pango_layout_set_text(layout, valstr, strlen(valstr));
-		pango_layout_get_pixel_size(layout, &w, &h);
-		gdk_draw_layout(widget->window, widget->style->fg_gc[widget->state], chart->ox - w - 2, y-h, layout);
+		if(i == 0 || i == chart->div) 	/* top/bottom line */
+		{
+			cairo_set_dash(cr, 0, 0, 0);
+			cairo_set_source_rgb(cr, COLTOCAIRO(238), COLTOCAIRO(238), COLTOCAIRO(238));
+		}
+		else /* intermediate line (dotted) */
+		{
+			cairo_set_dash(cr, dashed3, 1, 0);
+			
+			cairo_set_source_rgb(cr, COLTOCAIRO(204), COLTOCAIRO(204), COLTOCAIRO(204)); 
+		}
+
+		/* x axis ? */
+		if( curxval == 0.0 )
+		{
+			cairo_set_dash(cr, 0, 0, 0);
+			cairo_set_source_rgb(cr, COLTOCAIRO(102), COLTOCAIRO(102), COLTOCAIRO(102)); 
+		}
+
+
+		y = chart->t + ((i * chart->unit) / chart->range) * chart->graph_height;
+
+		DB( g_print(" + i=%d :: y=%f (%f / %f) * %f\n", i, y, i*chart->unit, chart->range, chart->graph_height) );
+
+		cairo_move_to(cr, chart->l, y);	
+		cairo_line_to(cr, chart->l + chart->w, y);
+		cairo_stroke(cr);
 
 		curxval -= chart->unit;
 	}
 
-	g_object_unref(layout);
+
+	cairo_destroy(cr);
+
+}
+
+static void barchart_draw_scale_text(GtkWidget *widget, GdkGC *gc, gpointer user_data)
+{
+GtkChart *chart = GTK_CHART(user_data);
+gint i;
+double x, y;
+gdouble curxval;
+gchar *valstr;
+gint first;
+
+	DB( g_print("----------------------\n(gtkline) draw scale text\n") );
+
+cairo_t *cr;
+cairo_text_extents_t extents;
 
 
+	cr = gdk_cairo_create (widget->window);
 
+	/* for drawing 1px line get rid off antialias */
+	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
+	cairo_set_line_width(cr, 1);
 
-	/* x-axis (vertical line) */
-	gdk_draw_line (widget->window, widget->style->fg_gc[widget->state],
-                     chart->ox, chart->oy-chart->posbarh, chart->ox, chart->oy+chart->negbarh);
+	/* clip */
+	cairo_rectangle(cr, MARGIN, 0, chart->w, chart->h + MARGIN);
+	cairo_clip(cr);
+
+	/* draw y-legend (amount) */
+	if(chart->show_xval)
+	{
+		x = chart->ox + 1 + (chart->barw/2);
+		y = chart->oy;
+		first = (gint)gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
+
+		for(i=first; i<(first+chart->visible) ;i++)
+		{
+			if( !(i % chart->decy_xval) )
+			{
+				valstr = chart->titles[i];
+				cairo_text_extents(cr, valstr, &extents);
+		
+				DB( g_print("%s w=%f h=%f\n", valstr, extents.width, extents.height) );
+				
+				cairo_set_source_rgb(cr, 0, 0, 0);
+				cairo_move_to(cr, x + 2, y + 2 + chart->font_h);	
+				cairo_show_text(cr, valstr); 
+		
+				cairo_set_source_rgb(cr, COLTOCAIRO(153), COLTOCAIRO(153), COLTOCAIRO(153)); 
+				cairo_move_to(cr, x, y);	
+				cairo_line_to(cr, x, y + 4 + extents.height);
+				cairo_stroke(cr);
+			}
+
+			x += chart->barw;
+		}
+	}
+
+	/* draw x-legend */
+
+	curxval = chart->max;
+	for(i=0;i<=chart->div;i++)
+	{
+		y = chart->t + ((i * chart->unit) / chart->range) * chart->graph_height;
+
+		DB( g_print(" + i=%d :: y=%f (%f / %f) * %f\n", i, y, i*chart->unit, chart->range, chart->graph_height) );
+
+		if( curxval != 0.0 )
+		{
+
+			valstr = chart_print_int(chart, (gint)curxval);
+			cairo_text_extents(cr, valstr, &extents);
+
+			cairo_set_source_rgb(cr, COLTOCAIRO(102), COLTOCAIRO(102), COLTOCAIRO(102)); 
+			cairo_move_to(cr, chart->l, y + 2 + extents.height);	
+			cairo_show_text(cr, valstr); 
+			cairo_move_to(cr, chart->l + chart->w - extents.width - 1, y + 2 + extents.height);	
+			cairo_show_text(cr, valstr);
+		}
+
+		curxval -= chart->unit;
+	}
+
+	cairo_destroy(cr);
 }
 
 /*
@@ -882,7 +1065,8 @@ gchar *valstr;
 static void barchart_draw_bars(GtkWidget *widget, GdkGC *gc, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
-gint x,y, scale;
+cairo_t *cr;
+double x, y, x2, y2, h;
 gint first;
 gint i;
 
@@ -892,56 +1076,66 @@ gint i;
 	y = chart->oy;
 	first = (gint)gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
 
-	for(i=first; i<(first+chart->visible) ;i++)
+	cr = gdk_cairo_create (widget->window);
+
+	/* clip */
+	cairo_rectangle(cr, MARGIN, 0, chart->w, chart->h + MARGIN);
+	cairo_clip(cr);
+
+	#if HELPDRAW == 1
+	x2 = x;
+	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
+	cairo_set_line_width(cr, 1.0);
+	cairo_set_source_rgba(cr, .0, 1.0, .0, .5);
+	for(i=first; i<=(first+chart->visible) ;i++)
+	{
+		cairo_move_to(cr, x2, chart->t);
+		cairo_line_to(cr, x2, chart->b);	
+		cairo_stroke(cr);
+		x2 += chart->dual ? chart->barw * 2 : chart->barw;
+	}
+	#endif
+
+	for(i=first; i<=(first+chart->visible) ;i++)
 	{
 	gint color;
 	gint barw = chart->barw;
 	gint blkw = chart->barw;
 
-		if( chart->dual ) barw /= 2;
+		if( chart->dual )
+			blkw = blkw * 2;
 
 		//if(!chart->datas1[i]) goto nextbar;
 
 		//color = i%NUM_COLORMAP_MAX;
 		color = chart->id[i]%NUM_COLORMAP_MAX;
 
-		if(i == chart->active)
-			gdk_gc_set_foreground(gc, &chart->over_colors[color]);
+		if( i == chart->active )
+			cairo_set_source_rgb(cr, COLTOCAIROOVER(colors[color].r), COLTOCAIROOVER(colors[color].g), COLTOCAIROOVER(colors[color].b)); 
 		else
-			gdk_gc_set_foreground(gc, &chart->normal_colors[color]);
+			cairo_set_source_rgb(cr, COLTOCAIRO(colors[color].r), COLTOCAIRO(colors[color].g), COLTOCAIRO(colors[color].b));
 
 		if(chart->datas1[i])
 		{
-			if(chart->datas1[i] > 0.0)
-			{
-				scale = (chart->datas1[i]/chart->max) * (chart->posbarh);
-				//gdk_draw_rectangle(widget->window, widget->style->fg_gc[widget->state], FALSE, x+1, y-scale, barw-2, scale );
-				//gdk_draw_rectangle(widget->window, gc, TRUE, x+2, y-scale+1, barw-3, scale-1 );
-				gdk_draw_rectangle(widget->window, gc, TRUE, x+2, y-scale, barw-3, scale );
-			}
-			else
-			{
-				scale = (chart->datas1[i]/chart->min) * (chart->negbarh);
-				//gdk_draw_rectangle(widget->window, widget->style->fg_gc[widget->state], FALSE, x+1, y, barw-2, scale );
-				//gdk_draw_rectangle(widget->window, gc, TRUE, x+2, y+1, barw-3, scale-1 );
-				gdk_draw_rectangle(widget->window, gc, TRUE, x+2, y+1, barw-3, scale+1 );
-			}
+			x2 = x + 2;
+			h = (chart->datas1[i] / chart->range) * chart->graph_height;
+			y2 = chart->oy - h;
+			
+			cairo_rectangle(cr, x2, y2, barw-3, h);
+			cairo_fill(cr);
+
 		}
 
 		if( chart->dual && chart->datas2[i])
 		{
 
-			if(chart->datas2[i] > 0.0)
-			{
-				scale = (chart->datas2[i]/chart->max) * (chart->posbarh);
-				gdk_draw_rectangle(widget->window, gc, TRUE, x+barw+1, y-scale, barw-3, scale );
-			}
-			else
-			{
-				scale = (chart->datas2[i]/chart->min) * (chart->negbarh);
-				gdk_draw_rectangle(widget->window, gc, TRUE, x+barw+1, y+1, barw-3, scale+1 );
-			}
-		
+			x2 = x + barw + 1;
+			h = (chart->datas2[i] / chart->range) * chart->graph_height;
+			y2 = chart->oy - h;
+			
+			cairo_rectangle(cr, x2, y2, barw-3, h);
+			cairo_fill(cr);
+
 		}
 
 		x += blkw;
@@ -950,6 +1144,8 @@ gint i;
 		//gdk_draw_line (widget->window, widget->style->fg_gc[widget->state], x, chart->oy-chart->posbarh, x, chart->oy+chart->negbarh);
 
 	}
+
+
 }
 
 /*
@@ -958,44 +1154,23 @@ gint i;
 static gint barchart_get_active(GtkWidget *widget, gint x, gint y, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
-gint retval, first, index, px, py, scale;
+gint retval, first, index, px, py;
+gint blkw = chart->barw;
 
-	px = (x - chart->ox);
-	py = (y - chart->oy);
-	first = gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
-	index = first + (px / (chart->barw));
+	if( chart->dual )
+		blkw = blkw * 2;
+
 	retval = -1;
 
-	//DB(g_printf(" -> x-test :: px=%d, index=%d\n", px, index) );
-
-	if( px > 0 )
+	if( x <= chart->r && x >= chart->l )
 	{
-	gdouble value;
+		px = (x - chart->ox);
+		py = (y - chart->oy);
+		first = gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
+		index = first + (px / blkw);
 
-		/*chart->test = (px / (chart->barw>>1)); */
-	
-		if( !chart->dual )
-		{ 
-			value = chart->datas1[index];
-		}
-		else
-		{
-			value = MAX( ABS(chart->datas1[index]), ABS(chart->datas2[index]) );
-			//value = (chart->test & 1) == 1 ? chart->datas2[index] : chart->datas1[index];
-		}
-
-		if(value > 0.0)
-		{
-			scale = (value/chart->max) * (chart->posbarh);
-			if(py < 0 && py >= -scale ) retval = index;
-		}
-		else
-		{
-			scale = (value/chart->min) * (chart->negbarh);
-			if(py > 0 &&  py <= scale) retval = index;
-		}
-
-	//	DB(g_printf(" -> y-test :: scale=%d, py=%d => scale-py=%d\n", scale, py, scale - py) );
+		if(index < chart->entries)
+			retval = index;
 	}
 
 	return(retval);
@@ -1063,69 +1238,135 @@ gint first;
 /* line section */
 
 /*
-** draw all visible bars
+** draw all visible lines
 */
+static void draw_plot(cairo_t *cr, double x, double y, double r)
+{
+	cairo_set_line_width(cr, r == 4 ? 2 : 4);
+
+	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+	cairo_arc(cr, x, y, r, 0, 2*M_PI);
+	cairo_stroke_preserve(cr);
+
+
+	cairo_set_source_rgb(cr, COLTOCAIRO(0), COLTOCAIRO(119), COLTOCAIRO(204)); 
+	cairo_fill(cr);
+
+
+}
+
 static void linechart_draw_lines(GtkWidget *widget, GdkGC *gc, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
-gint x,y, scale, x1, y1, x2, y2;
+cairo_t *cr;
+double x, y, x2, y2, firstx, lastx;
 gint first;
 gint i;
-gint color;
 
-	DB( g_print("\n(gtkchart) line draw lines\n") );
+	DB( g_print("\n(gtkline) line draw lines\n") );
 
 	x = chart->ox + 1;
 	y = chart->oy;
 	first = (gint)gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
 
-	//gcvalues
-	//GdkGCValues values;
-	//values.line_width = 2;
-	//gdk_gc_set_values(gc, &values, GDK_GC_LINE_WIDTH);
+	cr = gdk_cairo_create (widget->window);
 
-	color = 1;
-	gdk_gc_set_foreground(gc, &chart->normal_colors[color]);
+	/* clip */
+	cairo_rectangle(cr, MARGIN, 0, chart->w, chart->h + MARGIN);
+	cairo_clip(cr);
 
-	for(i=first; i<(first+chart->visible) ;i++)
+
+	#if HELPDRAW == 1
+	x2 = x;
+	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
+	cairo_set_line_width(cr, 1.0);
+	cairo_set_source_rgba(cr, .0, 1.0, .0, .5);
+	for(i=first; i<=(first+chart->visible) ;i++)
 	{
+		cairo_move_to(cr, x2, chart->t);
+		cairo_line_to(cr, x2, chart->b);	
+		cairo_stroke(cr);
+		x2 += chart->barw;
+	}
 
-		if(chart->datas1[i] > 0.0)
+	#endif
+
+	//todo: it should be possible to draw line & plot together using surface and composite fill, or sub path ??
+	lastx = x;
+	firstx = x;
+
+	cairo_set_antialias (cr, CAIRO_ANTIALIAS_DEFAULT);
+	cairo_set_line_join(cr, CAIRO_LINE_JOIN_BEVEL); 
+	cairo_set_line_width(cr, 4.0);
+
+	for(i=first; i<=(first+chart->visible) ;i++)
+	{
+		x2 = x + (chart->barw)/2;
+		y2 = chart->oy - (chart->datas1[i] / chart->range) * chart->graph_height;
+		if( i == first)
 		{
-			scale = (chart->datas1[i]/chart->max) * (chart->posbarh);
-			//gdk_draw_rectangle(widget->window, widget->style->fg_gc[widget->state], FALSE, x+2, y-scale, chart->barw-3, scale );
-
-			x2 = x + (chart->barw)/2;
-			y2 = y - scale + 1;
+			firstx = x2;
+			cairo_move_to(cr, x2, y2);
 		}
 		else
 		{
-			scale = (chart->datas1[i]/chart->min) * (chart->negbarh);
-			//gdk_draw_rectangle(widget->window, widget->style->fg_gc[widget->state], FALSE, x+2, y+1, chart->barw-3, scale+1 );
-
-			x2 = x + (chart->barw)/2;
-			y2 = y + scale + 1;
+			if( i < (chart->entries) )
+			{
+				cairo_line_to(cr, x2, y2);
+				lastx = x2;
+			}
+			else
+				lastx = x2 - chart->barw;
 		}
-
-
-		if( i > first)
-		{
-			gdk_draw_line(widget->window, gc, x1, y1, x2, y2 );
-
-		}
-
-		gdk_draw_rectangle(widget->window, gc, TRUE, x2-2, y2-2, 5, 5 );
-
-		x1 = x2;
-		y1 = y2;
 
 		x += chart->barw;
-
-		//debug
-		//gdk_draw_line (widget->window, widget->style->fg_gc[widget->state], x, 0, x, oy);
 	}
 
+	cairo_set_source_rgb(cr, COLTOCAIRO(0), COLTOCAIRO(119), COLTOCAIRO(204)); 
+	cairo_stroke_preserve(cr);
+
+	cairo_line_to(cr, lastx, y);
+	cairo_line_to(cr, firstx, y);
+	cairo_close_path(cr);
+
+	cairo_set_source_rgba(cr, COLTOCAIRO(0), COLTOCAIRO(119), COLTOCAIRO(204), .15); 
+	cairo_fill(cr);
+
+	x = chart->ox + 1;
+	y = chart->oy;
+	first = (gint)gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
+
+	// draw plots
+
+	for(i=first; i<(first+chart->visible) ;i++)
+	{
+		x2 = x + (chart->barw)/2;
+		y2 = chart->oy - (chart->datas1[i] / chart->range) * chart->graph_height;
+		draw_plot(cr,  x2, y2, i == chart->active ? 5 : 4);
+		x += chart->barw;
+	}
+
+/* overdrawn */
+	if( chart->show_over )
+	{
+		if(chart->minimum != 0 && chart->minimum >= chart->min)
+		{
+			y = chart->oy - (chart->minimum/chart->range) * chart->graph_height;
+			cairo_set_source_rgba(cr, COLTOCAIRO(255), COLTOCAIRO(0), COLTOCAIRO(0), .15); 
+			
+			DB( g_print(" draw over: %f, %f, %f, %f\n", chart->l, y, chart->w, chart->b - y) );
+			
+			cairo_rectangle(cr, chart->l, y, chart->w, chart->b - y);
+			cairo_fill(cr);
+		}		
+	}
+
+	cairo_destroy(cr);
+
+
 }
+
+
 
 
 /*
@@ -1134,38 +1375,21 @@ gint color;
 static gint linechart_get_active(GtkWidget *widget, gint x, gint y, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
-gint retval, first, index, px, py, x2, y2, scale;
-
-	px = (x - chart->ox);
-	py = (y - chart->oy);
-	first = gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
-	index = first + (px / (chart->barw));
+gint first, index, px, py, retval;
 
 	retval = -1;
 
-	x2 = ((index-first)*chart->barw) + (chart->barw)/2;
-
-	//DB(g_printf(" -> line x-test :: px=%d, index=%d, x2=%d, px-x2=%d\n", px, index, x2, px-x2) );
-
-	if(chart->datas1[index] > 0.0)
+	if( x <= chart->r && x >= chart->l )
 	{
-		scale = (chart->datas1[index]/chart->max) * (chart->posbarh);
-		y2 = - scale + 1;
-	//	if(py <= -scale-5 && py >= -scale+5 ) retval = index;
+		px = (x - chart->ox);
+		py = (y - chart->oy);
+		first = gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
+		index = first + (px / (chart->barw));
+
+		if(index < chart->entries)
+			retval = index;
 	}
-	else
-	{
-		scale = (chart->datas1[index]/chart->min) * (chart->negbarh);
-		y2 = scale + 1;
-		//if(py >= scale+5 &&  py <= scale-5) retval = index;
-	}
-
-	//DB(g_printf(" -> line y-test :: scale=%d, y2=%d, py=%d => py - y2=%d\n", scale, y2, py, py - y2) );
-
-
-	if( ABS(px - x2) < 5 && ABS(py - y2) < 5  )
-		retval = index;
-
+	
 	return(retval);
 }
 
@@ -1176,23 +1400,32 @@ gint retval, first, index, px, py, x2, y2, scale;
 void piechart_calculation(GtkChart *chart)
 {
 GtkWidget *drawarea = chart->drawarea;
+gint w, h;
+	
+	w = drawarea->allocation.width - (MARGIN*2);
+	h = drawarea->allocation.height - (MARGIN*2);
+
 
 	chart->ox    = drawarea->allocation.width / 2;
 	chart->oy    = drawarea->allocation.height / 2;
-	chart->rayon = MIN(drawarea->allocation.width-2, drawarea->allocation.height-2);
-	chart->left  = (drawarea->allocation.width - chart->rayon) / 2;
-	chart->top   = (drawarea->allocation.height - chart->rayon) / 2;
+	chart->rayon = MIN(w, h);
+	chart->left  = (w - chart->rayon) / 2;
+	chart->top   = (h - chart->rayon) / 2;
 }
 
 static void piechart_draw_slices(GtkWidget *widget, GdkGC *gc, gpointer user_data)
 {
 GtkChart *chart = GTK_CHART(user_data);
-gint i;
-gint a1, a2;
-gdouble sum;
 
 	if(chart->entries)
 	{
+
+		/*
+		gint i;
+		gint a1, a2;
+		gdouble sum;
+
+
 		a1 = 90;
 		a2 = 0;
 		sum = 0;
@@ -1219,7 +1452,120 @@ gdouble sum;
 			a1 = a2;
 		}
 		//gdk_draw_arc(widget->window, widget->style->fg_gc[widget->state], FALSE, chart->left, chart->top, chart->rayon, chart->rayon, 0*64, 360*64);
-	}
+		*/
+	
+		//cairo drawing
+	
+	
+		cairo_t *cr;
+		
+		double a1 = 0 * (M_PI / 180);
+		double a2 = 360 * (M_PI / 180);
+	
+		//g_print("angle1=%.2f angle2=%.2f\n", a1, a2);
+	
+		double cx = chart->ox;
+		double cy = chart->oy;
+		double radius = chart->rayon/2;
+		int i;
+		double dx, dy;
+		double sum = 0.0; 
+		double alpha;
+		gint color;
+
+		cr = gdk_cairo_create (widget->window);
+
+		for(i=0; i< chart->entries ;i++)
+		{
+			a1 = ((360 * (sum / chart->total)) - 90) * (M_PI / 180);
+			sum += ABS(chart->datas1[i]);
+			a2 = ((360 * (sum / chart->total)) - 90) * (M_PI / 180);
+	
+			dx = cx;
+			dy = cy;
+			
+			// move slice away if active
+			/*
+			if(i == chart->active)
+			{
+			gchar *txt;
+			double ac = a1 + (a2 - a1) / 2;	
+
+				txt = "test";
+				cairo_text_extents(cr, txt, &extents);	
+
+				dx = cx + (cos(ac)*(radius + extents.width));
+				dy = cy + (sin(ac)*(radius + extents.height));
+	
+				cairo_set_source_rgb(cr, .0, .0, .0);
+				cairo_move_to(cr, dx, dy);
+				cairo_show_text(cr, txt); 				
+
+				dx = cx + (cos(ac)*8);
+				dy = cy + (sin(ac)*8);
+		
+			}*/
+
+			cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+			cairo_move_to(cr, dx, dy);
+			cairo_arc(cr, dx, dy, radius, a1, a2);
+			cairo_line_to(cr, cx, cy);
+			cairo_stroke_preserve(cr);
+
+			DB( g_print("%d: %.2f%% %.2f %.2f\n", i, sum / chart->total, a1, a2) );
+
+			//g_print("color : %f %f %f\n", COLTOCAIRO(colors[i].r), COLTOCAIRO(colors[i].g), COLTOCAIRO(colors[i].b));
+
+			color = chart->id[i]%NUM_COLORMAP_MAX;
+
+			alpha = (i == chart->active) ? (1.0 - OVER_ALPHA) : 1.0;	
+			cairo_set_source_rgba(cr, COLTOCAIRO(colors[color].r), COLTOCAIRO(colors[color].g), COLTOCAIRO(colors[color].b), alpha); 
+
+			cairo_fill(cr);
+
+		}	
+
+
+#if SOFT_LIGHT == 1
+	a1 = 0;
+	a2 = 2 * M_PI;
+
+	pat1 = cairo_pattern_create_radial( cx, cy, 0,
+		cx, cy, radius);
+		
+	cairo_pattern_add_color_stop_rgba(pat1, 0.0, 1.0, 1.0, 1.0, .33);
+	cairo_pattern_add_color_stop_rgba(pat1, 1.0, 1.0, 1.0, 1.0, 0.0);			
+	
+	cairo_arc(cr, cx, cy, 
+			radius, a1, a2);
+	 cairo_set_source(cr, pat1);
+	cairo_fill(cr);
+#endif
+
+#if GRADIENT == 1
+	a1 = 0;
+	a2 = 2 * M_PI;
+	double gradius = radius - 8;
+
+	// start point, end point
+	pat1 = cairo_pattern_create_linear(cx, cy-gradius, cx, cy+gradius);
+
+	cairo_pattern_add_color_stop_rgba(pat1, 0.0, 1.0, 1.0, 1.0, .15);
+	cairo_pattern_add_color_stop_rgba(pat1, 1.0, 1.0, 1.0, 1.0, 0.0);			
+	
+	//debug
+	//cairo_rectangle(cr, 	cx-radius, cy-radius, radius*2, radius*2);
+	
+	cairo_arc(cr, cx, cy, gradius, a1, a2);
+
+
+	 cairo_set_source(cr, pat1);
+	cairo_fill(cr);
+
+#endif
+	
+		cairo_destroy(cr);
+		}
 
 }
 
@@ -1296,21 +1642,21 @@ GtkChart *chart = GTK_CHART(user_data);
 
 /* global widget function */
 
-
+/*
 static gboolean chart_map( GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
-GtkChart *chart = GTK_CHART(user_data);
+//GtkChart *chart = GTK_CHART(user_data);
 
 	DB( g_print("\n(gtkchart) map\n") );
 
-	/* our colors */
+	// our colors
 	//chart_setup_colors(widget, chart);
 
 	DB( g_print("** end map\n") );
 
 	return TRUE;
 }
-
+*/
 
 static gboolean chart_expose( GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 {
@@ -1325,13 +1671,31 @@ GdkGC	*gc1;
 
 	DB( g_print("\n(gtkchart) expose %d\n", chart->type) );
 
+cairo_t *cr;
+	cr = gdk_cairo_create (widget->window);
+
+	/* fillin the back in whithe */
+	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+	cairo_paint(cr);
+
+	/*debug help draws */
+#if HELPDRAW == 1
+		cairo_set_source_rgba(cr, 1.0, .0, .0, .5);
+		cairo_rectangle(cr, MARGIN, MARGIN, chart->w, chart->h);
+		cairo_stroke(cr);
+#endif
+
+	cairo_destroy(cr);
+	
+/*
 	gdk_draw_rectangle (widget->window,
-		      widget->style->white_gc,
+		      //widget->style->white_gc,
+				widget->style->base_gc[widget->state],		      
 		      TRUE,
 		      0, 0,
 		      widget->allocation.width,
 		      widget->allocation.height);
-
+*/
 	gc1 = gdk_gc_new(widget->window);
 
 	switch(chart->type)
@@ -1339,10 +1703,12 @@ GdkGC	*gc1;
 		case CHART_BAR_TYPE:
 			barchart_draw_scale(widget, gc1, chart);
 			barchart_draw_bars(widget, gc1, chart);
+			barchart_draw_scale_text(widget, gc1, chart);
 			break;
 		case CHART_LINE_TYPE:
 			barchart_draw_scale(widget, gc1, chart);
 			linechart_draw_lines(widget, gc1, chart);
+			barchart_draw_scale_text(widget, gc1, chart);
 			break;
 		case CHART_PIE_TYPE:
 			piechart_draw_slices(widget, gc1, chart);
@@ -1527,6 +1893,23 @@ GtkChart *chart = GTK_CHART(user_data);
 	return TRUE;
 }
 
+static gboolean
+chart_tooltip_paint_window (GtkWidget *window)
+{
+  gtk_paint_flat_box (window->style,
+		      window->window,
+		      GTK_STATE_NORMAL,
+		      GTK_SHADOW_OUT,
+		      NULL,
+		      window,
+		      "tooltip",
+		      0, 0,
+		      window->allocation.width,
+		      window->allocation.height);
+
+  return FALSE;
+}
+
 static gint chart_tooltip_timeout (gpointer data)
 {
 GtkChart *chart = GTK_CHART(data);
@@ -1575,10 +1958,11 @@ static void chart_tooltip_hide(GtkChart *chart)
 
 static void chart_tooltip_show(GtkChart *chart, gint xpos, gint ypos)
 {
-GtkWidget *window, *frame, *vbox, *label;
+GtkWidget *window, *vbox, *label;
 GtkRequisition req;
 gint active;
 gchar *strval, *buffer;
+GtkWidget *alignment;
 
 	DB( g_print("\n(gtkchart) tooltip show\n") );
    	DB( g_print(" x=%d, y=%d\n", xpos, ypos) );
@@ -1586,19 +1970,33 @@ gchar *strval, *buffer;
 	if(!chart->tooltipwin)
 	{
 		window = gtk_window_new (GTK_WINDOW_POPUP);
-		//gtk_tooltips_update_screen (tooltips, TRUE);
+		gtk_window_set_type_hint (GTK_WINDOW (window),
+			GDK_WINDOW_TYPE_HINT_TOOLTIP);
 		gtk_widget_set_app_paintable (window, TRUE);
 		gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-		gtk_widget_set_name (window, "gtk-tooltips");
+		gtk_widget_set_name (window, "gtk-tooltip");
 
-		frame = gtk_frame_new(NULL);
-	    gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
-		gtk_container_add (GTK_CONTAINER (window), frame);
+		alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+		gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
+			     window->style->ythickness,
+			     window->style->ythickness,
+			     window->style->xthickness,
+			     window->style->xthickness);
+		gtk_container_add (GTK_CONTAINER (window), alignment);
+		gtk_widget_show (alignment);
+
+		g_signal_connect_swapped (window, "expose_event",
+			G_CALLBACK (chart_tooltip_paint_window), window);
+
+		//frame = gtk_frame_new(NULL);
+	    //gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_OUT);
+		//gtk_container_add (GTK_CONTAINER (window), frame);
 		//gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
-		gtk_widget_show(frame);
+		//gtk_widget_show(frame);
 		
-		vbox = gtk_vbox_new (FALSE, 0);
-		gtk_container_add( GTK_CONTAINER(frame), vbox);
+		vbox = gtk_vbox_new (FALSE, window->style->xthickness);
+		//gtk_container_add( GTK_CONTAINER(frame), vbox);
+		gtk_container_add (GTK_CONTAINER (alignment), vbox);
 		gtk_widget_show(vbox);
 		
 		label = gtk_label_new (NULL);

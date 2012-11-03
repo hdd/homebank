@@ -3,15 +3,10 @@
 data/homebank.desktop.in.in
 
 # Main application
-src/data_access.c
-src/def_account.c
 src/def_archive.c
 src/def_budget.c
-src/def_category.c
 src/def_filter.c
-src/def_lists.c
 src/def_operation.c
-src/def_payee.c
 src/def_pref.c
 src/def_wallet.c
 src/dsp_account.c
@@ -28,6 +23,9 @@ src/rep_budget.c
 src/rep_car.c
 src/rep_over.c
 src/rep_stats.c
+src/ui_account.c
+src/ui_category.c
+src/ui_payee.c
 src/widgets.c
 src/xml.c
 

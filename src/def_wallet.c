@@ -1,25 +1,27 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 #include "homebank.h"
 
 #include "def_wallet.h"
+#include "ui_category.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -41,37 +43,47 @@ struct defwallet_data
 	GtkWidget	*ST_owner;
 	GtkWidget	*PO_grp;
 	GtkWidget	*NU_arc;
-
-	//struct	Base base;
-	//UBYTE	tmppass[12];
-	//BOOL	check;
-	//ULONG	change;
+	gint		change;
 };
-
 
 
 /*
 ** get widgets contents from the selected account
 */
-void defwallet_get(GtkWidget *widget, gpointer user_data)
+static void defwallet_get(GtkWidget *widget, gpointer user_data)
 {
 struct defwallet_data *data;
-gchar *txt;
+gchar	*owner;
+gint	car;
+gint	days;
 
 	DB( g_printf("(defwallet) get\n") );
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
-	txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_owner));
-	// ignore if entry is empty
-	if (txt && *txt)
+	// get values
+	owner = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_owner));
+	car   = ui_cat_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_grp));
+	days  = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->NU_arc));
+
+	// check for changes
+	if(strcasecmp(owner, GLOBALS->title)) data->change++;
+	if(car != GLOBALS->car_category) data->change++;
+	if(days != GLOBALS->auto_nbdays) data->change++;
+
+	// update
+	if (owner && *owner)
 	{
 		g_free(GLOBALS->title);
-		GLOBALS->title = g_strdup(txt);
+		GLOBALS->title = g_strdup(owner);
 	}
+	GLOBALS->car_category = car;
+	GLOBALS->auto_nbdays  = days;
 
-	GLOBALS->car_category = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_grp));
-	GLOBALS->auto_nbdays  = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->NU_arc));
+	DB( g_printf(" -> owner %s\n", GLOBALS->title) );
+	DB( g_printf(" -> ccgrp %d\n", GLOBALS->car_category) );
+	DB( g_printf(" -> autoinsert %d\n", GLOBALS->auto_nbdays) );
+
 }
 
 
@@ -79,7 +91,7 @@ gchar *txt;
 /*
 ** set widgets contents from the selected account
 */
-void defwallet_set(GtkWidget *widget, gpointer user_data)
+static void defwallet_set(GtkWidget *widget, gpointer user_data)
 {
 struct defwallet_data *data;
 
@@ -93,7 +105,7 @@ struct defwallet_data *data;
 
 
 	if(GLOBALS->title) gtk_entry_set_text(GTK_ENTRY(data->ST_owner), GLOBALS->title);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_grp), GLOBALS->car_category);
+	ui_cat_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_grp), GLOBALS->car_category);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->NU_arc), GLOBALS->auto_nbdays);
 
 
@@ -102,7 +114,7 @@ struct defwallet_data *data;
 /*
 **
 */
-gboolean defwallet_cleanup(struct defwallet_data *data, gint result)
+static gboolean defwallet_cleanup(struct defwallet_data *data, gint result)
 {
 gboolean doupdate = FALSE;
 
@@ -110,10 +122,15 @@ gboolean doupdate = FALSE;
 
 	if(result == GTK_RESPONSE_ACCEPT)
 	{
-		DB( g_printf(" we always update our glist\n") );
-
 		defwallet_get(data->ST_owner, NULL);
-		GLOBALS->change++;
+
+
+		DB( g_printf(" -> GLOBAL change = %d\n", GLOBALS->change) );
+
+		DB( g_printf(" -> we update, change = %d\n", data->change) );
+
+
+		GLOBALS->change += data->change;
 	}
 	return doupdate;
 }
@@ -121,11 +138,13 @@ gboolean doupdate = FALSE;
 /*
 **
 */
-void defwallet_setup(struct defwallet_data *data)
+static void defwallet_setup(struct defwallet_data *data)
 {
 	DB( g_printf("(defwallet) setup\n") );
 
-	make_popcategory_populate(GTK_COMBO_BOX(data->PO_grp), GLOBALS->cat_list);
+	data->change = 0;
+
+	ui_cat_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_grp), GLOBALS->h_cat);
 
 	defwallet_set(data->ST_owner, NULL);
 
@@ -143,8 +162,7 @@ GtkWidget *alignment;
 gint row;
 
       window = gtk_dialog_new_with_buttons (_("Wallet properties"),
-				//GTK_WINDOW (do_widget),
-				NULL,
+				GTK_WINDOW(GLOBALS->mainwindow),
 				0,
 				GTK_STOCK_CANCEL,
 				GTK_RESPONSE_REJECT,
@@ -216,7 +234,7 @@ gint row;
 	row++;
 	label = make_label(_("_Category:"), 0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-	combo = make_popcategory(label);
+	combo = ui_cat_comboboxentry_new(label);
 	data.PO_grp = combo;
 	gtk_table_attach (GTK_TABLE (table), combo, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 

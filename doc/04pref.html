@@ -1,325 +1,339 @@
-<html>
-<head>
-  <title>Settings</title>
-  <meta name="Generator" content="GuideML 2.2">
-  <meta http-equiv="Content-Type" content="text/html">
-  <link rel="stylesheet" href="help.css">
-</head>
-<body bgcolor="#ffffff">
-<a name="top"></a>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td>&nbsp;</td>
-    <td width="27"><a href="main.html"><img src="images/home.gif" width="27" height="27" border="0"></a></td>
-    <td width="27"><a href="99filt.html"><img src="images/prev.gif" width="27" height="27" border="0"></a></td>
-    <td width="27"><a href="05stat.html"><img src="images/next.gif" width="27" height="27" border="0"></a></td>
-  </tr>
-</table>
-<hr size="1">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Settings</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY ><A NAME="top"></A>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<TR>
+		<TD WIDTH=27>
+			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="99filt.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="05stat.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=1>
+<H2>Preferences dialog</H2>
+<P>The preferences dialog can be accessed from the main window menu,
+as Edit-&gt;Preferences. It lets you customize many aspects of the
+way HomeBank works. The following sections detail the settings that
+you can customize, and what they affect.
+</P>
+<P>Go to:
+<A HREF="#tab1">General</A>, 
+<A HREF="#tab2">Interface</A>,
+<A HREF="#tab3">Columns</A>,
+<A HREF="#tab4">Display format</A>, 
+<A HREF="#tab5">Euro options</A>, 
+<A HREF="#tab6">Report options</A>
+</P>
 
-<h2>Preferences dialog</h2>
+<!-- separator -->
+<div class="clear"></div>
+<H3><A NAME="tab1"></A>:: General tab</H3> 
+
+ 
+
 
 <div class="gtkshot">
-<img src="images/04prefs1.png">
+	<IMG SRC="images/04prefs1.png">
 </div>
 
-<p>
-The preferences dialog can be accessed from the mainwindow menu, as Edit->Preferences.
-It lets you customize many aspects of the way HomeBank works.
-The following sections detail the settings that you can customize, and what they affect.
+<H4>Folders</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">Wallet</TD>
+		<td class="winfo">default folder to load/save homebank files</TD>
+	</TR>
+	<TR>
+		<td class="wname">Import</TD>
+		<td class="winfo">default folder to load files to import</TD>
+	</TR>
+	<TR>
+		<td class="wname">Export</TD>
+		<td class="winfo">default folder to save files to export</TD>
+	</TR>
+</TABLE>
+
+<H4>Initial date filter</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">Range</TD>
+		<td class="winfo">default range initial value to be used everywhere in Homebank</TD>
+	</TR>
+</TABLE>
+
+<H4>Start behaviour</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">Load last opened file</TD>
+		<td class="winfo">load the last opened file when HomeBank start</TD>
+	</TR>
+</TABLE>
+
+<!-- separator -->
+<div class="clear"></div>
+
+<H3><A NAME="tab2"></A>:: Interface tab</H3>
+ 
+</P>
+<div class="gtkshot">
+	<IMG SRC="images/04prefs2.png">
+</div>
+<H4>General</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Toolbar</P>
+		</TD>
+		<td class="winfo">
+			<P>toolbar style to be used
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<H4>Amount colors</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Expense</P>
+		</TD>
+		<td class="winfo">
+			<P>color used for expense
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>Income</P>
+		</TD>
+		<td class="winfo">
+			<P>color used for incomes
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>Warning</P>
+		</TD>
+		<td class="winfo">
+			<P>color used for amount in warning (overdrawn)
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+
+<!-- separator -->
+<div class="clear"></div>
+<H3><A NAME="tab3"></A>:: Columns tab</H3>
+ 
+</P>
+<div class="gtkshot">
+	<IMG SRC="images/04prefs3.png">
+</div>
+<H4>Transaction list</H4>
+<P>
+Here you can show/hide columns to be displayed in transaction list.
+
 </p>
-<p>
-	Go to:
-	<a href="#tab1">General</a>,
-	<a href="#tab2">Interface</a>,
-	<a href="#tab3">Display format</a>,
-	<a href="#tab4">Help system</a>,
-	<a href="#tab5">Euro options</a>,
-	<a href="#tab5">Report options</a>
+
+<!-- separator -->
+<div class="clear"></div>
 
 
-</p>
+<H3><A NAME="tab4"></A>:: Display format tab</H3>
+ 
+</P>
+<div class="gtkshot">
+	<IMG SRC="images/04prefs4.png">
+</div>
+<H4>Date options</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Date format</P>
+		</TD>
+		<td class="winfo">
+			<P>display format used for date
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">&nbsp;</TD>
+		<td class="winfo">A date sample is displayed</TD>
+	</TR>
+</TABLE>
 
+<H4>Numbers options</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">Prefix symbol</TD>
+		<td class="winfo">Symbol that prefix the amount</TD>
+	</TR>
+	<TR>
+		<td class="wname">Suffix symbol</TD>
+		<td class="winfo">Symbol that suffix the amount</TD>
+	</TR>
+	<TR>
+		<td class="wname">Decimal char</TD>
+		<td class="winfo">Character to be used as decimal separator</TD>
+	</TR>
+	<TR>
+		<td class="wname">Grouping char</TD>
+		<td class="winfo">Character to be used as grouping separator</TD>
+	</TR>
+	<TR>
+		<td class="wname">Frac digits</TD>
+		<td class="winfo">Number of digits after decimal separator</TD>
+	</TR>
+	<TR>
+		<td class="wname">&nbsp;</TD>
+		<td class="winfo">An amount sample is displayed</TD>
+	</TR>
+</TABLE>
 
-<a name="tab1">
-<h3>General tab</h3>
-<a href="#top">top</a>
+<H4>Measurement units</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Use Imperial units</P>
+		</TD>
+		<td class="winfo">
+			<P>future: amiga not implemented yet.
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+
+<!-- separator -->
+<div class="clear"></div>
+
+<H3><A NAME="tab5"></A>:: Euro options tab</H3>
+ 
+</P>
+<div class="gtkshot">
+	<IMG SRC="images/04prefs5.png" >
+</div>
+<H4>General</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Enable</P>
+		</TD>
+		<td class="winfo">
+			<P>enable euro minor currency support in HomeBank.<BR>see <A HREF="02minor.html">minor
+			currency</A> for more details.
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>Fill from</P>
+		</TD>
+		<td class="winfo">
+			preselect of parameters for this tab
+			
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			Country
+		</TD>
+		<td class="winfo">
+			remind of the filled country from
+			</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			Value
+		</TD>
+		<td class="winfo">
+			change rate, value of 1 euro in your old country currency
+			
+		</TD>
+	</TR>
+</TABLE>
+<H4>Numbers format</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			Frac digits
+		</TD>
+		<td class="winfo">
+			<P>number of digits for decimal numbers
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			Thousand separator
+		</TD>
+		<td class="winfo">
+			separate thousands with a separator
+			
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			Symbol
+		</TD>
+		<td class="winfo">
+			old symbol of your country currency
+			
+		</TD>
+	</TR>
+</TABLE>
+
+<!-- separator -->
+<div class="clear"></div>
+
+<H3><A NAME="tab6"></A>:: Report options tab</H3>
+ 
 
 <div class="gtkshot">
-<img src="images/04prefs2.png">
+	<IMG SRC="images/04prefs6.png" N>
 </div>
+<H4>Statistics options</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			Show by amount
+		</TD>
+		<td class="winfo">
+			set the by amount toggle on the statistics window to default be
+			checked
+			
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			Show details
+		</TD>
+		<td class="winfo">
+			set the detail toggle on the statistics window to default be
+			checked
+			
+		</TD>
+	</TR>
+</TABLE>
+<H4>Budget options</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">Show details</TD>
+		<td class="winfo">
+			set the detail toggle on the budget window to default be
+			checked
+			
+		</TD>
+	</TR>
+</TABLE>
 
-<h4>Folders</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Wallet</td>
-      <td class="winfo">
-      default folder to load/save homebank files
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-<h4>Initial date filter</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Range</td>
-      <td class="winfo">
-      default range init value to be used everywhere in Homebank
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-
-
-<a name="tab2"></a>
-<h3>Interface tab</h3>
-<a href="#top">top</a>
-
-<div class="gtkshot">
-<img src="images/04prefs3.png">
-</div>
-
-<h4>General</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Toolbar</td>
-      <td class="winfo">
-      toolbar style to be used
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-<h4>Amount colors</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Expense</td>
-      <td class="winfo">
-      color used for expense
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Income</td>
-      <td class="winfo">
-      color used for incomes
-      </td>
-    </tr>
-     <tr>
-      <td class="wname">Warning</td>
-      <td class="winfo">
-      color used for amount in warning (overdrawn)
-      </td>
-    </tr>
-   </table>
-
-</div>
-
-
-<a name="tab3"></a>
-<h3>Display format tab</h3>
-<a href="#top">top</a>
-
-<div class="gtkshot">
-<img src="images/04prefs4.png">
-</div>
-
-<h4>Date options</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Date format</td>
-      <td class="winfo">
-      display format used for date
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-<h4>Numbers options</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Frac digits</td>
-      <td class="winfo">
-      number of digits for decimal numbers
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Thousand separator</td>
-      <td class="winfo">
-      separate thounsands with a separator
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-<h4>Measure units</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Use british units</td>
-      <td class="winfo">
-      future: amiga not implemented yet.
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-
-<a name="tab4"></a>
-<h3>help system tab</h3>
-<a href="#top">top</a>
-
-<div class="gtkshot">
-<img src="images/04prefs5.png">
-</div>
-
-<h4>Web navigator</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Web navigator to use</td>
-      <td class="winfo">
-      The navigator to lanch when you request for help to be launched
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-
-<a name="tab5"></a>
-<h3>Euro options tab</h3>
-<a href="#top">top</a>
-
-<div class="gtkshot">
-<img src="images/04prefs6.png">
-</div>
-
-<h4>General</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Enable</td>
-      <td class="winfo">
-      enable euro minor currency support in HomeBank.<br>
-      see <a href="02minor.html">minor currency</a> for more details.
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Fill from</td>
-      <td class="winfo">
-      preselection of parameters for this tab
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Country</td>
-      <td class="winfo">
-      remind of the filled country from
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Value</td>
-      <td class="winfo">
-      change rate, value of 1 euro in your old country currency
-      </td>
-    </tr>
-
-  </table>
-
-</div>
-
-<h4>Numbers format</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Frac digits</td>
-      <td class="winfo">
-      number of digits for decimal numbers
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Thousand separator</td>
-      <td class="winfo">
-      separate thounsands with a separator
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Symbol</td>
-      <td class="winfo">
-      old symbol of your country currency
-      </td>
-    </tr>
-   </table>
-
-</div>
-
-
-
-<a name="tab6"></a>
-<h3>Report options tab</h3>
-<a href="#top">top</a>
-
-<div class="gtkshot">
-<img src="images/04prefs7.png">
-</div>
-
-<h4>Statistics options</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Show by amount</td>
-      <td class="winfo">
-      set the by amount toggle on the statistics window to default be checked
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">Show details</td>
-      <td class="winfo">
-      set the detail toggle on the statistics window to default be checked
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-<h4>Budget options</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Show details</td>
-      <td class="winfo">
-      set the detail toggle on the budget window to default be checked
-      </td>
-    </tr>
-  </table>
-
-</div>
-
-
-</body>
-</html>
+</BODY>
+</HTML>

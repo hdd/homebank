@@ -49,7 +49,7 @@ view_list.svg \
 view_pie.svg \
 splash.png \
 lpi-help.png \
-lpi-translate.png \
-lpi-bug.png
+lpi-translate.svg \
+lpi-bug.svg
 
 EXTRA_DIST   = $(pixmaps_DATA) $(images_DATA)

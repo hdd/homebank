@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>What's new in v4.0</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY >
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=27>
+			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="main.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="02intro.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=1 COLOR="#000000">
+<H2>New features in v4.0</H2>
+<UL>
+	<LI> <A HREF="#qif">QIF file
+	import/export</A>
+	<LI> <A HREF="#add">Direct add of
+	Payee/Categories</A>
+	<LI> <A HREF="#auto">Auto completion</A>
+	<LI> <A HREF="#tags">Tags for
+	transaction</A>
+	<LI> <A HREF="#charts">Charts using
+	cairo graphics library</A>
+	<LI> <A HREF="#date">Enter date
+	improvement</A>
+	<LI><A HREF="#import">Reworked import process</A>
+</UL>
+
+<H3><A NAME="qif"></A><!-- = = = = separator = = = = -->:: QIF file
+import/export</H3>
+<P>QIF - Quicken Interchange Format is now supported It is now
+possible to import QIF file, and also to export as QIF file.<BR>This
+new features are accessible from the 'File' menu.</P>
+
+<H3><A NAME="add"></A><!-- = = = = separator = = = = -->:: Direct add
+of Payee/Categories</H3>
+<P>Direct add of Payee/Categories is and ow available in the
+transaction dialog.<BR>For example if you need to insert a category,
+you can saise directly: 'Car'.<BR>And if you need to insert a
+subcategory, you can saise: 'Car:Fuel'
+</P>
+
+<H3><A NAME="auto"></A><!-- = = = = separator = = = = -->:: Auto
+completion</H3>
+ Auto completion is now available in the
+transaction window for the following widgets:<BR>Payee, Category, and
+also for Description.
+</P>
+<P><IMG SRC="images/00import5.png">
+</P>
+<H3><A NAME="tags"></A><!-- = = = = separator = = = = -->:: Tags for
+transactions</H3>
+<P>The transaction now also provide a 'Tags' field which enable a new
+classification and report axis.<BR>Tags will also be displayed in the
+transactions list, and the report will be availbale in the statictics
+report window.<BR>With that new feature, a same transaction can be
+assigned to several 'group' which may be useful sometimes.
+</P>
+<H3><A NAME="charts"></A><!-- = = = = separator = = = = -->:: Charts
+using cairo graphics library</H3>
+ The HomeBank graphics charts were
+rewritten using cairo graphics library (used and included in
+GTK+):<BR>Also when the x-axis represent a portion of time (day,
+month, or year), then some x-legend is displayed.
+</P>
+<P><IMG SRC="images/00import6.png">
+</P>
+<H3><A NAME="date"></A><!-- = = = = separator = = = = -->:: Enter
+date improvement</H3>
+<P>The date widget was improved you can now enter date as follow:
+</P>
+<UL>
+	<LI> [day]<BR>a single number will be
+	recognized to day number of current month<BR>entering '15' to set
+	the date to the 15th of the current month
+
+	<LI> [day/month] or
+	[month/day]<BR>according to your country date format
+
+	<LI> [complete date]<BR>according to your country date format
+
+</UL>
+
+<H3><A NAME="import"></A><!-- = = = = separator = = = = -->::
+Reworked import process</H3>
+
+<H4>Step 2: File selection</H4>
+ The format recognition indicator is now
+more visible:</P>
+<P><IMG SRC="images/00import1.png"></P>
+<P><IMG SRC="images/00import2.png"></P>
+
+
+<H4>Step 3: File content</H4>
+<P>The file to be imported is analyzed and inform you about the
+number of:<BR>accounts, transactions, payees, categories.<BR><BR>When
+the file do not contains an explicit named account, you can choose:
+</P>
+<UL>
+	<LI> to create a new account
+	<LI>to affect the transactions to an existing account
+</UL>
+
+<H4>Step 4: Transaction selection</H4>
+ The duplicate match option is now
+displayed above the transaction list:</P>
+<P><IMG SRC="images/00import4.png">
+</P>
+</BODY>
+</HTML>

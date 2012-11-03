@@ -1,0 +1,1928 @@
+# Hellenic translation for homebank
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the homebank package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: homebank\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-13 23:35+0200\n"
+"PO-Revision-Date: 2008-03-21 23:09+0000\n"
+"Last-Translator: christosvas <christosvas@in.gr>\n"
+"Language-Team: Hellenic <christosvas@in.gr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-11-22 13:12+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"X-Poedit-Country: GREECE\n"
+"X-Poedit-Language: Greek\n"
+
+#. "translator-credits"	, "trans",
+#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:720
+msgid "Free, easy, personal accounting for everyone."
+msgstr "Δωρεάν, εύκολο, πρόγραμμα προσωπικών οικονομικών για όλους."
+
+#: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:29
+msgid "HomeBank"
+msgstr "HomeBank"
+
+#: ../src/def_archive.c:114
+msgid "Day"
+msgstr "Ημέρα"
+
+#: ../src/def_archive.c:114
+msgid "Week"
+msgstr "Εβδομάδα"
+
+#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+msgid "Month"
+msgstr "Μήνας"
+
+#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+msgid "Year"
+msgstr "Έτος"
+
+#: ../src/def_archive.c:139 ../src/dsp_account.c:659
+msgid "(new archive)"
+msgstr "(νέο αρχείο)"
+
+#: ../src/def_archive.c:603
+msgid "Manage Archives"
+msgstr ""
+
+#: ../src/def_archive.c:667
+msgid "<b>General infos</b>"
+msgstr "<b>Γενικές Πληροφορίες</b>"
+
+#: ../src/def_archive.c:675
+msgid "_Wording:"
+msgstr "_Διατύπωση"
+
+#: ../src/def_archive.c:683 ../src/def_operation.c:684
+msgid "_Amount:"
+msgstr "_Ποσό"
+
+#: ../src/def_archive.c:699 ../src/def_operation.c:700 ../src/import.c:1725
+#: ../src/rep_over.c:621
+msgid "A_ccount:"
+msgstr "_Λογαριασμός"
+
+#: ../src/def_archive.c:707 ../src/def_operation.c:708
+msgid "_Validated"
+msgstr "_Επικυρωμένο"
+
+#: ../src/def_archive.c:715
+msgid "<b>Optional infos</b>"
+msgstr "<b>Προαιρετικές πληροφορίες</b>"
+
+#: ../src/def_archive.c:719 ../src/def_operation.c:740
+msgid "Pay_ment:"
+msgstr "_Πληρωμή"
+
+#: ../src/def_archive.c:738 ../src/def_operation.c:759
+msgid "Of notebook _2"
+msgstr "Του σημειωματαρίου_2"
+
+#: ../src/def_archive.c:744 ../src/def_operation.c:765
+msgid "_To account:"
+msgstr "_Στο λογαριασμό:"
+
+#: ../src/def_archive.c:751 ../src/def_operation.c:781
+msgid "_Payee:"
+msgstr "_δικαιούχος:"
+
+#: ../src/def_archive.c:759 ../src/def_operation.c:791 ../src/def_wallet.c:235
+msgid "_Category:"
+msgstr "_Κατηγορία:"
+
+#: ../src/def_archive.c:771
+msgid "<b>Automated insertion</b>"
+msgstr "<b>Αυτόματη εισαγωγή</b>"
+
+#: ../src/def_archive.c:775
+msgid "_Activate"
+msgstr "_Ενεργοποίηση"
+
+#: ../src/def_archive.c:782
+msgid "_Limit to:"
+msgstr "_Περιορισμός στο:"
+
+#: ../src/def_archive.c:790
+msgid "t_imes"
+msgstr "_φορές"
+
+#: ../src/def_archive.c:795
+msgid "Ever_y:"
+msgstr "_Κάθε:"
+
+#: ../src/def_archive.c:804
+msgid "_Unit:"
+msgstr "_Μονάδα:"
+
+#: ../src/def_archive.c:811
+msgid "_Next on:"
+msgstr "_Επόμενη:"
+
+#: ../src/def_budget.c:322 ../src/ui_category.c:866
+msgid "File format error"
+msgstr "Σφάλμα μορφής αρχείου"
+
+#: ../src/def_budget.c:323
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, read the help for more details."
+msgstr ""
+"Το αρχείο CSV πρέπει να περιέχει τον ακριβή αριθμό στηλών,\n"
+"χωρισμένες με άνω-κάτω τελεία, διαβάστε τη βοήθεια για πληροφορίες."
+
+#: ../src/def_budget.c:691
+msgid "Manage Budget"
+msgstr ""
+
+#: ../src/def_budget.c:749
+msgid "<b>Budget for each month</b>"
+msgstr "<b>Έσοδα για κάθε μήνα</b>"
+
+#: ../src/def_budget.c:757
+msgid "is the same"
+msgstr "είναι ίδια"
+
+#: ../src/def_budget.c:775
+msgid "is different"
+msgstr "είναι διαφορετικά"
+
+#: ../src/def_budget.c:806 ../src/ui_category.c:1523 ../src/ui_payee.c:895
+msgid "_Import"
+msgstr "_Εισαγωγή"
+
+#: ../src/def_budget.c:810 ../src/ui_category.c:1527 ../src/ui_payee.c:899
+msgid "E_xport"
+msgstr "Ε_ξαγωγή"
+
+#: ../src/def_budget.c:921 ../src/rep_stats.c:939 ../src/rep_stats.c:955
+#: ../src/rep_stats.c:962 ../src/ui_account.c:344 ../src/ui_category.c:187
+#: ../src/ui_category.c:441 ../src/ui_payee.c:147 ../src/ui_payee.c:319
+#: ../src/widgets.c:64
+msgid "(none)"
+msgstr "(κανένα)"
+
+#: ../src/def_filter.c:54
+msgid "Inactive"
+msgstr "Ανενεργό"
+
+#: ../src/def_filter.c:54
+msgid "Include"
+msgstr "Συμπερίληψη"
+
+#: ../src/def_filter.c:54
+msgid "Exclude"
+msgstr "Εξαιρέσεις"
+
+#: ../src/def_filter.c:801 ../src/def_filter.c:850 ../src/def_filter.c:899
+#: ../src/def_filter.c:977 ../src/def_filter.c:1072 ../src/def_filter.c:1116
+msgid "_Option:"
+msgstr "_Επιλογή:"
+
+#: ../src/def_filter.c:822 ../src/def_filter.c:871 ../src/def_filter.c:920
+msgid "All"
+msgstr "Όλα"
+
+#: ../src/def_filter.c:826 ../src/def_filter.c:875 ../src/def_filter.c:924
+msgid "None"
+msgstr "Κανένα"
+
+#: ../src/def_filter.c:830 ../src/def_filter.c:879 ../src/def_filter.c:928
+msgid "Invert"
+msgstr "Αντιστροφή"
+
+#: ../src/def_filter.c:968
+msgid "<b>Filter Date</b>"
+msgstr "<b>Φίλτρο Ημερομηνίας</b>"
+
+#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:915
+#: ../src/rep_car.c:649 ../src/rep_over.c:642 ../src/rep_stats.c:1466
+msgid "_From:"
+msgstr "_Από:"
+
+#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:921
+#: ../src/rep_car.c:656 ../src/rep_over.c:648 ../src/rep_stats.c:1472
+msgid "_To:"
+msgstr "_Έως:"
+
+#: ../src/def_filter.c:1015
+msgid "<b>Filter State</b>"
+msgstr "<b>Κατάσταση Φίλτρου</b>"
+
+#: ../src/def_filter.c:1023
+msgid "Validated:"
+msgstr "Επικυρωμένα:"
+
+#: ../src/def_filter.c:1032
+msgid "Force:"
+msgstr "Εξαναγκασμός:"
+
+#. label = gtk_label_new(NULL);
+#. ----------------------------------------- l, r, t, b
+#. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
+#: ../src/def_filter.c:1038
+msgid "display 'Added'"
+msgstr "Εμφάνιση 'Πρόσθετων'"
+
+#. label = gtk_label_new(NULL);
+#. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
+#: ../src/def_filter.c:1045
+msgid "display 'Edited'"
+msgstr "εμφάνιση 'Επεξεργασμένων'"
+
+#: ../src/def_filter.c:1064
+msgid "<b>Filter Amount</b>"
+msgstr "<b>Φίλτρο Ποσών</b>"
+
+#: ../src/def_filter.c:1107
+msgid "<b>Filter Payment</b>"
+msgstr "<b>Φίλτρο Πληρωμών</b>"
+
+#: ../src/def_filter.c:1167
+msgid "Edit Filter"
+msgstr "Επεξεργασία Φίλτρων"
+
+#. common (date + state + amount)
+#: ../src/def_filter.c:1201 ../src/def_pref.c:154
+msgid "General"
+msgstr "Γενικά"
+
+#: ../src/def_filter.c:1207 ../src/def_pref.c:1773 ../src/list_operation.c:378
+#: ../src/list_operation.c:762 ../src/rep_budget.c:1239 ../src/rep_stats.c:198
+msgid "Category"
+msgstr "Κατηγορία"
+
+#: ../src/def_filter.c:1212 ../src/def_pref.c:1768 ../src/list_operation.c:316
+#: ../src/list_operation.c:751 ../src/list_upcoming.c:172
+#: ../src/rep_stats.c:198
+msgid "Payee"
+msgstr "Δικαιούχος"
+
+#: ../src/def_filter.c:1221 ../src/list_operation.c:691
+msgid "Account"
+msgstr "Λογαριασμός"
+
+#: ../src/def_operation.c:90 ../src/dsp_wallet.c:226
+msgid "Add transaction"
+msgstr "Προσθήκη συναλλαγής"
+
+#: ../src/def_operation.c:91
+msgid "Inherit transaction"
+msgstr "Κληρονόμηση συναλλαγής"
+
+#: ../src/def_operation.c:92
+msgid "Modify transaction"
+msgstr "Μεταβολή συναλλαγής"
+
+#. warn the user we have not found the child internal transfert
+#: ../src/def_operation.c:181
+#, c-format
+msgid ""
+"Could not propagate changes to child transfert:\n"
+"\n"
+"account:  %s\n"
+"date:  %s\n"
+"amount:  %s\n"
+"\n"
+"You should fix the problem manually."
+msgstr ""
+"Αδύνατη η προώθηση αλλαγών σε θυγατρικές μεταβιβάσεις:\n"
+"\n"
+"λογαριασμός:  %s\n"
+"ημερομηνία:  %s\n"
+"ποσό:  %s\n"
+"\n"
+"Θα πρέπει να κάνετε χειροκίνητη διόρθωση."
+
+#: ../src/def_operation.c:655
+msgid "<b>General information</b>"
+msgstr ""
+"<b>\t\n"
+"<b>Γενικές πληροφορίες</b>"
+
+#: ../src/def_operation.c:663
+msgid "_Date:"
+msgstr "_Ημερομηνία:"
+
+#: ../src/def_operation.c:671
+msgid ""
+"Date accepted here are:\n"
+"day,\n"
+"day/month or month/day,\n"
+"and complete date into your locale"
+msgstr ""
+
+#: ../src/def_operation.c:674
+msgid "_Description:"
+msgstr "_Περιγραφή:"
+
+#: ../src/def_operation.c:713
+msgid "_Remind"
+msgstr "_Υπενθύμιση"
+
+#: ../src/def_operation.c:732
+msgid "<b>Optional information</b>"
+msgstr "<b>Προαιρετικές πληροφορίες</b>"
+
+#: ../src/def_operation.c:772
+msgid "_Info:"
+msgstr "_Πληροφορίες:"
+
+#: ../src/def_operation.c:788
+msgid ""
+"Autocompletion and direct saise\n"
+"is available for Payee"
+msgstr ""
+
+#: ../src/def_operation.c:798
+msgid ""
+"Autocompletion and direct saise\n"
+"is available for Category"
+msgstr ""
+
+#: ../src/def_operation.c:801
+msgid "_Tags:"
+msgstr ""
+
+#: ../src/def_operation.c:906
+msgid "_Fill with archive:"
+msgstr "_Γέμισμα με αρχείο:"
+
+#: ../src/def_pref.c:155
+msgid "Interface"
+msgstr "Διεπαφή"
+
+#: ../src/def_pref.c:156
+msgid "Columns"
+msgstr "Στήλες"
+
+#: ../src/def_pref.c:157
+msgid "Display format"
+msgstr "Μορφή εμφάνισης"
+
+#. N_("Help system"),
+#: ../src/def_pref.c:159
+msgid "Euro options"
+msgstr "Επιλογές Ευρώ"
+
+#: ../src/def_pref.c:160
+msgid "Report options"
+msgstr "Επιλογές αναφοράς"
+
+#: ../src/def_pref.c:165
+msgid "System defaults"
+msgstr "Προκαθορισμένα συστήματος"
+
+#: ../src/def_pref.c:166
+msgid "Icons only"
+msgstr "Μόνο εικονίδια"
+
+#: ../src/def_pref.c:167
+msgid "Text only"
+msgstr "Μόνο κείμενο"
+
+#: ../src/def_pref.c:168
+msgid "Text under icons"
+msgstr "Κείμενο κάτω από τα εικονίδια"
+
+#: ../src/def_pref.c:169
+msgid "Text beside icons"
+msgstr "Κείμενο δίπλα από τα εικονίδια"
+
+#: ../src/def_pref.c:762
+msgid "<b>Statistics options</b>"
+msgstr "<b>Επιιλογές στατιστικών</b>"
+
+#: ../src/def_pref.c:770
+msgid "Show by _amount"
+msgstr "Εμφάνιση με βάση το _Ποσό"
+
+#: ../src/def_pref.c:775
+msgid "Show _rate column"
+msgstr "Εμφάνιση με βάση την _Αξία"
+
+#: ../src/def_pref.c:780 ../src/def_pref.c:790
+msgid "Show _details"
+msgstr "Εμφάνιση _λεπτομερειών"
+
+#: ../src/def_pref.c:786
+msgid "<b>Budget options</b>"
+msgstr "<b>Επιλογές Εσόδων</b>"
+
+#: ../src/def_pref.c:819 ../src/def_pref.c:1181 ../src/def_wallet.c:195
+msgid "<b>General</b>"
+msgstr "<b>Γενικά</b>"
+
+#: ../src/def_pref.c:828
+msgid "Fill from:"
+msgstr "Γέμισμα από:"
+
+#: ../src/def_pref.c:837
+msgid "Country:"
+msgstr "Χώρα:"
+
+#: ../src/def_pref.c:846
+msgid "Value:"
+msgstr "Αξία:"
+
+#: ../src/def_pref.c:856
+msgid "<b>Numbers format</b>"
+msgstr "<b>Μορφή αριθμών</b>"
+
+#: ../src/def_pref.c:860 ../src/def_pref.c:1016
+msgid "Prefix symbol:"
+msgstr "Σύμβολο Προθέματος:"
+
+#: ../src/def_pref.c:867 ../src/def_pref.c:1023
+msgid "Suffix symbol:"
+msgstr "Σύμβολο κατάληξης:"
+
+#: ../src/def_pref.c:874 ../src/def_pref.c:1030
+msgid "Decimal char:"
+msgstr "Σύμβολο υποδιαστολής:"
+
+#: ../src/def_pref.c:881 ../src/def_pref.c:1037
+msgid "Grouping char:"
+msgstr "Σύμβολο χιλιάδων:"
+
+#: ../src/def_pref.c:888 ../src/def_pref.c:1044
+msgid "_Frac digits:"
+msgstr "_Δεκαδικά ψηφία:"
+
+#: ../src/def_pref.c:987
+msgid "<b>Date options</b>"
+msgstr "<b>Επιλογές ημερομηνίας</b>"
+
+#: ../src/def_pref.c:995
+msgid "_Date format:"
+msgstr "_Μορφή ημερομηνίας:"
+
+#: ../src/def_pref.c:1012
+msgid "<b>Numbers options</b>"
+msgstr "<b>Μορφή αριθμών</b>"
+
+#: ../src/def_pref.c:1075
+msgid "<b>Measurement units</b>"
+msgstr "<b>Μονάδες μέτρησης</b>"
+
+#: ../src/def_pref.c:1079
+msgid "Use _Imperial units"
+msgstr ""
+
+#: ../src/def_pref.c:1105
+msgid "<b>Transaction list</b>"
+msgstr "<b>Λίστα συναλλαγών</b>"
+
+#: ../src/def_pref.c:1185
+msgid "_Toolbar:"
+msgstr "_Εργαλειοθήκη:"
+
+#: ../src/def_pref.c:1209
+msgid "<b>Amount colors</b>"
+msgstr "<b>Χρώματα ποσών</b>"
+
+#: ../src/def_pref.c:1213
+msgid "_Expense:"
+msgstr "_Δαπάνες:"
+
+#: ../src/def_pref.c:1223
+msgid "_Income:"
+msgstr "_Εισόδημα:"
+
+#: ../src/def_pref.c:1233
+msgid "_Warning:"
+msgstr "_Προειδοποίηση:"
+
+#: ../src/def_pref.c:1262
+msgid "<b>Folders</b>"
+msgstr "<b>Φάκελοι</b>"
+
+#: ../src/def_pref.c:1270
+msgid "_Wallet:"
+msgstr "_Πορτοφόλι:"
+
+#: ../src/def_pref.c:1286
+msgid "_Import:"
+msgstr "_Εισαγωγή:"
+
+#: ../src/def_pref.c:1302
+msgid "_Export:"
+msgstr ""
+
+#: ../src/def_pref.c:1320
+msgid "_Run the wizard"
+msgstr "_Εκτέλεση οδηγού"
+
+#: ../src/def_pref.c:1329
+msgid "<b>Initial date filter</b>"
+msgstr "<b>Φίλτρο αρχικής ημερομηνίας</ b>"
+
+#: ../src/def_pref.c:1333 ../src/dsp_account.c:2034 ../src/rep_budget.c:927
+#: ../src/rep_car.c:662 ../src/rep_over.c:654 ../src/rep_stats.c:1478
+msgid "_Range:"
+msgstr "_Περιοχή:"
+
+#: ../src/def_pref.c:1343
+msgid "<b>Start behaviour</b>"
+msgstr ""
+
+#: ../src/def_pref.c:1347
+msgid "Load last opened file"
+msgstr ""
+
+#: ../src/def_pref.c:1448
+msgid "Preferences"
+msgstr "Προτιμήσεις"
+
+#. {	N_(""), COL_OPE_STATUS,		},
+#. {	N_(""), COL_OPE_DATE,		},
+#: ../src/def_pref.c:1767 ../src/list_operation.c:291
+#: ../src/list_operation.c:735
+msgid "Info"
+msgstr "Πληροφορίες"
+
+#: ../src/def_pref.c:1769 ../src/list_operation.c:334
+#: ../src/list_operation.c:713 ../src/list_upcoming.c:184
+#: ../src/rep_over.c:979
+msgid "Description"
+msgstr "Περιγραφή"
+
+#. column: Amount
+#: ../src/def_pref.c:1770 ../src/list_operation.c:509
+#: ../src/list_operation.c:723 ../src/list_upcoming.c:196
+#: ../src/rep_car.c:1039
+msgid "Amount"
+msgstr "Ποσό"
+
+#. column: Expense
+#: ../src/def_pref.c:1771 ../src/list_operation.c:512 ../src/rep_budget.c:101
+#: ../src/rep_over.c:989 ../src/rep_stats.c:202 ../src/rep_stats.c:1842
+msgid "Expense"
+msgstr "Έξοδα"
+
+#. column: Income
+#: ../src/def_pref.c:1772 ../src/list_operation.c:515 ../src/rep_budget.c:101
+#: ../src/rep_over.c:993 ../src/rep_stats.c:202 ../src/rep_stats.c:1848
+msgid "Income"
+msgstr "Εισόδημα"
+
+#: ../src/def_pref.c:1774 ../src/list_operation.c:396
+msgid "Tags"
+msgstr ""
+
+#: ../src/def_pref.c:1893 ../src/ui_account.c:495 ../src/ui_payee.c:449
+msgid "Visible"
+msgstr "Ορατά"
+
+#: ../src/def_pref.c:1904
+msgid "Column"
+msgstr "Στήλη"
+
+#: ../src/def_wallet.c:164
+msgid "Wallet properties"
+msgstr "Ιδιότητες πορτοφολίου"
+
+#: ../src/def_wallet.c:203
+msgid "_Owner:"
+msgstr "_Ιδιοκτήτης:"
+
+#: ../src/def_wallet.c:212
+msgid "<b>Automatic transactions</b>"
+msgstr "<b>Αυτόματες συναλλαγές</b>"
+
+#: ../src/def_wallet.c:219
+msgid "_Insert:"
+msgstr "_Εισαγωγή:"
+
+#: ../src/def_wallet.c:224
+msgid "days into the future"
+msgstr "ημέρες στο μέλλον"
+
+#: ../src/def_wallet.c:231
+msgid "<b>Car cost</b>"
+msgstr "<b>Έξοδα αυτοκινήτου</b>"
+
+#. name, stock id, label
+#: ../src/dsp_account.c:155
+msgid "_Account"
+msgstr "_Λογαριασμός"
+
+#: ../src/dsp_account.c:156
+msgid "Transacti_on"
+msgstr "Συν_αλλαγή"
+
+#: ../src/dsp_account.c:157
+msgid "_Tools"
+msgstr "_Εργαλεία"
+
+#: ../src/dsp_account.c:159 ../src/dsp_wallet.c:210
+msgid "_Close"
+msgstr "_Κλείσιμο"
+
+#: ../src/dsp_account.c:159
+msgid "Close the current account"
+msgstr "Κλείσιμο τρέχοντος λογαριασμού"
+
+#. name, stock id, label, accelerator, tooltip
+#: ../src/dsp_account.c:162
+msgid "_Filter..."
+msgstr "_Φίλτρο..."
+
+#: ../src/dsp_account.c:162
+msgid "Open the list filter"
+msgstr "Άνοιγμα της λίστας φίλτρων"
+
+#: ../src/dsp_account.c:164
+msgid "_Add..."
+msgstr "_Προσθήκη..."
+
+#: ../src/dsp_account.c:164
+msgid "Add a new transaction"
+msgstr "Προσθήκη νέας συναλλαγής"
+
+#: ../src/dsp_account.c:165
+msgid "_Inherit..."
+msgstr "_Κληρονόμηση..."
+
+#: ../src/dsp_account.c:165
+msgid "Inherit from the active transaction"
+msgstr "Κληρονόμηση από την τρέχουσα συναλλαγή"
+
+#: ../src/dsp_account.c:166
+msgid "_Edit..."
+msgstr "_Επεξεργασία..."
+
+#: ../src/dsp_account.c:166
+msgid "Edit the active transaction"
+msgstr "Επεξεργασία της τρέχουσας συναλλαγής"
+
+#: ../src/dsp_account.c:167
+msgid "(In)_Validate..."
+msgstr "(Εσω)_Επικύρωση..."
+
+#: ../src/dsp_account.c:167
+msgid "Validate the active transactions"
+msgstr "Επικύρωση των τρεχουσών συναλλαγών"
+
+#: ../src/dsp_account.c:168
+msgid "_Remove..."
+msgstr "_Αφαίρεση..."
+
+#: ../src/dsp_account.c:168
+msgid "Remove the active transactions"
+msgstr "Αφαίρεση των τρεχουσών συναλλαγών"
+
+#: ../src/dsp_account.c:169
+msgid "Make an archive..."
+msgstr "Δημιουργία αρχείου..."
+
+#: ../src/dsp_account.c:171
+msgid "Export CSV..."
+msgstr "Εξαγωγή CSV..."
+
+#: ../src/dsp_account.c:348
+msgid "No corresponding transfert can be found."
+msgstr "Δε βρέθηκε αντίστοιχη μεταβίβαση"
+
+#. warn the useer we have notfound the child internal transfert
+#: ../src/dsp_account.c:368
+#, c-format
+msgid ""
+"Could not delete child transfert:\n"
+"\n"
+"account:  %s\n"
+"date:  %s\n"
+"amount:  %s\n"
+"\n"
+"You should fix the problem manually."
+msgstr ""
+"Αδυναμία διαγραφής θυγατρικών μεταβιβάσεων:\n"
+"\n"
+"λογαριασμός:  %s\n"
+"ημερομηνία:  %s\n"
+"ποσό:  %s\n"
+"\n"
+"Θα πρέπει να κάνετε χειροκίνητη διόρθωση."
+
+#: ../src/dsp_account.c:614
+msgid ""
+"Do you want to create an Archive with\n"
+"each of the selected transaction ?"
+msgstr ""
+"Θέλετε να δημιουργήσετε ένα Αρχείο με\n"
+"κάθε μια από τις επιλεγμένες συναλλαγές ;"
+
+#: ../src/dsp_account.c:1212
+msgid ""
+"Do you want to delete\n"
+"each of the selected transaction ?"
+msgstr ""
+"Θέλετε να διαγράψετε\n"
+"κάθε επιλεγμένη συναλλαγή ;"
+
+#: ../src/dsp_account.c:1516
+#, c-format
+msgid "%d transactions selected, %d hidden"
+msgstr ""
+
+#: ../src/dsp_account.c:1518
+#, c-format
+msgid "%d transactions selected, %d hidden :: %s ( %s - %s)"
+msgstr ""
+
+#: ../src/dsp_account.c:1583
+msgid "Modify date..."
+msgstr "Ημερομηνία μεταβολής..."
+
+#: ../src/dsp_account.c:1588
+msgid "Modify info..."
+msgstr "Πληροφορίες μεταβολής..."
+
+#: ../src/dsp_account.c:1595
+msgid "Modify payee..."
+msgstr "Πληροφορίες δικαιούχου..."
+
+#: ../src/dsp_account.c:1601
+msgid "Modify description..."
+msgstr "Μεταβολή περιγραφής"
+
+#: ../src/dsp_account.c:1607
+msgid "Modify amount..."
+msgstr "Μεταβολή ποσού..."
+
+#: ../src/dsp_account.c:1612
+msgid "Modify category..."
+msgstr "Μεταβολή κατηγορίας..."
+
+#: ../src/dsp_account.c:2039 ../src/rep_budget.c:933 ../src/rep_car.c:668
+#: ../src/rep_over.c:660 ../src/rep_stats.c:1484
+msgid "_Month:"
+msgstr "_Μήνας:"
+
+#: ../src/dsp_account.c:2044 ../src/rep_budget.c:939 ../src/rep_car.c:674
+#: ../src/rep_over.c:666 ../src/rep_stats.c:1490
+msgid "_Year:"
+msgstr "_Έτος:"
+
+#: ../src/dsp_account.c:2064
+msgid "Future:"
+msgstr "Μέλλον:"
+
+#: ../src/dsp_account.c:2073
+msgid "Today:"
+msgstr "Σήμερα:"
+
+#: ../src/dsp_account.c:2082
+msgid "Bank:"
+msgstr "Τράπεζα:"
+
+#: ../src/dsp_account.c:2088
+msgid "Minor"
+msgstr "Δευτερεύων"
+
+#. name, stock id, label
+#: ../src/dsp_wallet.c:189
+msgid "_File"
+msgstr "_Αρχείο"
+
+#: ../src/dsp_wallet.c:190
+msgid "_Edit"
+msgstr "_Επεξεργασία"
+
+#: ../src/dsp_wallet.c:191
+msgid "_View"
+msgstr ""
+
+#: ../src/dsp_wallet.c:192
+msgid "_Transactions"
+msgstr "_Συναλλαγές"
+
+#: ../src/dsp_wallet.c:193
+msgid "_Reports"
+msgstr "_Αναφορές"
+
+#: ../src/dsp_wallet.c:194
+msgid "T_ools"
+msgstr ""
+
+#: ../src/dsp_wallet.c:195
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: ../src/dsp_wallet.c:197
+msgid "Open _Recent"
+msgstr "Άνοιγμα _πρόσφατου"
+
+#: ../src/dsp_wallet.c:198
+msgid "Export to"
+msgstr ""
+
+#. name, stock id, label, accelerator, tooltip
+#. FileMenu
+#: ../src/dsp_wallet.c:202
+msgid "_New"
+msgstr "_Νέο"
+
+#: ../src/dsp_wallet.c:202
+msgid "Create a new wallet"
+msgstr "Δημιουργία νέου πορτοφολίου"
+
+#: ../src/dsp_wallet.c:203
+msgid "_Open..."
+msgstr "_Άνοιγμα..."
+
+#: ../src/dsp_wallet.c:203
+msgid "Open a wallet"
+msgstr "Άνοιγμα πορτοφολίου"
+
+#: ../src/dsp_wallet.c:204
+msgid "_Save"
+msgstr "Απ_οθήκευση"
+
+#: ../src/dsp_wallet.c:204
+msgid "Save the current wallet"
+msgstr "Αποθήκευση τρέχοντος πορτοφολίου"
+
+#: ../src/dsp_wallet.c:205
+msgid "Save As..."
+msgstr "Αποθήκευση _Ως..."
+
+#: ../src/dsp_wallet.c:205
+msgid "Save the current wallet with a different name"
+msgstr "Αποθήκευση τρέχοντος πορτοφολίου με άλλο όνομα"
+
+#: ../src/dsp_wallet.c:206
+msgid "Revert"
+msgstr "Αντιστροφή"
+
+#: ../src/dsp_wallet.c:206
+msgid "Revert to a saved version of this file"
+msgstr "Αντιστροφή σε μια αποθηκευμένη έκδοση του αρχείου"
+
+#: ../src/dsp_wallet.c:207
+msgid "Import..."
+msgstr "_Εισαγωγή..."
+
+#: ../src/dsp_wallet.c:207
+msgid "Open the import assistant"
+msgstr "Άνοιγμα του οδηγού εισαγωγής"
+
+#: ../src/dsp_wallet.c:209
+msgid "_Properties..."
+msgstr "_Ιδιότητες..."
+
+#: ../src/dsp_wallet.c:209
+msgid "Configure wallet"
+msgstr "Ρύθμιση πορτοφολίου"
+
+#: ../src/dsp_wallet.c:210
+msgid "Close the current wallet"
+msgstr "Κλείσιμο τρέχοντος πορτοφολίου"
+
+#: ../src/dsp_wallet.c:211
+msgid "_Quit"
+msgstr "_Έξοδος"
+
+#: ../src/dsp_wallet.c:211
+msgid "Quit homebank"
+msgstr "Έξοδος από το homebank"
+
+#. Export Menu
+#: ../src/dsp_wallet.c:214
+msgid "QIF Format..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:214
+msgid "Open the export to QIF assistant"
+msgstr ""
+
+#. EditMenu
+#: ../src/dsp_wallet.c:217
+msgid "Acc_ounts..."
+msgstr "_Λογαρισαμοί..."
+
+#: ../src/dsp_wallet.c:217
+msgid "Configure the accounts"
+msgstr "Ρύθμιση των λογαριασμών"
+
+#: ../src/dsp_wallet.c:218
+msgid "_Payees..."
+msgstr "_Δικαιούχοι..."
+
+#: ../src/dsp_wallet.c:218
+msgid "Configure the payees"
+msgstr "Ρύθμιση των δικαιούχων"
+
+#: ../src/dsp_wallet.c:219
+msgid "Categories..."
+msgstr "_Κατηγορίες..."
+
+#: ../src/dsp_wallet.c:219
+msgid "Configure the categories"
+msgstr "Ρύθμιση των κατηγοριών"
+
+#: ../src/dsp_wallet.c:220
+msgid "Arc_hives..."
+msgstr "_Αρχεία..."
+
+#: ../src/dsp_wallet.c:220
+msgid "Configure the archives"
+msgstr "Ρύθμιση των αρχείων"
+
+#: ../src/dsp_wallet.c:221
+msgid "Budget..."
+msgstr "Έσοδα..."
+
+#: ../src/dsp_wallet.c:221
+msgid "Configure the budget"
+msgstr "Ρύθμιση εσόδων"
+
+#: ../src/dsp_wallet.c:222
+msgid "Preferences..."
+msgstr "Προτιμήσεις..."
+
+#: ../src/dsp_wallet.c:222
+msgid "Configure homebank"
+msgstr "Ρύθμιση του homebank"
+
+#. OperationMenu
+#: ../src/dsp_wallet.c:225
+msgid "Show..."
+msgstr "Προβολή..."
+
+#: ../src/dsp_wallet.c:225
+msgid "Shows selected account transactions"
+msgstr "Εμφανίζει συναλλαγές επιλεγμένου λογαριασμού"
+
+#: ../src/dsp_wallet.c:226
+msgid "Add..."
+msgstr "Προσθήκη..."
+
+#: ../src/dsp_wallet.c:227
+msgid "Check automated..."
+msgstr "Αυτόματος έλεγχος..."
+
+#: ../src/dsp_wallet.c:227
+msgid "Insert pending automated transactions"
+msgstr "Εισαγωγή εκκρεμών αυτόματων συναλλαγών"
+
+#. ReportMenu
+#: ../src/dsp_wallet.c:230
+msgid "_Statistics..."
+msgstr "_Στατιστικά..."
+
+#: ../src/dsp_wallet.c:230
+msgid "Open the Statistics report"
+msgstr "Άνοιγμα αναφοράς στατιστικών"
+
+#: ../src/dsp_wallet.c:231
+msgid "B_udget..."
+msgstr "_Έσοδα..."
+
+#: ../src/dsp_wallet.c:231
+msgid "Open the Budget report"
+msgstr "Άνοιγμα αναφοράς εσόδων"
+
+#: ../src/dsp_wallet.c:232
+msgid "Ove_rdrawn..."
+msgstr "_Υπεραναλήψεις..."
+
+#: ../src/dsp_wallet.c:232
+msgid "Open the Overdrawn report"
+msgstr "Άνοιγμα αναφοράς υπεραναλήψεων"
+
+#: ../src/dsp_wallet.c:233
+msgid "_Car cost..."
+msgstr "_Έξοδα αυτοκινήτου"
+
+#: ../src/dsp_wallet.c:233
+msgid "Open the Car cost report"
+msgstr "Άνοιγμα αναφοράς εξόδων αυτοκινήτου"
+
+#. ToolsMenu
+#: ../src/dsp_wallet.c:236
+msgid "Import Amiga..."
+msgstr "Εισαγωγή Amiga..."
+
+#: ../src/dsp_wallet.c:236
+msgid "Import a file in Amiga 3.0 format"
+msgstr "Εισαγωγή αρχείου μορφής Amiga 3.0"
+
+#. HelpMenu
+#: ../src/dsp_wallet.c:239
+msgid "_Contents"
+msgstr "_Περιεχόμενα..."
+
+#: ../src/dsp_wallet.c:239
+msgid "Documentation about HomeBank"
+msgstr "Τεκμηρίωση του HomeBank"
+
+#: ../src/dsp_wallet.c:240
+msgid "Get Help Online..."
+msgstr "Online-Βοήθεια..."
+
+#: ../src/dsp_wallet.c:240
+msgid "Connect to the LaunchPad website for online help"
+msgstr "Online-Βοήθεια με σύνδεση στο LaunchPad website"
+
+#: ../src/dsp_wallet.c:241
+msgid "Translate this Application..."
+msgstr "Μετάφραση αυτής της Εφαρμογής..."
+
+#: ../src/dsp_wallet.c:241
+msgid "Connect to the LaunchPad website to help translate this application"
+msgstr ""
+"Σύνδεση στο LaunchPad website για βοήθεια σχετικά με τη μετάφραση της "
+"εφαρμογής"
+
+#: ../src/dsp_wallet.c:242
+msgid "Report a Problem..."
+msgstr "Αναφορά Προβλήματος..."
+
+#: ../src/dsp_wallet.c:242
+msgid "Connect to the LaunchPad website to help fix problems"
+msgstr "Σύνδεση στο LaunchPad website για βοήθεια επίλυσης προβλημάτων"
+
+#: ../src/dsp_wallet.c:244
+msgid "_About"
+msgstr "_Σχετικά"
+
+#: ../src/dsp_wallet.c:244
+msgid "About HomeBank"
+msgstr "Σχετικά με το HomeBank"
+
+#. name         , stockid, label, accelerator, tooltip, callback, is_active
+#: ../src/dsp_wallet.c:252
+msgid "Minor currency"
+msgstr "Δευτερεύουσα μονάδα"
+
+#: ../src/dsp_wallet.c:596 ../src/dsp_wallet.c:649 ../src/dsp_wallet.c:665
+msgid "No suitable web browser executable could be found."
+msgstr "Δε βρέθηκε κατάλληλο εκτελέσιμο φυλλομετρητή διαδικτύου."
+
+#: ../src/dsp_wallet.c:597 ../src/dsp_wallet.c:618 ../src/dsp_wallet.c:634
+#: ../src/dsp_wallet.c:650 ../src/dsp_wallet.c:666
+#, c-format
+msgid "Could not display the URL '%s'"
+msgstr "Αδυναμία εμφάνισης της ιστοσελίδας '%s'"
+
+#: ../src/dsp_wallet.c:617 ../src/dsp_wallet.c:633
+msgid "No suitable web browser application could be found."
+msgstr "Δε βρέθηκε κατάλληλος φυλλομετρητή διαδικτύου."
+
+#: ../src/dsp_wallet.c:754
+msgid ""
+"Do you want to save the changes\n"
+"in the current file ?"
+msgstr ""
+"Θέλετε να αποθηκεύσετε τις αλλαγές;\n"
+"στο τρέχον αρχείο ;"
+
+#: ../src/dsp_wallet.c:758
+#, c-format
+msgid ""
+"If you do not save, %d changes will be\n"
+"definitively lost."
+msgstr ""
+"Αν δεν αποθηκεύσετε, %d αλλαγές\n"
+"θα χαθούν οριστικά."
+
+#: ../src/dsp_wallet.c:763
+msgid "Do _not save"
+msgstr "_Μην αποθηκεύσεις"
+
+#. fix: v4.0
+#: ../src/dsp_wallet.c:835 ../src/homebank.c:1135
+msgid "(Nobody)"
+msgstr "(Κανείς)"
+
+#: ../src/dsp_wallet.c:1139
+msgid "No transaction to insert"
+msgstr "Δεν υπάρχει συναλλαγή για εισαγωγή"
+
+#: ../src/dsp_wallet.c:1141
+#, c-format
+msgid "%d transactions inserted"
+msgstr "%d συναλλαγές εισήχθησαν"
+
+#: ../src/dsp_wallet.c:1144
+msgid "Check automated transactions result"
+msgstr "Έλεγχος αποτελέσματος αυτόματων συναλλαγών"
+
+#: ../src/dsp_wallet.c:1169
+msgid "Import Amiga file"
+msgstr "Εισαγωγή αρχείου Amiga"
+
+#: ../src/dsp_wallet.c:1211
+#, c-format
+msgid "Revert to the previously saved file of '%s'?"
+msgstr "Αντιστροφή σε προηγούμενο αποθηκευμένο αρχείο του '%s';"
+
+#: ../src/dsp_wallet.c:1217
+msgid ""
+"- Changes made to the wallet will be permanently lost\n"
+"- Wallet will be restored to the last save (.old)"
+msgstr ""
+"- Αλλαγές που έγιναν στο πορτοφόλιο θα χαθούν για πάντα\n"
+"- Το πορτοφόλιο θα επανέρθει στην τελευταία αποθήκευση (.old)"
+
+#: ../src/dsp_wallet.c:1315
+msgid "File error"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1316
+#, c-format
+msgid "The file %s is not a valid HomeBank file."
+msgstr ""
+
+#: ../src/dsp_wallet.c:2297
+msgid "<b>Accounts summary</b>"
+msgstr "<b>Περίληψη λογαριασμών</b>"
+
+#: ../src/dsp_wallet.c:2313
+msgid "<b>Upcoming automated transactions</b>"
+msgstr "<b>Προσεχείς αυτοματοποιημένες συναλλαγές</b>"
+
+#: ../src/homebank.c:106
+msgid "Output version information and exit"
+msgstr "Εμφάνιση πληροφοριών έκδοσης και έξοδος"
+
+#: ../src/homebank.c:109
+msgid "[FILE]"
+msgstr "[ΑΡΧΕΙΟ]"
+
+#: ../src/homebank.c:196
+msgid "Export as QIF"
+msgstr ""
+
+#: ../src/homebank.c:207
+msgid "QIF files"
+msgstr ""
+
+#: ../src/homebank.c:212 ../src/homebank.c:277 ../src/homebank.c:342
+#: ../src/homebank.c:463
+msgid "All files"
+msgstr ""
+
+#: ../src/homebank.c:251
+msgid "Import from CSV"
+msgstr "Εισαγωγή από CSV"
+
+#: ../src/homebank.c:257
+msgid "Export as CSV"
+msgstr "Εξαγωγή από CSV"
+
+#: ../src/homebank.c:272
+msgid "CSV files"
+msgstr "Αρχεία CSV"
+
+#: ../src/homebank.c:320
+msgid "Open homebank file"
+msgstr ""
+
+#: ../src/homebank.c:325
+msgid "Save homebank file as"
+msgstr ""
+
+#: ../src/homebank.c:337
+msgid "HomeBank files"
+msgstr ""
+
+#: ../src/homebank.c:458
+msgid "Amiga files"
+msgstr "Αρχεία Amiga"
+
+#: ../src/homebank.c:1244 ../src/homebank.c:1245
+msgid "HomeBank options"
+msgstr "Επιλογές HomeBank"
+
+#: ../src/homebank.c:1363
+#, c-format
+msgid "Unable to open '%s', the file does not exist.\n"
+msgstr "Αδυναμία ανοίγματος '%s', το αρχείο δεν υπάρχει.\n"
+
+#: ../src/imp_amiga.c:105
+msgid "Import HomeBank Amiga File"
+msgstr "Εισαγωγή Αρχείου Amiga HomeBank"
+
+#: ../src/imp_amiga.c:106
+#, c-format
+msgid ""
+"Wrong Amiga file version %d.%d\n"
+"( must be > 3.0 )"
+msgstr ""
+"Λανθασμένη έκδοση αρχείου Amiga %d%d\n"
+"( πρέπει να είναι > 3.0 )"
+
+#: ../src/import.c:58
+msgid "Import assistant"
+msgstr ""
+
+#: ../src/import.c:59
+msgid "Select a file to import"
+msgstr ""
+
+#: ../src/import.c:60
+msgid "File content"
+msgstr ""
+
+#: ../src/import.c:61
+msgid "Transaction selection"
+msgstr ""
+
+#: ../src/import.c:62
+msgid "Update your accounts"
+msgstr "Ανανεώστε τους λογαριασμούς σας"
+
+#: ../src/import.c:672
+msgid "Please select a file..."
+msgstr ""
+
+#: ../src/import.c:683
+msgid "Unknown/Invalid file..."
+msgstr ""
+
+#: ../src/import.c:687
+msgid "QIF file recognised !"
+msgstr ""
+
+#: ../src/import.c:694
+msgid "OFX file recognised !"
+msgstr "Αναγνωρίστηκε το αρχείο OFX !"
+
+#: ../src/import.c:697
+msgid "** OFX support is disabled **"
+msgstr ""
+
+#: ../src/import.c:702
+msgid "CSV operation file recognised !"
+msgstr "Αναγνωρίστηκε το αρχείο εργασιών CSV !"
+
+#: ../src/import.c:1239
+#, c-format
+msgid ""
+"%d accounts\n"
+"%d transactions\n"
+"%d payees\n"
+"%d categories\n"
+msgstr ""
+
+#: ../src/import.c:1362
+#, c-format
+msgid ""
+"%d accounts will be created.\n"
+"\n"
+"%d transactions will be imported.\n"
+"%d transactions will be rejected."
+msgstr ""
+"%d λογαριασμοί θα δημιουργηθούν.\n"
+"\n"
+"%d συναλλαγές θα εισαχθούν.\n"
+"%d συναλλαγές θα απορριφθούν."
+
+#: ../src/import.c:1379
+#, c-format
+msgid "Import assistant (%d of %d)"
+msgstr "Οδηγός εισαγωγής (%d από %d)"
+
+#: ../src/import.c:1518
+msgid ""
+"HomeBank can import transactions from several file formats:\n"
+"\n"
+"- QIF\n"
+"- OFX/QFX (optional at compilation time)\n"
+"- CSV (Homebank transaction CSV export format only)\n"
+"\n"
+"Other formats or not supported at the moment.\n"
+"\n"
+"The import process has several steps. Your HomeBank accounts\n"
+"will not be changed until you click \"Apply\" at the end of this assistant.\n"
+"\n"
+"Now, click \"forward\" to start importing a file."
+msgstr ""
+
+#: ../src/import.c:1658
+msgid "<b>File analysis summary</b>"
+msgstr ""
+
+#: ../src/import.c:1666
+msgid "Filename:"
+msgstr ""
+
+#: ../src/import.c:1674
+msgid "Details:"
+msgstr ""
+
+#: ../src/import.c:1685
+msgid "<b>Unamed account selection</b>"
+msgstr ""
+
+#: ../src/import.c:1697
+msgid ""
+"The file that you just loaded appears to contain transactions for an account "
+"without specifying\n"
+"the name of that account. Please select the account to which these "
+"transactions can be attached."
+msgstr ""
+
+#: ../src/import.c:1707
+msgid "new account"
+msgstr ""
+
+#: ../src/import.c:1712
+msgid "_Name:"
+msgstr ""
+
+#: ../src/import.c:1720
+msgid "existing account"
+msgstr ""
+
+#: ../src/import.c:1775
+msgid "<b>Duplicate match options</b>"
+msgstr ""
+
+#: ../src/import.c:1787
+msgid "Date _tolerance:"
+msgstr "Ανοχή _Ημερομηνίας:"
+
+#: ../src/import.c:1797
+msgid "days"
+msgstr "Ημέρα(ες)"
+
+#: ../src/import.c:1814
+msgid ""
+"The match is done in order: by account, amount and date.\n"
+"A date tolerance of 0 days means an exact match"
+msgstr ""
+
+#: ../src/import.c:1827
+msgid "<b>Transactions to import</b>"
+msgstr "<b>Συναλλαγές για εισαγωγή</b>"
+
+#: ../src/import.c:1847
+msgid "<b>Possible duplicate for the above selected transaction</b>"
+msgstr "<b>Πιθανές διπλοεγγραφές για την επιλεγμένη συναλλαγή</b>"
+
+#. Create the expander
+#: ../src/import.c:1851
+msgid "Details"
+msgstr "Λεπτομέρειες"
+
+#: ../src/import.c:1916
+msgid ""
+"Click \"Apply\" to update your accounts.\n"
+"\n"
+msgstr ""
+"Πατήστε \"Εφαρμογή\" για ανανέωση των λογαριασμών σας.\n"
+"\n"
+
+#: ../src/list_account.c:253 ../src/list_operation.c:468
+msgid "State"
+msgstr "Κατάσταση"
+
+#. column 4: Bank
+#: ../src/list_account.c:273
+msgid "Bank"
+msgstr "Τράπεζα"
+
+#. column 5: Today
+#: ../src/list_account.c:277
+msgid "Today"
+msgstr "Σήμερα"
+
+#. column 6: Future
+#: ../src/list_account.c:281
+msgid "Future"
+msgstr "Μελλοντικά"
+
+#: ../src/list_operation.c:491 ../src/list_operation.c:702
+#: ../src/rep_car.c:995 ../src/rep_over.c:968
+msgid "Date"
+msgstr "Ημερομηνία"
+
+#: ../src/list_upcoming.c:208
+msgid "Next on"
+msgstr "Επόμενο"
+
+#: ../src/list_upcoming.c:220
+msgid "Remaining"
+msgstr "Απομένοντα"
+
+#: ../src/rep_budget.c:99
+msgid "Spent & Budget"
+msgstr "Έξοδα & Έσοδα"
+
+#. column: Expense
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1250
+msgid "Spent"
+msgstr "Έξοδα"
+
+#. column: Income
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1254
+msgid "Budget"
+msgstr "Έσοδα"
+
+#. column: Balance
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1258
+msgid "Decay"
+msgstr "Κατάρρευση"
+
+#: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
+msgid "List"
+msgstr "Λίστα"
+
+#: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
+msgid "View results as list"
+msgstr "Εμφάνιση αποτελεσμάτων ως λίστα"
+
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:127
+msgid "Bar"
+msgstr "Ράβδος"
+
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:127
+msgid "View results as bars"
+msgstr "Εμφάνιση αποτελεσμάτων ως ράβδους"
+
+#: ../src/rep_budget.c:110 ../src/rep_stats.c:130
+msgid "Detail"
+msgstr "Λεπτομέρειες"
+
+#: ../src/rep_budget.c:110 ../src/rep_stats.c:130
+msgid "Toggle detail"
+msgstr "Εναλλαγή λεπτομέρειας"
+
+#: ../src/rep_budget.c:111 ../src/rep_stats.c:131
+msgid "Legend"
+msgstr "Υπόμνημα"
+
+#: ../src/rep_budget.c:111 ../src/rep_stats.c:131
+msgid "Toggle legend"
+msgstr "Εναλλαγή υπομνήματος"
+
+#: ../src/rep_budget.c:113 ../src/rep_over.c:96 ../src/rep_stats.c:135
+msgid "Refresh"
+msgstr "Ανανέωση"
+
+#: ../src/rep_budget.c:113 ../src/rep_over.c:96 ../src/rep_stats.c:135
+msgid "Refresh results"
+msgstr "Ανανέωση αποτελεσμάτων"
+
+#: ../src/rep_budget.c:857
+msgid "Budget report"
+msgstr "Αναφορά εσόδων"
+
+#: ../src/rep_budget.c:883 ../src/rep_car.c:623 ../src/rep_over.c:617
+#: ../src/rep_stats.c:1423
+msgid "<b>Display</b>"
+msgstr "<b>Εμφάνιση</b>"
+
+#: ../src/rep_budget.c:887
+msgid "_Kind:"
+msgstr "_Τύπος:"
+
+#: ../src/rep_budget.c:894 ../src/rep_stats.c:1434
+msgid "_View:"
+msgstr "_Προβολή:"
+
+#: ../src/rep_budget.c:901 ../src/rep_car.c:635 ../src/rep_over.c:628
+#: ../src/rep_stats.c:1446
+msgid "_Minor currency"
+msgstr "_Δευτερεύον νόμισμα"
+
+#: ../src/rep_budget.c:911 ../src/rep_car.c:645 ../src/rep_over.c:638
+#: ../src/rep_stats.c:1462
+msgid "<b>Date filter</b>"
+msgstr "<b>Φίλτρο Ημερομηνίας</b>"
+
+#: ../src/rep_budget.c:987
+msgid "Decay:"
+msgstr "Κατάρρευση:"
+
+#: ../src/rep_budget.c:996
+msgid "Budget:"
+msgstr "Έσοδα:"
+
+#: ../src/rep_budget.c:1005
+msgid "Spent:"
+msgstr "Έξοδα:"
+
+#: ../src/rep_car.c:596
+msgid "Car report"
+msgstr "Αναφορά αυτοκινήτου"
+
+#: ../src/rep_car.c:627
+msgid "_Car category:"
+msgstr "_Κατηγορία αυτοκινήτου"
+
+#. column: consumption for 100Km
+#: ../src/rep_car.c:711 ../src/rep_car.c:1047
+msgid "100 Km"
+msgstr "100 km"
+
+#: ../src/rep_car.c:714
+msgid "Total"
+msgstr "Σύνολο"
+
+#: ../src/rep_car.c:718
+msgid "Meter:"
+msgstr "Μέτρο:"
+
+#: ../src/rep_car.c:722
+msgid "Consumption:"
+msgstr "Κατανάλωση:"
+
+#: ../src/rep_car.c:726
+msgid "Fuel cost:"
+msgstr "Δαπάνη καυσίμων:"
+
+#: ../src/rep_car.c:730
+msgid "Other cost:"
+msgstr "Άλλες δαπάνες:"
+
+#: ../src/rep_car.c:734
+msgid "Total cost:"
+msgstr "Συνολική δαπάνη:"
+
+#. 
+#. LST_CAR_DATE,
+#. LST_CAR_WORDING,
+#. LST_CAR_METER,
+#. LST_CAR_FUEL,
+#. LST_CAR_PRICE,
+#. LST_CAR_AMOUNT,
+#. LST_CAR_DIST,
+#. LST_CAR_100KM
+#. 
+#. 
+#. column: Wording
+#. 
+#. column = gtk_tree_view_column_new();
+#. gtk_tree_view_column_set_title(column, _("Wording"));
+#. gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+#. renderer = gtk_cell_renderer_text_new();
+#. gtk_tree_view_column_pack_start(column, renderer, TRUE);
+#. gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_WORDING);
+#. //gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_text_cell_data_function, NULL, NULL);
+#. 
+#. column: Meter
+#: ../src/rep_car.c:1027
+msgid "Meter"
+msgstr "Μέτρο"
+
+#. column: Fuel load
+#: ../src/rep_car.c:1031
+msgid "Fuel"
+msgstr "Καύσιμα"
+
+#. column: Price by unit
+#: ../src/rep_car.c:1035
+msgid "Price"
+msgstr "Τιμή"
+
+#. column: Distance done
+#: ../src/rep_car.c:1043
+msgid "Dist."
+msgstr "Απόσταση"
+
+#: ../src/rep_over.c:94
+msgid "Line"
+msgstr "Γραμμή"
+
+#: ../src/rep_over.c:94
+msgid "View results as lines"
+msgstr "Προβολή αποτελεσμάτων ως γραμμές"
+
+#: ../src/rep_over.c:302
+#, c-format
+msgid "%d/%d under %s"
+msgstr ""
+
+#: ../src/rep_over.c:588
+msgid "Overdrawn report"
+msgstr "Αναφορά υπεραναλήψεων"
+
+#. column: Balance
+#: ../src/rep_over.c:997 ../src/rep_stats.c:202 ../src/rep_stats.c:1854
+msgid "Balance"
+msgstr "Ισοζύγιο"
+
+#: ../src/rep_stats.c:128
+msgid "Pie"
+msgstr "Πίτα"
+
+#: ../src/rep_stats.c:128
+msgid "View results as pies"
+msgstr "Εμφάνιση αποτελεσμάτων ως πίτα"
+
+#: ../src/rep_stats.c:132
+msgid "Rate"
+msgstr "Ρυθμός"
+
+#: ../src/rep_stats.c:132
+msgid "Toggle rate"
+msgstr "Εναλλαγή ρυθμού"
+
+#: ../src/rep_stats.c:134
+msgid "Filter"
+msgstr "Φίλτρο"
+
+#: ../src/rep_stats.c:134
+msgid "Edit the filter"
+msgstr "Επεξεργασία φίλτρου"
+
+#: ../src/rep_stats.c:198
+msgid "Subcategory"
+msgstr ""
+
+#: ../src/rep_stats.c:198
+msgid "Tag"
+msgstr ""
+
+#: ../src/rep_stats.c:202
+msgid "Exp. & Inc."
+msgstr "Έξοδα & Έσοδα"
+
+#: ../src/rep_stats.c:206
+msgid "All date"
+msgstr "Όλες οι ημερομηνίες"
+
+#: ../src/rep_stats.c:207
+msgid "Current month"
+msgstr "Τρέχον μήνας"
+
+#: ../src/rep_stats.c:208
+msgid "Current year"
+msgstr "Τρέχον έτος"
+
+#: ../src/rep_stats.c:209
+msgid "Previous month"
+msgstr "Προηγούμενος μήνας"
+
+#: ../src/rep_stats.c:210
+msgid "Previous year"
+msgstr "Προηγούμενο έτος"
+
+#: ../src/rep_stats.c:211
+msgid "Last 30 days"
+msgstr "Τελευταίες 30 ημέρες"
+
+#: ../src/rep_stats.c:212
+msgid "Last 2 months"
+msgstr "Τελευταίοι 2 μήνες"
+
+#: ../src/rep_stats.c:213
+msgid "Last 3 months"
+msgstr "Τελευταίοι 3 μήνες"
+
+#: ../src/rep_stats.c:214
+msgid "Last 4 months"
+msgstr "Τελευταίοι 4 μήνες"
+
+#: ../src/rep_stats.c:215
+msgid "Last 6 months"
+msgstr "Τελευταίοι 6 μήνες"
+
+#: ../src/rep_stats.c:216
+msgid "Last 12 months"
+msgstr "Τελευταίοι 12 μήνες"
+
+#: ../src/rep_stats.c:223
+msgid "All month"
+msgstr "Όλοι οι μήνες"
+
+#: ../src/rep_stats.c:224 ../src/rep_stats.c:242
+msgid "January"
+msgstr "Ιανουάριος"
+
+#: ../src/rep_stats.c:225 ../src/rep_stats.c:243
+msgid "February"
+msgstr "Φεβρουάριος"
+
+#: ../src/rep_stats.c:226 ../src/rep_stats.c:244
+msgid "March"
+msgstr "Μάρτιος"
+
+#: ../src/rep_stats.c:227 ../src/rep_stats.c:245
+msgid "April"
+msgstr "Απρίλιος"
+
+#: ../src/rep_stats.c:228 ../src/rep_stats.c:246
+msgid "May"
+msgstr "Μάιος"
+
+#: ../src/rep_stats.c:229 ../src/rep_stats.c:247
+msgid "June"
+msgstr "Ιούνιος"
+
+#: ../src/rep_stats.c:230 ../src/rep_stats.c:248
+msgid "July"
+msgstr "Ιούλιος"
+
+#: ../src/rep_stats.c:231 ../src/rep_stats.c:249
+msgid "August"
+msgstr "Αύγουστος"
+
+#: ../src/rep_stats.c:232 ../src/rep_stats.c:250
+msgid "September"
+msgstr "Σεπτέμβριος"
+
+#: ../src/rep_stats.c:233 ../src/rep_stats.c:251
+msgid "October"
+msgstr "Οκτώβριος"
+
+#: ../src/rep_stats.c:234 ../src/rep_stats.c:252
+msgid "November"
+msgstr "Νοέμβριος"
+
+#: ../src/rep_stats.c:235 ../src/rep_stats.c:253
+msgid "December"
+msgstr "Δεκέμβριος"
+
+#: ../src/rep_stats.c:1397
+msgid "Statistics Report"
+msgstr "Αναφορά στατιστικών"
+
+#: ../src/rep_stats.c:1427
+msgid "_For:"
+msgstr "_Για:"
+
+#: ../src/rep_stats.c:1441
+msgid "By _amount"
+msgstr "Ανά _Ποσό"
+
+#: ../src/rep_stats.c:1539
+msgid "Balance:"
+msgstr "Ισοζύγιο:"
+
+#: ../src/rep_stats.c:1548
+msgid "Income:"
+msgstr "Εισόδημα:"
+
+#: ../src/rep_stats.c:1557
+msgid "Expense:"
+msgstr "Έξοδα:"
+
+#: ../src/rep_stats.c:1831
+msgid "Result"
+msgstr "Αποτέλεσμα"
+
+#: ../src/ui_account.c:864
+#, c-format
+msgid "(account %d)"
+msgstr ""
+
+#: ../src/ui_account.c:896
+msgid "Remove not allowed"
+msgstr ""
+
+#: ../src/ui_account.c:897
+msgid "This account is used and cannot be removed."
+msgstr ""
+
+#: ../src/ui_account.c:1004
+msgid "Manage Accounts"
+msgstr ""
+
+#: ../src/ui_account.c:1077
+msgid "<b>Informations</b>"
+msgstr "<b>Πληροφορίες</b>"
+
+#: ../src/ui_account.c:1085
+msgid "_Heading:"
+msgstr "_Τίτλος:"
+
+#: ../src/ui_account.c:1102
+msgid "_Number:"
+msgstr "_Αριθμός:"
+
+#: ../src/ui_account.c:1109
+msgid "_Bank name:"
+msgstr "_Τράπεζα:"
+
+#: ../src/ui_account.c:1116
+msgid "Include in the budget"
+msgstr "Συμπερίληψη στα έσοδα"
+
+#: ../src/ui_account.c:1121
+msgid "This account was closed"
+msgstr "Αυτός ο λογαριασμός έκλεισε"
+
+#: ../src/ui_account.c:1133
+msgid "<b>Balances</b>"
+msgstr "<b>Ισοζύγια</b>"
+
+#: ../src/ui_account.c:1137
+msgid "_Initial:"
+msgstr "_Αρχικά:"
+
+#: ../src/ui_account.c:1148
+msgid "_Overdrawn at:"
+msgstr "_Υπερανάληψη στα:"
+
+#: ../src/ui_account.c:1162
+msgid "<b>Cheque number</b>"
+msgstr "<b>Αριθμός τσεκ</b>"
+
+#: ../src/ui_account.c:1166
+msgid "Notebook _1:"
+msgstr "Σημειωματάριο_1:"
+
+#: ../src/ui_account.c:1180
+msgid "Notebook _2:"
+msgstr "Σημειωματάριο _2:"
+
+#: ../src/ui_category.c:867
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, please see the help for more details."
+msgstr ""
+"Το αρχείο csv πρέπει να περιέχει τον ακριβή αριθμό στηλών,\n"
+"διαχωρισμένες με άνω κάτω τελεία, παρακαλώ δείτε τη βοήθεια."
+
+#: ../src/ui_category.c:996 ../src/ui_payee.c:579
+msgid "Modify..."
+msgstr "Μεταβολή..."
+
+#: ../src/ui_category.c:1018
+msgid "_Income"
+msgstr "_Έσοδα"
+
+#: ../src/ui_category.c:1100 ../src/ui_payee.c:620
+msgid "Error"
+msgstr ""
+
+#: ../src/ui_category.c:1101
+#, c-format
+msgid ""
+"Cannot rename this Category,\n"
+"from '%s' to '%s',\n"
+"this name already exists."
+msgstr ""
+
+#: ../src/ui_category.c:1219
+msgid "Remove a category ?"
+msgstr ""
+
+#: ../src/ui_category.c:1220
+#, c-format
+msgid ""
+"If you remove '%s', archive and operation referencing this category\n"
+"will set place to 'no category'"
+msgstr ""
+
+#: ../src/ui_category.c:1428
+msgid "Manage Categories"
+msgstr ""
+
+#: ../src/ui_category.c:1466
+msgid "I_ncome"
+msgstr "Έσ_οδα"
+
+#: ../src/ui_payee.c:621
+#, c-format
+msgid ""
+"Cannot rename this Payee,\n"
+"from '%s' to '%s',\n"
+"this name already exists."
+msgstr ""
+
+#: ../src/ui_payee.c:741
+msgid "Remove a payee ?"
+msgstr ""
+
+#: ../src/ui_payee.c:742
+#, c-format
+msgid ""
+"If you remove '%s', archive and operation referencing this payee\n"
+"will set place to 'no payee'"
+msgstr ""
+
+#: ../src/ui_payee.c:826
+msgid "Manage Payees"
+msgstr ""
+
+#: ../src/widgets.c:65
+msgid "Credit card"
+msgstr "Πιστωτική κάρτα"
+
+#: ../src/widgets.c:66
+msgid "Cheque"
+msgstr "Επιταγή"
+
+#: ../src/widgets.c:67
+msgid "Cash"
+msgstr "Μετρητά"
+
+#: ../src/widgets.c:68
+msgid "Bank transfer"
+msgstr "Τραπεζική μεταβίβαση"
+
+#: ../src/widgets.c:69
+msgid "Internal transfer"
+msgstr "Εσωτερική μεταβίβαση"

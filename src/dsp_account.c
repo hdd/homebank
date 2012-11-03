@@ -1,29 +1,35 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 #include "homebank.h"
-#include "preferences.h"
+
+#include "da_transaction.h"
+#include "hb_transaction.h"
 #include "dsp_account.h"
 #include "list_operation.h"
-#include "def_lists.h"
+#include "def_archive.h"
 #include "def_filter.h"
 #include "def_operation.h"
+#include "dsp_wallet.h"
+#include "ui_payee.h"
+#include "ui_category.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -42,14 +48,6 @@ extern struct Preferences *PREFS;
 
 //debug
 #define UI 1
-
-/* our functions prototype */
-void account_populate(GtkWidget *view);
-void account_action(GtkWidget *widget, gpointer user_data);
-void account_toggle(GtkWidget *widget, gpointer user_data);
-void account_clear(GtkWidget *widget, gpointer user_data);
-void account_updateacc(GtkWidget *widget, gpointer user_data);
-void account_update(GtkWidget *widget, gpointer user_data);
 
 
 enum
@@ -80,7 +78,6 @@ struct account_data
 	GtkWidget	*CY_month, *NB_year;
 	GtkWidget	*CY_range;
 
-	GtkWidget	*TX_info;
 
 	gint	busy;
 
@@ -89,6 +86,7 @@ struct account_data
 
 	GtkWidget	*GR_info;
 	GtkWidget	*CM_minor;
+	GtkWidget	*TX_info;
 	GtkWidget	*TX_balance[3];
 	GtkWidget	*GO_gauge;
 
@@ -108,7 +106,7 @@ struct account_data
 
 	gulong		handler_id[MAX_HID];
 
-	gint change;
+	//gint change;	/* change shouldbe done directly */
 
 };
 
@@ -131,28 +129,26 @@ static void account_action_validate(GtkAction *action, gpointer user_data);
 static void account_action_remove(GtkAction *action, gpointer user_data);
 static void account_action_createarchive(GtkAction *action, gpointer user_data);
 
-static void account_action_importcsv(GtkAction *action, gpointer user_data);
 static void account_action_exportcsv(GtkAction *action, gpointer user_data);
 
-/* these 2 functions are independant from account window */
-void operation_add_treeview(Operation *ope, GtkWidget *treeview, gint accnum);
-void operation_add(Operation *ope, GtkWidget *treeview, gint accnum);
+static void account_populate(GtkWidget *view);
+static void account_action(GtkWidget *widget, gpointer user_data);
+static void account_toggle(GtkWidget *widget, gpointer user_data);
+static void account_update(GtkWidget *widget, gpointer user_data);
 
-void account_import_csv(GtkWidget *widget, gpointer user_data);
-void account_export_csv(GtkWidget *widget, gpointer user_data);
-void account_make_archive(GtkWidget *widget, gpointer user_data);
-void account_period_change(GtkWidget *widget, gpointer user_data);
-void account_range_change(GtkWidget *widget, gpointer user_data);
-void account_add(GtkWidget *widget, gpointer user_data);
-void account_populate(GtkWidget *view);
-void validate_selected_foreach_func (GtkTreeModel  *model, GtkTreePath   *path, GtkTreeIter   *iter, gpointer       userdata);
+static void account_export_csv(GtkWidget *widget, gpointer user_data);
+static void account_make_archive(GtkWidget *widget, gpointer user_data);
+static void account_period_change(GtkWidget *widget, gpointer user_data);
+static void account_range_change(GtkWidget *widget, gpointer user_data);
+static void account_add(GtkWidget *widget, gpointer user_data);
+static void account_populate(GtkWidget *view);
+static void validate_selected_foreach_func (GtkTreeModel  *model, GtkTreePath   *path, GtkTreeIter   *iter, gpointer       userdata);
 Operation *get_active_operation(GtkTreeView *treeview);
-void account_action(GtkWidget *widget, gpointer user_data);
-void account_toggle(GtkWidget *widget, gpointer user_data);
-void account_selection(GtkTreeSelection *treeselection, gpointer user_data);
-void account_update(GtkWidget *widget, gpointer user_data);
-GtkWidget *create_account_toolbar(struct account_data *data);
-void account_onRowActivated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata);
+static void account_action(GtkWidget *widget, gpointer user_data);
+static void account_toggle(GtkWidget *widget, gpointer user_data);
+static void account_selection(GtkTreeSelection *treeselection, gpointer user_data);
+static void account_update(GtkWidget *widget, gpointer user_data);
+static void account_onRowActivated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata);
 
 static GtkActionEntry entries[] = {
 
@@ -173,7 +169,6 @@ static GtkActionEntry entries[] = {
   { "Remove"       , "hb-stock-ope-delete", N_("_Remove..."), NULL,    N_("Remove the active transactions"), G_CALLBACK (account_action_remove) },
   { "MakeArchive"  , NULL, N_("Make an archive..."), NULL,    NULL, G_CALLBACK (account_action_createarchive) },
 
-  { "Import"       , NULL, N_("Import CSV..."), NULL,    NULL, G_CALLBACK (account_action_importcsv) },
   { "Export"       , NULL, N_("Export CSV..."), NULL,    NULL, G_CALLBACK (account_action_exportcsv) },
 
 };
@@ -198,7 +193,6 @@ static const gchar *ui_info =
 "    <menu action='ToolsMenu'>"
 "      <menuitem action='Filter'/>"
 "        <separator/>"
-"      <menuitem action='Import'/>"
 "      <menuitem action='Export'/>"
 "    </menu>"
 "  </menubar>"
@@ -220,7 +214,6 @@ static const gchar *ui_info =
 static void account_action_close(GtkAction *action, gpointer user_data)
 {
 struct account_data *data = user_data;
-gboolean result;
 
 	DB( g_print("action close\n") );
 
@@ -288,13 +281,6 @@ struct account_data *data = user_data;
 
 
 
-static void account_action_importcsv(GtkAction *action, gpointer user_data)
-{
-struct account_data *data = user_data;
-
-	account_import_csv(data->window, NULL);
-}
-
 static void account_action_exportcsv(GtkAction *action, gpointer user_data)
 {
 struct account_data *data = user_data;
@@ -336,6 +322,8 @@ Operation *item;
 		list = g_list_next(list);
 	}		
 
+	DB( g_print(" not found...\n") );
+
 	return NULL;
 }
 
@@ -354,7 +342,7 @@ void operation_warn_transfert(Operation *src, gchar *msg2)
 		g_date_strftime (str_date, 128-1, PREFS->date_format, date);
 		g_date_free(date);
 		
-		acc = g_list_nth_data(GLOBALS->acc_list, src->dst_account);
+		acc = da_acc_get( src->dst_account);
 		
 		//warn the user
 		homebank_message_dialog(GTK_WINDOW(GLOBALS->mainwindow), GTK_MESSAGE_INFO,
@@ -390,7 +378,40 @@ Operation *dst;
 	}
 }
 
+static void operation_add_transfert(Operation *ope, GtkWidget *treeview)
+{
+Operation *newope;
+Account *acc;
+gchar swap;
 
+	DB( g_printf("(operation) operation add transfert\n") );
+
+	if( ope->dst_account > 0 )
+	{
+		newope = da_operation_clone(ope);
+
+		newope->amount = -newope->amount;
+		newope->flags ^= (OF_INCOME);	//xor
+		newope->flags &= (~OF_REMIND);
+
+		swap = newope->account;
+		newope->account = newope->dst_account;
+		newope->dst_account = swap;
+
+
+		/* update acc flags */
+		acc = da_acc_get( newope->account);
+		if(acc != NULL)
+			acc->flags |= AF_ADDED;
+
+
+		DB( g_printf(" + add transfert, %x\n", newope) );
+
+		da_operation_append(newope);
+		if(treeview != NULL) operation_add_treeview(newope, treeview, ope->account);
+	}
+
+}
 
 void operation_add(Operation *ope, GtkWidget *treeview, gint accnum)
 {
@@ -418,7 +439,7 @@ Account *acc;
 	guint cheque;
 
 		/* get the active account and the corresponding cheque number */
-		acc = g_list_nth_data(GLOBALS->acc_list, newope->account);
+		acc = da_acc_get( newope->account);
 		cheque = atol(newope->info);
 
 		DB( g_printf(" -> should store cheque number %d to %d", cheque, newope->account) );
@@ -430,44 +451,22 @@ Account *acc;
 
 
 	/* add normal operation */
-
-	/* update acc flags */
-	acc = g_list_nth_data(GLOBALS->acc_list, ope->account);
+	acc = da_acc_get( ope->account);
 	if(acc != NULL)
 		acc->flags |= AF_ADDED;
 
 	DB( g_printf(" + add normal %x\n", newope) );
+	da_operation_append(newope);
+	if(treeview != NULL) operation_add_treeview(newope, treeview, accnum);
 
-	GLOBALS->ope_list = g_list_append(GLOBALS->ope_list, newope);
-	if(treeview != NULL)
-		operation_add_treeview(newope, treeview, accnum);
-
-	/* prepare for remind or transfert */
-	ope->amount = -ope->amount;
-	ope->flags ^= (OF_INCOME);	//xor
-
-	/* add transfert operation */
 	if(ope->paymode == PAYMODE_PERSTRANSFERT)
 	{
-	gchar swap;
-
-		ope->flags &= (~OF_REMIND);
-		swap = ope->account;
-		ope->account = ope->dst_account;
-		ope->dst_account = swap;
-
-		/* update acc flags */
-		acc = g_list_nth_data(GLOBALS->acc_list, ope->account);
-		acc->flags |= AF_ADDED;
-
-		newope = da_operation_clone(ope);
-
-		DB( g_printf(" + add transfert, %x\n", newope) );
-
-		GLOBALS->ope_list = g_list_append(GLOBALS->ope_list, newope);
-		if(treeview != NULL) operation_add_treeview(newope, treeview, accnum);
+		operation_add_transfert(ope, treeview);
 	}
 }
+
+
+
 
 void operation_add_treeview(Operation *ope, GtkWidget *treeview, gint accnum)
 {
@@ -505,118 +504,8 @@ GtkTreeIter  iter;
 
 
 
-void account_import_csv(GtkWidget *widget, gpointer user_data)
-{
-struct account_data *data;
-gchar *filename = NULL;
-GIOChannel *io;
-static gint csvtype[7] = {
-					CSV_DATE,
-					CSV_INT,
-					CSV_STRING,
-					CSV_STRING,
-					CSV_STRING,
-					CSV_DOUBLE,
-					CSV_STRING,
-					};
 
-	DB( g_print("(account) import csv\n") );
-
-	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
-
-	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_OPEN, &filename) == TRUE )
-	{
-		DB( g_print(" + filename is %s\n", filename) );
-
-		DB( g_print(" + will add to %d\n", data->accnum) );
-
-		io = g_io_channel_new_file(filename, "r", NULL);
-		if(io != NULL)
-		{
-		gchar *tmpstr;
-		gint io_stat;
-		gboolean valid;
-		gint count = 0;
-		gint error = 0;
-
-			for(;;)
-			{
-				io_stat = g_io_channel_read_line(io, &tmpstr, NULL, NULL, NULL);
-				if( io_stat == G_IO_STATUS_EOF)
-					break;
-				if( io_stat == G_IO_STATUS_NORMAL)
-				{
-					if( tmpstr != "")
-					{
-					gchar **str_array;
-					Operation *newope = &data->ope;
-
-						hb_string_strip_crlf(tmpstr);
-
-						/* control validity here */
-						valid = hb_string_csv_valid(tmpstr, 7, csvtype);
-					
-						 DB( g_print("valid %d, '%s'\n", valid, tmpstr) );
-					
-						if( !valid )
-						{
-							error++;
-						}
-						else
-						{
-							count++;
-						
-							str_array = g_strsplit (tmpstr, ";", 7);
-							// date; paymode; info; payee, wording; amount; category
-
-							DB( g_print(" read %s : %s : %s\n", str_array[0], str_array[1], str_array[2]) );
-
-							/* fill in the operation */
-							memset(&data->ope, 0, sizeof(Operation));
-
-							newope->date		= hb_date_get_julian_parse(str_array[0]);	
-							newope->paymode     = atoi(str_array[1]);
-							newope->info        = g_strdup(str_array[2]);
-							newope->payee       = da_payee_exists(GLOBALS->pay_list, str_array[3]);
-							newope->wording     = g_strdup(str_array[4]);
-							newope->amount      = g_ascii_strtod(str_array[5],NULL);
-							newope->category    = da_category_exists(GLOBALS->cat_list, str_array[6]);
-							newope->account     = data->accnum;
-							newope->dst_account = data->accnum;
-
-							newope->flags |= OF_ADDED;
-
-							if( newope->amount > 0)
-								newope->flags |= OF_INCOME;
-
-							account_add(widget, NULL);
-
-							g_strfreev (str_array);
-						}
-					}
-					g_free(tmpstr);
-				}
-
-			}
-			g_io_channel_unref (io);
-
-			homebank_message_dialog(GTK_WINDOW(data->window), error > 0 ? GTK_MESSAGE_ERROR : GTK_MESSAGE_INFO,
-				_("Transaction CSV import result"),
-				_("%d transactions inserted\n%d errors in the file"),
-				count, error);
-				 
-		}
-
-		g_free( filename );
-
-		account_update(widget, (gpointer)UF_BALANCE);
-		account_range_change(widget, NULL);
-
-	}
-
-}
-
-void account_export_csv(GtkWidget *widget, gpointer user_data)
+static void account_export_csv(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
 gchar *filename = NULL;
@@ -668,9 +557,9 @@ GIOChannel *io;
 
 				info = ope->info;
 				if(info == NULL) info = "";
-				payee = g_list_nth_data(GLOBALS->pay_list, ope->payee);
+				payee = da_pay_get(ope->payee);
 				payeename = (payee->name == NULL) ? "" : payee->name;
-				category = g_list_nth_data(GLOBALS->cat_list, ope->category);
+				category = da_cat_get(ope->category);
 				categoryname = (category->name == NULL) ? "" : category->name;
 
 
@@ -702,7 +591,7 @@ GIOChannel *io;
 /*
 ** make an archive with the active operation
 */
-void account_make_archive(GtkWidget *widget, gpointer user_data)
+static void account_make_archive(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
 
@@ -767,10 +656,13 @@ gint result, count;
 				item->flags			= ope->flags  & (OF_INCOME);
 				item->payee			= ope->payee;
 				item->category		= ope->category;
-				item->wording 		= g_strdup(ope->wording);
+				if(ope->wording != NULL)
+					item->wording 		= g_strdup(ope->wording);
+				else
+					item->wording 		= g_strdup(_("(new archive)"));
 
 				GLOBALS->arc_list = g_list_insert_sorted(GLOBALS->arc_list, item, (GCompareFunc)defarchive_list_sort);
-				data->change++;
+				GLOBALS->change++;
 
 				list = g_list_next(list);
 			}
@@ -784,7 +676,7 @@ gint result, count;
 
 
 
-void account_period_change(GtkWidget *widget, gpointer user_data)
+static void account_period_change(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
 gint month, year;
@@ -808,7 +700,7 @@ gint month, year;
 	account_populate(data->LV_ope);
 }
 
-void account_range_change(GtkWidget *widget, gpointer user_data)
+static void account_range_change(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
 GList *list;
@@ -852,9 +744,13 @@ GDate *date;
 	}
 }
 
-
-
-void account_add(GtkWidget *widget, gpointer user_data)
+/*
+*	update balance with data->ope amount for the active account (data->accnum)
+*	call operation_add with data->ope, data->accnum
+*
+*
+*/
+static void account_add(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
 Operation *ope;
@@ -868,9 +764,17 @@ Operation *ope;
 		DB( g_printf(" -> update balance %.2f\n", ope->amount) );
 
 		//update our account balance
-		if(ope->flags & OF_VALID) data->bank += ope->amount;
-		data->today += ope->amount;
-		data->future += ope->amount;
+		if(!(ope->flags & OF_REMIND))
+		{
+			data->future += ope->amount;
+			
+			if(ope->date <= GLOBALS->today)
+				data->today += ope->amount;
+
+			if(ope->flags & OF_VALID)
+				data->bank += ope->amount;
+
+		}
 	}
 
 	operation_add(ope, data->LV_ope, data->accnum);
@@ -879,7 +783,7 @@ Operation *ope;
 
 
 
-void account_populate(GtkWidget *view)
+static void account_populate(GtkWidget *view)
 {
 struct account_data *data;
 
@@ -909,7 +813,7 @@ GList *list;
 	{
 	Account *acc;
 
-		acc = g_list_nth_data(GLOBALS->acc_list, data->accnum);
+		acc = da_acc_get(data->accnum);
 		if(acc)
 		{
 			data->bank = acc->initial;
@@ -930,6 +834,9 @@ GList *list;
 		if(ope->account == data->accnum)
 		{
 
+			if(!(ope->flags & OF_REMIND))
+			{
+
 		/* balances */
 			data->future += ope->amount;
 
@@ -938,6 +845,7 @@ GList *list;
 
 			if(ope->flags & OF_VALID)
 				data->bank += ope->amount;
+			}
 
 			/* then filter on date */
 			if(filter_test(data->filter, ope) == 1)
@@ -958,6 +866,7 @@ GList *list;
 				data->hidden++;
 
 			}
+					
 		}
 
 
@@ -990,12 +899,12 @@ GList *list;
 		g_free(info);
 	}
 
-	account_update(view, (gpointer)UF_SENSITIVE+UF_BALANCE);
+	account_update(view, GINT_TO_POINTER(UF_SENSITIVE+UF_BALANCE));
 
 }
 
 
-void validate_selected_foreach_func (GtkTreeModel  *model, GtkTreePath   *path, GtkTreeIter   *iter, gpointer       userdata)
+static void validate_selected_foreach_func (GtkTreeModel  *model, GtkTreePath   *path, GtkTreeIter   *iter, gpointer       userdata)
 {
 struct account_data *data = userdata;
 Operation *entry;
@@ -1019,8 +928,21 @@ gint *indices;
 			data->bank += entry->amount;
 			entry->flags ^= OF_VALID;
 			entry->flags |= OF_CHANGED;
-
 	}
+
+	/* deal with transfert to be validated also */
+	if( entry->paymode == PAYMODE_PERSTRANSFERT )
+	{
+	Operation *ct;
+		
+		ct = operation_get_child_transfert(entry);
+		if(ct != NULL)
+		{
+			ct->flags ^= OF_VALID;
+			ct->flags |= OF_CHANGED;
+		}
+	}
+
 
 }
 
@@ -1051,8 +973,32 @@ Operation *ope;
 }
 
 
+static void remove_active_operation(GtkTreeView *treeview)
+{
+GtkTreeModel *model;
+GList *list;
 
-void account_action(GtkWidget *widget, gpointer user_data)
+	model = gtk_tree_view_get_model(treeview);
+	list = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(treeview), &model);
+
+	if(list != NULL)
+	{
+	GtkTreeIter iter;
+
+		gtk_tree_model_get_iter(model, &iter, list->data);
+		gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+		
+	}
+
+	g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+	g_list_free(list);
+
+
+}
+
+
+
+static void account_action(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
 gint action = (gint)user_data;
@@ -1083,7 +1029,8 @@ gboolean result;
 
 			DB( g_printf(" -> ope=%8x\n", &data->ope) );
 
-			window = create_defoperation_window(&data->ope, OPERATION_EDIT_ADD, data->accnum);
+			window = create_defoperation_window(GTK_WINDOW(data->window), &data->ope, OPERATION_EDIT_ADD, data->accnum);
+			result = GTK_RESPONSE_ADD;
 			while(result == GTK_RESPONSE_ADD)
 			{
 				/* fill in the operation */
@@ -1095,32 +1042,27 @@ gboolean result;
 
 				result = gtk_dialog_run (GTK_DIALOG (window));
 
-				if(result != GTK_RESPONSE_REJECT)
+				if(result == GTK_RESPONSE_ADD || result == GTK_RESPONSE_ACCEPT)
 				{
 
 					defoperation_get(window, NULL);
 
 					account_add(widget, NULL);
-					account_update(widget, (gpointer)UF_BALANCE);
+					account_update(widget, GINT_TO_POINTER(UF_BALANCE));
 
 					data->acc->flags |= AF_ADDED;
-					data->change++;
-
-					//DB( g_printf(" -> change=%d\n", data->change) );
+					GLOBALS->change++;
 
 				}
 
+				//keep these values for next
 				date = data->ope.date;
 				account = data->ope.account;
 
 				//DB( g_printf(" -> result %d\n", result) );
 			}
-
-
 			defoperation_dispose(window, NULL);
-			
-			
-			
+		
 			gtk_widget_destroy (window);
 		}
 		break;
@@ -1131,37 +1073,42 @@ gboolean result;
 		Operation *ope;
 		GtkWidget *window;
 
+			DB( g_printf("(operation) inherit multiple\n") );
+
 			ope = get_active_operation(GTK_TREE_VIEW(data->LV_ope));
 			if(ope)
 			{
-				memcpy(&data->ope, ope, sizeof(Operation));
-				data->ope.date = GLOBALS->today;
-				//duplicate strings
-				data->ope.wording = g_strdup(ope->wording);
-				data->ope.info    = g_strdup(ope->info);
-
-				window = create_defoperation_window(&data->ope, OPERATION_EDIT_INHERIT, data->accnum);
-
-				defoperation_set_operation(window, &data->ope);
-
-				result = gtk_dialog_run (GTK_DIALOG (window));
-
-				if(result != GTK_RESPONSE_REJECT)
+				window = create_defoperation_window(GTK_WINDOW(data->window), &data->ope, OPERATION_EDIT_INHERIT, data->accnum);
+				result = GTK_RESPONSE_ADD;
+				while(result == GTK_RESPONSE_ADD)
 				{
-					defoperation_get(window, NULL);
+					/* fill in the operation */
 
-					account_add(widget, NULL);
-					account_update(widget, (gpointer)UF_BALANCE);
+					memcpy(&data->ope, ope, sizeof(Operation));
+					data->ope.wording = g_strdup(ope->wording);
+					data->ope.info    = g_strdup(ope->info);
 
-					data->acc->flags |= AF_ADDED;
-					data->change++;
-					DB( g_printf(" -> change=%d\n", data->change) );
+					defoperation_set_operation(window, &data->ope);
+
+					result = gtk_dialog_run (GTK_DIALOG (window));
+
+					if(result == GTK_RESPONSE_ADD || result == GTK_RESPONSE_ACCEPT)
+					{
+						defoperation_get(window, NULL);
+
+						account_add(widget, NULL);
+						account_update(widget, GINT_TO_POINTER(UF_BALANCE));
+
+						data->acc->flags |= AF_ADDED;
+						GLOBALS->change++;
+					}
+
 				}
 
 				defoperation_dispose(window, NULL);
 				gtk_widget_destroy (window);
-			}
 
+			}
 		}
 		break;
 
@@ -1177,7 +1124,7 @@ gboolean result;
 				memcpy(&data->ope, ope, sizeof(Operation));
 
 				oldope = &data->ope;
-				window = create_defoperation_window(ope, OPERATION_EDIT_MODIFY, data->accnum);
+				window = create_defoperation_window(GTK_WINDOW(data->window), ope, OPERATION_EDIT_MODIFY, data->accnum);
 
 				defoperation_set_operation(window, ope);
 
@@ -1185,24 +1132,57 @@ gboolean result;
 
 				if(result == GTK_RESPONSE_ACCEPT)
 				{
+					//sub the old amount to balances
+					if(!(ope->flags & OF_REMIND))
+					{
+						data->future -= oldope->amount;
+						if(ope->date <= GLOBALS->today)
+							data->today -= oldope->amount;
+						if(ope->flags & OF_VALID)
+							data->bank -= oldope->amount;
+					}
+					
 					defoperation_get(window, NULL);
 
-					//sub the old amount to balances
-					if(ope->flags & OF_VALID) data->bank -= oldope->amount;
-					data->today -= oldope->amount;
-					data->future -= oldope->amount;
+					//add our new amount to balances if ope->account == this account
+					if( ope->account == data->accnum )
+					{					
+						if(!(ope->flags & OF_REMIND))
+						{
+							data->future += ope->amount;
+							if(ope->date <= GLOBALS->today)
+								data->today += ope->amount;
+							if(ope->flags & OF_VALID)
+								data->bank += ope->amount;
+						}
+					}
+					else
+					{
+						//remove from the display
+						remove_active_operation(GTK_TREE_VIEW(data->LV_ope));
+				
+					}
 
-					//add our new amount to balances
-					if(ope->flags & OF_VALID) data->bank += ope->amount;
-					data->today += ope->amount;
-					data->future += ope->amount;
 
-					account_update(widget, (gpointer)UF_BALANCE);
+					if( ope->paymode == PAYMODE_PERSTRANSFERT )
+					{
+					Operation *ct;
+						
+						ct = operation_get_child_transfert(ope);
+						if(ct == NULL)
+						{
+							//todo:sould create the transeftr also
+							operation_add_transfert(ope, data->LV_ope);
+						}
+						// synchronisation is done in operation_get method using defoperation_update_child_transfert
+
+					}
+
+					account_update(widget, GINT_TO_POINTER(UF_BALANCE));
 
 					data->acc->flags |= AF_CHANGED;
-					data->change++;
+					GLOBALS->change++;
 
-					DB( g_printf(" -> change=%d\n", data->change) );
 				}
 
 				defoperation_dispose(window, NULL);
@@ -1213,29 +1193,6 @@ gboolean result;
 		}
 		break;
 
-		//validate
-		case ACTION_ACCOUNT_VALIDATE:
-		{
-			GtkTreeSelection *selection;
-
-			selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_ope));
-			gtk_tree_selection_selected_foreach(selection, (GtkTreeSelectionForeachFunc)validate_selected_foreach_func, data);
-
-			DB( g_printf(" validate\n") );
-
-			gtk_widget_queue_draw (data->LV_ope);
-			//gtk_widget_queue_resize (data->LV_acc);
-
-
-			account_update(widget, (gpointer)UF_BALANCE);
-
-			data->acc->flags |= AF_CHANGED;
-			data->change++;
-
-			DB( g_printf(" -> change=%d\n", data->change) );
-		}
-
-			break;
 
 		//delete
 		case ACTION_ACCOUNT_REMOVE:
@@ -1293,16 +1250,13 @@ gboolean result;
 					if(!(entry->flags & OF_REMIND))
 					{
 						DB( printf("[account] line - sub\n") );
-						if(entry->flags & OF_VALID) data->bank -= entry->amount;
-						data->today -= entry->amount;
-						data->future -= entry->amount;
+
+						data->future += entry->amount;
+						if(entry->date <= GLOBALS->today)
+							data->today += entry->amount;
+						if(entry->flags & OF_VALID)
+							data->bank += entry->amount;
 					}
-
-					gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
-					GLOBALS->ope_list = g_list_remove(GLOBALS->ope_list, entry);
-
-					data->change++;
-					DB( g_printf(" -> change=%d\n", data->change) );
 
 					/* v3.4: also remove child transfert */
 					if( entry->paymode == PAYMODE_PERSTRANSFERT )
@@ -1310,19 +1264,49 @@ gboolean result;
 						operation_delete_child_transfert( entry );
 					}
 
+					gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+					GLOBALS->ope_list = g_list_remove(GLOBALS->ope_list, entry);
+					da_operation_free(entry);
+
+					GLOBALS->change++;
+
+
 					list = g_list_previous(list);
 				}
 
 				g_list_foreach(selection, (GFunc)gtk_tree_path_free, NULL);
 				g_list_free(selection);
 
-				account_update(widget, (gpointer)UF_BALANCE);
+				account_update(widget, GINT_TO_POINTER(UF_BALANCE));
 
 				data->acc->flags |= AF_CHANGED;
 
 			}
 		}
 		break;
+
+		//validate
+		case ACTION_ACCOUNT_VALIDATE:
+		{
+			GtkTreeSelection *selection;
+
+			selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_ope));
+			gtk_tree_selection_selected_foreach(selection, (GtkTreeSelectionForeachFunc)validate_selected_foreach_func, data);
+
+			DB( g_printf(" validate\n") );
+
+			gtk_widget_queue_draw (data->LV_ope);
+			//gtk_widget_queue_resize (data->LV_acc);
+
+
+			account_update(widget, GINT_TO_POINTER(UF_BALANCE));
+
+			data->acc->flags |= AF_CHANGED;
+			GLOBALS->change++;
+
+		}
+
+			break;
 
 		case ACTION_ACCOUNT_FILTER:
 		{
@@ -1332,7 +1316,7 @@ gboolean result;
 			if(create_deffilter_window(data->filter, FALSE) == GTK_RESPONSE_ACCEPT)
 			{
 				account_populate(data->LV_ope);
-				account_update(data->LV_ope, (gpointer)UF_SENSITIVE+UF_BALANCE);
+				account_update(data->LV_ope, GINT_TO_POINTER(UF_SENSITIVE+UF_BALANCE));
 			}
 
 		}
@@ -1354,7 +1338,7 @@ gboolean result;
 
 
 
-void account_toggle(GtkWidget *widget, gpointer user_data)
+static void account_toggle(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
 
@@ -1362,19 +1346,22 @@ struct account_data *data;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
-	account_update(data->LV_ope, (gpointer)UF_BALANCE);
+	account_update(data->LV_ope, GINT_TO_POINTER(UF_BALANCE));
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW(data->LV_ope));
 }
 
-void account_selection(GtkTreeSelection *treeselection, gpointer user_data)
+static void account_selection(GtkTreeSelection *treeselection, gpointer user_data)
 {
 
-	account_update(GTK_WIDGET(gtk_tree_selection_get_tree_view (treeselection)), (gpointer)UF_SENSITIVE);
+	DB( g_printf("****\n(account) selection changed cb\n") );
+
+
+	account_update(GTK_WIDGET(gtk_tree_selection_get_tree_view (treeselection)), GINT_TO_POINTER(UF_SENSITIVE));
 
 }
 
 
-void account_update(GtkWidget *widget, gpointer user_data)
+static void account_update(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
 GtkTreeSelection *selection;
@@ -1530,9 +1517,9 @@ gboolean minor;
 	gtk_statusbar_pop (GTK_STATUSBAR(data->statusbar), 0); /* clear any previous message, underflow is allowed */
 
 	if( count <= 1 )
-		msg = g_strdup_printf ("%d transactions selected, %d hidden", count, data->hidden);
+		msg = g_strdup_printf (_("%d transactions selected, %d hidden"), count, data->hidden);
 	else
-		msg = g_strdup_printf ("%d transactions selected, %d hidden :: %s ( %s - %s)", count, data->hidden, buf3, buf1, buf2);
+		msg = g_strdup_printf (_("%d transactions selected, %d hidden :: %s ( %s - %s)"), count, data->hidden, buf3, buf1, buf2);
 
 	gtk_statusbar_push (GTK_STATUSBAR(data->statusbar), 0, msg);
 	g_free (msg);
@@ -1550,6 +1537,7 @@ GtkTreeIter iter;
 gint col_id, count;
 GList *selection, *list;
 Operation *ope;
+gchar *tagstr, *txt;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(treeview), GTK_TYPE_WINDOW)), "inst_data");
 
@@ -1568,7 +1556,7 @@ Operation *ope;
 
 	if( count == 1)
 	{
-		account_action(GTK_WIDGET(treeview), (gpointer)ACTION_ACCOUNT_EDIT);
+		account_action(GTK_WIDGET(treeview), GINT_TO_POINTER(ACTION_ACCOUNT_EDIT));
 	}
 	else
 	if(col_id >= LST_DSPOPE_DATE )
@@ -1610,9 +1598,9 @@ Operation *ope;
 				break;
 			case LST_DSPOPE_PAYEE:
 				gtk_window_set_title (GTK_WINDOW (window), _("Modify payee..."));
-				widget1 = make_poppayee(NULL);
-				make_poppayee_populate(GTK_COMBO_BOX(widget1), GLOBALS->pay_list);
-				gtk_combo_box_set_active(GTK_COMBO_BOX(widget1), ope->payee);
+				widget1 = ui_pay_comboboxentry_new(NULL);
+				ui_pay_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(widget1), GLOBALS->h_pay);
+				ui_pay_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(widget1), ope->payee);
 				break;
 			case LST_DSPOPE_WORDING:
 				gtk_window_set_title (GTK_WINDOW (window), _("Modify description..."));
@@ -1621,15 +1609,27 @@ Operation *ope;
 				break;
 			case LST_DSPOPE_EXPENSE:
 			case LST_DSPOPE_INCOME:
+			case LST_DSPOPE_AMOUNT:
 				gtk_window_set_title (GTK_WINDOW (window), _("Modify amount..."));
 				widget1 = make_amount(NULL);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget1), ope->amount);
 				break;
 			case LST_DSPOPE_CATEGORY:
 				gtk_window_set_title (GTK_WINDOW (window), _("Modify category..."));
-				widget1 = make_popcategory(NULL);
-				make_popcategory_populate(GTK_COMBO_BOX(widget1), GLOBALS->cat_list);
-				gtk_combo_box_set_active(GTK_COMBO_BOX(widget1), ope->category);
+				widget1 = ui_cat_comboboxentry_new(FALSE);
+				ui_cat_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(widget1), GLOBALS->h_cat);
+				ui_cat_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(widget1), ope->category);
+				break;
+			case LST_DSPOPE_TAGS:
+				gtk_window_set_title (GTK_WINDOW (window), _("Modify tags..."));
+				widget1 = make_string(NULL);
+
+				tagstr = transaction_get_tagstring(ope);
+
+				txt = (tagstr != NULL) ? tagstr : "";
+				gtk_entry_set_text(GTK_ENTRY(widget1), txt);
+				g_free(tagstr);
+
 				break;
 		}
 
@@ -1671,7 +1671,8 @@ Operation *ope;
 						}
 						break;
 					case LST_DSPOPE_PAYEE:
-						ope->payee = gtk_combo_box_get_active(GTK_COMBO_BOX(widget1));
+						ope->payee = ui_pay_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(widget1));
+						DB( g_print(" -> payee: '%d'\n", ope->payee) );
 						break;
 					case LST_DSPOPE_WORDING:
 						txt = gtk_entry_get_text(GTK_ENTRY(widget1));
@@ -1683,16 +1684,31 @@ Operation *ope;
 						break;
 					case LST_DSPOPE_EXPENSE:
 					case LST_DSPOPE_INCOME:
+					case LST_DSPOPE_AMOUNT:
 						ope->flags &= (~OF_INCOME);
 						ope->amount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget1));
 						if(ope->amount > 0) ope->flags |= OF_INCOME;
 						break;
 					case LST_DSPOPE_CATEGORY:
-						ope->category = gtk_combo_box_get_active(GTK_COMBO_BOX(widget1));
+						ope->category = ui_cat_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(widget1));
+						//bad .... ope->category = gtk_combo_box_get_active(GTK_COMBO_BOX(widget1));
+						
+						DB( g_print(" -> category: '%d'\n", ope->category) );
 						break;
+					case LST_DSPOPE_TAGS:
+						txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget1));
+						if (txt && *txt)
+						{
+							DB( g_print(" -> tags: '%s'\n", txt) );
+		
+							transaction_set_tags(ope, txt);
+						}
+					
+						break;
+
 				}
 
-				data->change++;
+				GLOBALS->change++;
 
 				list = g_list_next(list);
 			}
@@ -1707,14 +1723,13 @@ Operation *ope;
 	}
 }
 
-
 void account_busy(GtkWidget *widget, gboolean state)
 {
 struct account_data *data;
 GtkWidget *window;
 GdkCursor *cursor;
 
-	DB( g_printf("(account) busy\n") );
+	DB( g_printf("(account) busy %d\n", state) );
 
 	window = gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW);
 	data = g_object_get_data(G_OBJECT(window), "inst_data");
@@ -1731,7 +1746,7 @@ GdkCursor *cursor;
 		gtk_widget_set_sensitive(window, FALSE);
 		gtk_action_group_set_sensitive(data->actions, FALSE);
 	
-		  /* make sure chnages is up */
+		  // make sure changes is up
 		  while (gtk_events_pending ())
 		    gtk_main_iteration ();
 	
@@ -1748,16 +1763,58 @@ GdkCursor *cursor;
 	}
 }
 
+
+
+
+
+
+/*
+static gint listview_context_cb (GtkWidget *widget, GdkEventButton *event, GtkWidget *menu)
+{
+
+	if (event->button == 3)
+	{
+
+		
+		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
+			(gint) event->x, (gint) event->y, &path, NULL, NULL, NULL))
+		{
+			gtk_tree_view_set_cursor (GTK_TREE_VIEW (treeview), path, NULL, FALSE);
+			gtk_tree_path_free (path);
+		}
+		
+		
+
+
+        gtk_menu_popup (GTK_MENU(menu), NULL, NULL, NULL, NULL,
+                        event->button, event->time);
+
+        // On indique à l'appelant que l'on a géré cet événement.
+
+        return TRUE;
+    }
+
+    // On indique à l'appelant que l'on n'a pas géré cet événement.
+
+    return FALSE;
+}
+*/
+
+
 /*
 ** populate the account window
 */
 void account_init_window(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
+GDate *date;
+guint year;
+GList *list;
+Operation *item;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(widget), GTK_TYPE_WINDOW)), "inst_data");
 
-	DB( g_print("(account) populate\n") );
+	DB( g_print("(account) init window\n") );
 
 	account_busy(widget, TRUE);
 
@@ -1765,10 +1822,7 @@ struct account_data *data;
 
 	if(g_list_length(GLOBALS->ope_list) > 1)
 	{
-	GList *list;
-	Operation *item;
-	GDate *date;
-	guint year;
+		DB( g_printf(" -> get date bounds\n") );
 
 		//get our min max date
 		list = g_list_first(GLOBALS->ope_list);
@@ -1776,27 +1830,35 @@ struct account_data *data;
 		data->filter->mindate = item->date;
 		list = g_list_last(GLOBALS->ope_list);
 		item = list->data;
-		data->filter->maxdate   = item->date;
-
-		date = g_date_new_julian(data->filter->maxdate);
-		year = g_date_get_year(date);
-		g_date_free(date);
-
-		g_signal_handler_block(data->NB_year, data->handler_id[HID_YEAR]);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->NB_year), year);
-		g_signal_handler_unblock(data->NB_year, data->handler_id[HID_YEAR]);
+		data->filter->maxdate = item->date;
+		
 	}
+	else
+	{
+		data->filter->mindate = GLOBALS->today;
+		data->filter->maxdate = GLOBALS->today;
+	}
+	
+	date = g_date_new_julian(data->filter->maxdate);
+	year = g_date_get_year(date);
+	g_date_free(date);
+
+	g_signal_handler_block(data->NB_year, data->handler_id[HID_YEAR]);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->NB_year), year);
+	g_signal_handler_unblock(data->NB_year, data->handler_id[HID_YEAR]);
 
 	DB( g_printf(" mindate=%d, maxdate=%d %x\n", data->filter->mindate,data->filter->maxdate) );
 
-	account_update(widget, (gpointer)UF_VISUAL);
+	DB( g_printf(" -> call update visual\n") );
+	account_update(widget, GINT_TO_POINTER(UF_VISUAL));
 
+	DB( g_printf(" -> set range or populate+update sensitive+balance\n") );
 	if( PREFS->filter_range != 0 )
 		gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_range), PREFS->filter_range);
 	else
 	{
 		account_populate(widget);
-		account_update(widget, (gpointer)UF_SENSITIVE+UF_BALANCE);
+		account_update(widget, GINT_TO_POINTER(UF_SENSITIVE+UF_BALANCE));
 	}
 
 	account_busy(widget, FALSE);
@@ -1812,7 +1874,7 @@ static gboolean account_getgeometry(GtkWidget         *widget,
                                                         GdkEventConfigure *event,
                                                         gpointer           user_data)
 {
-struct account_data *data = user_data;
+//struct account_data *data = user_data;
 struct WinGeometry *wg;
 
 	DB( g_printf("(account) get geometry\n") );
@@ -1834,7 +1896,7 @@ struct WinGeometry *wg;
 */
 static gboolean account_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
-struct account_data *data = user_data;
+//struct account_data *data = user_data;
 
 
 	DB( g_printf("(account) delete-event\n") );
@@ -1858,10 +1920,8 @@ struct account_data *data;
  
  
  
- 	DB( g_printf(" -> add global change=%d\n", data->change) );
 	//enable define windows
 	GLOBALS->define_off--;
-	GLOBALS->change += data->change;
 
 	/* unset operation edit mutex */
 	if(data->acc)
@@ -1879,7 +1939,7 @@ struct account_data *data;
 
 
 	wallet_compute_balances(GLOBALS->mainwindow, NULL);
-	wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE+UF_BALANCE);
+	wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(UF_TITLE+UF_SENSITIVE+UF_BALANCE));
 
 }
 
@@ -1891,6 +1951,7 @@ struct account_data *data;
 struct WinGeometry *wg;
 GtkWidget *window, *mainvbox, *hbox, *hbox2, *statusbar;
 GtkWidget *treeview, *check_button, *vbar, *label, *entry, *sw;
+//GtkWidget *menu, *menu_items;
 GtkUIManager *ui;
 GtkActionGroup *actions;
 GError *error = NULL;
@@ -1900,7 +1961,7 @@ GError *error = NULL;
 
 	//disable define windows
 	GLOBALS->define_off++;
-	wallet_update(GLOBALS->mainwindow, (gpointer)UF_SENSITIVE);
+	wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(UF_SENSITIVE));
 
     /* create window, etc */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -1913,7 +1974,7 @@ GError *error = NULL;
 
 	/* set operation edit mutex */
 	if(data->acc)
-		data->acc->window = window;
+		data->acc->window = GTK_WINDOW(window);
 
 	//g_free(data->wintitle);
 	data->wintitle = g_strdup_printf("HomeBank - %s", data->acc->name);
@@ -2097,11 +2158,32 @@ GError *error = NULL;
 	data->handler_id[HID_RANGE] = g_signal_connect (data->CY_range, "changed", G_CALLBACK (account_range_change), NULL);
 
 
+	//todo: test context menu
+/*
+	menu = gtk_menu_new();
+
+//	menu_items = gtk_ui_manager_get_widget (ui, "/MenuBar/OperationMenu/Add");
+	
+	menu_items = gtk_menu_item_new_with_label ("test");
+	gtk_widget_show(menu_items);
+	gtk_menu_shell_append (GTK_MENU (menu), menu_items);
+
+	
+	
+	
+	//todo: debug test
+	g_signal_connect (treeview, "button-press-event", G_CALLBACK (listview_context_cb), 
+		// todo: here is not a GtkMenu but GtkImageMenuItem...
+		menu
+		//gtk_ui_manager_get_widget (ui, "/MenuBar")
+	);
+	*/
+
 
 	//g_signal_connect (GTK_TREE_VIEW(treeview), "cursor-changed", G_CALLBACK (account_update), (gpointer)2);
 	g_signal_connect (gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview)), "changed", G_CALLBACK (account_selection), NULL);
 
-	g_signal_connect (GTK_TREE_VIEW(treeview), "row-activated", G_CALLBACK (account_onRowActivated), (gpointer)2);
+	g_signal_connect (GTK_TREE_VIEW(treeview), "row-activated", G_CALLBACK (account_onRowActivated), GINT_TO_POINTER(2));
 
 
 	//setup, init and show window
@@ -2120,9 +2202,6 @@ GError *error = NULL;
 	DB( g_printf(" filter ok %x\n", (gint)data->filter) );
 	filter_reset(data->filter);
 
-	data->change = 0;
-
-	DB( g_printf(" -> change=%d\n", data->change) );
 
 	return window;
 }

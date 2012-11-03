@@ -1,25 +1,28 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 #include "homebank.h"
 
-#include "def_lists.h"
+#include "ui_account.h"
+#include "ui_payee.h"
+#include "ui_category.h"
 #include "def_filter.h"
 
 /****************************************************************************/
@@ -84,7 +87,20 @@ struct deffilter_data
 
 
 void deffilter_set(struct deffilter_data *data);
+void filter_reset(Filter *flt);
+void deffilter_clear(GtkWidget *widget, gpointer user_data);
+void deffilter_acc_select(GtkWidget *widget, gpointer user_data);
+void deffilter_pay_select(GtkWidget *widget, gpointer user_data);
+void deffilter_cat_select(GtkWidget *widget, gpointer user_data);
+void deffilter_option_update(GtkWidget *widget, gpointer user_data);
+void deffilter_get(struct deffilter_data *data);
+void deffilter_set(struct deffilter_data *data);
+void deffilter_setup(struct deffilter_data *data);
 
+GtkWidget *deffilter_page_category (struct deffilter_data *data);
+GtkWidget *deffilter_page_payee (struct deffilter_data *data);
+GtkWidget *deffilter_page_account (struct deffilter_data *data);
+GtkWidget *deffilter_page_general (struct deffilter_data *data);
 
 /*
 **
@@ -92,7 +108,6 @@ void deffilter_set(struct deffilter_data *data);
 void filter_reset(Filter *flt)
 {
 gint i;
-guint count;
 
 	DB( g_printf("(filter) reset %x\n", flt) );
 
@@ -112,32 +127,11 @@ guint count;
 
 */
 
-	flt->forceadd = TRUE;
-	flt->forcechg = TRUE;
+	flt->forceadd = FALSE;
+	flt->forcechg = FALSE;
 
 	for(i=0;i<NUM_PAYMODE_MAX;i++)
 		flt->paymode[i] = TRUE;
-
-	g_free(flt->acc);
-	count = g_list_length(GLOBALS->acc_list);
-	DB( g_printf(" %d accounts\n", count) );
-	flt->acc = g_malloc0(sizeof(gboolean)*count);
-	for(i=0;i<count;i++)
-		flt->acc[i] = TRUE;
-
-	g_free(flt->pay);
-	count = g_list_length(GLOBALS->pay_list);
-	DB( g_printf(" %d payees\n", count) );
-	flt->pay = g_malloc0(sizeof(gboolean)*count);
-	for(i=0;i<count;i++)
-		flt->pay[i] = TRUE;
-
-	g_free(flt->cat);
-	count = g_list_length(GLOBALS->cat_list);
-	DB( g_printf(" %d categories\n", count) );
-	flt->cat = g_malloc0(sizeof(gboolean)*count);
-	for(i=0;i<count;i++)
-		flt->cat[i] = TRUE;
 
 }
 
@@ -145,6 +139,9 @@ guint count;
 gint filter_test(Filter *flt, Operation *ope)
 {
 gint insert, count;
+Account *accitem;
+Payee *payitem;
+Category *catitem;
 
 	//DB( g_printf("(filter) test\n") );
 
@@ -172,25 +169,37 @@ gint insert, count;
 
 /* account */
 	if(flt->option[FILTER_ACCOUNT]) {
-		insert = ( flt->acc[ope->account] == TRUE ) ? 1 : 0;
-		count++;
-		if(flt->option[FILTER_ACCOUNT] == 2) insert ^= 1;
+		accitem = da_acc_get(ope->account);
+		if(accitem)
+		{	
+			insert = ( accitem->filter == TRUE ) ? 1 : 0;
+			count++;
+			if(flt->option[FILTER_ACCOUNT] == 2) insert ^= 1;
+		}
 	}
 	if(!insert) goto end;
 
 /* payee */
 	if(flt->option[FILTER_PAYEE]) {
-		insert = ( flt->pay[ope->payee] == TRUE ) ? 1 : 0;
-		count++;
-		if(flt->option[FILTER_PAYEE] == 2) insert ^= 1;
+		payitem = da_pay_get(ope->payee);
+		if(payitem)
+		{
+			insert = ( payitem->filter == TRUE ) ? 1 : 0;
+			count++;
+			if(flt->option[FILTER_PAYEE] == 2) insert ^= 1;
+		}
 	}
 	if(!insert) goto end;
 
 /* category */
 	if(flt->option[FILTER_CATEGORY]) {
-		insert = ( flt->cat[ope->category] == TRUE ) ? 1 : 0;
-		count++;
-		if(flt->option[FILTER_CATEGORY] == 2) insert ^= 1;
+		catitem = da_cat_get(ope->category);
+		if(catitem)
+		{
+			insert = ( catitem->filter == TRUE ) ? 1 : 0;
+			count++;
+			if(flt->option[FILTER_CATEGORY] == 2) insert ^= 1;
+		}
 	}
 	if(!insert) goto end;
 
@@ -497,7 +506,12 @@ gint i;
 		for(i=0;i<NUM_PAYMODE_MAX;i++)
 			data->filter->paymode[i] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_paymode[i]));
 
+	//amount
+	data->filter->minamount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_minamount));
+	data->filter->maxamount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_maxamount));
+
 	// account
+
 		if(data->show_account == TRUE)
 		{
 			DB( g_printf(" account\n") );
@@ -507,10 +521,15 @@ gint i;
 			i=0; valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
 			while (valid)
 			{
-				gtk_tree_model_get (model, &iter, LST_DEFACC_TOGGLE, &toggled, -1);
+			Account *accitem;
+
+				gtk_tree_model_get (model, &iter,
+					LST_DEFACC_TOGGLE, &toggled,
+					LST_DEFACC_DATAS, &accitem,
+					-1);
 
 				//data->filter->acc[i] = gtk_tree_selection_iter_is_selected(selection, &iter);
-				data->filter->acc[i] = toggled;
+				accitem->filter = toggled;
 
 				/* Make iter point to the next row in the list store */
 				i++; valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
@@ -525,10 +544,15 @@ gint i;
 		i=0; valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
 		while (valid)
 		{
-			gtk_tree_model_get (model, &iter, LST_DEFPAY_TOGGLE, &toggled, -1);
+		Payee *payitem;
+
+			gtk_tree_model_get (model, &iter,
+				LST_DEFPAY_TOGGLE, &toggled,
+				LST_DEFPAY_DATAS, &payitem,
+				-1);
 
 			//data->filter->pay[i] = gtk_tree_selection_iter_is_selected(selection, &iter);
-			data->filter->pay[i] = toggled;
+			payitem->filter = toggled;
 
 			/* Make iter point to the next row in the list store */
 			i++; valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
@@ -542,10 +566,16 @@ gint i;
 		i=0; valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
 		while (valid)
 		{
-			gtk_tree_model_get (model, &iter, LST_DEFCAT_TOGGLE, &toggled, -1);
+		Category *catitem;
+		
+			gtk_tree_model_get (model, &iter,
+				LST_DEFCAT_TOGGLE, &toggled,
+				LST_DEFCAT_DATAS, &catitem,
+				-1);
 
 			//data->filter->cat[i] = gtk_tree_selection_iter_is_selected(selection, &iter);
-			data->filter->cat[i] = toggled;
+			//data->filter->cat[i] = toggled;
+			catitem->filter = toggled;
 
 			n_child = gtk_tree_model_iter_n_children (GTK_TREE_MODEL(model), &iter);
 			gtk_tree_model_iter_children (GTK_TREE_MODEL(model), &child, &iter);
@@ -553,9 +583,15 @@ gint i;
 			{
 				i++;
 
-				gtk_tree_model_get (model, &child, LST_DEFCAT_TOGGLE, &toggled, -1);
-				data->filter->cat[i] = toggled;
+				gtk_tree_model_get (model, &child,
+					LST_DEFCAT_TOGGLE, &toggled,
+					LST_DEFCAT_DATAS, &catitem,
+					-1);
+
+				
+				//data->filter->cat[i] = toggled;
 				//data->filter->cat[i] = gtk_tree_selection_iter_is_selected(selection, &child);
+				catitem->filter = toggled;
 
 				n_child--;
 				gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &child);
@@ -617,7 +653,11 @@ void deffilter_set(struct deffilter_data *data)
 		for(i=0;i<NUM_PAYMODE_MAX;i++)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_paymode[i]), data->filter->paymode[i]);
 
-	// account
+	//amount
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->ST_minamount), data->filter->minamount);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->ST_maxamount), data->filter->maxamount);
+	
+	//account
 		if(data->show_account == TRUE)
 		{
 			DB( g_printf(" account\n") );
@@ -627,9 +667,16 @@ void deffilter_set(struct deffilter_data *data)
 			i=0; valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
 			while (valid)
 			{
-				if(data->filter->acc[i] == TRUE)
+			Account *accitem;
+
+				gtk_tree_model_get (model, &iter,
+					LST_DEFACC_DATAS, &accitem,
+					-1);
+
+				if(accitem->filter == TRUE)
 					//gtk_tree_selection_select_iter(selection, &iter);
-					gtk_list_store_set (GTK_LIST_STORE (model), &iter, LST_DEFACC_TOGGLE, TRUE, -1);
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+						LST_DEFACC_TOGGLE, TRUE, -1);
 
 				/* Make iter point to the next row in the list store */
 				i++; valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
@@ -644,8 +691,13 @@ void deffilter_set(struct deffilter_data *data)
 		i=0; valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
 		while (valid)
 		{
-			if(data->filter->pay[i] == TRUE)
-				//gtk_tree_selection_select_iter(selection, &iter);
+		Payee *payitem;
+
+			gtk_tree_model_get (model, &iter,
+				LST_DEFPAY_DATAS, &payitem,
+				-1);
+		
+			if(payitem->filter == TRUE)
 				gtk_list_store_set (GTK_LIST_STORE (model), &iter, LST_DEFPAY_TOGGLE, TRUE, -1);
 
 			/* Make iter point to the next row in the list store */
@@ -660,8 +712,13 @@ void deffilter_set(struct deffilter_data *data)
 		i=0; valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
 		while (valid)
 		{
-			if(data->filter->cat[i] == TRUE)
-				//gtk_tree_selection_select_iter(selection, &iter);
+		Category *catitem;
+		
+			gtk_tree_model_get (model, &iter,
+				LST_DEFCAT_DATAS, &catitem,
+				-1);
+		
+			if(catitem->filter == TRUE)
 				gtk_tree_store_set (GTK_TREE_STORE (model), &iter, LST_DEFCAT_TOGGLE, TRUE, -1);
 
 			n_child = gtk_tree_model_iter_n_children (GTK_TREE_MODEL(model), &iter);
@@ -670,8 +727,11 @@ void deffilter_set(struct deffilter_data *data)
 			{
 				i++;
 
-				if(data->filter->cat[i] == TRUE)
-					//gtk_tree_selection_select_iter(selection, &child);
+				gtk_tree_model_get (model, &child,
+					LST_DEFCAT_DATAS, &catitem,
+					-1);
+
+				if(catitem->filter == TRUE)
 					gtk_tree_store_set (GTK_TREE_STORE (model), &child, LST_DEFCAT_TOGGLE, TRUE, -1);
 
 				n_child--;
@@ -703,21 +763,24 @@ void deffilter_setup(struct deffilter_data *data)
 	{
 		//gtk_tree_selection_set_mode(GTK_TREE_SELECTION(gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_acc))), GTK_SELECTION_MULTIPLE);
 
-		populate_view_acc(data->LV_acc, GLOBALS->acc_list, FALSE);
+		ui_acc_listview_populate(data->LV_acc);
+		//populate_view_acc(data->LV_acc, GLOBALS->acc_list, FALSE);
 	}
 
 	if(data->LV_pay)
 	{
 		//gtk_tree_selection_set_mode(GTK_TREE_SELECTION(gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_pay))), GTK_SELECTION_MULTIPLE);
 
-		populate_view_pay(data->LV_pay, GLOBALS->pay_list, FALSE);
+		ui_pay_listview_populate(data->LV_pay);
+		//populate_view_pay(data->LV_pay, GLOBALS->pay_list, FALSE);
 	}
 
 	if(data->LV_cat)
 	{
 		//gtk_tree_selection_set_mode(GTK_TREE_SELECTION(gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_cat))), GTK_SELECTION_MULTIPLE);
 
-		populate_view_cat(data->LV_cat, GLOBALS->cat_list, FALSE);
+		//populate_view_cat(data->LV_cat, GLOBALS->cat_list, FALSE);
+		ui_cat_listview_populate(data->LV_cat);
 		gtk_tree_view_expand_all (GTK_TREE_VIEW(data->LV_cat));
 	}
 }
@@ -750,7 +813,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin), GTK_SHADOW_ETCHED_IN);
 	//gtk_container_set_border_width (GTK_CONTAINER(scrollwin), HB_BOX_SPACING);
 
-	data->LV_cat = (GtkWidget *)defcategory_list_new(TRUE);
+	data->LV_cat = (GtkWidget *)ui_cat_listview_new(TRUE);
 	gtk_container_add(GTK_CONTAINER(scrollwin), data->LV_cat);
 
 	vbox = gtk_vbox_new(FALSE, HB_BOX_SPACING);
@@ -799,7 +862,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin), GTK_SHADOW_ETCHED_IN);
 	//gtk_container_set_border_width (GTK_CONTAINER(scrollwin), HB_BOX_SPACING);
 
-	data->LV_pay = (GtkWidget *)defpayee_list_new(TRUE);
+	data->LV_pay = (GtkWidget *)ui_pay_listview_new(TRUE);
 	gtk_container_add(GTK_CONTAINER(scrollwin), data->LV_pay);
 
 	vbox = gtk_vbox_new(FALSE, HB_BOX_SPACING);
@@ -848,7 +911,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin), GTK_SHADOW_ETCHED_IN);
 	//gtk_container_set_border_width (GTK_CONTAINER(scrollwin), HB_BOX_SPACING);
 
-	data->LV_acc = (GtkWidget *)defaccount_list_new(TRUE);
+	data->LV_acc = ui_acc_listview_new(TRUE);
 	gtk_container_add(GTK_CONTAINER(scrollwin), data->LV_acc);
 
 	vbox = gtk_vbox_new(FALSE, HB_BOX_SPACING);
@@ -1174,18 +1237,18 @@ GtkWidget *window, *mainbox, *notebook, *label, *page;
 	{
 	    g_signal_connect (data.CY_option[FILTER_ACCOUNT] , "changed", G_CALLBACK (deffilter_option_update), NULL);
 
-	    g_signal_connect (data.BT_acc[BUTTON_ALL]   , "clicked", G_CALLBACK (deffilter_acc_select), (gpointer)BUTTON_ALL);
-	    g_signal_connect (data.BT_acc[BUTTON_NONE]  , "clicked", G_CALLBACK (deffilter_acc_select), (gpointer)BUTTON_NONE);
-	    g_signal_connect (data.BT_acc[BUTTON_INVERT], "clicked", G_CALLBACK (deffilter_acc_select), (gpointer)BUTTON_INVERT);
+	    g_signal_connect (data.BT_acc[BUTTON_ALL]   , "clicked", G_CALLBACK (deffilter_acc_select), GINT_TO_POINTER(BUTTON_ALL));
+	    g_signal_connect (data.BT_acc[BUTTON_NONE]  , "clicked", G_CALLBACK (deffilter_acc_select), GINT_TO_POINTER(BUTTON_NONE));
+	    g_signal_connect (data.BT_acc[BUTTON_INVERT], "clicked", G_CALLBACK (deffilter_acc_select), GINT_TO_POINTER(BUTTON_INVERT));
 	}
 
-    g_signal_connect (data.BT_pay[BUTTON_ALL]   , "clicked", G_CALLBACK (deffilter_pay_select), (gpointer)BUTTON_ALL);
-    g_signal_connect (data.BT_pay[BUTTON_NONE]  , "clicked", G_CALLBACK (deffilter_pay_select), (gpointer)BUTTON_NONE);
-    g_signal_connect (data.BT_pay[BUTTON_INVERT], "clicked", G_CALLBACK (deffilter_pay_select), (gpointer)BUTTON_INVERT);
+    g_signal_connect (data.BT_pay[BUTTON_ALL]   , "clicked", G_CALLBACK (deffilter_pay_select), GINT_TO_POINTER(BUTTON_ALL));
+    g_signal_connect (data.BT_pay[BUTTON_NONE]  , "clicked", G_CALLBACK (deffilter_pay_select), GINT_TO_POINTER(BUTTON_NONE));
+    g_signal_connect (data.BT_pay[BUTTON_INVERT], "clicked", G_CALLBACK (deffilter_pay_select), GINT_TO_POINTER(BUTTON_INVERT));
 
-    g_signal_connect (data.BT_cat[BUTTON_ALL]   , "clicked", G_CALLBACK (deffilter_cat_select), (gpointer)BUTTON_ALL);
-    g_signal_connect (data.BT_cat[BUTTON_NONE]  , "clicked", G_CALLBACK (deffilter_cat_select), (gpointer)BUTTON_NONE);
-    g_signal_connect (data.BT_cat[BUTTON_INVERT], "clicked", G_CALLBACK (deffilter_cat_select), (gpointer)BUTTON_INVERT);
+    g_signal_connect (data.BT_cat[BUTTON_ALL]   , "clicked", G_CALLBACK (deffilter_cat_select), GINT_TO_POINTER(BUTTON_ALL));
+    g_signal_connect (data.BT_cat[BUTTON_NONE]  , "clicked", G_CALLBACK (deffilter_cat_select), GINT_TO_POINTER(BUTTON_NONE));
+    g_signal_connect (data.BT_cat[BUTTON_INVERT], "clicked", G_CALLBACK (deffilter_cat_select), GINT_TO_POINTER(BUTTON_INVERT));
 
 	//setup, init and show window
 	deffilter_setup(&data);

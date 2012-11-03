@@ -1,19 +1,20 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "homebank.h"
@@ -36,28 +37,26 @@ extern struct HomeBank *GLOBALS;
 extern struct Preferences *PREFS;
 
 
-void homebank_pref_init_monetary_win32(void)
+static void homebank_pref_init_monetary(void)
 {
-	DB( g_print("(preferences) monetary win32\n") );
+	DB( g_print("\n** (preferences) monetary\n") );
 
-	//todo: to be really set by a win32 specialist from the registry...
-	
-	PREFS->base_cur.prefix_symbol = NULL;
-	PREFS->base_cur.suffix_symbol = NULL;
-	PREFS->base_cur.decimal_char  = NULL;
-	PREFS->base_cur.grouping_char = NULL;
-	PREFS->base_cur.frac_digits   = 2;
-	
-}
 
-void homebank_pref_init_monetary_unix(void)
-{
+#ifdef G_OS_UNIX
+
 struct lconv *lc = localeconv();
 
-	DB( g_print("(preferences) monetary unix\n") );
+	DB( g_print("\n** (preferences) monetary unix\n") );
 
+	DB( g_print("mon_decimal_point is utf8: %d", g_utf8_validate(lc->mon_decimal_point, -1, NULL)) );
 	DB( g_print("mon_decimal_point '%s'\n", lc->mon_decimal_point) );
+	DB( g_print("mon_decimal_point %x %x %x %x\n", lc->mon_decimal_point[0], lc->mon_decimal_point[1], lc->mon_decimal_point[2], lc->mon_decimal_point[3]) );
+
+	DB( g_print("mon_thousands_sep is utf8: %d", g_utf8_validate(lc->mon_thousands_sep, -1, NULL)) );
 	DB( g_print("mon_thousands_sep '%s'\n", lc->mon_thousands_sep) );
+	DB( g_print("mon_thousands_sep %x %x %x %x\n", lc->mon_thousands_sep[0], lc->mon_thousands_sep[1], lc->mon_thousands_sep[2], lc->mon_thousands_sep[3]) );
+
+
 
 	DB( g_print("frac_digits '%d'\n", (gint)lc->frac_digits) );
 
@@ -67,24 +66,56 @@ struct lconv *lc = localeconv();
 
 	DB( g_print("n_cs_precedes '%d'\n", lc->n_cs_precedes) );
 
+	/* ok assign */
 
 	
 	if( lc->p_cs_precedes || lc->n_cs_precedes )
 	{
 		PREFS->base_cur.prefix_symbol = g_strdup(lc->currency_symbol);
+		PREFS->base_cur.suffix_symbol = NULL; //g_strdup("");
 		DB( g_print("locale mon cs is a prefix\n") );
 	}
 	else
+	{
+		PREFS->base_cur.prefix_symbol = NULL; //g_strdup("");
 		PREFS->base_cur.suffix_symbol = g_strdup(lc->currency_symbol);
+	}
 
 	PREFS->base_cur.decimal_char  = g_strdup(lc->mon_decimal_point);	
+	
 	PREFS->base_cur.grouping_char = g_strdup(lc->mon_thousands_sep);	
+	
+	//todo:fix
+	//PREFS->base_cur.grouping_char = g_locale_to_utf8(lc->mon_thousands_sep, -1, NULL, NULL, NULL);
+	//PREFS->base_cur.grouping_char = g_convert (lc->mon_thousands_sep, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+	
+	DB( g_print(" -> grouping_char: '%s'\n", PREFS->base_cur.grouping_char) );
+	
 	PREFS->base_cur.frac_digits   = lc->frac_digits;
 	
 
+#else
+	#ifdef G_OS_WIN32
+	//todo: to be really set by a win32 specialist from the registry...
+	
+	PREFS->base_cur.prefix_symbol = NULL; //g_strdup("");
+	PREFS->base_cur.suffix_symbol = NULL; //g_strdup("");
+	PREFS->base_cur.decimal_char  = g_strdup(".");
+	PREFS->base_cur.grouping_char = NULL; //g_strdup("");
+	PREFS->base_cur.frac_digits   = 2;
+	#else
+	PREFS->base_cur.prefix_symbol = NULL; //g_strdup("");
+	PREFS->base_cur.suffix_symbol = NULL; //g_strdup("");
+	PREFS->base_cur.decimal_char  = g_strdup(".");
+	PREFS->base_cur.grouping_char = NULL; //g_strdup("");
+	PREFS->base_cur.frac_digits   = 2;
+	#endif
+#endif
+	
 }
 
-void homebank_pref_update_to_tango_colors(void)
+
+static void homebank_pref_update_to_tango_colors(void)
 {
 	if(PREFS->color_exp == OLD_EXP_COLOR)
 		PREFS->color_exp = DEFAULT_EXP_COLOR;
@@ -97,7 +128,7 @@ void homebank_pref_update_to_tango_colors(void)
 
 }
 
-void homebank_pref_init_wingeometry(struct WinGeometry *wg, gint l, gint t, gint w, gint h)
+static void homebank_pref_init_wingeometry(struct WinGeometry *wg, gint l, gint t, gint w, gint h)
 {
 	wg->l = l;
 	wg->t = t;
@@ -108,13 +139,14 @@ void homebank_pref_init_wingeometry(struct WinGeometry *wg, gint l, gint t, gint
 
 void homebank_pref_free(void)
 {
-	DB( g_print("(preferences) free\n") );
+	DB( g_print("\n** (preferences) free\n") );
 
 
 	g_free(PREFS->date_format);
 
 	g_free(PREFS->path_wallet);
 	g_free(PREFS->path_import);
+	g_free(PREFS->path_export);
 	//g_free(PREFS->path_navigator);
 
 	g_free(PREFS->base_cur.prefix_symbol);
@@ -134,7 +166,7 @@ void homebank_pref_free(void)
 void homebank_pref_setdefault(void)
 {
 
-	DB( g_print("(preferences) pref init\n") );
+	DB( g_print("\n** (preferences) pref init\n") );
 
 	homebank_pref_free();
 
@@ -142,8 +174,10 @@ void homebank_pref_setdefault(void)
 
 	PREFS->path_wallet = g_strdup_printf("%s", g_get_home_dir ());
 	PREFS->path_import = g_strdup_printf("%s", g_get_home_dir ());
+	PREFS->path_export = g_strdup_printf("%s", g_get_home_dir ());
 	//PREFS->path_navigator = g_strdup(DEFAULT_PATH_NAVIGATOR);
 
+	PREFS->loadlast = TRUE;
 
 	PREFS->color_exp  = DEFAULT_EXP_COLOR;
 	PREFS->color_inc  = DEFAULT_INC_COLOR;
@@ -168,12 +202,7 @@ void homebank_pref_setdefault(void)
 	PREFS->acc_wg.w = 640;
 	PREFS->acc_wg.h = 480;
 
-#ifdef G_OS_WIN32
-	homebank_pref_init_monetary_win32();
-#else
-	homebank_pref_init_monetary_unix();
-#endif
-
+	homebank_pref_init_monetary();
 
 	PREFS->lst_ope_columns[COL_OPE_STATUS] = TRUE;
 	PREFS->lst_ope_columns[COL_OPE_DATE] = TRUE;
@@ -193,14 +222,6 @@ void homebank_pref_setdefault(void)
 
 	//todo: add intelligence here
 	PREFS->euro_active  = FALSE;
-	
-	//todo add intelligence here
-
-	PREFS->minor_cur.suffix_symbol = g_strdup("??");
-	PREFS->minor_cur.decimal_char  = g_strdup(".");	
-	PREFS->minor_cur.grouping_char = g_strdup(" ");
-	PREFS->minor_cur.frac_digits   = 2;
-		
 	
 	PREFS->euro_country = 0;
 	PREFS->euro_value   = 1.0;
@@ -222,8 +243,10 @@ void homebank_pref_setdefault(void)
 */
 void homebank_pref_createformat(void)
 {
+struct Currency *cur;
+gchar *ptr;
 
-	DB( g_print("(preferences) pref create format\n") );
+	DB( g_print("\n** (preferences) pref create format\n") );
 
 /*
 	if(PREFS->base_cur.grouping_char != NULL)
@@ -249,16 +272,47 @@ void homebank_pref_createformat(void)
 
 	DB( g_print("+ minor is: '%s'\n", GLOBALS->fmt_min_number) );
 */
-	/* new fmt */
-	g_snprintf(PREFS->base_cur.format , 8-1, "%%.%df", PREFS->base_cur.frac_digits);
-	g_snprintf(PREFS->minor_cur.format, 8-1, "%%.%df", PREFS->minor_cur.frac_digits);
+	/* base format */
+	cur = &PREFS->base_cur;
+
+	g_snprintf(cur->format , 8-1, "%%.%df", cur->frac_digits);
+
+	ptr = cur->monfmt;
+	if(cur->prefix_symbol != NULL)
+	{
+		ptr = g_stpcpy(ptr, cur->prefix_symbol);
+		ptr = g_stpcpy(ptr, " ");
+	}
+	ptr = g_stpcpy(ptr, "%s");
+	if(cur->suffix_symbol != NULL)
+	{
+		ptr = g_stpcpy(ptr, " ");
+		ptr = g_stpcpy(ptr, cur->suffix_symbol);
+	}
+
+	cur = &PREFS->minor_cur;
+
+	g_snprintf(cur->format , 8-1, "%%.%df", cur->frac_digits);
+
+	ptr = cur->monfmt;
+	if(cur->prefix_symbol != NULL)
+	{
+		ptr = g_stpcpy(ptr, cur->prefix_symbol);
+		ptr = g_stpcpy(ptr, " ");
+	}
+	ptr = g_stpcpy(ptr, "%s");
+	if(cur->suffix_symbol != NULL)
+	{
+		ptr = g_stpcpy(ptr, " ");
+		ptr = g_stpcpy(ptr, cur->suffix_symbol);
+	}
 
 }
 
 /*
-** load preference from homedir/.homebank
+** load preference from homedir/.homebank (HB_DATA_PATH)
 */
-static homebank_pref_get_wingeometry(
+static void homebank_pref_get_wingeometry(
 	GKeyFile *key_file,
     const gchar *group_name,
     const gchar *key,
@@ -278,7 +332,7 @@ static homebank_pref_get_wingeometry(
 
 
 
-static homebank_pref_get_boolean(
+static void homebank_pref_get_boolean(
 	GKeyFile *key_file,
     const gchar *group_name,
     const gchar *key,
@@ -291,7 +345,7 @@ static homebank_pref_get_boolean(
 	}
 }
 
-static homebank_pref_get_integer(
+static void homebank_pref_get_integer(
 	GKeyFile *key_file,
     const gchar *group_name,
     const gchar *key,
@@ -304,7 +358,20 @@ static homebank_pref_get_integer(
 	}
 }
 
-static homebank_pref_get_short(
+static void homebank_pref_get_guint32(
+	GKeyFile *key_file,
+    const gchar *group_name,
+    const gchar *key,
+	guint32 *storage)
+{
+
+	if( g_key_file_has_key(key_file, group_name, key, NULL) )
+	{
+		*storage = g_key_file_get_integer(key_file, group_name, key, NULL);
+	}
+}
+
+static void homebank_pref_get_short(
 	GKeyFile *key_file,
     const gchar *group_name,
     const gchar *key,
@@ -317,7 +384,7 @@ static homebank_pref_get_short(
 	}
 }
 
-static homebank_pref_get_string(
+static void homebank_pref_get_string(
 	GKeyFile *key_file,
     const gchar *group_name,
     const gchar *key,
@@ -338,7 +405,7 @@ gchar *string;
 		*storage = NULL;
 		
 		string = g_key_file_get_string(key_file, group_name, key, NULL);
-		if( string != "" )
+		if( string != NULL )
 		{
 			*storage = g_strdup(string);
 			
@@ -366,12 +433,17 @@ gboolean retval = FALSE;
 gchar *group, *filename;
 GError *error = NULL;
 
-	DB( g_print("(preferences) pref load\n") );
+	DB( g_print("\n** (preferences) pref load\n") );
 
 	keyfile = g_key_file_new();
 	if(keyfile)
 	{
-		filename = g_strdup_printf("%s/.homebank/preferences", g_get_home_dir ());
+		//filename = g_strdup_printf("%s/" HB_DATA_PATH "/preferences", g_get_home_dir ());
+		filename = g_build_filename(g_get_home_dir (), HB_DATA_PATH, "preferences", NULL );
+
+		DB( g_print(" filename: %s\n", filename) );
+
+
 		if(g_key_file_load_from_file (keyfile, filename, G_KEY_FILE_NONE, NULL))
 		{
 
@@ -383,9 +455,9 @@ GError *error = NULL;
 				//todo x = strtoul(s, 0, 16); converti une chaine hexa en int
 
 				homebank_pref_get_short(keyfile, group, "BarStyle" , &PREFS->toolbar_style);
-				homebank_pref_get_integer(keyfile, group, "ColorExp" , &PREFS->color_exp);
-				homebank_pref_get_integer(keyfile, group, "ColorInc" , &PREFS->color_inc);
-				homebank_pref_get_integer(keyfile, group, "ColorWarn", &PREFS->color_warn);
+				homebank_pref_get_guint32(keyfile, group, "ColorExp" , &PREFS->color_exp);
+				homebank_pref_get_guint32(keyfile, group, "ColorInc" , &PREFS->color_inc);
+				homebank_pref_get_guint32(keyfile, group, "ColorWarn", &PREFS->color_warn);
 
 				#if DOWIZARD == 1
 				homebank_pref_get_boolean(keyfile, group, "RunWizard", &PREFS->runwizard);
@@ -393,13 +465,15 @@ GError *error = NULL;
 				
 				homebank_pref_get_string(keyfile, group, "WalletPath", &PREFS->path_wallet);
 				homebank_pref_get_string(keyfile, group, "ImportPath", &PREFS->path_import);
+				homebank_pref_get_string(keyfile, group, "ExportPath", &PREFS->path_export);
 				//homebank_pref_get_string(keyfile, group, "NavigatorPath", &PREFS->path_navigator);
+
+				homebank_pref_get_boolean(keyfile, group, "LoadLast", &PREFS->loadlast);
 
 				
 				if( g_key_file_has_key(keyfile, group, "ColumnsOpe", NULL) )
 				{
-				gboolean okay = TRUE;
-				gint *pos, *d, i;
+				gint *pos;
 				gsize length;
 
 					pos = g_key_file_get_boolean_list(keyfile, group, "ColumnsOpe",
@@ -439,7 +513,7 @@ GError *error = NULL;
 					homebank_pref_get_short(keyfile, group, "FracDigits", &PREFS->base_cur.frac_digits);
 				}
 
-				homebank_pref_get_boolean(keyfile, group, "UKUnits", &PREFS->british_unit);
+				homebank_pref_get_boolean(keyfile, group, "UKUnits", &PREFS->imperial_unit);
 				
 
 			group = "Filter";
@@ -510,24 +584,44 @@ GError *error = NULL;
 	return retval;
 }
 
+static void homebank_pref_set_string(
+	GKeyFile *key_file,
+    const gchar *group_name,
+    const gchar *key,
+	gchar *string)
+{
+
+	DB( g_print(" -> homebank_pref_set_string :: group='%s' key='%s' value='%s'\n", group_name, key, string) );
+
+	if( string != NULL && *string != '\0')
+		g_key_file_set_string  (key_file, group_name, key, string);
+	//else
+	//	g_key_file_set_string  (key_file, group_name, key, "");
+		
+}
+
 
 /*
-** save preference to homedir/.homebank
+** save preference to homedir/.homebank (HB_DATA_PATH)
 */
 gboolean homebank_pref_save(void)
 {
 GKeyFile *keyfile;
 gboolean retval = FALSE;
 gchar *group, *filename;
-guint length;
+gsize length;
 
-	DB( g_print("(preferences) pref save\n") );
+	DB( g_print("\n** (preferences) pref save\n") );
 
 	keyfile = g_key_file_new();
 	if(keyfile )
 	{
+
+		DB( g_print(" -> ** general\n") );
+
+
 		group = "General";
-		g_key_file_set_string  (keyfile, group, "Version", PREF_VERSION);
+		homebank_pref_set_string  (keyfile, group, "Version", PREF_VERSION);
 
 		g_key_file_set_integer (keyfile, group, "BarStyle", PREFS->toolbar_style);
 		//g_key_file_set_integer (keyfile, group, "BarImageSize", PREFS->image_size);
@@ -540,13 +634,17 @@ guint length;
 		g_key_file_set_boolean (keyfile, group, "RunWizard", PREFS->runwizard);
 		#endif
 
-		g_key_file_set_string  (keyfile, group, "WalletPath"   , PREFS->path_wallet);
-		g_key_file_set_string  (keyfile, group, "ImportPath"   , PREFS->path_import);
+		homebank_pref_set_string  (keyfile, group, "WalletPath"   , PREFS->path_wallet);
+		homebank_pref_set_string  (keyfile, group, "ImportPath"   , PREFS->path_import);
+		homebank_pref_set_string  (keyfile, group, "ExportPath"   , PREFS->path_export);
 		//g_key_file_set_string  (keyfile, group, "NavigatorPath", PREFS->path_navigator);
 
+		g_key_file_set_boolean (keyfile, group, "LoadLast", PREFS->loadlast);
 		g_key_file_set_boolean_list(keyfile, group, "ColumnsOpe", PREFS->lst_ope_columns, NUM_COL_OPE);
 
 		// added v3.4
+		DB( g_print(" -> ** windows\n") );
+
 		group = "Windows";
 		g_key_file_set_integer_list(keyfile, group, "Wal", (gint *)&PREFS->wal_wg, 4);
 		g_key_file_set_integer_list(keyfile, group, "Acc", (gint *)&PREFS->acc_wg, 4);
@@ -555,34 +653,45 @@ guint length;
 		g_key_file_set_integer_list(keyfile, group, "Bud", (gint *)&PREFS->bud_wg, 4);
 		g_key_file_set_integer_list(keyfile, group, "Car", (gint *)&PREFS->car_wg, 4);
 
-		group = "Format";
-		g_key_file_set_string  (keyfile, group, "DateFmt"   , PREFS->date_format);
+		DB( g_print(" -> ** format\n") );
 
-		g_key_file_set_string  (keyfile, group, "PreSymbol" , PREFS->base_cur.prefix_symbol);
-		g_key_file_set_string  (keyfile, group, "SufSymbol" , PREFS->base_cur.suffix_symbol);
-		g_key_file_set_string  (keyfile, group, "DecChar"   , PREFS->base_cur.decimal_char);
-		g_key_file_set_string  (keyfile, group, "GroupChar" , PREFS->base_cur.grouping_char);
+		group = "Format";
+		homebank_pref_set_string  (keyfile, group, "DateFmt"   , PREFS->date_format);
+
+		homebank_pref_set_string  (keyfile, group, "PreSymbol" , PREFS->base_cur.prefix_symbol);
+		homebank_pref_set_string  (keyfile, group, "SufSymbol" , PREFS->base_cur.suffix_symbol);
+		homebank_pref_set_string  (keyfile, group, "DecChar"   , PREFS->base_cur.decimal_char);
+		homebank_pref_set_string  (keyfile, group, "GroupChar" , PREFS->base_cur.grouping_char);
 		g_key_file_set_integer (keyfile, group, "FracDigits", PREFS->base_cur.frac_digits);
 
-		g_key_file_set_boolean (keyfile, group, "UKUnits" , PREFS->british_unit);
+		g_key_file_set_boolean (keyfile, group, "UKUnits" , PREFS->imperial_unit);
+
+		DB( g_print(" -> ** filter\n") );
 
 		group = "Filter";
 		g_key_file_set_integer (keyfile, group, "DefRange", PREFS->filter_range);
 
+		DB( g_print(" -> ** euro\n") );
+
 	//euro options
 		group = "Euro";
 		g_key_file_set_boolean (keyfile, group, "Active" , PREFS->euro_active);
-		g_key_file_set_integer (keyfile, group, "Country", PREFS->euro_country);
-		gchar ratestr[64];
-		g_ascii_dtostr(ratestr, 63, PREFS->euro_value);
-		g_key_file_set_string  (keyfile, group, "ChangeRate", ratestr);
-		g_key_file_set_string  (keyfile, group, "PreSymbol" , PREFS->minor_cur.prefix_symbol);
-		g_key_file_set_string  (keyfile, group, "SufSymbol" , PREFS->minor_cur.suffix_symbol);
-		g_key_file_set_string  (keyfile, group, "DecChar"   , PREFS->minor_cur.decimal_char);
-		g_key_file_set_string  (keyfile, group, "GroupChar" , PREFS->minor_cur.grouping_char);
-		g_key_file_set_integer (keyfile, group, "FracDigits", PREFS->minor_cur.frac_digits);
+		if( PREFS->euro_active )
+		{	
+			g_key_file_set_integer (keyfile, group, "Country", PREFS->euro_country);
+			gchar ratestr[64];
+			g_ascii_dtostr(ratestr, 63, PREFS->euro_value);
+			homebank_pref_set_string  (keyfile, group, "ChangeRate", ratestr);
+			homebank_pref_set_string  (keyfile, group, "PreSymbol" , PREFS->minor_cur.prefix_symbol);
+			homebank_pref_set_string  (keyfile, group, "SufSymbol" , PREFS->minor_cur.suffix_symbol);
+			homebank_pref_set_string  (keyfile, group, "DecChar"   , PREFS->minor_cur.decimal_char);
+			homebank_pref_set_string  (keyfile, group, "GroupChar" , PREFS->minor_cur.grouping_char);
+			g_key_file_set_integer (keyfile, group, "FracDigits", PREFS->minor_cur.frac_digits);
+		}
 
 	//report options
+		DB( g_print(" -> ** report\n") );
+
 		group = "Report";
 		g_key_file_set_boolean (keyfile, group, "StatByAmount", PREFS->stat_byamount);
 		g_key_file_set_boolean (keyfile, group, "StatDetail"  , PREFS->stat_showdetail);
@@ -596,15 +705,28 @@ guint length;
 		//g_key_file_set_boolean (keyfile, group, "", PREFS->);
 		//g_key_file_set_integer (keyfile, group, "", PREFS->);
 
+		DB( g_print(" -> ** g_key_file_to_data\n") );
+
 		gchar *contents = g_key_file_to_data (keyfile, &length, NULL);
 
 		//DB( g_print(" keyfile:\n%s\nlen=%d\n", contents, length) );
 
-		filename = g_strdup_printf("%s/.homebank/preferences", g_get_home_dir ());
+		//filename = g_strdup_printf("%s/" HB_DATA_PATH "/preferences", g_get_home_dir ());
+		filename = g_build_filename(g_get_home_dir (), HB_DATA_PATH, "preferences", NULL );
+
+		DB( g_print(" -> filename: %s\n", filename) );
+
 		g_file_set_contents(filename, contents, length, NULL);
+
+		DB( g_print(" -> freeing filename\n") );
 		g_free(filename);
 
+		DB( g_print(" -> freeing buffer\n") );
+
 		g_free(contents);
+
+		DB( g_print(" -> freeing keyfile\n") );
+
 		g_key_file_free (keyfile);
 	}
 

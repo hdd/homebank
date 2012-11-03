@@ -1,19 +1,20 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
@@ -32,16 +33,19 @@
 #define DB(x);
 #endif
 
+/* our global datas */
+extern struct HomeBank *GLOBALS;
 
-//-----------------------------------------------------------------------------
+
+/* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
+
+
 enum
 {
 	LST_PAYMODE_PIXBUF,
 	LST_PAYMODE_LABEL,
 	NUM_LST_PAYMODE
 };
-
-extern *homebank_pixmaps_dir;
 
 GdkPixbuf *paymode_icons[NUM_PAYMODE_MAX];
 
@@ -88,7 +92,7 @@ guint i;
 
 	for(i=0;i<NUM_PAYMODE_MAX;i++)
 	{
-		pathfilename = g_build_filename((const gchar *)homebank_pixmaps_dir, paymode_pixbuf_names[i], NULL);
+		pathfilename = g_build_filename(homebank_app_get_pixmaps_dir(), paymode_pixbuf_names[i], NULL);
 
 		DB( g_print("loading %s\n", pathfilename) );
 
@@ -117,7 +121,7 @@ gimp_label_set_attributes (GtkLabel *label,
   PangoAttrList  *attrs;
   va_list         args;
 
-  g_return_if_fail (GTK_IS_LABEL (label));
+  //g_return_if_fail (GTK_IS_LABEL (label));
 
   attrs = pango_attr_list_new ();
 
@@ -270,6 +274,52 @@ GtkWidget *entry;
 /*
 **
 */
+GtkWidget *make_memo_entry(GtkWidget *label)
+{
+GtkListStore *store;
+GtkWidget *entry;
+GtkEntryCompletion *completion;
+GList *list;
+
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+
+    completion = gtk_entry_completion_new ();
+    gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(store));
+    gtk_entry_completion_set_text_column (completion, 0);
+
+	entry = gtk_entry_new ();
+	gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+
+	g_object_unref(store);
+
+	//populate
+	//gtk_list_store_clear (GTK_LIST_STORE(store));
+
+	list = g_hash_table_get_keys(GLOBALS->h_memo);
+	while (list != NULL)
+	{
+	GtkTreeIter  iter;
+
+		gtk_list_store_append (GTK_LIST_STORE(store), &iter);
+		gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, list->data, -1);
+
+		list = g_list_next(list);
+	}
+
+	g_list_free(list);
+
+	if(label)
+		gtk_label_set_mnemonic_widget (GTK_LABEL(label), entry);
+
+	return entry;
+}
+
+
+
+
+/*
+**
+*/
 GtkWidget *make_string_maxlength(GtkWidget *label, guint max_length)
 {
 GtkWidget *entry;
@@ -416,140 +466,6 @@ guint i;
 /*
 **
 */
-guint make_popaccount_populate(GtkComboBox *combobox, GList *srclist)
-{
-GtkTreeModel *model;
-GtkTreeIter  iter;
-GList *list;
-gint i;
-
-	//insert all glist item into treeview
-	model  = gtk_combo_box_get_model(combobox);
-	gtk_list_store_clear(GTK_LIST_STORE(model));
-	i=0; list = g_list_first(srclist);
-	while (list != NULL)
-	{
-	Account *entry = list->data;
-
-		gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-		gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, entry->name, -1);
-
-		//DB( g_printf(" populate_treeview: %d %08x\n", i, list->data) );
-
-		i++; list = g_list_next(list);
-	}
-
-	return i;
-}
-
-
-GtkWidget *make_popaccount(GtkWidget *label)
-{
-GtkListStore *store;
-GtkWidget *combobox;
-GtkCellRenderer    *renderer;
-
-	//store
-	store = gtk_list_store_new (1, G_TYPE_STRING);
-	combobox = gtk_combo_box_new_with_model (GTK_TREE_MODEL(store));
-	g_object_unref(store);
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox), renderer, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer, "text", 0, NULL);
-
-	if(label)
-		gtk_label_set_mnemonic_widget (GTK_LABEL(label), combobox);
-
-	return combobox;
-}
-
-/*
-**
-*/
-/*
-static void
-capital_sensitive (GtkCellLayout   *cell_layout,
-		   GtkCellRenderer *cell,
-		   GtkTreeModel    *tree_model,
-		   GtkTreeIter     *iter,
-		   gpointer         data)
-{
-gboolean sensitive;
-struct _Payee *entry;
-
-	gtk_tree_model_get(tree_model, iter, LST_DEFPAY_DATAS, &entry, -1);
-	g_object_set(cell, "text", entry->pay_Name, NULL);
-
-
-  sensitive = !gtk_tree_model_iter_has_child (tree_model, iter);
-
-  g_object_set (cell, "sensitive", sensitive, NULL);
-}
-*/
-
-guint make_poppayee_populate(GtkComboBox *combobox, GList *srclist)
-{
-GtkTreeModel *model;
-GtkTreeIter  iter;
-GList *list;
-gint i;
-Payee *entry;
-
-	//insert all glist item into treeview
-	model  = gtk_combo_box_get_model(combobox);
-	gtk_list_store_clear(GTK_LIST_STORE(model));
-	i=0; list = g_list_first(srclist);
-	while (list != NULL)
-	{
-		gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-		entry = list->data;
-		gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, ((entry->name==NULL) ? (gchar *)_("(none)") : (gchar *)entry->name), -1);
-
-		//DB( g_printf(" populate_treeview: %d %08x\n", i, list->data) );
-
-		i++; list = g_list_next(list);
-	}
-
-	return i;
-}
-
-GtkWidget *make_poppayee(GtkWidget *label)
-{
-GtkListStore *store;
-GtkWidget *combobox;
-GtkCellRenderer    *renderer;
-
-	//store
-	store = gtk_list_store_new (1, G_TYPE_STRING);
-	combobox = gtk_combo_box_new_with_model (GTK_TREE_MODEL(store));
-	g_object_unref(store);
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox), renderer, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer, "text", 0, NULL);
-	/*
-	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combobox),
-					    renderer,
-					    capital_sensitive,
-					    NULL, NULL);
-	*/
-
-
-	if(label)
-		gtk_label_set_mnemonic_widget (GTK_LABEL(label), combobox);
-
-	return combobox;
-}
-
-
-
-
-
-
-
-
-/*
-**
-*/
 guint make_poparchive_populate(GtkComboBox *combobox, GList *srclist)
 {
 GtkTreeModel *model;
@@ -618,6 +534,7 @@ GtkCellRenderer    *renderer;
 **
 */
 /* for catgeory */
+/*
 guint make_popcategory_populate(GtkComboBox *combobox, GList *srclist)
 {
 GtkTreeModel *model;
@@ -679,6 +596,7 @@ GtkCellRenderer    *renderer;
 
 	return combobox;
 }
+*/
 
 /*
 ** Make a paymode combobox widget

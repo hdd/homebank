@@ -7,361 +7,279 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HomeBank 3.2.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 18:19+0200\n"
-"PO-Revision-Date: 2007-07-25 07:59+0000\n"
-"Last-Translator: Pavel V. Kulikov <kulikovpv8256@yandex.ru>\n"
+"POT-Creation-Date: 2008-09-13 23:35+0200\n"
+"PO-Revision-Date: 2008-11-11 14:51+0000\n"
+"Last-Translator: Maxim Kochetkov aka fido_max <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Export-Date: 2007-08-16 08:58:24+0000\n"
+"X-Launchpad-Export-Date: 2008-11-22 13:12+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
-#: ../data/homebank.desktop.in.in.h:1
+#. "translator-credits"	, "trans",
+#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:720
 msgid "Free, easy, personal accounting for everyone."
-msgstr ""
+msgstr "Простое и лёгкое управление личными финансами для каждого."
 
-#: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:35
-#, fuzzy
+#: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:29
 msgid "HomeBank"
-msgstr "Опции евро"
+msgstr "HomeBank"
 
-#: ../src/def_account.c:221
-msgid "(new account)"
-msgstr "(новый аккаунт)"
-
-#: ../src/def_account.c:586
-msgid "Edit Accounts"
-msgstr "Редактировать аккаунты"
-
-#: ../src/def_account.c:660
-msgid "<b>Informations</b>"
-msgstr "<b>Информация</b>"
-
-#: ../src/def_account.c:668
-msgid "_Heading:"
-msgstr "_Заголовок:"
-
-#: ../src/def_account.c:685
-msgid "_Number:"
-msgstr "_Номер:"
-
-#: ../src/def_account.c:692
-msgid "_Bank name:"
-msgstr "_Имя банка:"
-
-#: ../src/def_account.c:699
-msgid "Include in the budget"
-msgstr "Включить в бюджет"
-
-#: ../src/def_account.c:704
-msgid "This account was closed"
-msgstr "Этот аккаунт был закрыт"
-
-#: ../src/def_account.c:716
-msgid "<b>Balances</b>"
-msgstr "<b>Балансы</b>"
-
-#: ../src/def_account.c:720
-msgid "_Initial:"
-msgstr "_Начальный:"
-
-#: ../src/def_account.c:731
-msgid "_Overdrawn at:"
-msgstr "_Превышение при:"
-
-#: ../src/def_account.c:745
-msgid "<b>Cheque number</b>"
-msgstr "<b>Номер чека</b>"
-
-#: ../src/def_account.c:749
-msgid "Notebook _1:"
-msgstr "Записная книжка _1:"
-
-#: ../src/def_account.c:763
-msgid "Notebook _2:"
-msgstr "Записная книжка _2:"
-
-#: ../src/def_archive.c:108
+#: ../src/def_archive.c:114
 msgid "Day"
 msgstr "День"
 
-#: ../src/def_archive.c:108
+#: ../src/def_archive.c:114
 msgid "Week"
 msgstr "Неделя"
 
-#: ../src/def_archive.c:108 ../src/rep_stats.c:189
+#: ../src/def_archive.c:114 ../src/rep_stats.c:198
 msgid "Month"
 msgstr "Месяц"
 
-#: ../src/def_archive.c:108 ../src/rep_stats.c:189
+#: ../src/def_archive.c:114 ../src/rep_stats.c:198
 msgid "Year"
 msgstr "Год"
 
-#: ../src/def_archive.c:133
+#: ../src/def_archive.c:139 ../src/dsp_account.c:659
 msgid "(new archive)"
 msgstr "(новый архив)"
 
-#: ../src/def_archive.c:593
-msgid "Edit Archives"
-msgstr "Редактировать архивы"
+#: ../src/def_archive.c:603
+msgid "Manage Archives"
+msgstr "Управление архивами"
 
-#: ../src/def_archive.c:658
+#: ../src/def_archive.c:667
 msgid "<b>General infos</b>"
 msgstr "<b>Общая информация</b>"
 
-#: ../src/def_archive.c:666
+#: ../src/def_archive.c:675
 msgid "_Wording:"
 msgstr "_Формулировка:"
 
-#: ../src/def_archive.c:674 ../src/def_operation.c:585
+#: ../src/def_archive.c:683 ../src/def_operation.c:684
 msgid "_Amount:"
 msgstr "_Сумма:"
 
-#: ../src/def_archive.c:690 ../src/def_operation.c:601 ../src/import.c:1282
-#: ../src/rep_over.c:594
+#: ../src/def_archive.c:699 ../src/def_operation.c:700 ../src/import.c:1725
+#: ../src/rep_over.c:621
 msgid "A_ccount:"
-msgstr "А_ккаунт"
+msgstr "_Счёт"
 
-#: ../src/def_archive.c:698 ../src/def_operation.c:609
+#: ../src/def_archive.c:707 ../src/def_operation.c:708
 msgid "_Validated"
 msgstr "_Подтверждена"
 
-#: ../src/def_archive.c:706
+#: ../src/def_archive.c:715
 msgid "<b>Optional infos</b>"
 msgstr "<b>Выборочная информация</b>"
 
-#: ../src/def_archive.c:710 ../src/def_operation.c:641
+#: ../src/def_archive.c:719 ../src/def_operation.c:740
 msgid "Pay_ment:"
 msgstr "Пла_теж:"
 
-#: ../src/def_archive.c:729 ../src/def_operation.c:660
+#: ../src/def_archive.c:738 ../src/def_operation.c:759
 msgid "Of notebook _2"
-msgstr "В записеой книжке _2"
+msgstr "В записной книжке _2"
 
-#: ../src/def_archive.c:735 ../src/def_operation.c:666
+#: ../src/def_archive.c:744 ../src/def_operation.c:765
 msgid "_To account:"
-msgstr "_К аккаунту:"
+msgstr "_К счёту:"
 
-#: ../src/def_archive.c:742 ../src/def_operation.c:682
+#: ../src/def_archive.c:751 ../src/def_operation.c:781
 msgid "_Payee:"
 msgstr "_Получатель платежа:"
 
-#: ../src/def_archive.c:750 ../src/def_operation.c:690 ../src/def_wallet.c:217
+#: ../src/def_archive.c:759 ../src/def_operation.c:791 ../src/def_wallet.c:235
 msgid "_Category:"
 msgstr "_Категория:"
 
-#: ../src/def_archive.c:762
+#: ../src/def_archive.c:771
 msgid "<b>Automated insertion</b>"
 msgstr "<b>Автоматическая вставка</b>"
 
-#: ../src/def_archive.c:766
+#: ../src/def_archive.c:775
 msgid "_Activate"
-msgstr "_Активировать"
+msgstr "_Включить"
 
-#: ../src/def_archive.c:773
+#: ../src/def_archive.c:782
 msgid "_Limit to:"
 msgstr "_Ограничить до:"
 
-#: ../src/def_archive.c:781
+#: ../src/def_archive.c:790
 msgid "t_imes"
 msgstr "р_аз"
 
-#: ../src/def_archive.c:786
+#: ../src/def_archive.c:795
 msgid "Ever_y:"
 msgstr "Кажды_й:"
 
-#: ../src/def_archive.c:795
+#: ../src/def_archive.c:804
 msgid "_Unit:"
-msgstr "_Модуль:"
+msgstr "_Единица:"
 
-#: ../src/def_archive.c:802
+#: ../src/def_archive.c:811
 msgid "_Next on:"
 msgstr "_Следующий:"
 
-#: ../src/def_budget.c:261 ../src/def_category.c:208
+#: ../src/def_budget.c:322 ../src/ui_category.c:866
 msgid "File format error"
 msgstr "Ошибка формата файла"
 
-#: ../src/def_budget.c:262
+#: ../src/def_budget.c:323
 msgid ""
 "The csv file must contains the exact numbers of column,\n"
 "separated by a semi-colon, read the help for more details."
 msgstr ""
-"Этот cvs файл должен содержать точное число столбцов, \n"
+"Этот CSV файл должен содержать точное число столбцов, \n"
 "разделенных точкой с запятой, обращайтесь к справке за подробностями."
 
-#: ../src/def_budget.c:672
-msgid "Edit Budget"
-msgstr "Редактировать бюджет"
+#: ../src/def_budget.c:691
+msgid "Manage Budget"
+msgstr "Управление бюджетом"
 
-#: ../src/def_budget.c:733
+#: ../src/def_budget.c:749
 msgid "<b>Budget for each month</b>"
 msgstr "<b>Бюджет на каждый месяц</b>"
 
-#: ../src/def_budget.c:741
+#: ../src/def_budget.c:757
 msgid "is the same"
 msgstr "одинаковый"
 
-#: ../src/def_budget.c:759
+#: ../src/def_budget.c:775
 msgid "is different"
 msgstr "различный"
 
-#: ../src/def_budget.c:790 ../src/def_category.c:1179 ../src/def_payee.c:781
+#: ../src/def_budget.c:806 ../src/ui_category.c:1523 ../src/ui_payee.c:895
 msgid "_Import"
 msgstr "_Импорт"
 
-#: ../src/def_budget.c:794 ../src/def_category.c:1183 ../src/def_payee.c:785
+#: ../src/def_budget.c:810 ../src/ui_category.c:1527 ../src/ui_payee.c:899
 msgid "E_xport"
 msgstr "Э_кспорт"
 
-#: ../src/def_category.c:209
-msgid ""
-"The csv file must contains the exact numbers of column,\n"
-"separated by a semi-colon, please see the help for more details."
-msgstr ""
+#: ../src/def_budget.c:921 ../src/rep_stats.c:939 ../src/rep_stats.c:955
+#: ../src/rep_stats.c:962 ../src/ui_account.c:344 ../src/ui_category.c:187
+#: ../src/ui_category.c:441 ../src/ui_payee.c:147 ../src/ui_payee.c:319
+#: ../src/widgets.c:64
+msgid "(none)"
+msgstr "(пусто)"
 
-#: ../src/def_category.c:652 ../src/def_payee.c:465
-msgid "Modify..."
-msgstr "Изменить..."
-
-#: ../src/def_category.c:674
-msgid "_Income"
-msgstr "_Доходы"
-
-#: ../src/def_category.c:1081
-msgid "Edit Categories"
-msgstr "Редактировать категории"
-
-#: ../src/def_category.c:1122
-#, fuzzy
-msgid "I_ncome"
-msgstr "Доход"
-
-#: ../src/def_filter.c:51
+#: ../src/def_filter.c:54
 msgid "Inactive"
-msgstr "Деактивировать"
+msgstr "Неактивен"
 
-#: ../src/def_filter.c:51
+#: ../src/def_filter.c:54
 msgid "Include"
-msgstr "Включает"
+msgstr "Включить"
 
-#: ../src/def_filter.c:51
+#: ../src/def_filter.c:54
 msgid "Exclude"
-msgstr "Исключает"
+msgstr "Исключить"
 
-#: ../src/def_filter.c:738 ../src/def_filter.c:787 ../src/def_filter.c:836
-#: ../src/def_filter.c:914 ../src/def_filter.c:1009 ../src/def_filter.c:1053
+#: ../src/def_filter.c:801 ../src/def_filter.c:850 ../src/def_filter.c:899
+#: ../src/def_filter.c:977 ../src/def_filter.c:1072 ../src/def_filter.c:1116
 msgid "_Option:"
 msgstr "_Опция:"
 
-#: ../src/def_filter.c:759 ../src/def_filter.c:808 ../src/def_filter.c:857
-#: ../src/dsp_wallet.c:1195 ../src/homebank.c:199 ../src/homebank.c:299
+#: ../src/def_filter.c:822 ../src/def_filter.c:871 ../src/def_filter.c:920
 msgid "All"
 msgstr "Все"
 
-#: ../src/def_filter.c:763 ../src/def_filter.c:812 ../src/def_filter.c:861
+#: ../src/def_filter.c:826 ../src/def_filter.c:875 ../src/def_filter.c:924
 msgid "None"
 msgstr "Ничего"
 
-#: ../src/def_filter.c:767 ../src/def_filter.c:816 ../src/def_filter.c:865
+#: ../src/def_filter.c:830 ../src/def_filter.c:879 ../src/def_filter.c:928
 msgid "Invert"
 msgstr "Инвертировать"
 
-#: ../src/def_filter.c:905
+#: ../src/def_filter.c:968
 msgid "<b>Filter Date</b>"
 msgstr "<b>Фильтр даты</b>"
 
-#: ../src/def_filter.c:922 ../src/def_filter.c:1018 ../src/rep_budget.c:880
-#: ../src/rep_car.c:624 ../src/rep_over.c:615 ../src/rep_stats.c:1308
+#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:915
+#: ../src/rep_car.c:649 ../src/rep_over.c:642 ../src/rep_stats.c:1466
 msgid "_From:"
 msgstr "_Из:"
 
-#: ../src/def_filter.c:930 ../src/def_filter.c:1025 ../src/rep_budget.c:886
-#: ../src/rep_car.c:631 ../src/rep_over.c:621 ../src/rep_stats.c:1314
+#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:921
+#: ../src/rep_car.c:656 ../src/rep_over.c:648 ../src/rep_stats.c:1472
 msgid "_To:"
 msgstr "_К:"
 
-#: ../src/def_filter.c:952
+#: ../src/def_filter.c:1015
 msgid "<b>Filter State</b>"
 msgstr "<b>Фильтр состояния</b>"
 
-#: ../src/def_filter.c:960
+#: ../src/def_filter.c:1023
 msgid "Validated:"
-msgstr "Подтвержденный:"
+msgstr "Подтвержденная:"
 
-#: ../src/def_filter.c:969
+#: ../src/def_filter.c:1032
 msgid "Force:"
 msgstr "Причина:"
 
 #. label = gtk_label_new(NULL);
 #. ----------------------------------------- l, r, t, b
 #. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
-#: ../src/def_filter.c:975
+#: ../src/def_filter.c:1038
 msgid "display 'Added'"
 msgstr "показать 'Добавлен'"
 
 #. label = gtk_label_new(NULL);
 #. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
-#: ../src/def_filter.c:982
+#: ../src/def_filter.c:1045
 msgid "display 'Edited'"
 msgstr "показать 'Изменен'"
 
-#: ../src/def_filter.c:1001
+#: ../src/def_filter.c:1064
 msgid "<b>Filter Amount</b>"
 msgstr "<b>Фильтр суммы</b>"
 
-#: ../src/def_filter.c:1044
+#: ../src/def_filter.c:1107
 msgid "<b>Filter Payment</b>"
 msgstr "<b>Фильтр выплат</b>"
 
-#: ../src/def_filter.c:1104
+#: ../src/def_filter.c:1167
 msgid "Edit Filter"
 msgstr "Редактировать фильтр"
 
 #. common (date + state + amount)
-#: ../src/def_filter.c:1138 ../src/def_pref.c:153
+#: ../src/def_filter.c:1201 ../src/def_pref.c:154
 msgid "General"
 msgstr "Общий"
 
-#: ../src/def_filter.c:1144 ../src/def_pref.c:1691 ../src/list_operation.c:350
-#: ../src/rep_budget.c:1204 ../src/rep_stats.c:189
+#: ../src/def_filter.c:1207 ../src/def_pref.c:1773 ../src/list_operation.c:378
+#: ../src/list_operation.c:762 ../src/rep_budget.c:1239 ../src/rep_stats.c:198
 msgid "Category"
 msgstr "Категория"
 
-#: ../src/def_filter.c:1149 ../src/def_pref.c:1686 ../src/list_operation.c:290
-#: ../src/list_upcoming.c:172 ../src/rep_stats.c:189
+#: ../src/def_filter.c:1212 ../src/def_pref.c:1768 ../src/list_operation.c:316
+#: ../src/list_operation.c:751 ../src/list_upcoming.c:172
+#: ../src/rep_stats.c:198
 msgid "Payee"
-msgstr "Получ. плат."
+msgstr "Получатель платежа"
 
-#: ../src/def_filter.c:1158 ../src/list_account.c:255
-#: ../src/list_operation.c:655
+#: ../src/def_filter.c:1221 ../src/list_operation.c:691
 msgid "Account"
-msgstr "Аккаунт"
+msgstr "Счёт"
 
-#: ../src/def_lists.c:153 ../src/def_lists.c:273 ../src/def_lists.c:413
-#: ../src/def_pref.c:1810
-msgid "Visible"
-msgstr "Видимый"
-
-#: ../src/def_lists.c:228 ../src/def_lists.c:359 ../src/def_lists.c:575
-#: ../src/widgets.c:60 ../src/widgets.c:506 ../src/widgets.c:651
-msgid "(none)"
-msgstr "(ничего)"
-
-#: ../src/def_operation.c:81 ../src/dsp_wallet.c:222
+#: ../src/def_operation.c:90 ../src/dsp_wallet.c:226
 msgid "Add transaction"
-msgstr ""
+msgstr "Добавить транзакцию"
 
-#: ../src/def_operation.c:82
+#: ../src/def_operation.c:91
 msgid "Inherit transaction"
-msgstr ""
+msgstr "Унаследовать транзакцию"
 
-#: ../src/def_operation.c:83
+#: ../src/def_operation.c:92
 msgid "Modify transaction"
-msgstr ""
+msgstr "Изменить транзакцию"
 
-#. warn the useer we have notfound the child internal transfert
-#: ../src/def_operation.c:264
+#. warn the user we have not found the child internal transfert
+#: ../src/def_operation.c:181
 #, c-format
 msgid ""
 "Could not propagate changes to child transfert:\n"
@@ -372,365 +290,412 @@ msgid ""
 "\n"
 "You should fix the problem manually."
 msgstr ""
+"Не удалось перенести изменения в дочерний перевод:\n"
+"\n"
+"счёт: %s\n"
+"дата: %s\n"
+"сумма: %s\n"
+"\n"
+"Исправьте вручную."
 
-#: ../src/def_operation.c:559
+#: ../src/def_operation.c:655
 msgid "<b>General information</b>"
-msgstr ""
+msgstr "<b>Общая информация</b>"
 
-#: ../src/def_operation.c:567
+#: ../src/def_operation.c:663
 msgid "_Date:"
 msgstr "_Дата:"
 
-#: ../src/def_operation.c:576
-msgid "_Description:"
+#: ../src/def_operation.c:671
+msgid ""
+"Date accepted here are:\n"
+"day,\n"
+"day/month or month/day,\n"
+"and complete date into your locale"
 msgstr ""
+"Приемлемые форматы даты:\n"
+"день,\n"
+"день/месяц или месяц/день\n"
+"полная дата в вашем региональном формате"
 
-#: ../src/def_operation.c:614
+#: ../src/def_operation.c:674
+msgid "_Description:"
+msgstr "_Описание"
+
+#: ../src/def_operation.c:713
 msgid "_Remind"
 msgstr "_Напомнить"
 
-#: ../src/def_operation.c:633
+#: ../src/def_operation.c:732
 msgid "<b>Optional information</b>"
-msgstr ""
+msgstr "<b>Необязательная информация</b>"
 
-#: ../src/def_operation.c:673
+#: ../src/def_operation.c:772
 msgid "_Info:"
 msgstr "_Инфо:"
 
-#: ../src/def_operation.c:795
+#: ../src/def_operation.c:788
+msgid ""
+"Autocompletion and direct saise\n"
+"is available for Payee"
+msgstr ""
+"Автозаполнение и прямой saise\n"
+"доступны получателю платежа"
+
+#: ../src/def_operation.c:798
+msgid ""
+"Autocompletion and direct saise\n"
+"is available for Category"
+msgstr ""
+"Автозаполнение и прямой saise\n"
+"доступны категории"
+
+#: ../src/def_operation.c:801
+msgid "_Tags:"
+msgstr "_Метки:"
+
+#: ../src/def_operation.c:906
 msgid "_Fill with archive:"
-msgstr "_Заполнить архив:"
-
-#: ../src/def_payee.c:711
-msgid "Edit Payees"
-msgstr "Редактировать получателей платежа"
-
-#: ../src/def_pref.c:154
-msgid "Interface"
-msgstr "Интерфейс"
+msgstr "_Заполнить из архива:"
 
 #: ../src/def_pref.c:155
+msgid "Interface"
+msgstr "Внешний вид"
+
+#: ../src/def_pref.c:156
 msgid "Columns"
 msgstr "Столбцы"
 
-#: ../src/def_pref.c:156
+#: ../src/def_pref.c:157
 msgid "Display format"
 msgstr "Формат отображения"
 
 #. N_("Help system"),
-#: ../src/def_pref.c:158
+#: ../src/def_pref.c:159
 msgid "Euro options"
 msgstr "Опции евро"
 
-#: ../src/def_pref.c:159
+#: ../src/def_pref.c:160
 msgid "Report options"
-msgstr "Опции отчета"
+msgstr "Настройки отчета"
 
-#: ../src/def_pref.c:164
+#: ../src/def_pref.c:165
 msgid "System defaults"
 msgstr "По умолчанию"
 
-#: ../src/def_pref.c:165
+#: ../src/def_pref.c:166
 msgid "Icons only"
 msgstr "Только значки"
 
-#: ../src/def_pref.c:166
+#: ../src/def_pref.c:167
 msgid "Text only"
 msgstr "Только текст"
 
-#: ../src/def_pref.c:167
+#: ../src/def_pref.c:168
 msgid "Text under icons"
 msgstr "Текст под значками"
 
-#: ../src/def_pref.c:168
+#: ../src/def_pref.c:169
 msgid "Text beside icons"
-msgstr "Текст рядом с значками"
+msgstr "Текст рядом со значками"
 
-#: ../src/def_pref.c:716
+#: ../src/def_pref.c:762
 msgid "<b>Statistics options</b>"
-msgstr "<b>Опции статистики</b>"
+msgstr "<b>Настройки статистики</b>"
 
-#: ../src/def_pref.c:724
+#: ../src/def_pref.c:770
 msgid "Show by _amount"
 msgstr "Показать по _сумме"
 
-#: ../src/def_pref.c:729
-#, fuzzy
+#: ../src/def_pref.c:775
 msgid "Show _rate column"
 msgstr "Показать по _сумме"
 
-#: ../src/def_pref.c:734 ../src/def_pref.c:744
+#: ../src/def_pref.c:780 ../src/def_pref.c:790
 msgid "Show _details"
 msgstr "Показать _детали"
 
-#: ../src/def_pref.c:740
+#: ../src/def_pref.c:786
 msgid "<b>Budget options</b>"
-msgstr "<b>Опции бюджета</b>"
+msgstr "<b>Настройки бюджета</b>"
 
-#: ../src/def_pref.c:773 ../src/def_pref.c:1135 ../src/def_wallet.c:177
+#: ../src/def_pref.c:819 ../src/def_pref.c:1181 ../src/def_wallet.c:195
 msgid "<b>General</b>"
-msgstr "<b>Общие</b>"
+msgstr "<b>Основные</b>"
 
-#: ../src/def_pref.c:782
+#: ../src/def_pref.c:828
 msgid "Fill from:"
 msgstr "Заполнить из:"
 
-#: ../src/def_pref.c:791
+#: ../src/def_pref.c:837
 msgid "Country:"
 msgstr "Страна:"
 
-#: ../src/def_pref.c:800
+#: ../src/def_pref.c:846
 msgid "Value:"
 msgstr "Значение:"
 
-#: ../src/def_pref.c:810
+#: ../src/def_pref.c:856
 msgid "<b>Numbers format</b>"
 msgstr "<b>Формат цифр</b>"
 
-#: ../src/def_pref.c:814 ../src/def_pref.c:970
+#: ../src/def_pref.c:860 ../src/def_pref.c:1016
 msgid "Prefix symbol:"
-msgstr "Символ приставки:"
+msgstr "Символ префикса:"
 
-#: ../src/def_pref.c:821 ../src/def_pref.c:977
-#, fuzzy
+#: ../src/def_pref.c:867 ../src/def_pref.c:1023
 msgid "Suffix symbol:"
-msgstr "Символ:"
+msgstr "Символ суффикса:"
 
-#: ../src/def_pref.c:828 ../src/def_pref.c:984
+#: ../src/def_pref.c:874 ../src/def_pref.c:1030
 msgid "Decimal char:"
-msgstr "Символ десятичный разделитель:"
+msgstr "Десятичный разделитель:"
 
-#: ../src/def_pref.c:835 ../src/def_pref.c:991
+#: ../src/def_pref.c:881 ../src/def_pref.c:1037
 msgid "Grouping char:"
-msgstr ""
+msgstr "Символ тысячного разделителя:"
 
-#: ../src/def_pref.c:842 ../src/def_pref.c:998
+#: ../src/def_pref.c:888 ../src/def_pref.c:1044
 msgid "_Frac digits:"
-msgstr ""
+msgstr "_Цифр после запятой:"
 
-#: ../src/def_pref.c:941
+#: ../src/def_pref.c:987
 msgid "<b>Date options</b>"
-msgstr "<b>Опции даты</b>"
+msgstr "<b>Настройки даты</b>"
 
-#: ../src/def_pref.c:949
+#: ../src/def_pref.c:995
 msgid "_Date format:"
 msgstr "Формат _даты:"
 
-#: ../src/def_pref.c:966
+#: ../src/def_pref.c:1012
 msgid "<b>Numbers options</b>"
-msgstr "<b>Опции чисел</b>"
+msgstr "<b>Настройки чисел</b>"
 
-#: ../src/def_pref.c:1029
+#: ../src/def_pref.c:1075
 msgid "<b>Measurement units</b>"
-msgstr ""
+msgstr "<b>Единицы измерения</b>"
 
-#: ../src/def_pref.c:1033
-msgid "Use _British units"
-msgstr "Использовать _Британский стандарт"
+#: ../src/def_pref.c:1079
+msgid "Use _Imperial units"
+msgstr "Использовать _английскую систему мер"
 
-#: ../src/def_pref.c:1059
+#: ../src/def_pref.c:1105
 msgid "<b>Transaction list</b>"
-msgstr ""
+msgstr "<b>Список транзакций</b>"
 
-#: ../src/def_pref.c:1139
+#: ../src/def_pref.c:1185
 msgid "_Toolbar:"
 msgstr "_Панель инструментов"
 
-#: ../src/def_pref.c:1163
+#: ../src/def_pref.c:1209
 msgid "<b>Amount colors</b>"
 msgstr "<b>Цвета сумм</b>"
 
-#: ../src/def_pref.c:1167
+#: ../src/def_pref.c:1213
 msgid "_Expense:"
 msgstr "_Расход:"
 
-#: ../src/def_pref.c:1177
+#: ../src/def_pref.c:1223
 msgid "_Income:"
 msgstr "_Доход:"
 
-#: ../src/def_pref.c:1187
+#: ../src/def_pref.c:1233
 msgid "_Warning:"
 msgstr "_Предупреждение:"
 
-#: ../src/def_pref.c:1216
+#: ../src/def_pref.c:1262
 msgid "<b>Folders</b>"
 msgstr "<b>Папки</b>"
 
-#: ../src/def_pref.c:1224
+#: ../src/def_pref.c:1270
 msgid "_Wallet:"
 msgstr "_Бумажник:"
 
-#: ../src/def_pref.c:1240
-#, fuzzy
+#: ../src/def_pref.c:1286
 msgid "_Import:"
 msgstr "_Импорт"
 
-#: ../src/def_pref.c:1258
+#: ../src/def_pref.c:1302
+msgid "_Export:"
+msgstr "_Экспорт"
+
+#: ../src/def_pref.c:1320
 msgid "_Run the wizard"
 msgstr "_Запустить мастер"
 
-#: ../src/def_pref.c:1267
+#: ../src/def_pref.c:1329
 msgid "<b>Initial date filter</b>"
 msgstr "<b>Фильтр начальной даты</b>"
 
-#: ../src/def_pref.c:1271 ../src/dsp_account.c:2006 ../src/rep_budget.c:892
-#: ../src/rep_car.c:637 ../src/rep_over.c:627 ../src/rep_stats.c:1320
+#: ../src/def_pref.c:1333 ../src/dsp_account.c:2034 ../src/rep_budget.c:927
+#: ../src/rep_car.c:662 ../src/rep_over.c:654 ../src/rep_stats.c:1478
 msgid "_Range:"
 msgstr "_Диапазон:"
 
-#: ../src/def_pref.c:1376
+#: ../src/def_pref.c:1343
+msgid "<b>Start behaviour</b>"
+msgstr "<b>Начальное поведение</b>"
+
+#: ../src/def_pref.c:1347
+msgid "Load last opened file"
+msgstr "Загрузить последний открытый файл"
+
+#: ../src/def_pref.c:1448
 msgid "Preferences"
-msgstr "Предпочтения"
+msgstr "Настройки"
 
 #. {	N_(""), COL_OPE_STATUS,		},
 #. {	N_(""), COL_OPE_DATE,		},
-#: ../src/def_pref.c:1685 ../src/list_operation.c:267
-#: ../src/list_operation.c:676
+#: ../src/def_pref.c:1767 ../src/list_operation.c:291
+#: ../src/list_operation.c:735
 msgid "Info"
 msgstr "Инфо"
 
-#: ../src/def_pref.c:1687 ../src/list_operation.c:307
-#: ../src/list_operation.c:702 ../src/list_upcoming.c:183
-#: ../src/rep_over.c:955
+#: ../src/def_pref.c:1769 ../src/list_operation.c:334
+#: ../src/list_operation.c:713 ../src/list_upcoming.c:184
+#: ../src/rep_over.c:979
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #. column: Amount
-#: ../src/def_pref.c:1688 ../src/list_operation.c:462
-#: ../src/list_operation.c:712 ../src/list_upcoming.c:194
-#: ../src/rep_car.c:1012
+#: ../src/def_pref.c:1770 ../src/list_operation.c:509
+#: ../src/list_operation.c:723 ../src/list_upcoming.c:196
+#: ../src/rep_car.c:1039
 msgid "Amount"
 msgstr "Сумма"
 
 #. column: Expense
-#: ../src/def_pref.c:1689 ../src/list_operation.c:465 ../src/rep_budget.c:98
-#: ../src/rep_over.c:964 ../src/rep_stats.c:193 ../src/rep_stats.c:1682
+#: ../src/def_pref.c:1771 ../src/list_operation.c:512 ../src/rep_budget.c:101
+#: ../src/rep_over.c:989 ../src/rep_stats.c:202 ../src/rep_stats.c:1842
 msgid "Expense"
 msgstr "Расход"
 
 #. column: Income
-#: ../src/def_pref.c:1690 ../src/list_operation.c:468 ../src/rep_budget.c:98
-#: ../src/rep_over.c:968 ../src/rep_stats.c:193 ../src/rep_stats.c:1688
+#: ../src/def_pref.c:1772 ../src/list_operation.c:515 ../src/rep_budget.c:101
+#: ../src/rep_over.c:993 ../src/rep_stats.c:202 ../src/rep_stats.c:1848
 msgid "Income"
 msgstr "Доход"
 
-#: ../src/def_pref.c:1821
+#: ../src/def_pref.c:1774 ../src/list_operation.c:396
+msgid "Tags"
+msgstr "Метки"
+
+#: ../src/def_pref.c:1893 ../src/ui_account.c:495 ../src/ui_payee.c:449
+msgid "Visible"
+msgstr "Видимый"
+
+#: ../src/def_pref.c:1904
 msgid "Column"
 msgstr "Столбец"
 
-#: ../src/def_wallet.c:145
+#: ../src/def_wallet.c:164
 msgid "Wallet properties"
-msgstr "Параметры бумажника"
+msgstr "Настройки бумажника"
 
-#: ../src/def_wallet.c:185
+#: ../src/def_wallet.c:203
 msgid "_Owner:"
 msgstr "_Владелец:"
 
-#: ../src/def_wallet.c:194
+#: ../src/def_wallet.c:212
 msgid "<b>Automatic transactions</b>"
-msgstr ""
+msgstr "<b>Авто-транзакции</b>"
 
-#: ../src/def_wallet.c:201
+#: ../src/def_wallet.c:219
 msgid "_Insert:"
 msgstr "_Вставить:"
 
-#: ../src/def_wallet.c:206
+#: ../src/def_wallet.c:224
 msgid "days into the future"
-msgstr ""
+msgstr "дней в будущем"
 
-#: ../src/def_wallet.c:213
+#: ../src/def_wallet.c:231
 msgid "<b>Car cost</b>"
 msgstr "<b>Стоимость машины</b>"
 
 #. name, stock id, label
-#: ../src/dsp_account.c:160
+#: ../src/dsp_account.c:155
 msgid "_Account"
-msgstr ""
+msgstr "_Счёт"
 
-#: ../src/dsp_account.c:161
+#: ../src/dsp_account.c:156
 msgid "Transacti_on"
-msgstr ""
+msgstr "Транзакц_ия"
 
-#: ../src/dsp_account.c:162
+#: ../src/dsp_account.c:157
 msgid "_Tools"
 msgstr "_Инструменты"
 
-#: ../src/dsp_account.c:164 ../src/dsp_wallet.c:209
+#: ../src/dsp_account.c:159 ../src/dsp_wallet.c:210
 msgid "_Close"
 msgstr "_Закрыть"
 
-#: ../src/dsp_account.c:164
+#: ../src/dsp_account.c:159
 msgid "Close the current account"
-msgstr ""
+msgstr "Закрыть текущий счёт"
 
 #. name, stock id, label, accelerator, tooltip
-#: ../src/dsp_account.c:167
+#: ../src/dsp_account.c:162
 msgid "_Filter..."
 msgstr "_Фильтр..."
 
-#: ../src/dsp_account.c:167
+#: ../src/dsp_account.c:162
 msgid "Open the list filter"
 msgstr "Открыть список фильтров"
 
-#: ../src/dsp_account.c:169
+#: ../src/dsp_account.c:164
 msgid "_Add..."
 msgstr "_Добавить..."
 
-#: ../src/dsp_account.c:169
+#: ../src/dsp_account.c:164
 msgid "Add a new transaction"
-msgstr ""
+msgstr "Добавить транзакцию"
 
-#: ../src/dsp_account.c:170
+#: ../src/dsp_account.c:165
 msgid "_Inherit..."
 msgstr "_Наследовать..."
 
-#: ../src/dsp_account.c:170
+#: ../src/dsp_account.c:165
 msgid "Inherit from the active transaction"
-msgstr ""
+msgstr "Унаследовать от текущей транзакции"
 
-#: ../src/dsp_account.c:171
+#: ../src/dsp_account.c:166
 msgid "_Edit..."
-msgstr "_Редактировать..."
+msgstr "_Правка..."
 
-#: ../src/dsp_account.c:171
+#: ../src/dsp_account.c:166
 msgid "Edit the active transaction"
-msgstr ""
+msgstr "Редактировать текущую транзакцию"
 
-#: ../src/dsp_account.c:172
+#: ../src/dsp_account.c:167
 msgid "(In)_Validate..."
-msgstr ""
+msgstr "(Не)_Подтверждать"
 
-#: ../src/dsp_account.c:172
-#, fuzzy
+#: ../src/dsp_account.c:167
 msgid "Validate the active transactions"
-msgstr "Подтвердить активную(ые) операцию(и)"
+msgstr "Подтвердить текущие транзакции"
 
-#: ../src/dsp_account.c:173
+#: ../src/dsp_account.c:168
 msgid "_Remove..."
 msgstr "_Удалить..."
 
-#: ../src/dsp_account.c:173
+#: ../src/dsp_account.c:168
 msgid "Remove the active transactions"
-msgstr ""
+msgstr "Удалить текущие транзакции"
 
-#: ../src/dsp_account.c:174
+#: ../src/dsp_account.c:169
 msgid "Make an archive..."
-msgstr "Сделать архив..."
+msgstr "Создать архив..."
 
-#: ../src/dsp_account.c:176
-msgid "Import CSV..."
-msgstr ""
-
-#: ../src/dsp_account.c:177
+#: ../src/dsp_account.c:171
 msgid "Export CSV..."
-msgstr ""
+msgstr "Экспорт CSV..."
 
-#: ../src/dsp_account.c:361
+#: ../src/dsp_account.c:348
 msgid "No corresponding transfert can be found."
-msgstr ""
+msgstr "Соответствующий перевод не найден"
 
 #. warn the useer we have notfound the child internal transfert
-#: ../src/dsp_account.c:381
+#: ../src/dsp_account.c:368
 #, c-format
 msgid ""
 "Could not delete child transfert:\n"
@@ -741,501 +706,581 @@ msgid ""
 "\n"
 "You should fix the problem manually."
 msgstr ""
+"Не удалось удалить дочерний перевод:\n"
+"\n"
+"счёт: %s\n"
+"дата: %s\n"
+"сумма: %s\n"
+"\n"
+"Исправьте вручную."
 
-#: ../src/dsp_account.c:604
-msgid "Transaction CSV import result"
-msgstr ""
-
-#: ../src/dsp_account.c:605
-#, c-format
-msgid ""
-"%d transactions inserted\n"
-"%d errors in the file"
-msgstr ""
-
-#: ../src/dsp_account.c:728
+#: ../src/dsp_account.c:614
 msgid ""
 "Do you want to create an Archive with\n"
 "each of the selected transaction ?"
 msgstr ""
+"Создать архив с каждой\n"
+"из выбранных транзакций?"
 
-#: ../src/dsp_account.c:1258
+#: ../src/dsp_account.c:1212
 msgid ""
 "Do you want to delete\n"
 "each of the selected transaction ?"
 msgstr ""
+"Удалить каждую\n"
+"из выбранных транзакций?"
 
-#: ../src/dsp_account.c:1600
+#: ../src/dsp_account.c:1516
+#, c-format
+msgid "%d transactions selected, %d hidden"
+msgstr "%d транзакций выбрано, %d скрыто"
+
+#: ../src/dsp_account.c:1518
+#, c-format
+msgid "%d transactions selected, %d hidden :: %s ( %s - %s)"
+msgstr "%d транзакций выбрано, %d скрыто :: %s ( %s - %s)"
+
+#: ../src/dsp_account.c:1583
 msgid "Modify date..."
 msgstr "Изменить дату..."
 
-#: ../src/dsp_account.c:1605
+#: ../src/dsp_account.c:1588
 msgid "Modify info..."
-msgstr "Изменть информацию..."
+msgstr "Изменить информацию..."
 
-#: ../src/dsp_account.c:1612
+#: ../src/dsp_account.c:1595
 msgid "Modify payee..."
-msgstr "Имзенить получателя платежа..."
+msgstr "Изменить получателя платежа..."
 
-#: ../src/dsp_account.c:1618
+#: ../src/dsp_account.c:1601
 msgid "Modify description..."
-msgstr ""
+msgstr "Изменить описание..."
 
-#: ../src/dsp_account.c:1624
+#: ../src/dsp_account.c:1607
 msgid "Modify amount..."
 msgstr "Изменить сумму..."
 
-#: ../src/dsp_account.c:1629
+#: ../src/dsp_account.c:1612
 msgid "Modify category..."
 msgstr "Изменить категорию..."
 
-#: ../src/dsp_account.c:2011 ../src/rep_budget.c:898 ../src/rep_car.c:643
-#: ../src/rep_over.c:633 ../src/rep_stats.c:1326
+#: ../src/dsp_account.c:2039 ../src/rep_budget.c:933 ../src/rep_car.c:668
+#: ../src/rep_over.c:660 ../src/rep_stats.c:1484
 msgid "_Month:"
 msgstr "_Месяц:"
 
-#: ../src/dsp_account.c:2016 ../src/rep_budget.c:904 ../src/rep_car.c:649
-#: ../src/rep_over.c:639 ../src/rep_stats.c:1332
+#: ../src/dsp_account.c:2044 ../src/rep_budget.c:939 ../src/rep_car.c:674
+#: ../src/rep_over.c:666 ../src/rep_stats.c:1490
 msgid "_Year:"
 msgstr "_Год:"
 
-#: ../src/dsp_account.c:2036
+#: ../src/dsp_account.c:2064
 msgid "Future:"
 msgstr "Будущее:"
 
-#: ../src/dsp_account.c:2045
+#: ../src/dsp_account.c:2073
 msgid "Today:"
 msgstr "Сегодня:"
 
-#: ../src/dsp_account.c:2054
+#: ../src/dsp_account.c:2082
 msgid "Bank:"
 msgstr "Банк:"
 
-#: ../src/dsp_account.c:2060
+#: ../src/dsp_account.c:2088
 msgid "Minor"
 msgstr "Младший"
 
 #. name, stock id, label
-#: ../src/dsp_wallet.c:190
+#: ../src/dsp_wallet.c:189
 msgid "_File"
 msgstr "_Файл"
 
-#: ../src/dsp_wallet.c:191
+#: ../src/dsp_wallet.c:190
 msgid "_Edit"
-msgstr "_Редактировать"
+msgstr "_Править"
+
+#: ../src/dsp_wallet.c:191
+msgid "_View"
+msgstr "_Вид"
 
 #: ../src/dsp_wallet.c:192
-#, fuzzy
-msgid "_Display"
-msgstr "Формат отображения"
+msgid "_Transactions"
+msgstr "_Транзакции"
 
 #: ../src/dsp_wallet.c:193
-msgid "_Transactions"
-msgstr ""
+msgid "_Reports"
+msgstr "_Отчеты"
 
 #: ../src/dsp_wallet.c:194
-msgid "_Reports"
-msgstr "О_тчеты"
+msgid "T_ools"
+msgstr "_Инструменты"
 
 #: ../src/dsp_wallet.c:195
 msgid "_Help"
 msgstr "_Помощь"
 
+#: ../src/dsp_wallet.c:197
+msgid "Open _Recent"
+msgstr "Открыть _последние"
+
+#: ../src/dsp_wallet.c:198
+msgid "Export to"
+msgstr "Экспорт"
+
 #. name, stock id, label, accelerator, tooltip
 #. FileMenu
-#: ../src/dsp_wallet.c:200
+#: ../src/dsp_wallet.c:202
 msgid "_New"
 msgstr "_Новый"
 
-#: ../src/dsp_wallet.c:200
-#, fuzzy
+#: ../src/dsp_wallet.c:202
 msgid "Create a new wallet"
-msgstr "Открыть бумажник"
+msgstr "Создать бумажник"
 
-#: ../src/dsp_wallet.c:201
+#: ../src/dsp_wallet.c:203
 msgid "_Open..."
 msgstr "_Открыть"
 
-#: ../src/dsp_wallet.c:201
+#: ../src/dsp_wallet.c:203
 msgid "Open a wallet"
 msgstr "Открыть бумажник"
 
-#: ../src/dsp_wallet.c:202
-msgid "Open _Recent"
-msgstr "Открыть_недавние"
-
-#: ../src/dsp_wallet.c:203
+#: ../src/dsp_wallet.c:204
 msgid "_Save"
 msgstr "_Сохранить"
 
-#: ../src/dsp_wallet.c:203
-#, fuzzy
-msgid "Save the current wallet"
-msgstr "Сохранить этот бумажник"
-
 #: ../src/dsp_wallet.c:204
+msgid "Save the current wallet"
+msgstr "Сохранить текущий бумажник"
+
+#: ../src/dsp_wallet.c:205
 msgid "Save As..."
 msgstr "Сохранить как..."
 
-#: ../src/dsp_wallet.c:204
+#: ../src/dsp_wallet.c:205
 msgid "Save the current wallet with a different name"
-msgstr "Сохранить текущий кошелек под другим именем"
-
-#: ../src/dsp_wallet.c:205
-#, fuzzy
-msgid "Revert"
-msgstr "Инвертировать"
-
-#: ../src/dsp_wallet.c:205
-msgid "Revert to a saved version of this file"
-msgstr ""
+msgstr "Сохранить текущий бумажник под другим именем"
 
 #: ../src/dsp_wallet.c:206
+msgid "Revert"
+msgstr "Откатить"
+
+#: ../src/dsp_wallet.c:206
+msgid "Revert to a saved version of this file"
+msgstr "Откатить к сохранённой версии"
+
+#: ../src/dsp_wallet.c:207
 msgid "Import..."
 msgstr "Импортировать..."
 
-#: ../src/dsp_wallet.c:206
-#, fuzzy
+#: ../src/dsp_wallet.c:207
 msgid "Open the import assistant"
-msgstr "Открыть список фильтров"
-
-#: ../src/dsp_wallet.c:207
-msgid "Import Amiga..."
-msgstr "Импортировать Amiga"
-
-#: ../src/dsp_wallet.c:207
-#, fuzzy
-msgid "Import a file in Amiga 3.0 format"
-msgstr "Импортировать файл Amiga 3.0"
-
-#: ../src/dsp_wallet.c:208
-msgid "_Properties..."
-msgstr "_Параметры..."
-
-#: ../src/dsp_wallet.c:208
-msgid "Configure wallet"
-msgstr "Настроить кошелек"
+msgstr "Открыть мастер импорта"
 
 #: ../src/dsp_wallet.c:209
-msgid "Close the current wallet"
-msgstr "Закрыть текущий кошелек"
+msgid "_Properties..."
+msgstr "_Свойства..."
+
+#: ../src/dsp_wallet.c:209
+msgid "Configure wallet"
+msgstr "Настроить бумажник"
 
 #: ../src/dsp_wallet.c:210
+msgid "Close the current wallet"
+msgstr "Закрыть текущий бумажник"
+
+#: ../src/dsp_wallet.c:211
 msgid "_Quit"
 msgstr "_Выход"
 
-#: ../src/dsp_wallet.c:210
+#: ../src/dsp_wallet.c:211
 msgid "Quit homebank"
-msgstr ""
+msgstr "Выйти из программы"
 
-#. EditMenu
-#: ../src/dsp_wallet.c:213
-msgid "Acc_ounts..."
-msgstr "Акк_аунты..."
-
-#: ../src/dsp_wallet.c:213
-#, fuzzy
-msgid "Configure the accounts"
-msgstr "Редактировать аккаунты"
+#. Export Menu
+#: ../src/dsp_wallet.c:214
+msgid "QIF Format..."
+msgstr "Формат QIF"
 
 #: ../src/dsp_wallet.c:214
+msgid "Open the export to QIF assistant"
+msgstr "Открыть помощника экспорта в QIF"
+
+#. EditMenu
+#: ../src/dsp_wallet.c:217
+msgid "Acc_ounts..."
+msgstr "_Счета..."
+
+#: ../src/dsp_wallet.c:217
+msgid "Configure the accounts"
+msgstr "Редактировать счета"
+
+#: ../src/dsp_wallet.c:218
 msgid "_Payees..."
 msgstr "_Получатели платежа..."
 
-#: ../src/dsp_wallet.c:214
-#, fuzzy
+#: ../src/dsp_wallet.c:218
 msgid "Configure the payees"
-msgstr "Редактировать получателей платежа"
+msgstr "Настроить получателей"
 
-#: ../src/dsp_wallet.c:215
+#: ../src/dsp_wallet.c:219
 msgid "Categories..."
 msgstr "Категории..."
 
-#: ../src/dsp_wallet.c:215
-#, fuzzy
+#: ../src/dsp_wallet.c:219
 msgid "Configure the categories"
-msgstr "Редактировать категории"
+msgstr "Настроить категории"
 
-#: ../src/dsp_wallet.c:216
+#: ../src/dsp_wallet.c:220
 msgid "Arc_hives..."
 msgstr "Арх_ивы..."
 
-#: ../src/dsp_wallet.c:216
-#, fuzzy
+#: ../src/dsp_wallet.c:220
 msgid "Configure the archives"
-msgstr "Редактировать архивы"
+msgstr "Настроить архивы"
 
-#: ../src/dsp_wallet.c:217
+#: ../src/dsp_wallet.c:221
 msgid "Budget..."
 msgstr "Бюджет..."
 
-#: ../src/dsp_wallet.c:217
-#, fuzzy
+#: ../src/dsp_wallet.c:221
 msgid "Configure the budget"
-msgstr "Редактировать бюджет"
+msgstr "Настроить бюджет"
 
-#: ../src/dsp_wallet.c:218
+#: ../src/dsp_wallet.c:222
 msgid "Preferences..."
-msgstr "Предпочтения..."
+msgstr "Настройки..."
 
-#: ../src/dsp_wallet.c:218
+#: ../src/dsp_wallet.c:222
 msgid "Configure homebank"
-msgstr ""
+msgstr "Настроить homebank"
 
 #. OperationMenu
-#: ../src/dsp_wallet.c:221
+#: ../src/dsp_wallet.c:225
 msgid "Show..."
 msgstr "Показать..."
 
-#: ../src/dsp_wallet.c:221
+#: ../src/dsp_wallet.c:225
 msgid "Shows selected account transactions"
-msgstr ""
+msgstr "Показать транзакции в выбранных счетах"
 
-#: ../src/dsp_wallet.c:222
+#: ../src/dsp_wallet.c:226
 msgid "Add..."
 msgstr "Добавить..."
 
-#: ../src/dsp_wallet.c:223
+#: ../src/dsp_wallet.c:227
 msgid "Check automated..."
 msgstr "Проверить автоматически..."
 
-#: ../src/dsp_wallet.c:223
+#: ../src/dsp_wallet.c:227
 msgid "Insert pending automated transactions"
-msgstr ""
+msgstr "Вставить авто-транзакцию, требующую рассмотрения"
 
 #. ReportMenu
-#: ../src/dsp_wallet.c:226
+#: ../src/dsp_wallet.c:230
 msgid "_Statistics..."
 msgstr "_Статистика..."
 
-#: ../src/dsp_wallet.c:226
-#, fuzzy
+#: ../src/dsp_wallet.c:230
 msgid "Open the Statistics report"
-msgstr "Отчет по статистике"
+msgstr "Открыть статистический отчет"
 
-#: ../src/dsp_wallet.c:227
+#: ../src/dsp_wallet.c:231
 msgid "B_udget..."
 msgstr "Б_юджет..."
 
-#: ../src/dsp_wallet.c:227
-#, fuzzy
+#: ../src/dsp_wallet.c:231
 msgid "Open the Budget report"
-msgstr "Отчет по бюджету"
+msgstr "Открыть бюджетный отчет"
 
-#: ../src/dsp_wallet.c:228
+#: ../src/dsp_wallet.c:232
 msgid "Ove_rdrawn..."
 msgstr "Пре_вышение..."
 
-#: ../src/dsp_wallet.c:228
-#, fuzzy
+#: ../src/dsp_wallet.c:232
 msgid "Open the Overdrawn report"
-msgstr "Отчет по превышениям"
+msgstr "Открыть отчет по превышениям"
 
-#: ../src/dsp_wallet.c:229
+#: ../src/dsp_wallet.c:233
 msgid "_Car cost..."
-msgstr ""
+msgstr "_Стоимость машины"
 
-#: ../src/dsp_wallet.c:229
-#, fuzzy
+#: ../src/dsp_wallet.c:233
 msgid "Open the Car cost report"
-msgstr "Открыть список фильтров"
+msgstr "Открыть отчёт по стоимости машины"
+
+#. ToolsMenu
+#: ../src/dsp_wallet.c:236
+msgid "Import Amiga..."
+msgstr "Импортировать Amiga"
+
+#: ../src/dsp_wallet.c:236
+msgid "Import a file in Amiga 3.0 format"
+msgstr "Импортировать файл в формате Amiga 3.0"
 
 #. HelpMenu
-#: ../src/dsp_wallet.c:232
-#, fuzzy
+#: ../src/dsp_wallet.c:239
 msgid "_Contents"
 msgstr "_Содержание..."
 
-#: ../src/dsp_wallet.c:232
+#: ../src/dsp_wallet.c:239
 msgid "Documentation about HomeBank"
 msgstr "Документация по HomeBank"
 
-#: ../src/dsp_wallet.c:233
+#: ../src/dsp_wallet.c:240
 msgid "Get Help Online..."
-msgstr "Получить онлайн справку"
+msgstr "Получить помощь в Интернете..."
 
-#: ../src/dsp_wallet.c:233
+#: ../src/dsp_wallet.c:240
 msgid "Connect to the LaunchPad website for online help"
-msgstr ""
+msgstr "Получить помощь с сайта LaunchPad"
 
-#: ../src/dsp_wallet.c:234
+#: ../src/dsp_wallet.c:241
 msgid "Translate this Application..."
 msgstr "Перевести это приложение..."
 
-#: ../src/dsp_wallet.c:234
+#: ../src/dsp_wallet.c:241
 msgid "Connect to the LaunchPad website to help translate this application"
 msgstr ""
+"Соединиться с сайтом LaunchPad для помощи в переводе этого приложения"
 
-#: ../src/dsp_wallet.c:235
+#: ../src/dsp_wallet.c:242
 msgid "Report a Problem..."
-msgstr "Сообщить о прблеме..."
+msgstr "Сообщить о проблеме..."
 
-#: ../src/dsp_wallet.c:235
+#: ../src/dsp_wallet.c:242
 msgid "Connect to the LaunchPad website to help fix problems"
-msgstr ""
+msgstr "Перейти на сайт для решения проблемы"
 
-#: ../src/dsp_wallet.c:237
-#, fuzzy
+#: ../src/dsp_wallet.c:244
 msgid "_About"
 msgstr "О программе"
 
-#: ../src/dsp_wallet.c:237
+#: ../src/dsp_wallet.c:244
 msgid "About HomeBank"
-msgstr ""
+msgstr "О программе"
 
 #. name         , stockid, label, accelerator, tooltip, callback, is_active
-#: ../src/dsp_wallet.c:245
-#, fuzzy
+#: ../src/dsp_wallet.c:252
 msgid "Minor currency"
-msgstr "_Вторая валюта"
+msgstr "_Вторичная валюта"
 
-#: ../src/dsp_wallet.c:570 ../src/dsp_wallet.c:621 ../src/dsp_wallet.c:637
+#: ../src/dsp_wallet.c:596 ../src/dsp_wallet.c:649 ../src/dsp_wallet.c:665
 msgid "No suitable web browser executable could be found."
-msgstr ""
+msgstr "Не найден подходящий исполняемый файл браузера"
 
-#: ../src/dsp_wallet.c:571 ../src/dsp_wallet.c:590 ../src/dsp_wallet.c:606
-#: ../src/dsp_wallet.c:622 ../src/dsp_wallet.c:638
+#: ../src/dsp_wallet.c:597 ../src/dsp_wallet.c:618 ../src/dsp_wallet.c:634
+#: ../src/dsp_wallet.c:650 ../src/dsp_wallet.c:666
 #, c-format
 msgid "Could not display the URL '%s'"
-msgstr "Невозможно отобразить URL '%s'"
+msgstr "Не удалось отобразить URL '%s'"
 
-#: ../src/dsp_wallet.c:589 ../src/dsp_wallet.c:605
+#: ../src/dsp_wallet.c:617 ../src/dsp_wallet.c:633
 msgid "No suitable web browser application could be found."
-msgstr ""
+msgstr "Не найден подходящий браузер"
 
-#. "translator-credits"	, "trans",
-#: ../src/dsp_wallet.c:692
-msgid "Free, easy, personal accounting for everyone !"
-msgstr ""
-
-#: ../src/dsp_wallet.c:726
+#: ../src/dsp_wallet.c:754
 msgid ""
 "Do you want to save the changes\n"
 "in the current file ?"
 msgstr ""
-"Вы действительно хотите сохранить \n"
-"изменения в текущем файле?"
+"Сохранить изменения\n"
+"в текущем файле?"
 
-#: ../src/dsp_wallet.c:730
+#: ../src/dsp_wallet.c:758
 #, c-format
 msgid ""
 "If you do not save, %d changes will be\n"
 "definitively lost."
 msgstr ""
-"Ссли вы не сохраните файл, %d изменения \n"
+"Если вы не сохраните файл, %d изменения \n"
 "будут потеряны."
 
-#: ../src/dsp_wallet.c:735
+#: ../src/dsp_wallet.c:763
 msgid "Do _not save"
 msgstr "_Не сохранять"
 
-#: ../src/dsp_wallet.c:807
+#. fix: v4.0
+#: ../src/dsp_wallet.c:835 ../src/homebank.c:1135
 msgid "(Nobody)"
 msgstr "(Никто)"
 
-#: ../src/dsp_wallet.c:1108
+#: ../src/dsp_wallet.c:1139
 msgid "No transaction to insert"
-msgstr ""
+msgstr "Нет транзакций для вставки"
 
-#: ../src/dsp_wallet.c:1110
+#: ../src/dsp_wallet.c:1141
 #, c-format
 msgid "%d transactions inserted"
-msgstr ""
+msgstr "%d транзакций добавлено"
 
-#: ../src/dsp_wallet.c:1113
+#: ../src/dsp_wallet.c:1144
 msgid "Check automated transactions result"
-msgstr ""
+msgstr "Проверить результаты автоматических транзакций"
 
-#: ../src/dsp_wallet.c:1138
+#: ../src/dsp_wallet.c:1169
 msgid "Import Amiga file"
 msgstr "Импортировать файл Amiga"
 
-#: ../src/dsp_wallet.c:1263
+#: ../src/dsp_wallet.c:1211
 #, c-format
 msgid "Revert to the previously saved file of '%s'?"
-msgstr ""
+msgstr "Откатить к предыдущей версии файла '%s'?"
 
-#: ../src/dsp_wallet.c:1269
+#: ../src/dsp_wallet.c:1217
 msgid ""
 "- Changes made to the wallet will be permanently lost\n"
 "- Wallet will be restored to the last save (.old)"
 msgstr ""
+"- Все изменения в бумажнике будут безвозвратно потеряны\n"
+"- Бумажник будет восстановлен к последней сохранённой версии (.old)"
 
-#: ../src/dsp_wallet.c:2269
-#, fuzzy
+#: ../src/dsp_wallet.c:1315
+msgid "File error"
+msgstr "Ошибка файла"
+
+#: ../src/dsp_wallet.c:1316
+#, c-format
+msgid "The file %s is not a valid HomeBank file."
+msgstr "Файл %s не является файлом HomeBank"
+
+#: ../src/dsp_wallet.c:2297
 msgid "<b>Accounts summary</b>"
-msgstr "<b>Отчет</b>"
+msgstr "<b>Краткая информация о счетах</b>"
 
-#: ../src/dsp_wallet.c:2285
+#: ../src/dsp_wallet.c:2313
 msgid "<b>Upcoming automated transactions</b>"
-msgstr ""
+msgstr "<b>Предстоящие автоматические транзакции</b>"
 
-#: ../src/homebank.c:116
+#: ../src/homebank.c:106
 msgid "Output version information and exit"
-msgstr ""
+msgstr "Показать информацию о версии и выйти"
 
-#: ../src/homebank.c:119
+#: ../src/homebank.c:109
 msgid "[FILE]"
-msgstr "[ФАЙЛ]"
+msgstr "[Файл]"
 
-#: ../src/homebank.c:177
+#: ../src/homebank.c:196
+msgid "Export as QIF"
+msgstr "Экспортировать как QIF"
+
+#: ../src/homebank.c:207
+msgid "QIF files"
+msgstr "Файлы QIF"
+
+#: ../src/homebank.c:212 ../src/homebank.c:277 ../src/homebank.c:342
+#: ../src/homebank.c:463
+msgid "All files"
+msgstr "Все файлы"
+
+#: ../src/homebank.c:251
 msgid "Import from CSV"
-msgstr ""
+msgstr "Импорт из CSV"
 
-#: ../src/homebank.c:182
+#: ../src/homebank.c:257
 msgid "Export as CSV"
-msgstr ""
+msgstr "Экспорт в CSV"
 
-#: ../src/homebank.c:194
+#: ../src/homebank.c:272
 msgid "CSV files"
-msgstr "Файлы CVS"
+msgstr "Файлы CSV"
 
-#: ../src/homebank.c:294
-#, fuzzy
+#: ../src/homebank.c:320
+msgid "Open homebank file"
+msgstr "Открыть файл HomeBank"
+
+#: ../src/homebank.c:325
+msgid "Save homebank file as"
+msgstr "Сохранить файл HomeBank как"
+
+#: ../src/homebank.c:337
+msgid "HomeBank files"
+msgstr "Файлы HomeBank"
+
+#: ../src/homebank.c:458
 msgid "Amiga files"
-msgstr "Импортировать файл Amiga"
+msgstr "Amiga файлы"
 
-#: ../src/homebank.c:927 ../src/homebank.c:928
-#, fuzzy
+#: ../src/homebank.c:1244 ../src/homebank.c:1245
 msgid "HomeBank options"
-msgstr "Опции евро"
+msgstr "Настройки HomeBank"
 
-#: ../src/homebank.c:1025
+#: ../src/homebank.c:1363
 #, c-format
 msgid "Unable to open '%s', the file does not exist.\n"
 msgstr "Не удалось открыть '%s', файл не существует.\n"
 
-#: ../src/imp_amiga.c:104
+#: ../src/imp_amiga.c:105
 msgid "Import HomeBank Amiga File"
 msgstr "Импортировать файл HomeBank Amiga"
 
-#: ../src/imp_amiga.c:105
+#: ../src/imp_amiga.c:106
 #, c-format
 msgid ""
 "Wrong Amiga file version %d.%d\n"
 "( must be > 3.0 )"
 msgstr ""
-"Несовместимая верися файла Amiga %d.%d\n"
+"Несовместимая версия файла Amiga %d.%d\n"
 "(должна быть > 3.0)"
 
-#: ../src/import.c:303 ../src/import.c:650
-#, c-format
-msgid "new%d"
-msgstr ""
+#: ../src/import.c:58
+msgid "Import assistant"
+msgstr "Помощник импорта"
 
-#: ../src/import.c:695
-msgid "Unknow/Invalid file..."
-msgstr "Неизвестный/Неверный файл"
+#: ../src/import.c:59
+msgid "Select a file to import"
+msgstr "Выберите файл для импорта"
 
-#: ../src/import.c:699
+#: ../src/import.c:60
+msgid "File content"
+msgstr "Содержимое файла"
+
+#: ../src/import.c:61
+msgid "Transaction selection"
+msgstr "Выбор транзакции"
+
+#: ../src/import.c:62
+msgid "Update your accounts"
+msgstr "Обновить ваши счета"
+
+#: ../src/import.c:672
+msgid "Please select a file..."
+msgstr "Выберите файл"
+
+#: ../src/import.c:683
+msgid "Unknown/Invalid file..."
+msgstr "Формат файла неизвестен..."
+
+#: ../src/import.c:687
+msgid "QIF file recognised !"
+msgstr "Распознан файл QIF!"
+
+#: ../src/import.c:694
 msgid "OFX file recognised !"
-msgstr ""
+msgstr "Распознан файл OFX!"
 
-#: ../src/import.c:704
+#: ../src/import.c:697
+msgid "** OFX support is disabled **"
+msgstr "** Поддержка OFX отключена**"
+
+#: ../src/import.c:702
 msgid "CSV operation file recognised !"
-msgstr ""
+msgstr "Распознан файл CSV!"
 
-#: ../src/import.c:1122
+#: ../src/import.c:1239
+#, c-format
+msgid ""
+"%d accounts\n"
+"%d transactions\n"
+"%d payees\n"
+"%d categories\n"
+msgstr ""
+"%d счета\n"
+"%d транзакции\n"
+"%d получатели\n"
+"%d категории\n"
+
+#: ../src/import.c:1362
 #, c-format
 msgid ""
 "%d accounts will be created.\n"
@@ -1243,25 +1288,23 @@ msgid ""
 "%d transactions will be imported.\n"
 "%d transactions will be rejected."
 msgstr ""
+"%d счёта(ов) будет создано\n"
+"\n"
+"%d транзакции(й) будет импортировано\n"
+"%d транзакции(й) будет отклонено"
 
-#: ../src/import.c:1136
-#, c-format
-msgid ""
-"%d transactions will be imported.\n"
-"%d transactions will be rejected."
-msgstr ""
-
-#: ../src/import.c:1152
+#: ../src/import.c:1379
 #, c-format
 msgid "Import assistant (%d of %d)"
-msgstr ""
+msgstr "Мастер импорта (%d из %d)"
 
-#: ../src/import.c:1193
+#: ../src/import.c:1518
 msgid ""
 "HomeBank can import transactions from several file formats:\n"
 "\n"
+"- QIF\n"
+"- OFX/QFX (optional at compilation time)\n"
 "- CSV (Homebank transaction CSV export format only)\n"
-"- OFX/QFX (optional)\n"
 "\n"
 "Other formats or not supported at the moment.\n"
 "\n"
@@ -1270,259 +1313,266 @@ msgid ""
 "\n"
 "Now, click \"forward\" to start importing a file."
 msgstr ""
+"HomeBank может импортировать транзакции из нескольких форматов файлов:\n"
+"- QIF\n"
+"- OFX/QFX (опционально во время компиляции)\n"
+"- CSV (только формат экспорта CSV HomeBank)\n"
+"\n"
+"Другие форматы на данный момент не поддерживаются.\n"
+"\n"
+"Процесс импорта состоит из нескольких шагов. Ваш аккаунт в HomeBank\n"
+"не будет изменён до нажатия \"Применить\" в конце этого мастера.\n"
+"\n"
+"Нажмите \"Далее\", чтобы начать импорт файла."
 
-#: ../src/import.c:1212
-msgid "Transaction import wizard"
-msgstr ""
+#: ../src/import.c:1658
+msgid "<b>File analysis summary</b>"
+msgstr "<b>Отчёт об анализе файла</b>"
 
-#. gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), vbox, GTK_ASSISTANT_PAGE_CONTENT);
-#: ../src/import.c:1247
-#, fuzzy
-msgid "Select a file to load"
-msgstr "<b>Выберите файл для импорта</b>"
+#: ../src/import.c:1666
+msgid "Filename:"
+msgstr "Имя файла:"
 
-#: ../src/import.c:1272
+#: ../src/import.c:1674
+msgid "Details:"
+msgstr "Подробности:"
+
+#: ../src/import.c:1685
+msgid "<b>Unamed account selection</b>"
+msgstr "<b>Выбор безымянного аккаунта</b>"
+
+#: ../src/import.c:1697
 msgid ""
-"The file you selected appears to contains transactions\n"
-"for just one account, without specifying its name.\n"
-"\n"
-"Please select the account to which these transactions can be attached."
+"The file that you just loaded appears to contain transactions for an account "
+"without specifying\n"
+"the name of that account. Please select the account to which these "
+"transactions can be attached."
 msgstr ""
+"Загруженный файл содержит транзакции для счета без имени этого счета. "
+"Укажите счет, к которому\n"
+"нужно применить эти транзакции."
 
-#: ../src/import.c:1292
-#, fuzzy
-msgid "Set the default account"
-msgstr "Редактировать аккаунты"
+#: ../src/import.c:1707
+msgid "new account"
+msgstr "новый счет"
 
-#: ../src/import.c:1319
-msgid ""
-"Duplicate transactions will be found and unselected\n"
-"for import but can, of course, be reselected.\n"
-"\n"
-"The match is done in order by account, amount and date.\n"
-"For date, you can set a tolerance:\n"
-"\n"
-"- 0 means an exact match.\n"
-"- 1-14 to match +/- 1 to 14 days\n"
-"\n"
-msgstr ""
+#: ../src/import.c:1712
+msgid "_Name:"
+msgstr "_Имя:"
 
-#: ../src/import.c:1332
-#, fuzzy
+#: ../src/import.c:1720
+msgid "existing account"
+msgstr "существующий счет"
+
+#: ../src/import.c:1775
+msgid "<b>Duplicate match options</b>"
+msgstr "<b>Опция поиска дубликата</b>"
+
+#: ../src/import.c:1787
 msgid "Date _tolerance:"
-msgstr "Формат _даты:"
+msgstr "Формат д_аты:"
 
-#: ../src/import.c:1337
+#: ../src/import.c:1797
 msgid "days"
 msgstr "дней"
 
-#: ../src/import.c:1344
-msgid "Set the duplicate match option"
+#: ../src/import.c:1814
+msgid ""
+"The match is done in order: by account, amount and date.\n"
+"A date tolerance of 0 days means an exact match"
 msgstr ""
+"Совпадения упорядочены по счету, сумме и дате.\n"
+"Отклонение в дате 0 дней означает точное совпадение."
 
-#: ../src/import.c:1368
+#: ../src/import.c:1827
 msgid "<b>Transactions to import</b>"
-msgstr ""
+msgstr "<b>Импортировать транзакции</b>"
 
-#: ../src/import.c:1383
+#: ../src/import.c:1847
 msgid "<b>Possible duplicate for the above selected transaction</b>"
-msgstr ""
+msgstr "<b>Возможное повторение выбранной выше транзакции</b>"
 
 #. Create the expander
-#: ../src/import.c:1387
+#: ../src/import.c:1851
 msgid "Details"
-msgstr "Детали"
+msgstr "Сведения"
 
-#. gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), vbox, GTK_ASSISTANT_PAGE_CONFIRM);
-#. gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), vbox, TRUE);
-#: ../src/import.c:1411
-msgid "Select transactions to import"
-msgstr ""
-
-#: ../src/import.c:1439
+#: ../src/import.c:1916
 msgid ""
 "Click \"Apply\" to update your accounts.\n"
 "\n"
 msgstr ""
-"Щелкните по \"Применить\" для обновления вашего счета.\n"
+"Нажмите \"Применить\" для обновления вашего счёта.\n"
 "\n"
 
-#. gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), label, TRUE);
-#: ../src/import.c:1452
-#, fuzzy
-msgid "Update your accounts"
-msgstr "Редактировать аккаунты"
-
-#: ../src/list_account.c:269 ../src/list_operation.c:422
+#: ../src/list_account.c:253 ../src/list_operation.c:468
 msgid "State"
 msgstr "Состояние"
 
 #. column 4: Bank
-#: ../src/list_account.c:287
+#: ../src/list_account.c:273
 msgid "Bank"
 msgstr "Банк"
 
 #. column 5: Today
-#: ../src/list_account.c:291
+#: ../src/list_account.c:277
 msgid "Today"
 msgstr "Сегодня"
 
 #. column 6: Future
-#: ../src/list_account.c:295
+#: ../src/list_account.c:281
 msgid "Future"
 msgstr "Будущее"
 
-#: ../src/list_operation.c:444 ../src/list_operation.c:666
-#: ../src/rep_car.c:969 ../src/rep_over.c:945
+#: ../src/list_operation.c:491 ../src/list_operation.c:702
+#: ../src/rep_car.c:995 ../src/rep_over.c:968
 msgid "Date"
 msgstr "Дата"
 
-#: ../src/list_upcoming.c:206
-#, fuzzy
+#: ../src/list_upcoming.c:208
 msgid "Next on"
-msgstr "_Следующий:"
+msgstr "Следующий:"
 
-#: ../src/list_upcoming.c:218
-#, fuzzy
+#: ../src/list_upcoming.c:220
 msgid "Remaining"
-msgstr "_Напомнить"
+msgstr "Остаточный"
 
-#: ../src/rep_budget.c:96
+#: ../src/rep_budget.c:99
 msgid "Spent & Budget"
 msgstr "Расходы и бюджет"
 
 #. column: Expense
-#: ../src/rep_budget.c:96 ../src/rep_budget.c:1214
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1250
 msgid "Spent"
 msgstr "Потрачено"
 
 #. column: Income
-#: ../src/rep_budget.c:96 ../src/rep_budget.c:1218
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1254
 msgid "Budget"
 msgstr "Бюджет"
 
 #. column: Balance
-#: ../src/rep_budget.c:96 ../src/rep_budget.c:1222
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1258
 msgid "Decay"
 msgstr "Потери"
 
-#: ../src/rep_budget.c:104 ../src/rep_over.c:91 ../src/rep_stats.c:124
+#: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
 msgid "List"
 msgstr "Список"
 
-#: ../src/rep_budget.c:104 ../src/rep_over.c:91 ../src/rep_stats.c:124
+#: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
 msgid "View results as list"
-msgstr "Результаты как список"
+msgstr "Результаты списком"
 
-#: ../src/rep_budget.c:105 ../src/rep_stats.c:125
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:127
 msgid "Bar"
 msgstr "Полоса"
 
-#: ../src/rep_budget.c:105 ../src/rep_stats.c:125
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:127
 msgid "View results as bars"
-msgstr ""
+msgstr "Результаты гистограммой"
 
-#: ../src/rep_budget.c:107 ../src/rep_stats.c:128
+#: ../src/rep_budget.c:110 ../src/rep_stats.c:130
 msgid "Detail"
 msgstr "Детали"
 
-#: ../src/rep_budget.c:107 ../src/rep_stats.c:128
+#: ../src/rep_budget.c:110 ../src/rep_stats.c:130
 msgid "Toggle detail"
 msgstr "Показать детали"
 
-#: ../src/rep_budget.c:108 ../src/rep_stats.c:129
+#: ../src/rep_budget.c:111 ../src/rep_stats.c:131
 msgid "Legend"
 msgstr "Легенда"
 
-#: ../src/rep_budget.c:108 ../src/rep_stats.c:129
+#: ../src/rep_budget.c:111 ../src/rep_stats.c:131
 msgid "Toggle legend"
 msgstr "Показать легенду"
 
-#: ../src/rep_budget.c:110 ../src/rep_over.c:94 ../src/rep_stats.c:133
+#: ../src/rep_budget.c:113 ../src/rep_over.c:96 ../src/rep_stats.c:135
 msgid "Refresh"
 msgstr "Обновить"
 
-#: ../src/rep_budget.c:110 ../src/rep_over.c:94 ../src/rep_stats.c:133
+#: ../src/rep_budget.c:113 ../src/rep_over.c:96 ../src/rep_stats.c:135
 msgid "Refresh results"
 msgstr "Обновить результаты"
 
-#: ../src/rep_budget.c:822
+#: ../src/rep_budget.c:857
 msgid "Budget report"
 msgstr "Отчет по бюджету"
 
-#: ../src/rep_budget.c:848 ../src/rep_car.c:598 ../src/rep_over.c:590
-#: ../src/rep_stats.c:1265
+#: ../src/rep_budget.c:883 ../src/rep_car.c:623 ../src/rep_over.c:617
+#: ../src/rep_stats.c:1423
 msgid "<b>Display</b>"
 msgstr "<b>Отображение</b>"
 
-#: ../src/rep_budget.c:852
+#: ../src/rep_budget.c:887
 msgid "_Kind:"
 msgstr "_Тип:"
 
-#: ../src/rep_budget.c:859 ../src/rep_stats.c:1276
+#: ../src/rep_budget.c:894 ../src/rep_stats.c:1434
 msgid "_View:"
 msgstr "_Вид:"
 
-#: ../src/rep_budget.c:866 ../src/rep_car.c:610 ../src/rep_over.c:601
-#: ../src/rep_stats.c:1288
+#: ../src/rep_budget.c:901 ../src/rep_car.c:635 ../src/rep_over.c:628
+#: ../src/rep_stats.c:1446
 msgid "_Minor currency"
 msgstr "_Вторая валюта"
 
-#: ../src/rep_budget.c:876 ../src/rep_car.c:620 ../src/rep_over.c:611
-#: ../src/rep_stats.c:1304
+#: ../src/rep_budget.c:911 ../src/rep_car.c:645 ../src/rep_over.c:638
+#: ../src/rep_stats.c:1462
 msgid "<b>Date filter</b>"
-msgstr "<b>Фильт даты</b>"
+msgstr "<b>Фильтр даты</b>"
 
-#: ../src/rep_budget.c:952
+#: ../src/rep_budget.c:987
 msgid "Decay:"
 msgstr "Потери:"
 
-#: ../src/rep_budget.c:961
+#: ../src/rep_budget.c:996
 msgid "Budget:"
 msgstr "Бюджет:"
 
-#: ../src/rep_budget.c:970
+#: ../src/rep_budget.c:1005
 msgid "Spent:"
 msgstr "Потрачено:"
 
-#: ../src/rep_car.c:571
+#: ../src/rep_car.c:596
 msgid "Car report"
-msgstr "Отчер по машине"
+msgstr "Отчёт по машине"
 
-#: ../src/rep_car.c:602
+#: ../src/rep_car.c:627
 msgid "_Car category:"
 msgstr "Категория _машины"
 
 #. column: consumption for 100Km
-#: ../src/rep_car.c:686 ../src/rep_car.c:1020
+#: ../src/rep_car.c:711 ../src/rep_car.c:1047
 msgid "100 Km"
 msgstr "100 км"
 
-#: ../src/rep_car.c:689
+#: ../src/rep_car.c:714
 msgid "Total"
-msgstr "Всего"
+msgstr "Итого"
 
-#: ../src/rep_car.c:693
+#: ../src/rep_car.c:718
 msgid "Meter:"
-msgstr "Метр:"
+msgstr "Счётчик"
 
-#: ../src/rep_car.c:697
+#: ../src/rep_car.c:722
 msgid "Consumption:"
 msgstr "Потребление:"
 
-#: ../src/rep_car.c:701
+#: ../src/rep_car.c:726
 msgid "Fuel cost:"
 msgstr "Стоимость топлива:"
 
-#: ../src/rep_car.c:705
+#: ../src/rep_car.c:730
 msgid "Other cost:"
 msgstr "Другие расходы:"
 
-#: ../src/rep_car.c:709
+#: ../src/rep_car.c:734
 msgid "Total cost:"
-msgstr "Всего стоимость:"
+msgstr "Общая стоимость:"
 
-#.
+#. 
 #. LST_CAR_DATE,
 #. LST_CAR_WORDING,
 #. LST_CAR_METER,
@@ -1531,10 +1581,10 @@ msgstr "Всего стоимость:"
 #. LST_CAR_AMOUNT,
 #. LST_CAR_DIST,
 #. LST_CAR_100KM
-#.
-#.
+#. 
+#. 
 #. column: Wording
-#.
+#. 
 #. column = gtk_tree_view_column_new();
 #. gtk_tree_view_column_set_title(column, _("Wording"));
 #. gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
@@ -1542,219 +1592,385 @@ msgstr "Всего стоимость:"
 #. gtk_tree_view_column_pack_start(column, renderer, TRUE);
 #. gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_WORDING);
 #. //gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_text_cell_data_function, NULL, NULL);
-#.
+#. 
 #. column: Meter
-#: ../src/rep_car.c:1000
+#: ../src/rep_car.c:1027
 msgid "Meter"
-msgstr "Метр"
+msgstr "Счётчик"
 
 #. column: Fuel load
-#: ../src/rep_car.c:1004
+#: ../src/rep_car.c:1031
 msgid "Fuel"
 msgstr "Топливо"
 
 #. column: Price by unit
-#: ../src/rep_car.c:1008
+#: ../src/rep_car.c:1035
 msgid "Price"
 msgstr "Цена"
 
 #. column: Distance done
-#: ../src/rep_car.c:1016
+#: ../src/rep_car.c:1043
 msgid "Dist."
-msgstr "Дист."
+msgstr "Расст."
 
-#: ../src/rep_over.c:92
+#: ../src/rep_over.c:94
 msgid "Line"
 msgstr "Линия"
 
-#: ../src/rep_over.c:92
+#: ../src/rep_over.c:94
 msgid "View results as lines"
-msgstr "Результаты как линии"
+msgstr "Результаты в виде линий"
 
-#: ../src/rep_over.c:561
+#: ../src/rep_over.c:302
+#, c-format
+msgid "%d/%d under %s"
+msgstr "%d/%d под %s"
+
+#: ../src/rep_over.c:588
 msgid "Overdrawn report"
 msgstr "Отчет по превышениям"
 
 #. column: Balance
-#: ../src/rep_over.c:972 ../src/rep_stats.c:193 ../src/rep_stats.c:1694
+#: ../src/rep_over.c:997 ../src/rep_stats.c:202 ../src/rep_stats.c:1854
 msgid "Balance"
 msgstr "Баланс"
 
-#: ../src/rep_stats.c:126
+#: ../src/rep_stats.c:128
 msgid "Pie"
 msgstr "Круговая диаграмма"
 
-#: ../src/rep_stats.c:126
+#: ../src/rep_stats.c:128
 msgid "View results as pies"
-msgstr ""
+msgstr "Результаты в виде круговой диаграммы"
 
-#: ../src/rep_stats.c:130
+#: ../src/rep_stats.c:132
 msgid "Rate"
 msgstr "Ставка"
 
-#: ../src/rep_stats.c:130
+#: ../src/rep_stats.c:132
 msgid "Toggle rate"
 msgstr "Сменить ставку"
 
-#: ../src/rep_stats.c:132
+#: ../src/rep_stats.c:134
 msgid "Filter"
 msgstr "Фильтр"
 
-#: ../src/rep_stats.c:132
-#, fuzzy
+#: ../src/rep_stats.c:134
 msgid "Edit the filter"
 msgstr "Редактировать фильтр"
 
-#: ../src/rep_stats.c:193
+#: ../src/rep_stats.c:198
+msgid "Subcategory"
+msgstr "Подкатегория"
+
+#: ../src/rep_stats.c:198
+msgid "Tag"
+msgstr "Метка"
+
+#: ../src/rep_stats.c:202
 msgid "Exp. & Inc."
 msgstr "Расх. и. дох."
 
-#: ../src/rep_stats.c:197
+#: ../src/rep_stats.c:206
 msgid "All date"
 msgstr "Все даты"
 
-#: ../src/rep_stats.c:198
+#: ../src/rep_stats.c:207
 msgid "Current month"
 msgstr "Текущий месяц"
 
-#: ../src/rep_stats.c:199
+#: ../src/rep_stats.c:208
 msgid "Current year"
 msgstr "Текущий год"
 
-#: ../src/rep_stats.c:200
+#: ../src/rep_stats.c:209
 msgid "Previous month"
 msgstr "Предыдущий месяц"
 
-#: ../src/rep_stats.c:201
+#: ../src/rep_stats.c:210
 msgid "Previous year"
 msgstr "Предыдущий год"
 
-#: ../src/rep_stats.c:202
+#: ../src/rep_stats.c:211
 msgid "Last 30 days"
 msgstr "Последние 30 дней"
 
-#: ../src/rep_stats.c:203
+#: ../src/rep_stats.c:212
 msgid "Last 2 months"
 msgstr "Последние 2 месяца"
 
-#: ../src/rep_stats.c:204
+#: ../src/rep_stats.c:213
 msgid "Last 3 months"
 msgstr "Последние 3 месяца"
 
-#: ../src/rep_stats.c:205
+#: ../src/rep_stats.c:214
 msgid "Last 4 months"
 msgstr "Последние 4 месяца"
 
-#: ../src/rep_stats.c:206
+#: ../src/rep_stats.c:215
 msgid "Last 6 months"
 msgstr "Последние 6 месяцев"
 
-#: ../src/rep_stats.c:207
+#: ../src/rep_stats.c:216
 msgid "Last 12 months"
 msgstr "Последние 12 месяцев"
 
-#: ../src/rep_stats.c:214
+#: ../src/rep_stats.c:223
 msgid "All month"
-msgstr "Весь месяц"
+msgstr "Все месяцы"
 
-#: ../src/rep_stats.c:215 ../src/rep_stats.c:233
+#: ../src/rep_stats.c:224 ../src/rep_stats.c:242
 msgid "January"
 msgstr "Январь"
 
-#: ../src/rep_stats.c:216 ../src/rep_stats.c:234
+#: ../src/rep_stats.c:225 ../src/rep_stats.c:243
 msgid "February"
 msgstr "Февраль"
 
-#: ../src/rep_stats.c:217 ../src/rep_stats.c:235
+#: ../src/rep_stats.c:226 ../src/rep_stats.c:244
 msgid "March"
-msgstr "Граница"
+msgstr "Март"
 
-#: ../src/rep_stats.c:218 ../src/rep_stats.c:236
+#: ../src/rep_stats.c:227 ../src/rep_stats.c:245
 msgid "April"
 msgstr "Апрель"
 
-#: ../src/rep_stats.c:219 ../src/rep_stats.c:237
+#: ../src/rep_stats.c:228 ../src/rep_stats.c:246
 msgid "May"
 msgstr "Май"
 
-#: ../src/rep_stats.c:220 ../src/rep_stats.c:238
+#: ../src/rep_stats.c:229 ../src/rep_stats.c:247
 msgid "June"
 msgstr "Июнь"
 
-#: ../src/rep_stats.c:221 ../src/rep_stats.c:239
+#: ../src/rep_stats.c:230 ../src/rep_stats.c:248
 msgid "July"
 msgstr "Июль"
 
-#: ../src/rep_stats.c:222 ../src/rep_stats.c:240
+#: ../src/rep_stats.c:231 ../src/rep_stats.c:249
 msgid "August"
 msgstr "Август"
 
-#: ../src/rep_stats.c:223 ../src/rep_stats.c:241
+#: ../src/rep_stats.c:232 ../src/rep_stats.c:250
 msgid "September"
 msgstr "Сентябрь"
 
-#: ../src/rep_stats.c:224 ../src/rep_stats.c:242
+#: ../src/rep_stats.c:233 ../src/rep_stats.c:251
 msgid "October"
 msgstr "Октябрь"
 
-#: ../src/rep_stats.c:225 ../src/rep_stats.c:243
+#: ../src/rep_stats.c:234 ../src/rep_stats.c:252
 msgid "November"
 msgstr "Ноябрь"
 
-#: ../src/rep_stats.c:226 ../src/rep_stats.c:244
+#: ../src/rep_stats.c:235 ../src/rep_stats.c:253
 msgid "December"
 msgstr "Декабрь"
 
-#: ../src/rep_stats.c:1239
+#: ../src/rep_stats.c:1397
 msgid "Statistics Report"
-msgstr "Отчет по статистике"
+msgstr "Отчёт по статистике"
 
-#: ../src/rep_stats.c:1269
+#: ../src/rep_stats.c:1427
 msgid "_For:"
 msgstr "_Для:"
 
-#: ../src/rep_stats.c:1283
+#: ../src/rep_stats.c:1441
 msgid "By _amount"
 msgstr "По _сумме"
 
-#: ../src/rep_stats.c:1381
+#: ../src/rep_stats.c:1539
 msgid "Balance:"
 msgstr "Баланс:"
 
-#: ../src/rep_stats.c:1390
+#: ../src/rep_stats.c:1548
 msgid "Income:"
 msgstr "Доход:"
 
-#: ../src/rep_stats.c:1399
+#: ../src/rep_stats.c:1557
 msgid "Expense:"
 msgstr "Расход:"
 
-#: ../src/rep_stats.c:1672
+#: ../src/rep_stats.c:1831
 msgid "Result"
 msgstr "Результат"
 
-#: ../src/widgets.c:61
+#: ../src/ui_account.c:864
+#, c-format
+msgid "(account %d)"
+msgstr "(счет %d)"
+
+#: ../src/ui_account.c:896
+msgid "Remove not allowed"
+msgstr "Удаление не разрешено"
+
+#: ../src/ui_account.c:897
+msgid "This account is used and cannot be removed."
+msgstr "Этот счет используется и не может быть удален."
+
+#: ../src/ui_account.c:1004
+msgid "Manage Accounts"
+msgstr "Управление счетами"
+
+#: ../src/ui_account.c:1077
+msgid "<b>Informations</b>"
+msgstr "<b>Информация</b>"
+
+#: ../src/ui_account.c:1085
+msgid "_Heading:"
+msgstr "_Заголовок:"
+
+#: ../src/ui_account.c:1102
+msgid "_Number:"
+msgstr "_Номер:"
+
+#: ../src/ui_account.c:1109
+msgid "_Bank name:"
+msgstr "_Название банка:"
+
+#: ../src/ui_account.c:1116
+msgid "Include in the budget"
+msgstr "Включить в бюджет"
+
+#: ../src/ui_account.c:1121
+msgid "This account was closed"
+msgstr "Этот счёт был закрыт"
+
+#: ../src/ui_account.c:1133
+msgid "<b>Balances</b>"
+msgstr "<b>Балансы</b>"
+
+#: ../src/ui_account.c:1137
+msgid "_Initial:"
+msgstr "_Начальный:"
+
+#: ../src/ui_account.c:1148
+msgid "_Overdrawn at:"
+msgstr "_Превышение на:"
+
+#: ../src/ui_account.c:1162
+msgid "<b>Cheque number</b>"
+msgstr "<b>Номер чека</b>"
+
+#: ../src/ui_account.c:1166
+msgid "Notebook _1:"
+msgstr "Записная книжка _1:"
+
+#: ../src/ui_account.c:1180
+msgid "Notebook _2:"
+msgstr "Записная книжка _2:"
+
+#: ../src/ui_category.c:867
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, please see the help for more details."
+msgstr ""
+"CSV файл должен содержать точное число столбцов, \n"
+"разделённых точкой с запятой, обращайтесь к справке за подробностями."
+
+#: ../src/ui_category.c:996 ../src/ui_payee.c:579
+msgid "Modify..."
+msgstr "Изменить..."
+
+#: ../src/ui_category.c:1018
+msgid "_Income"
+msgstr "_Доходы"
+
+#: ../src/ui_category.c:1100 ../src/ui_payee.c:620
+msgid "Error"
+msgstr "Ошибка"
+
+#: ../src/ui_category.c:1101
+#, c-format
+msgid ""
+"Cannot rename this Category,\n"
+"from '%s' to '%s',\n"
+"this name already exists."
+msgstr ""
+"Невозможно переименовать категорию\n"
+"из '%s' в '%s',\n"
+"это имя уже используется."
+
+#: ../src/ui_category.c:1219
+msgid "Remove a category ?"
+msgstr "Удалить категорию?"
+
+#: ../src/ui_category.c:1220
+#, c-format
+msgid ""
+"If you remove '%s', archive and operation referencing this category\n"
+"will set place to 'no category'"
+msgstr ""
+"Если вы удалите '%s', архивы и операции этой категории\n"
+"будут перемещены в 'нет категории'"
+
+#: ../src/ui_category.c:1428
+msgid "Manage Categories"
+msgstr "Управление категориями"
+
+#: ../src/ui_category.c:1466
+msgid "I_ncome"
+msgstr "Доход"
+
+#: ../src/ui_payee.c:621
+#, c-format
+msgid ""
+"Cannot rename this Payee,\n"
+"from '%s' to '%s',\n"
+"this name already exists."
+msgstr ""
+"Невозможно переименовать этого Получателя,\n"
+"из '%s' в '%s',\n"
+"это имя уже используется."
+
+#: ../src/ui_payee.c:741
+msgid "Remove a payee ?"
+msgstr "Удалить получателя?"
+
+#: ../src/ui_payee.c:742
+#, c-format
+msgid ""
+"If you remove '%s', archive and operation referencing this payee\n"
+"will set place to 'no payee'"
+msgstr ""
+"Если вы удалите '%s', архивы и операции этого получателя\n"
+"будут перемещены в 'нет получателя'"
+
+#: ../src/ui_payee.c:826
+msgid "Manage Payees"
+msgstr "Управление Получателями"
+
+#: ../src/widgets.c:65
 msgid "Credit card"
 msgstr "Кредитная карта"
 
-#: ../src/widgets.c:62
+#: ../src/widgets.c:66
 msgid "Cheque"
 msgstr "Чек"
 
-#: ../src/widgets.c:63
+#: ../src/widgets.c:67
 msgid "Cash"
 msgstr "Наличные"
 
-#: ../src/widgets.c:64
+#: ../src/widgets.c:68
 msgid "Bank transfer"
 msgstr "Банковский перевод"
 
-#: ../src/widgets.c:65
+#: ../src/widgets.c:69
 msgid "Internal transfer"
 msgstr "Внутренний перевод"
 
 #~ msgid "Free easy personal accounting for all !"
 #~ msgstr "Бесплатный учет финансов для всех!"
+
+#~ msgid "Edit Archives"
+#~ msgstr "Редактировать архивы"
+
+#~ msgid "Edit Budget"
+#~ msgstr "Редактировать бюджет"
+
+#~ msgid "Edit Categories"
+#~ msgstr "Редактировать категории"
 
 #~ msgid "Add operation(s)"
 #~ msgstr "Добавить операции"
@@ -1765,12 +1981,11 @@ msgstr "Внутренний перевод"
 #~ msgid "Modify operation"
 #~ msgstr "Изменить операцию"
 
+#~ msgid "Edit Payees"
+#~ msgstr "Редактировать получателей платежа"
+
 #~ msgid "<b>Measure units</b>"
 #~ msgstr "<b>Единицы измерения</b>"
-
-#, fuzzy
-#~ msgid "<b>Operation list</b>"
-#~ msgstr "<b>Операции для импорта</b>"
 
 #~ msgid "Wording"
 #~ msgstr "Формулировка"
@@ -1796,6 +2011,9 @@ msgstr "Внутренний перевод"
 #~ msgid "(De)_Validate..."
 #~ msgstr "(Не)_подтвердить..."
 
+#~ msgid "Validate active operation(s)"
+#~ msgstr "Подтвердить активную(ые) операцию(и)"
+
 #~ msgid "Remove active operation(s)"
 #~ msgstr "Удалить активную(ые) операцию(и)"
 
@@ -1808,6 +2026,7 @@ msgstr "Внутренний перевод"
 #~ msgid "Operation CSV import result"
 #~ msgstr "Результат операции импорта CVS"
 
+#, c-format
 #~ msgid ""
 #~ "%d operation(s) inserted\n"
 #~ "%d error(s) in the file"
@@ -1835,38 +2054,18 @@ msgstr "Внутренний перевод"
 #~ msgid "_Operations"
 #~ msgstr "_Операции"
 
-#~ msgid "Revert to a saved version of the file"
-#~ msgstr "Вернуться к сохранённой версии файла"
-
-#~ msgid "Quit the program"
-#~ msgstr "Выйти из программы"
-
-#~ msgid "Configure the application"
-#~ msgstr "Настроить приложение"
-
-#, fuzzy
-#~ msgid "Shows selected account operations"
-#~ msgstr "1) Выдерите аккаунт для импорта операций"
-
-#, fuzzy
-#~ msgid "Insert pending automated operations"
-#~ msgstr "<b>Автоматические операции</b>"
-
 #~ msgid "_Carcost..."
 #~ msgstr "_Стоимость машины..."
 
 #~ msgid "No operation to insert"
 #~ msgstr "Нет операции для вставки"
 
+#, c-format
 #~ msgid "%d operations inserted"
 #~ msgstr "%d операций вставлено"
 
 #~ msgid "Check automated operations result"
 #~ msgstr "Проверить результат автоматических операций"
-
-#, fuzzy
-#~ msgid "<b>Upcoming automated operations</b>"
-#~ msgstr "<b>Автоматические операции</b>"
 
 #~ msgid "Import from csv"
 #~ msgstr "Импортировать из cvs"
@@ -1880,62 +2079,7 @@ msgstr "Внутренний перевод"
 #~ msgid "CSV operation file recognized !"
 #~ msgstr "Обнаружен файл операций CVS!"
 
-#~ msgid ""
-#~ "%d account(s) will be created.\n"
-#~ "\n"
-#~ "%d operation(s) will be imported.\n"
-#~ "%d operation(s) will be rejected."
-#~ msgstr ""
-#~ "%d счет(ов) было создано.\n"
-#~ "\n"
-#~ "%d операция(ий) была импортирована.\n"
-#~ "%d операция(ий) была отменена."
-
-#, fuzzy
-#~ msgid ""
-#~ "%d operation(s) will be imported.\n"
-#~ "%d operation(s) will be rejected."
-#~ msgstr ""
-#~ "%d операций было импортировано.\n"
-#~ "%d операций было отклонено."
-
-#, fuzzy
-#~ msgid ""
-#~ "HomeBank can import operations from several file format:\n"
-#~ "\n"
-#~ "- CSV (Homebank operation csv export format only)\n"
-#~ "- OFX/QFX (optional)\n"
-#~ "\n"
-#~ "Other formats or not supported for the moment.\n"
-#~ "\n"
-#~ "The import process has several steps. Your HomeBank accounts\n"
-#~ "will not be changed until you click \"Apply\" at the end of this "
-#~ "assistant.\n"
-#~ "\n"
-#~ "Now, click \"forward\" to start importing a file."
-#~ msgstr ""
-#~ "Мастер операций импорта добавит операции\n"
-#~ "из файла (пока поддерживается только формат cvs homebank)\n"
-#~ "в Ваш бумажник под Вашим контролем каждого шага.\n"
-#~ "\n"
-#~ "Дублирующиеся операции будут автоматически убраны\n"
-#~ "из импорта и могут быть добавлены вручную пользователем.\n"
-#~ "\n"
-#~ "(NB: OFX/QFX/QIF форматы будут поддерживаться со следующего релиза)"
-
-#, fuzzy
-#~ msgid "Operation import wizard"
-#~ msgstr "Мастер операций импорта"
-
 #~ msgid "<b>Operations to import</b>"
-#~ msgstr "<b>Операции для импорта</b>"
-
-#, fuzzy
-#~ msgid "<b>Possible duplicate for the above selected operation</b>"
-#~ msgstr "<b>Возможное дублирование выбранных для импорта операций</b>"
-
-#, fuzzy
-#~ msgid "Select operations to import"
 #~ msgstr "<b>Операции для импорта</b>"
 
 #~ msgid "View results as 2d-bars"
@@ -1983,34 +2127,8 @@ msgstr "Внутренний перевод"
 #~ msgid "_About..."
 #~ msgstr "_О программе..."
 
-#, fuzzy
-#~ msgid "Minor currency..."
-#~ msgstr "_Вторая валюта"
-
-#, fuzzy
-#~ msgid "Incom_e"
-#~ msgstr "Доход"
-
 #~ msgid "I_s income"
 #~ msgstr "В_ доход"
-
-#~ msgid "Thousand separator"
-#~ msgstr "Раздельтель тысяч"
-
-#~ msgid "_Thousand separator"
-#~ msgstr "_Разделитель тысяч"
-
-#~ msgid "Account name"
-#~ msgstr "Имя аккаунта"
-
-#~ msgid "Account number"
-#~ msgstr "Номер аккаунта"
-
-#~ msgid "Import ?"
-#~ msgstr "Импорт?"
-
-#~ msgid "(OFX new %d)"
-#~ msgstr "(OFX новый %d)"
 
 #~ msgid "<b>Operation import wizard</b>"
 #~ msgstr "<b>Мастер операций импорта</b>"
@@ -2038,9 +2156,20 @@ msgstr "Внутренний перевод"
 #~ msgid "Duplicate date decay:"
 #~ msgstr "Дублирование дат:"
 
-#, fuzzy
-#~ msgid "Duplicate"
-#~ msgstr "Дата"
+#~ msgid "Thousand separator"
+#~ msgstr "Раздельтель тысяч"
+
+#~ msgid "_Thousand separator"
+#~ msgstr "_Разделитель тысяч"
+
+#~ msgid "Account name"
+#~ msgstr "Имя аккаунта"
+
+#~ msgid "Account number"
+#~ msgstr "Номер аккаунта"
+
+#~ msgid "Import ?"
+#~ msgstr "Импорт?"
 
 #~ msgid "HomeBank setup wizard"
 #~ msgstr "Мастер настройки HomeBank"
@@ -2095,3 +2224,6 @@ msgstr "Внутренний перевод"
 
 #~ msgid "Import Grisbi file"
 #~ msgstr "Импортировать файл Grisbi"
+
+#~ msgid "(OFX new %d)"
+#~ msgstr "(OFX новый %d)"

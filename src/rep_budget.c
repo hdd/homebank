@@ -1,24 +1,27 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 #include "homebank.h"
 
+#include "gtkchart.h"
+#include "dsp_wallet.h"
 #include "rep_budget.h"
 #include "list_operation.h"
 
@@ -139,18 +142,18 @@ enum
 
 /* prototypes */
 
-void repbudget_date_change(GtkWidget *widget, gpointer user_data);
-void repbudget_period_change(GtkWidget *widget, gpointer user_data);
-void repbudget_range_change(GtkWidget *widget, gpointer user_data);
-void repbudget_toggle_detail(GtkWidget *widget, gpointer user_data);
-void repbudget_detail(GtkWidget *widget, gpointer user_data);
-void repbudget_compute(GtkWidget *widget, gpointer user_data);
-void repbudget_update_total(GtkWidget *widget, gpointer user_data);
-void repbudget_sensitive(GtkWidget *widget, gpointer user_data);
-void repbudget_toggle_legend(GtkWidget *widget, gpointer user_data);
-void repbudget_toggle(GtkWidget *widget, gpointer user_data);
-GtkWidget *create_list_budget(void);
-void repbudget_update_detail(GtkWidget *widget, gpointer user_data);
+static void repbudget_date_change(GtkWidget *widget, gpointer user_data);
+static void repbudget_period_change(GtkWidget *widget, gpointer user_data);
+static void repbudget_range_change(GtkWidget *widget, gpointer user_data);
+static void repbudget_toggle_detail(GtkWidget *widget, gpointer user_data);
+static void repbudget_detail(GtkWidget *widget, gpointer user_data);
+static void repbudget_compute(GtkWidget *widget, gpointer user_data);
+static void repbudget_update_total(GtkWidget *widget, gpointer user_data);
+static void repbudget_sensitive(GtkWidget *widget, gpointer user_data);
+static void repbudget_toggle_legend(GtkWidget *widget, gpointer user_data);
+static void repbudget_toggle(GtkWidget *widget, gpointer user_data);
+static GtkWidget *create_list_budget(void);
+static void repbudget_update_detail(GtkWidget *widget, gpointer user_data);
 
 /* action functions -------------------- */
 static void repbudget_action_viewlist(GtkAction *action, gpointer user_data)
@@ -195,19 +198,29 @@ struct repbudget_data *data = user_data;
 /* ======================== */
 
 
-gint getmonth(guint date)
+static gint getmonth(guint date)
 {
 GDate *date1;
 gint month;
 
 	date1 = g_date_new_julian(date);
 	month = g_date_get_month(date1);
+
+	#if MYDEBUG == 1
+		gchar buffer1[128];
+		g_date_strftime (buffer1, 128-1, "%x", date1);
+		g_print("  date is '%s'\n", buffer1);
+
+		g_print(" month is %d\n", month);
+
+	#endif
+
 	g_date_free(date1);
 
 	return(month);
 }
 
-gint countmonth(guint32 mindate, guint32 maxdate)
+static gint countmonth(guint32 mindate, guint32 maxdate)
 {
 GDate *date1, *date2;
 gint nbmonth;
@@ -229,7 +242,7 @@ gint nbmonth;
 }
 
 
-void repbudget_date_change(GtkWidget *widget, gpointer user_data)
+static void repbudget_date_change(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 
@@ -244,7 +257,7 @@ struct repbudget_data *data;
 
 }
 
-void repbudget_period_change(GtkWidget *widget, gpointer user_data)
+static void repbudget_period_change(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 gint month, year;
@@ -284,7 +297,7 @@ gint month, year;
 
 }
 
-void repbudget_range_change(GtkWidget *widget, gpointer user_data)
+static void repbudget_range_change(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 GList *list;
@@ -339,7 +352,7 @@ GDate *date;
 	}
 }
 
-void repbudget_toggle_detail(GtkWidget *widget, gpointer user_data)
+static void repbudget_toggle_detail(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 
@@ -353,7 +366,7 @@ struct repbudget_data *data;
 
 }		
 		
-void repbudget_update_detail(GtkWidget *widget, gpointer user_data)
+static void repbudget_update_detail(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 
@@ -376,7 +389,7 @@ struct repbudget_data *data;
 
 			//DB( g_print(" - active is %d\n", pos) );
 
-			repbudget_detail(GTK_WIDGET(gtk_tree_selection_get_tree_view (treeselection)), (gpointer)key);
+			repbudget_detail(GTK_WIDGET(gtk_tree_selection_get_tree_view (treeselection)), GINT_TO_POINTER(key));
 		}
 
 
@@ -388,10 +401,10 @@ struct repbudget_data *data;
 }
 
 
-void repbudget_detail(GtkWidget *widget, gpointer user_data)
+static void repbudget_detail(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
-guint active = (gint)user_data;
+guint active = GPOINTER_TO_INT(user_data);
 GList *list;
 GtkTreeModel *model;
 GtkTreeIter  iter;
@@ -449,7 +462,7 @@ GtkTreeIter  iter;
 }
 
 
-void repbudget_compute(GtkWidget *widget, gpointer user_data)
+static void repbudget_compute(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 
@@ -482,7 +495,8 @@ gint nbmonth = 1;
 	nbmonth = countmonth(mindate, maxdate);
 	DB( g_print(" date: min=%d max=%d nbmonth=%d\n", mindate, maxdate, nbmonth) );
 
-	n_result = g_list_length(GLOBALS->cat_list);
+	n_result = da_cat_get_max_key();
+	DB( g_print(" nbcat=%d\n", n_result) );
 
 	/* allocate some memory */
 	tmp_spent  = g_malloc0((n_result+1) * sizeof(gdouble));
@@ -503,18 +517,22 @@ gint nbmonth = 1;
 
 			DB( g_print("%d, get ope: %s :: acc=%d\n", i, ope->wording, ope->account) );
 
-			acc = g_list_nth_data(GLOBALS->acc_list, ope->account);
-			if((acc->flags & AF_CLOSED)) goto next;
-			if(!(acc->flags & AF_BUDGET)) goto next;
-
-			if( !(ope->flags & OF_REMIND) && ope->date >= mindate && ope->date <= maxdate)
+			acc = da_acc_get(ope->account);
+			if(acc != NULL)
 			{
-			gint pos;
+				if((acc->flags & AF_CLOSED)) goto next;
+				if(!(acc->flags & AF_BUDGET)) goto next;
 
-				pos = ope->category;
-				tmp_spent[pos] += ope->amount;
-			}
-	
+				if( !(ope->flags & OF_REMIND) && ope->date >= mindate && ope->date <= maxdate)
+				{
+				gint pos;
+
+					pos = ope->category;
+					if( pos >= 0)
+						tmp_spent[pos] += ope->amount;
+				}
+			}	
+
 		next:
 			list = g_list_next(list);
 			i++;
@@ -532,14 +550,31 @@ gint nbmonth = 1;
 		for(i=0, id=0; i<n_result; i++)
 		{
 		gchar *name, *fullcatname;
+		Category *entry;
 		//gchar buffer[128];
 
 			fullcatname = NULL;
 
-			Category *entry = g_list_nth_data(GLOBALS->cat_list, i);
+			entry = da_cat_get(i);
+			if( entry == NULL)
+				continue;
+
+			//debug
+			#if MYDEBUG == 1
+			gint k;
+
+			g_print("--------\n");
+
+			g_print("+ %s", entry->name);
+			for(k=0;k<13;k++)
+				g_print( "%d[%.2f] ", k, entry->budget[k]);
+			g_print("\n");
+	
+			#endif
+
 			if(entry->flags & GF_SUB)
 			{
-			Category *parent = g_list_nth_data(GLOBALS->cat_list, entry->parent);
+			Category *parent = da_cat_get( entry->parent);
 
 				fullcatname = g_strdup_printf("%s:%s", parent->name, entry->name);
 				name = fullcatname;
@@ -552,25 +587,30 @@ gint nbmonth = 1;
 
 			if(name == NULL) name  = "(None)";
 
+			// same value each month ?
 			if(!(entry->flags & GF_CUSTOM))
 			{
-				DB( g_print(" -> monthly %.2f\n", entry->budget[0]) );
+				DB( g_print(" cat %s -> monthly %.2f\n", name, entry->budget[0]) );
 				tmp_budget[i] = entry->budget[0]*nbmonth;
 			}
+			//otherwise	sum each month from mindate month		
 			else
 			{
-			gint month = getmonth(mindate)-1;
+			gint month = getmonth(mindate);
 			gint j;
+
+				DB( g_print(" cat '%s' -> custom month=%ld nbmonth=%ld\n", name, month, nbmonth) );
 
 				for(j=0;j<nbmonth;j++)
 				{
+					DB( g_print(" %d, cat %s -> custom j=%ld month=%ld budg=%.2f\n", j, name, month, tmp_budget[i]) );
+
 					tmp_budget[i] += entry->budget[month];
 					month++;
-					if(month == 11) month = 0;
+					if(month > 12) month = 1;
 				}
 
-				DB( g_print(" -> %ld %ld custom %.2f\n", j, month, tmp_budget[i]) );
-
+				
 			}
 
 
@@ -655,7 +695,7 @@ gint nbmonth = 1;
 }
 
 
-void repbudget_update_total(GtkWidget *widget, gpointer user_data)
+static void repbudget_update_total(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 gboolean minor;
@@ -676,7 +716,7 @@ gboolean minor;
 /*
 ** update sensitivity
 */
-void repbudget_sensitive(GtkWidget *widget, gpointer user_data)
+static void repbudget_sensitive(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 gboolean active;
@@ -707,7 +747,7 @@ gint page;
 /*
 ** change the chart legend visibility
 */
-void repbudget_toggle_legend(GtkWidget *widget, gpointer user_data)
+static void repbudget_toggle_legend(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 
@@ -718,11 +758,11 @@ struct repbudget_data *data;
 	//active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_legend));
 	data->legend ^= 1;
 
-	gtk_chart_set_legend(GTK_CHART(data->RE_bar), data->legend);
+	gtk_chart_show_legend(GTK_CHART(data->RE_bar), data->legend);
 
 }
 
-void repbudget_toggle(GtkWidget *widget, gpointer user_data)
+static void repbudget_toggle(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 gboolean minor;
@@ -737,13 +777,13 @@ gboolean minor;
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW(data->LV_report));
 
 	minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
-	gtk_chart_set_minor(GTK_CHART(data->RE_bar), minor);
+	gtk_chart_show_minor(GTK_CHART(data->RE_bar), minor);
 
 }
 
 
 
-void repbudget_selection(GtkTreeSelection *treeselection, gpointer user_data)
+static void repbudget_selection(GtkTreeSelection *treeselection, gpointer user_data)
 {
 GtkTreeModel *model;
 GtkTreeIter iter;
@@ -757,7 +797,7 @@ guint key;
 
 		DB( g_print(" - active is %d\n", key) );
 
-		repbudget_detail(GTK_WIDGET(gtk_tree_selection_get_tree_view (treeselection)), (gpointer)key);
+		repbudget_detail(GTK_WIDGET(gtk_tree_selection_get_tree_view (treeselection)), GINT_TO_POINTER(key));
 	}
 
 	repbudget_sensitive(GTK_WIDGET(gtk_tree_selection_get_tree_view (treeselection)), NULL);
@@ -765,7 +805,7 @@ guint key;
 /*
 **
 */
-gboolean repbudget_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+static gboolean repbudget_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct repbudget_data *data = user_data;
 struct WinGeometry *wg;
@@ -783,7 +823,7 @@ struct WinGeometry *wg;
 
 	//enable define windows
 	GLOBALS->define_off--;
-	wallet_update(GLOBALS->mainwindow, (gpointer)2);
+	wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(2));
 
 	DB( g_print("(repbudget) end dispose\n") );
 
@@ -810,7 +850,7 @@ GError *error = NULL;
 
 	//disable define windows
 	GLOBALS->define_off++;
-	wallet_update(GLOBALS->mainwindow, (gpointer)2);
+	wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(2));
 
     /* create window, etc */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -1115,7 +1155,7 @@ GError *error = NULL;
 /*
 ** ============================================================================
 */
-void budget_amount_cell_data_function (GtkTreeViewColumn *col,
+static void budget_amount_cell_data_function (GtkTreeViewColumn *col,
                            GtkCellRenderer   *renderer,
                            GtkTreeModel      *model,
                            GtkTreeIter       *iter,
@@ -1129,7 +1169,7 @@ gchar *markuptxt;
 guint32 color;
 
 	//get datas
-	gtk_tree_model_get(model, iter, user_data, &value, -1);
+	gtk_tree_model_get(model, iter, GPOINTER_TO_INT(user_data), &value, -1);
 
 	if( value )
 	{
@@ -1156,7 +1196,7 @@ guint32 color;
 
 }
 
-GtkTreeViewColumn *amount_list_budget_column(gchar *name, gint id)
+static GtkTreeViewColumn *amount_list_budget_column(gchar *name, gint id)
 {
 GtkTreeViewColumn  *column;
 GtkCellRenderer    *renderer;
@@ -1166,8 +1206,8 @@ GtkCellRenderer    *renderer;
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set(renderer, "xalign", 1.0, NULL);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, budget_amount_cell_data_function, (gpointer)id, NULL);
-	gtk_tree_view_column_set_alignment (column, 1.0);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, budget_amount_cell_data_function, GINT_TO_POINTER(id), NULL);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	//gtk_tree_view_column_set_sort_column_id (column, id);
 	return column;
 }
@@ -1175,7 +1215,7 @@ GtkCellRenderer    *renderer;
 /*
 ** create our statistic list
 */
-GtkWidget *create_list_budget(void)
+static GtkWidget *create_list_budget(void)
 {
 GtkListStore *store;
 GtkWidget *view;
@@ -1208,6 +1248,7 @@ GtkTreeViewColumn  *column;
 	gtk_tree_view_column_add_attribute(column, renderer, "text", LST_BUDGET_NAME);
 	//gtk_tree_view_column_set_sort_column_id (column, LST_STAT_NAME);
 	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 	/* column: Expense */

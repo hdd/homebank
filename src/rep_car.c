@@ -1,25 +1,28 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 #include "homebank.h"
-
+#include "gtkchart.h"
+#include "dsp_wallet.h"
 #include "rep_car.h"
+#include "ui_category.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -105,18 +108,18 @@ enum
 };
 
 /* prototypes */
-void repcar_date_change(GtkWidget *widget, gpointer user_data);
-void repcar_period_change(GtkWidget *widget, gpointer user_data);
-void repcar_range_change(GtkWidget *widget, gpointer user_data);
-void repcar_compute(GtkWidget *widget, gpointer user_data);
-void repcar_update(GtkWidget *widget, gpointer user_data);
-void repcar_toggle_minor(GtkWidget *widget, gpointer user_data);
-void repcar_setup(struct repcar_data *data);
-gboolean repcar_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data);
-GtkWidget *create_list_repcar(void);
+static void repcar_date_change(GtkWidget *widget, gpointer user_data);
+static void repcar_period_change(GtkWidget *widget, gpointer user_data);
+static void repcar_range_change(GtkWidget *widget, gpointer user_data);
+static void repcar_compute(GtkWidget *widget, gpointer user_data);
+static void repcar_update(GtkWidget *widget, gpointer user_data);
+static void repcar_toggle_minor(GtkWidget *widget, gpointer user_data);
+static void repcar_setup(struct repcar_data *data);
+static gboolean repcar_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data);
+static GtkWidget *create_list_repcar(void);
 
 
-void repcar_date_change(GtkWidget *widget, gpointer user_data)
+static void repcar_date_change(GtkWidget *widget, gpointer user_data)
 {
 struct repcar_data *data;
 
@@ -132,7 +135,7 @@ struct repcar_data *data;
 }
 
 
-void repcar_period_change(GtkWidget *widget, gpointer user_data)
+static void repcar_period_change(GtkWidget *widget, gpointer user_data)
 {
 struct repcar_data *data;
 gint month, year;
@@ -172,7 +175,7 @@ gint month, year;
 
 }
 
-void repcar_range_change(GtkWidget *widget, gpointer user_data)
+static void repcar_range_change(GtkWidget *widget, gpointer user_data)
 {
 struct repcar_data *data;
 GList *list;
@@ -228,11 +231,13 @@ GDate *date;
 }
 
 
-void repcar_compute(GtkWidget *widget, gpointer user_data)
+static void repcar_compute(GtkWidget *widget, gpointer user_data)
 {
 struct repcar_data *data;
 GList *list;
-gint catkey, nb_refuel;
+guint32 catkey;
+gint nb_refuel;
+guint lastmeter = 0;
 
 	DB( g_print("(repcar) compute\n") );
 
@@ -242,7 +247,9 @@ gint catkey, nb_refuel;
 	if(g_list_length(GLOBALS->ope_list) == 0) return;
 
 	// get the account key
-	catkey = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_cat));
+	catkey = ui_cat_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_cat));
+
+	DB( g_print(" -> active cat is %d\n", catkey) );
 
 	// clear the glist
 	da_carcost_destroy(data->car_list);
@@ -255,45 +262,61 @@ gint catkey, nb_refuel;
 	while (list != NULL)
 	{
 	Operation *ope = list->data;
-    CarCost *item, *previtem;
+    CarCost *item;
+    //CarCost *previtem;
 	gchar *d, *v;
 	gint len;
 
 		if( (ope->category == catkey) && !(ope->flags & OF_REMIND) )
 		{
-			len = strlen(ope->wording);
-			d = g_strstr_len(ope->wording, len, "d=");
-			v = g_strstr_len(ope->wording, len, "v=");
-
-			if(d && v)
+			if( ope->wording != NULL)
 			{
-		    	item = da_carcost_malloc();
+				len = strlen(ope->wording);
+				d = g_strstr_len(ope->wording, len, "d=");
+				v = g_strstr_len(ope->wording, len, "v=");
 
-				if(item)
+				if(d && v)
 				{
-			    	item->ope	= ope;
-			    	item->meter	= atol(d+2);
-			    	item->fuel	= g_strtod(v+2, NULL);
-			    	item->dist	= 0;
+					item = da_carcost_malloc();
 
-			    	data->car_list = g_list_append(data->car_list, item);
-					/*
-					if(d[-1] == '(') d--;
-					if(d[-1] == ' ') d--;
-					len = (UWORD)d - (UWORD)&ope->ope_Word;
-					strncpy(ac.ac_Word, ope->ope_Word, len);
-					ac.ac_Word[len] = 0;
-					*/
-
-					DB( g_print("store refuel d=%d v=%.2f $%.2f\n", item->meter, item->fuel, item->ope->amount) );
-
-					if(nb_refuel > 0 )
+					if(item)
 					{
-				    	previtem = g_list_nth_data(data->car_list, nb_refuel-1);
-						if(previtem != NULL) previtem->dist = item->meter - previtem->meter;
-					}
+						DB( g_print("**%d**\n", nb_refuel) );
+						
+						item->ope	= ope;
+						item->meter	= atol(d+2);
+						item->fuel	= g_strtod(v+2, NULL);
+						item->dist	= 0;
 
-					nb_refuel++;
+						data->car_list = g_list_append(data->car_list, item);
+						/*
+						if(d[-1] == '(') d--;
+						if(d[-1] == ' ') d--;
+						len = (UWORD)d - (UWORD)&ope->ope_Word;
+						strncpy(ac.ac_Word, ope->ope_Word, len);
+						ac.ac_Word[len] = 0;
+						*/
+
+
+						if(nb_refuel > 0 )
+						{
+							//previtem = g_list_nth_data(data->car_list, nb_refuel-1);
+							//if(previtem != NULL) previtem->dist = item->meter - previtem->meter;
+							//DB( g_print(" + previous item dist = %d\n", item->meter - previtem->meter) );
+							item->dist = item->meter - lastmeter;
+
+						
+
+							DB( g_print(" + last meter = %d\n", lastmeter) );
+
+						}
+
+						lastmeter = item->meter;
+
+						DB( g_print(" store refuel d=%d v=%4.2f $%8.2f dist=%d\n", item->meter, item->fuel, item->ope->amount, item->dist) );
+
+						nb_refuel++;
+					}
 				}
 			}
 			else
@@ -307,7 +330,7 @@ gint catkey, nb_refuel;
 	repcar_update(widget, NULL);
 }
 
-void repcar_update(GtkWidget *widget, gpointer user_data)
+static void repcar_update(GtkWidget *widget, gpointer user_data)
 {
 struct repcar_data *data;
 GtkTreeModel *model;
@@ -354,7 +377,7 @@ gchar *buf;
 				LST_CAR_100KM   , centkm,
 				-1);
 
-			DB( g_print("insert d=%d v=%.2f $%.2f %d %.2f\n", item->meter, item->fuel, item->ope->amount, dist, centkm) );
+			DB( g_print("insert d=%d v=%4.2f $%8.2f %d %5.2f\n", item->meter, item->fuel, item->ope->amount, dist, centkm) );
 
 			if(item->dist)
 			{
@@ -434,7 +457,7 @@ gchar *buf;
 
 }
 
-void repcar_toggle_minor(GtkWidget *widget, gpointer user_data)
+static void repcar_toggle_minor(GtkWidget *widget, gpointer user_data)
 {
 struct repcar_data *data;
 
@@ -453,8 +476,8 @@ struct repcar_data *data;
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW(data->LV_report));
 
 	minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
-	gtk_chart_set_minor(GTK_CHART(data->RE_bar), minor);
-	gtk_chart_set_minor(GTK_CHART(data->RE_pie), minor);
+	gtk_chart_show_minor(GTK_CHART(data->RE_bar), minor);
+	gtk_chart_show_minor(GTK_CHART(data->RE_pie), minor);
 	*/
 
 }
@@ -462,7 +485,7 @@ struct repcar_data *data;
 /*
 **
 */
-void repcar_setup(struct repcar_data *data)
+static void repcar_setup(struct repcar_data *data)
 {
 	DB( g_print("(repcar) setup\n") );
 
@@ -505,11 +528,13 @@ void repcar_setup(struct repcar_data *data)
 
 	}
 
-	make_popcategory_populate(GTK_COMBO_BOX(data->PO_cat), GLOBALS->cat_list);
+	ui_cat_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_cat), GLOBALS->h_cat);
 
 	g_signal_handler_block(data->PO_cat, data->handler_id[HID_CAR]);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_cat), GLOBALS->car_category);
+	ui_cat_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_cat), GLOBALS->car_category);
 	g_signal_handler_unblock(data->PO_cat, data->handler_id[HID_CAR]);
+
+
 
 }
 
@@ -517,7 +542,7 @@ void repcar_setup(struct repcar_data *data)
 /*
 **
 */
-gboolean repcar_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+static gboolean repcar_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct repcar_data *data = user_data;
 struct WinGeometry *wg;
@@ -537,7 +562,7 @@ struct WinGeometry *wg;
 
 	//enable define windows
 	GLOBALS->define_off--;
-	wallet_update(GLOBALS->mainwindow, (gpointer)2);
+	wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(2));
 
 	return FALSE;
 }
@@ -559,7 +584,7 @@ gint row, col;
 
 	//disable define windows
 	GLOBALS->define_off++;
-	wallet_update(GLOBALS->mainwindow, (gpointer)2);
+	wallet_update(GLOBALS->mainwindow, GINT_TO_POINTER(2));
 
     /* create window, etc */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -602,7 +627,8 @@ gint row, col;
 	label = make_label(_("_Car category:"), 0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
-	widget = make_popcategory(label);
+	widget = ui_cat_comboboxentry_new(label);
+	gtk_widget_set_size_request (widget, 10, -1);
 	data->PO_cat = widget;
 	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 2, row, row+1);
 
@@ -787,6 +813,7 @@ gint row, col;
 		gtk_widget_hide(data->CM_minor);
 
 
+
 	if( PREFS->filter_range )
 		gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_range), PREFS->filter_range);
 	else
@@ -799,7 +826,7 @@ gint row, col;
 ** ============================================================================
 */
 
-void repcar_date_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+static void repcar_date_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
 GDate *date;
 guint32 julian;
@@ -816,7 +843,7 @@ gchar buf[256];
 	g_object_set(renderer, "text", buf, NULL);
 }
 
-void repcar_distance_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+static void repcar_distance_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
 guint distance;
 gchar *text;
@@ -833,7 +860,7 @@ gchar *text;
 		g_object_set(renderer, "text", "-", NULL);
 }
 
-void repcar_volume_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+static void repcar_volume_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
 gdouble volume;
 gchar *text;
@@ -850,7 +877,7 @@ gchar *text;
 		g_object_set(renderer, "text", "-", NULL);
 }
 
-void repcar_amount_cell_data_function (GtkTreeViewColumn *col,
+static void repcar_amount_cell_data_function (GtkTreeViewColumn *col,
                            GtkCellRenderer   *renderer,
                            GtkTreeModel      *model,
                            GtkTreeIter       *iter,
@@ -886,7 +913,7 @@ guint32 color;
 
 }
 
-GtkTreeViewColumn *volume_list_repcar_column(gchar *name, gint id)
+static GtkTreeViewColumn *volume_list_repcar_column(gchar *name, gint id)
 {
 GtkTreeViewColumn  *column;
 GtkCellRenderer    *renderer;
@@ -896,13 +923,13 @@ GtkCellRenderer    *renderer;
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set(renderer, "xalign", 1.0, NULL);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_volume_cell_data_function, (gpointer)id, NULL);
-	gtk_tree_view_column_set_alignment (column, 1.0);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_volume_cell_data_function, GINT_TO_POINTER(id), NULL);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	//gtk_tree_view_column_set_sort_column_id (column, id);
 	return column;
 }
 
-GtkTreeViewColumn *distance_list_repcar_column(gchar *name, gint id)
+static GtkTreeViewColumn *distance_list_repcar_column(gchar *name, gint id)
 {
 GtkTreeViewColumn  *column;
 GtkCellRenderer    *renderer;
@@ -912,13 +939,13 @@ GtkCellRenderer    *renderer;
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set(renderer, "xalign", 1.0, NULL);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_distance_cell_data_function, (gpointer)id, NULL);
-	gtk_tree_view_column_set_alignment (column, 1.0);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_distance_cell_data_function, GINT_TO_POINTER(id), NULL);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	//gtk_tree_view_column_set_sort_column_id (column, id);
 	return column;
 }
 
-GtkTreeViewColumn *amount_list_repcar_column(gchar *name, gint id)
+static GtkTreeViewColumn *amount_list_repcar_column(gchar *name, gint id)
 {
 GtkTreeViewColumn  *column;
 GtkCellRenderer    *renderer;
@@ -928,8 +955,8 @@ GtkCellRenderer    *renderer;
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set(renderer, "xalign", 1.0, NULL);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_amount_cell_data_function, (gpointer)id, NULL);
-	gtk_tree_view_column_set_alignment (column, 1.0);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_amount_cell_data_function, GINT_TO_POINTER(id), NULL);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	//gtk_tree_view_column_set_sort_column_id (column, id);
 	return column;
 }
@@ -938,7 +965,7 @@ GtkCellRenderer    *renderer;
 /*
 ** create our statistic list
 */
-GtkWidget *create_list_repcar(void)
+static GtkWidget *create_list_repcar(void)
 {
 GtkListStore *store;
 GtkWidget *view;
@@ -971,6 +998,7 @@ GtkTreeViewColumn  *column;
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	//gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_DATE);
+	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_date_cell_data_function, NULL, NULL);
 
 /*

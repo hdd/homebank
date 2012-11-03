@@ -1,26 +1,29 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 #include "homebank.h"
 
-#include "def_lists.h"
 #include "def_archive.h"
+#include "ui_account.h"
+#include "ui_category.h"
+#include "ui_payee.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -36,32 +39,13 @@
 /* our global datas */
 extern struct HomeBank *GLOBALS;
 
-enum
-{
-	FIELD_PAYEE,
-	FIELD_WORDING,
-	FIELD_AMOUNT,
-	FIELD_VALID,
-
-	FIELD_PAYMODE,
-	FIELD_CHEQUE,
-	FIELD_CATEGORY,
-	FIELD_ACCOUNT,
-	FIELD_TOACCOUNT,
-
-	FIELD_AUTO,
-	FIELD_EVERY,
-	FIELD_UNIT,
-	FIELD_NEXT,
-	FIELD_LIMIT,
-	FIELD_TIMES,
-	MAX_FIELD
-};
-
 struct defarchive_data
 {
 	GList	*tmp_list;
 	gint	change;
+	//guint32	lastkey;
+	Archive		*lastarcitem;
+
 
 	GtkWidget	*LV_arc;
 
@@ -89,7 +73,7 @@ struct defarchive_data
 	GtkWidget	*BT_ren;
 	GtkWidget	*BT_rem;
 
-	gulong		handler_id[MAX_FIELD];
+	//gulong		handler_id[MAX_FIELD];
 
 };
 
@@ -104,15 +88,16 @@ void defarchive_automatic(GtkWidget *widget, gpointer user_data);
 gboolean defarchive_cleanup(struct defarchive_data *data, gint result);
 void defarchive_setup(struct defarchive_data *data);
 void defarchive_dispose(struct defarchive_data *data);
+void defarchive_getlast(struct defarchive_data *data);
+void defarchive_rename(GtkWidget *widget, gpointer user_data);
+
+GtkWidget *defarchive_list_new(void);
+
 
 gchar *CYA_UNIT[] = { N_("Day"), N_("Week"), N_("Month"), N_("Year"), NULL };
 
 
-gboolean defarchive_focus_out(GtkWidget *widget, GdkEventFocus *event, gpointer user_data)
-{
-	defarchive_get(widget, user_data);
-	return FALSE;
-}
+
 /*
 ** add an empty new account to our temp GList and treeview
 */
@@ -131,6 +116,8 @@ Archive *item;
 
 	item = da_archive_malloc();
 	item->wording = g_strdup(_("(new archive)"));
+
+	GLOBALS->arc_list = g_list_append(GLOBALS->arc_list, item);
 
 	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
 	gtk_list_store_set (GTK_LIST_STORE(model), &iter,
@@ -152,6 +139,7 @@ struct defarchive_data *data;
 GtkTreeSelection *selection;
 GtkTreeModel		 *model;
 GtkTreeIter			 iter;
+Archive *item;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 	DB( g_printf("(defarchive) remove (data=%08x)\n", data) );
@@ -160,8 +148,10 @@ GtkTreeIter			 iter;
 	//if true there is a selected node
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		//gtk_tree_model_get(model, &iter, LST_DEFARC_DATAS, &entry, -1);
+		gtk_tree_model_get(model, &iter, LST_DEFARC_DATAS, &item, -1);
 		gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+
+		GLOBALS->arc_list = g_list_remove(GLOBALS->arc_list, item);
 
 		data->change++;
 		//DB( g_printf(" remove =%08x (pos=%d)\n", entry, g_list_index(data->tmp_list, entry) ) );
@@ -177,6 +167,7 @@ struct defarchive_data *data;
 GtkTreeModel		 *model;
 GtkTreeIter			 iter;
 gboolean selected, sensitive;
+Archive *arcitem;
 
 	DB( g_printf("\n****(defarchive) update\n") );
 
@@ -188,7 +179,6 @@ gboolean selected, sensitive;
 	selected = gtk_tree_selection_get_selected(gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_arc)), &model, &iter);
 
 	DB( g_printf(" selected = %d\n", selected) );
-
 
 	sensitive = (selected == TRUE) ? TRUE : FALSE;
 	gtk_widget_set_sensitive(data->PO_pay, sensitive);
@@ -215,7 +205,23 @@ gboolean selected, sensitive;
 
 	if(selected)
 	{
+		gtk_tree_model_get(model, &iter, LST_DEFARC_DATAS, &arcitem, -1);
+
+		if(data->lastarcitem != NULL && arcitem != data->lastarcitem)
+		{
+			DB( g_print(" -> should do a get for last selected (%s)\n", data->lastarcitem->wording) );
+			defarchive_getlast(data);
+		}
+		data->lastarcitem = arcitem;
+
+
 		defarchive_set(widget, NULL);
+		
+	}
+	else
+	{
+		data->lastarcitem = NULL;
+	
 	}
 
 	defarchive_paymode(widget,NULL);
@@ -249,63 +255,37 @@ Archive *item;
 
 		gtk_entry_set_text(GTK_ENTRY(data->ST_word), item->wording);
 
-		g_signal_handler_block(data->ST_amount, data->handler_id[FIELD_AMOUNT]);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->ST_amount), item->amount);
-		g_signal_handler_unblock(data->ST_amount, data->handler_id[FIELD_AMOUNT]);
 
-		//gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_amount), (item->Flags & OF_INCOME) ? 1 : 0);
 
-		g_signal_handler_block(data->CM_valid, data->handler_id[FIELD_VALID]);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_valid), (item->flags & OF_VALID) ? 1 : 0);
-		g_signal_handler_unblock(data->CM_valid, data->handler_id[FIELD_VALID]);
 
-		g_signal_handler_block(data->NU_mode, data->handler_id[FIELD_PAYMODE]);
 		gtk_combo_box_set_active(GTK_COMBO_BOX(data->NU_mode), item->paymode);
-		g_signal_handler_unblock(data->NU_mode, data->handler_id[FIELD_PAYMODE]);
 
-		g_signal_handler_block(data->CM_cheque, data->handler_id[FIELD_CHEQUE]);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_cheque), (item->flags & OF_CHEQ2) ? 1 : 0);
-		g_signal_handler_unblock(data->CM_cheque, data->handler_id[FIELD_CHEQUE]);
 
-		g_signal_handler_block(data->PO_grp, data->handler_id[FIELD_CATEGORY]);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_grp), item->category);
-		g_signal_handler_unblock(data->PO_grp, data->handler_id[FIELD_CATEGORY]);
+		ui_cat_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_grp), item->category);
 
-		g_signal_handler_block(data->PO_pay, data->handler_id[FIELD_PAYEE]);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_pay), item->payee);
-		g_signal_handler_unblock(data->PO_pay, data->handler_id[FIELD_PAYEE]);
+	DB( g_print(" -> set payee %d\n", item->payee) );
+		ui_pay_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_pay), item->payee);
 
-		g_signal_handler_block(data->PO_acc, data->handler_id[FIELD_ACCOUNT]);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_acc), item->account);
-		g_signal_handler_unblock(data->PO_acc, data->handler_id[FIELD_ACCOUNT]);
+	DB( g_print(" -> PO_acc %d\n", item->account) );
+		ui_acc_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_acc), item->account);
 
-		g_signal_handler_block(data->PO_accto, data->handler_id[FIELD_TOACCOUNT]);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_accto), item->dst_account);
-		g_signal_handler_unblock(data->PO_accto, data->handler_id[FIELD_TOACCOUNT]);
+	DB( g_print(" -> PO_accto %d\n", item->dst_account) );
+		ui_acc_comboboxentry_set_active(GTK_COMBO_BOX_ENTRY(data->PO_accto), item->dst_account);
 
-		g_signal_handler_block(data->CM_auto, data->handler_id[FIELD_AUTO]);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_auto), (item->flags & OF_AUTO) ? 1 : 0);
-		g_signal_handler_unblock(data->CM_auto, data->handler_id[FIELD_AUTO]);
 
-		g_signal_handler_block(data->NB_every, data->handler_id[FIELD_EVERY]);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->NB_every), item->every);
-		g_signal_handler_unblock(data->NB_every, data->handler_id[FIELD_EVERY]);
 
-		g_signal_handler_block(data->CY_unit, data->handler_id[FIELD_UNIT]);
 		gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_unit), item->unit);
-		g_signal_handler_unblock(data->CY_unit, data->handler_id[FIELD_UNIT]);
 
-		g_signal_handler_block(data->PO_next, data->handler_id[FIELD_NEXT]);
 		gtk_dateentry_set_date(GTK_DATE_ENTRY(data->PO_next), item->nextdate);
-		g_signal_handler_unblock(data->PO_next, data->handler_id[FIELD_NEXT]);
 
-		g_signal_handler_block(data->CM_limit, data->handler_id[FIELD_LIMIT]);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_limit), (item->flags & OF_LIMIT) ? 1 : 0);
-		g_signal_handler_unblock(data->CM_limit, data->handler_id[FIELD_LIMIT]);
 
-		g_signal_handler_block(data->NB_limit, data->handler_id[FIELD_TIMES]);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->NB_limit), item->limit);
-		g_signal_handler_unblock(data->NB_limit, data->handler_id[FIELD_TIMES]);
 
 	}
 
@@ -314,29 +294,21 @@ Archive *item;
 /*
 ** get widgets contents to the selected account
 */
-void defarchive_get(GtkWidget *widget, gpointer user_data)
+void defarchive_getlast(struct defarchive_data *data)
 {
-struct defarchive_data *data;
-GtkTreeSelection *selection;
-GtkTreeModel		 *model;
-GtkTreeIter			 iter;
 gchar *txt;
 gboolean bool;
 gdouble value;
 gint active;
-
 Archive *item;
-gint field = GPOINTER_TO_INT(user_data);
 
-	DB( g_print("(defarchive) get %d\n", field) );
+	DB( g_print("(defarchive) getlast\n") );
 
-	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
-
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_arc));
-	//if true there is a selected node
-	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	item = data->lastarcitem;
+	
+	if( item != NULL )
 	{
-		gtk_tree_model_get(model, &iter, LST_DEFARC_DATAS, &item, -1);
+		DB( g_print(" -> %s\n", item->wording) );
 
 		txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_word));
 		// ignore if entry is empty
@@ -364,10 +336,13 @@ gint field = GPOINTER_TO_INT(user_data);
 		if(bool) item->flags |= OF_VALID;
 
 		item->paymode		= gtk_combo_box_get_active(GTK_COMBO_BOX(data->NU_mode));
-		item->category		= gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_grp));
-		item->payee			= gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_pay));
-		item->account		= gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_acc));
-		item->dst_account	= gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_accto));
+		item->category		= ui_cat_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_grp));
+		item->payee			= ui_pay_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_pay));
+		item->account		= ui_acc_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_acc));
+		item->dst_account	= ui_acc_comboboxentry_get_key(GTK_COMBO_BOX_ENTRY(data->PO_accto));
+
+		DB( g_print(" -> PO_acc %d\n", item->account) );
+		DB( g_print(" -> PO_accto %d\n", item->dst_account) );
 
 		bool = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_auto));
 		if(bool) item->flags |= OF_AUTO;
@@ -381,6 +356,10 @@ gint field = GPOINTER_TO_INT(user_data);
 
 		item->limit   = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->NB_limit));
 
+		
+		/*
+		todo
+		
 		switch( field )
 		{
 			case FIELD_PAYMODE:
@@ -392,9 +371,49 @@ gint field = GPOINTER_TO_INT(user_data);
 				defarchive_automatic(widget, NULL);
 				break;
 
+		}*/
+
+		data->change++;
+	}
+}
+
+
+/*
+** update the archive name everytime it changes
+*/
+void defarchive_rename(GtkWidget *widget, gpointer user_data)
+{
+struct defarchive_data *data;
+GtkTreeSelection *selection;
+GtkTreeModel		 *model;
+GtkTreeIter			 iter;
+gchar *txt;
+Archive *item;
+
+	DB( g_print("(defarchive) rename\n") );
+
+	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_arc));
+	//if true there is a selected node
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, LST_DEFARC_DATAS, &item, -1);
+	
+		DB( g_print(" -> %s\n", item->wording) );
+
+		txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_word));
+		// ignore if entry is empty
+		if (txt && *txt)
+		{
+			g_free(item->wording);
+			item->wording = g_strdup(txt);
 		}
 
+		gtk_tree_view_columns_autosize (GTK_TREE_VIEW(data->LV_arc));
+
 	}
+
 }
 
 /*
@@ -476,7 +495,7 @@ gboolean sensitive;
 /*
 **
 */
-void defarchive_selection(GtkTreeSelection *treeselection, gpointer user_data)
+static void defarchive_selection(GtkTreeSelection *treeselection, gpointer user_data)
 {
 	defarchive_update(GTK_WIDGET(gtk_tree_selection_get_tree_view (treeselection)), NULL);
 }
@@ -490,44 +509,14 @@ gboolean doupdate = FALSE;
 
 	DB( g_printf("(defarchive) cleanup\n") );
 
-	if(result == GTK_RESPONSE_ACCEPT)
+
+	if(data->lastarcitem != NULL)
 	{
-	GtkTreeModel *model;
-	GtkTreeIter	iter;
-	gboolean valid;
-	guint i;
-
-		DB( g_printf(" we always update our glist\n") );
-
-			model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_arc));
-			i=0; valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
-			while (valid)
-			{
-			Archive *item;
-			gint oldpos;
-
-				gtk_tree_model_get(GTK_TREE_MODEL(model), &iter,
-					LST_DEFARC_DATAS, &item,
-					LST_DEFARC_OLDPOS, &oldpos,
-					-1);
-
-				//item->key = i;
-				data->tmp_list = g_list_append(data->tmp_list, item);
-
-				/* Make iter point to the next row in the list store */
-				i++; valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
-			}
-
-		//update our GLOBAL pay_list
-		da_archive_destroy(GLOBALS->arc_list);
-		GLOBALS->arc_list = g_list_sort(data->tmp_list, (GCompareFunc)defarchive_list_sort);
-		data->tmp_list = NULL;
-
-		GLOBALS->change += data->change;
+		DB( g_print(" -> should do a get for last selected (%s)\n", data->lastarcitem->wording) );
+		defarchive_getlast(data);
 	}
-	DB( g_printf(" free tmp_list\n") );
 
-	da_archive_destroy(data->tmp_list);
+	GLOBALS->change += data->change;
 
 	return doupdate;
 }
@@ -547,6 +536,7 @@ gint i;
 	//init GList
 	data->tmp_list = NULL; //hb_glist_clone_list(GLOBALS->arc_list, sizeof(struct _Archive));
 	data->change = 0;
+	data->lastarcitem = NULL;
 
 	//hb_glist_populate_treeview(data->tmp_list, data->LV_arc, LST_DEFARC_DATAS, LST_DEFARC_OLDPOS);
 
@@ -555,7 +545,7 @@ gint i;
 	i=0; list = g_list_first(GLOBALS->arc_list);
 	while (list != NULL)
 	{
-	Archive *item = da_archive_clone(list->data);
+	Archive *item = list->data;
 
 		gtk_list_store_append (GTK_LIST_STORE(model), &iter);
 		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
@@ -568,10 +558,10 @@ gint i;
 		i++; list = g_list_next(list);
 	}
 
-	make_poppayee_populate(GTK_COMBO_BOX(data->PO_pay), GLOBALS->pay_list);
-	make_popcategory_populate(GTK_COMBO_BOX(data->PO_grp), GLOBALS->cat_list);
-	make_popaccount_populate(GTK_COMBO_BOX(data->PO_acc), GLOBALS->acc_list);
-	make_popaccount_populate(GTK_COMBO_BOX(data->PO_accto), GLOBALS->acc_list);
+	ui_pay_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_pay)  , GLOBALS->h_pay);
+	ui_cat_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_grp)  , GLOBALS->h_cat);
+	ui_acc_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_acc)  , GLOBALS->h_acc);
+	ui_acc_comboboxentry_populate(GTK_COMBO_BOX_ENTRY(data->PO_accto), GLOBALS->h_acc);
 
 }
 
@@ -590,13 +580,10 @@ GtkWidget *label, *widget, *treeview, *scrollwin, *notebook;
 GtkWidget *alignment;
 gint row;
 
-      window = gtk_dialog_new_with_buttons (_("Edit Archives"),
-					    //GTK_WINDOW (do_widget),
-					    NULL,
+      window = gtk_dialog_new_with_buttons (_("Manage Archives"),
+					    GTK_WINDOW(GLOBALS->mainwindow),
 					    0,
-					    GTK_STOCK_CANCEL,
-					    GTK_RESPONSE_REJECT,
-					    GTK_STOCK_OK,
+					    GTK_STOCK_CLOSE,
 					    GTK_RESPONSE_ACCEPT,
 					    NULL);
 
@@ -690,7 +677,7 @@ gint row;
 	label = gtk_label_new_with_mnemonic (_("A_ccount:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-	widget = make_popaccount(label);
+	widget = ui_acc_comboboxentry_new(label);	
 	data.PO_acc = widget;
 	gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
@@ -733,8 +720,8 @@ gint row;
 		hbox = gtk_hbox_new(FALSE, HB_BOX_SPACING);
 		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), hbox, NULL);
 		label = make_label(_("_To account:"), 1, 0.5);
-		gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-		widget = make_popaccount(label);
+		gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+		widget = ui_acc_comboboxentry_new(label);	
 		data.PO_accto = widget;
 		gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
 
@@ -742,7 +729,7 @@ gint row;
 	label = gtk_label_new_with_mnemonic (_("_Payee:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-	widget = make_poppayee(label);
+	widget = ui_pay_comboboxentry_new(label);	
 	data.PO_pay = widget;
 	gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
@@ -750,7 +737,7 @@ gint row;
 	label = gtk_label_new_with_mnemonic (_("_Category:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-	widget = make_popcategory(label);
+	widget = ui_cat_comboboxentry_new(label);
 	data.PO_grp = widget;
 	gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
@@ -819,25 +806,26 @@ gint row;
 	g_signal_connect (G_OBJECT (data.BT_rem), "clicked", G_CALLBACK (defarchive_remove), NULL);
 
 	// modify events
-	data.handler_id[FIELD_PAYEE] = g_signal_connect (data.PO_pay, "changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_PAYEE);
-	g_signal_connect (G_OBJECT (data.ST_word), "activate", G_CALLBACK (defarchive_get), (gpointer)FIELD_WORDING);
-	g_signal_connect (G_OBJECT (data.ST_word), "focus-out-event", G_CALLBACK (defarchive_focus_out), (gpointer)FIELD_WORDING);
-	data.handler_id[FIELD_AMOUNT] = g_signal_connect (data.ST_amount, "value-changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_AMOUNT);
-	data.handler_id[FIELD_VALID] = g_signal_connect (data.CM_valid, "toggled", G_CALLBACK (defarchive_get), (gpointer)FIELD_VALID);
+	//data.handler_id[FIELD_PAYEE] = g_signal_connect (data.PO_pay, "changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_PAYEE));
 
-	data.handler_id[FIELD_PAYMODE] = g_signal_connect (data.NU_mode, "changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_PAYMODE);
-	data.handler_id[FIELD_CHEQUE] = g_signal_connect (data.CM_cheque, "toggled", G_CALLBACK (defarchive_get), (gpointer)FIELD_CHEQUE);
-	data.handler_id[FIELD_CATEGORY] = g_signal_connect (data.PO_grp, "changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_CATEGORY);
-	data.handler_id[FIELD_ACCOUNT] = g_signal_connect (data.PO_acc, "changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_ACCOUNT);
-	data.handler_id[FIELD_TOACCOUNT] = g_signal_connect (data.PO_accto, "changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_TOACCOUNT);
+	g_signal_connect (G_OBJECT (data.ST_word), "changed", G_CALLBACK (defarchive_rename), NULL);
+	//g_signal_connect (G_OBJECT (data.ST_word), "focus-out-event", G_CALLBACK (defarchive_focus_out), GINT_TO_POINTER(FIELD_WORDING));
+	//data.handler_id[FIELD_AMOUNT] = g_signal_connect (data.ST_amount, "value-changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_AMOUNT));
+	//data.handler_id[FIELD_VALID] = g_signal_connect (data.CM_valid, "toggled", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_VALID));
 
-	data.handler_id[FIELD_AUTO] = g_signal_connect (data.CM_auto, "toggled", G_CALLBACK (defarchive_get), (gpointer)FIELD_AUTO);
-	data.handler_id[FIELD_EVERY] = g_signal_connect (data.NB_every, "value-changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_EVERY);
-	data.handler_id[FIELD_UNIT] = g_signal_connect (data.CY_unit, "changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_UNIT);
-	data.handler_id[FIELD_NEXT] = g_signal_connect (data.PO_next, "changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_NEXT);
+	 g_signal_connect (data.NU_mode, "changed", G_CALLBACK (defarchive_paymode), NULL);
+	//data.handler_id[FIELD_CHEQUE] = g_signal_connect (data.CM_cheque, "toggled", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_CHEQUE));
+	//data.handler_id[FIELD_CATEGORY] = g_signal_connect (data.PO_grp, "changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_CATEGORY));
+	//data.handler_id[FIELD_ACCOUNT] = g_signal_connect (data.PO_acc, "changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_ACCOUNT));
+	//data.handler_id[FIELD_TOACCOUNT] = g_signal_connect (data.PO_accto, "changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_TOACCOUNT));
 
-	data.handler_id[FIELD_LIMIT] = g_signal_connect (data.CM_limit, "toggled", G_CALLBACK (defarchive_get), (gpointer)FIELD_LIMIT);
-	data.handler_id[FIELD_TIMES] = g_signal_connect (data.NB_limit, "changed", G_CALLBACK (defarchive_get), (gpointer)FIELD_TIMES);
+	g_signal_connect (data.CM_auto, "toggled", G_CALLBACK (defarchive_automatic), NULL);
+	//data.handler_id[FIELD_EVERY] = g_signal_connect (data.NB_every, "value-changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_EVERY));
+	//data.handler_id[FIELD_UNIT] = g_signal_connect (data.CY_unit, "changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_UNIT));
+	//data.handler_id[FIELD_NEXT] = g_signal_connect (data.PO_next, "changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_NEXT));
+
+	g_signal_connect (data.CM_limit, "toggled", G_CALLBACK (defarchive_automatic), NULL);
+	//data.handler_id[FIELD_TIMES] = g_signal_connect (data.NB_limit, "changed", G_CALLBACK (defarchive_get), GINT_TO_POINTER(FIELD_TIMES));
 
 	//setup, init and show window
 	defarchive_setup(&data);
@@ -864,3 +852,116 @@ gint row;
 
 	return NULL;
 }
+
+/* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
+
+
+/*
+**
+*/
+gint defarchive_list_sort(Archive *a, Archive *b)
+{
+gint result;
+
+//	result = a->category - b->category;
+//	if(result == 0)
+
+	result = g_utf8_collate(a->wording, b->wording);
+
+	return result;
+}
+
+
+
+/*
+**
+*/
+static void defarchive_auto_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+{
+Archive *item;
+GdkPixbuf *pixbuf = NULL;
+
+	// get the operation
+	gtk_tree_model_get(model, iter, LST_DEFARC_DATAS, &item, -1);
+
+	if( item->flags & OF_AUTO )
+		pixbuf = GLOBALS->lst_pixbuf[LST_PIXBUF_AUTO];
+
+	g_object_set(renderer, "pixbuf", pixbuf, NULL);
+}
+
+
+/*
+** draw some text from the stored data structure
+*/
+static void
+defarchive_text_cell_data_function (GtkTreeViewColumn *col,
+				GtkCellRenderer *renderer,
+				GtkTreeModel *model,
+				GtkTreeIter *iter,
+				gpointer user_data)
+{
+Archive *item;
+gchar *name;
+
+	gtk_tree_model_get(model, iter, LST_DEFARC_DATAS, &item, -1);
+
+	name = item->wording;
+
+	g_object_set(renderer, "text", name, NULL);
+}
+
+
+
+/*
+**
+*/
+GtkWidget *defarchive_list_new(void)
+{
+GtkListStore *store;
+GtkWidget *view;
+GtkCellRenderer    *renderer;
+GtkTreeViewColumn  *column;
+
+	//store
+	store = gtk_list_store_new (
+		NUM_LST_DEFARC,
+		G_TYPE_POINTER,
+		G_TYPE_UINT,
+		G_TYPE_BOOLEAN
+		);
+
+	//sortable
+	//gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), LST_DEFPAY_DATAS, sort_iter_compare_func, GINT_TO_POINTER(LST_DEFPAY_DATAS), NULL);
+	//gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), LST_DEFPAY_DATAS, GTK_SORT_ASCENDING);
+
+
+	//treeview
+	view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+	g_object_unref(store);
+
+	/* column 1 */
+	column = gtk_tree_view_column_new();
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_column_pack_start(column, renderer, TRUE);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, defarchive_text_cell_data_function, GINT_TO_POINTER(1), NULL);
+	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+
+	/* column 2 */
+	column = gtk_tree_view_column_new();
+	renderer = gtk_cell_renderer_pixbuf_new ();
+	gtk_cell_renderer_set_fixed_size(renderer, GLOBALS->lst_pixbuf_maxwidth, -1);
+	gtk_tree_view_column_pack_start(column, renderer, TRUE);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, defarchive_auto_cell_data_function, NULL, NULL);
+	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
+	//gtk_tree_view_set_reorderable (GTK_TREE_VIEW(view), TRUE);
+
+	return(view);
+}
+
+
+
+
+

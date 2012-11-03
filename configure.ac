@@ -2,30 +2,38 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.52)
-AC_INIT([homebank], [3.4])
+AC_INIT([homebank], [4.0.1])
 
 
 AM_CONFIG_HEADER(config.h)
 
-#AM_INIT_AUTOMAKE([1.9 foreign])
-AM_INIT_AUTOMAKE([1.9 -Wall -Werror foreign])
+AM_INIT_AUTOMAKE([1.9 foreign])
 
-# If the source code has changed at all, increment GLADE_REVISION
-# If any interfaces have been added, removed, or changed, increment GLADE_CURRENT, and set GLADE_REVISION to 0.
-# If any interfaces have been added since the last public release, then increment GLADE_AGE.
-# If any interfaces have been removed since the last public release, then set GLADE_AGE to 0.
+# If the source code has changed at all, increment REVISION
+# If any interfaces have been added, removed, or changed, increment CURRENT, and set REVISION to 0.
+# If any interfaces have been added since the last public release, then increment AGE.
+# If any interfaces have been removed since the last public release, then set AGE to 0.
 # Reference: http://www.gnu.org/software/libtool/manual.html#Versioning
 
 # Checks for programs.
-AC_PROG_INTLTOOL
-
 AC_PROG_CC
+AC_PROG_LN_S
 AC_PROG_INSTALL
+AC_PROG_INTLTOOL
 
 # Checks for libraries.
 PKG_CHECK_MODULES(DEPS, gtk+-2.0 >= 2.10 glib-2.0 >= 2.12)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
+
+
+# Pre-release strict cflags
+#CFLAGS="${CFLAGS} -Wall -Werror -Wmissing-prototypes "
+#CFLAGS="${CFLAGS} -Wall -Wmissing-prototypes "
+
+# Usual cflags
+CFLAGS="${CFLAGS} -Wall -DG_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DGDK_PIXBUF_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1"
+
 
 # Check for libofx
 AC_CHECK_HEADER(libofx/libofx.h,,noofx=true)
@@ -39,12 +47,12 @@ then
     if test x$noofx != xtrue
     then
         AC_CHECK_LIB(ofx, ofx_set_status_cb, OFX_0_7="-DOFX_0_7")
-        LDFLAGS="${LDFLAGS} -lofx"
+        DEPS_LIBS="-lofx ${DEPS_LIBS}"
         CFLAGS="${CFLAGS} $OFX_0_7"
     else
         noofx=true
         AC_MSG_RESULT([Libofx header missing. Check your libofx installation])
-	CFLAGS="${CFLAGS} -DNOOFX"
+		CFLAGS="${CFLAGS} -DNOOFX"
     fi
 else
     noofx=true
@@ -60,12 +68,14 @@ AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h])
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_STRUCT_TM
+AC_C_VOLATILE
 
 # Checks for library functions.
-AC_CHECK_FUNCS([floor memset modf pow setlocale sqrt])
+AC_CHECK_FUNCS([floor localeconv memset modf pow setlocale sqrt strcasecmp strtoul])
 
 # International support
-ALL_LINGUAS="de es fr he it nb nl pt_BR ru zh_CN"
+ALL_LINGUAS="am ar bg ca cs da de el en_AU en_CA en_GB es et fa fi fr gl he hr hu id is it ja kn \
+			 ko lt lv mi ms nb nds nl oc pl pt_BR pt pt_PT ro ru sk sl sv ta tr uk ur vi zh_CN zh_HK zh_TW"
 AM_GLIB_GNU_GETTEXT
 
 GETTEXT_PACKAGE=$PACKAGE
@@ -74,7 +84,6 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 
 AC_CONFIG_FILES([
 Makefile
-po/Makefile.in 
 data/homebank.desktop.in
 data/Makefile
 data/icons/Makefile
@@ -91,19 +100,29 @@ data/icons/hicolor/scalable/Makefile
 data/icons/hicolor/scalable/apps/Makefile
 doc/Makefile
 doc/images/Makefile
-mime/Makefile
-src/Makefile 
 images/Makefile
+mime/Makefile
+po/Makefile.in 
+src/Makefile 
 ])
 
 AC_OUTPUT
 
-echo "
+echo
+echo $PACKAGE $VERSION
+echo 
+echo Compiler................ : $CC
+echo Build with OFX support.. : $build_ofx
+if test "x$noofx" = "xtrue" ; then
+echo ........................ : **error** libofx header is missing, ofx feature will be disabled. Check your libofx installation
+fi
+eval eval echo Path to images.......... : $datadir/homebank/images
+eval eval echo Path to locale.......... : $datadir/locale
+eval eval echo Path to help............ : $datadir/homebank/help
 
-Configuration:
+echo
+eval eval echo HomeBank will be installed in $bindir.
+echo
+echo configure complete, now type \'make\'
+echo
 
-	Source code location:	${srcdir}
-	Compiler:		${CC}
-	datadir: ${datadir}
-	pkgdatadir: ${pkgdatadir}
-"

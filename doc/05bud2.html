@@ -1,111 +1,108 @@
-<html>
-<head>
-  <title>Budget</title>
-  <meta name="Generator" content="GuideML 2.2">
-  <meta http-equiv="Content-Type" content="text/html">
-  <link rel="stylesheet" href="help.css">
-</head>
-<body bgcolor="#ffffff">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td>&nbsp;</td>
-    <td width="27"><a href="main.html"><img src="images/home.gif" width="27" height="27" border="0"></a></td>
-    <td width="27"><a href="05stat.html"><img src="images/prev.gif" width="27" height="27" border="0"></a></td>
-    <td width="27"><a href="05over.html"><img src="images/next.gif" width="27" height="27" border="0"></a></td>
-  </tr>
-</table>
-<hr size="1" color="#000000">
-
-<h2>Budget report</h2>
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Budget</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY >
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=27>
+			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="05stat.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="05over.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=1 COLOR="#000000">
+<H2>Budget report</H2>
 <div class="gtkshot">
-<img src="images/05budget1.png">
+	<IMG SRC="images/05budget1.png">
 </div>
+<P>The budget report will summarize your running budget and will
+display its result.
+</P>
+<P>See also: <A HREF="04bud1.html">budget dialog</A>, and <A HREF="02concepts.html#budget">basic
+concepts</A>
+</P>
+<H3>Window call</H3>
+<P>This report can be called in the following way:
+</P>
+<UL>
+	<LI> from the main window-menu: Report
+	/ Budget
 
-<p>
-The budget report will summarize your running budget and will display its result.
-</p>
-<p>
-See also: <a href="04bud1.html">budget dialog</a>, and <a href="02concepts.html#budget">basic concepts</a>
-</p>
+	<LI>from the main window-tool-bar.
 
+</UL>
+<H3>Using budget report</H3>
+<H4><IMG SRC="images/1.png" NAME="graphics5" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Display</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>Kind</P>
+		</TD>
+		<td class="winfo">
+			<P>specify the item the result should be computed for: Expense,
+			Income
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>View</P>
+		</TD>
+		<td class="winfo">
+			<P>select the graph display: Spent, Budget or Decay
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<H4><IMG SRC="images/2.png" NAME="graphics6" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Date filter</H4>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			<P>From / To</P>
+		</TD>
+		<td class="winfo">
+			<P>specify date bound limit to restrict the results to
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<td class="wname">
+			<P>Range / Month / Year</P>
+		</TD>
+		<td class="winfo">
+			<P>fast select a date with predefined range, or specific month
+			and/or year
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<H4><IMG SRC="images/3.png" NAME="graphics7" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Tool bar</H4>
+<P>The tool-bar is the main control of the display. All tool-button
+have a tool-tip that will help you know what action will be launched
+when you click on the tool-button.
+</P>
+<H4><IMG SRC="images/4.png" NAME="graphics8" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Total</H4>
+<P>This is the total of columns of the list-view for: Spent, Budget
+and Decay
+</P>
+<H4><IMG SRC="images/5.png" NAME="graphics9" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>
+Result list / Bar chart</H4>
+<P>The result list display the computed amounts according to the
+current selection.
+</P>
 
-
-<h3>Window call</h3>
-This report can be called in the following way:
-<ul>
-<li>from the mainwindow-menu: Report / Budget
-<li>from the mainwindow-toolbar.
-</ul>
-
-<h3>Using budget report</h3>
-
-<h4><img src="images/1.png"> Display</h4>
-<div class="gtkgroup">
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">Kind</td>
-      <td class="winfo">
-      specify the item the result should be computed for: Expense, Income
-      </td>
-    </tr>
-    <tr>
-      <td class="wname">View</td>
-      <td class="winfo"> 
-      select the graph display: Spent, Budget or Decay
-      </td>
-    </tr>
-  </table>
-</div>
-
-<h4><img src="images/2.png"> Date filter</h4>
-<div class="gtkgroup">
-
-  <table class="widgetinfo">
-    <tr>
-      <td class="wname">From / To</td>
-      <td class="winfo">
-		specify date bound limit to restrict the results to
-      </td>
-    </tr>
-
-    <tr>
-      <td class="wname">Range / Month / Year</td>
-      <td class="winfo">
-		fastly select a date with predefined range, or specific month and/or year
-      </td>
-    </tr>
-
-  </table>
-  
-</div>
-
-<h4><img src="images/3.png"> Toolbar</h4>
-<div class="gtkgroup">
-The toolbar is the main control of the display. All toobutton have a tooltip that will help you know what
-action will be launched when you click on the toolbutton.
-</div>
-
-<h4><img src="images/4.png"> Total</h4>
-<div class="gtkgroup">
-This is the total of columns of the listview for: Spent, Budget and Decay
-</div>
-
-<h4><img src="images/5.png"> Result list</h4>
-<div class="gtkgroup">
-The result list display the computed amounts according to the current selection.
-</div>
-
-
-
-<h3>Other screen shots</h3>
-
-<h4>Bar display</h4>
-<div class="gtkshot">
-<img src="images/05budget2.png">
-</div>
-
-
-
-</body>
-</html>
+</BODY>
+</HTML>

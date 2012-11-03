@@ -1,19 +1,20 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "homebank.h"
@@ -168,9 +169,9 @@ gint i, j;
 	{
 	Account *entry;
 
-		entry = da_account_malloc();
+		entry = da_acc_malloc();
 
-		entry->key = ptr[0];
+		entry->key = ptr[0] + 1;
 		entry->flags = ptr[1];
 		//entry->name = g_locale_to_utf8(ptr+2, -1, NULL, NULL, &error);
 		entry->name = g_convert (ptr+2, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
@@ -181,6 +182,8 @@ gint i, j;
 		entry->cheque1 = amiga_ulong(ptr, 98+8+8);
 		entry->cheque2 = amiga_ulong(ptr, 98+8+8+4);
 
+		entry->pos = i;
+
 		DB( printf(" account: %d, %s = %s\n", entry->key, ptr+2, entry->name) );
 
 		//acc->acc_Flags |= AF_ADDED;
@@ -188,7 +191,7 @@ gint i, j;
 		//add our entry pointer to the glist
 		//g_printf("account: %d, inserting %s\n", i, acc->acc_Name);
 
-		GLOBALS->acc_list = g_list_append(GLOBALS->acc_list, entry);
+		da_acc_insert(entry);
 
 		ptr += AM_SIZE_ACCOUNT;
 		GLOBALS->change++;
@@ -203,7 +206,7 @@ gint i, j;
 	gint parentid = 0;
 	gboolean budget;
 
-		entry = da_category_malloc();
+		entry = da_cat_malloc();
 
 		entry->key = amiga_uword(ptr, 0);
 		entry->flags = ptr[2];
@@ -269,7 +272,7 @@ gint i, j;
 		#endif
 		*/
 
-		GLOBALS->cat_list = g_list_append(GLOBALS->cat_list, entry);
+		da_cat_insert(entry);
 
 		ptr += AM_SIZE_GROUP;
 		GLOBALS->change++;
@@ -281,7 +284,7 @@ gint i, j;
 	{
 	Payee *entry;
 
-		entry = da_payee_malloc();
+		entry = da_pay_malloc();
 		entry->key = amiga_uword(ptr, 0);
 		//entry->pay_Flags = ptr[2];
 
@@ -289,7 +292,7 @@ gint i, j;
 
 		//g_printf("payee: %d, inserting %s (%d)\n", i, entry->pay_Name, (ptr-buffer));
 
-		GLOBALS->pay_list = g_list_append(GLOBALS->pay_list, entry);
+		da_pay_insert(entry);
 
 		ptr += AM_SIZE_PAYEE;
 		GLOBALS->change++;
@@ -303,8 +306,8 @@ gint i, j;
 
 		entry = da_archive_malloc();
 		entry->amount		= amiga_double(ptr, 0);
-		entry->account		= ptr[8];
-		entry->dst_account	= ptr[9];
+		entry->account		= ptr[8]+1;
+		entry->dst_account	= ptr[9]+1;
 		entry->paymode		= ptr[10];
 		entry->flags		= ptr[11];
 		entry->payee		= amiga_uword(ptr, 12);
@@ -339,8 +342,8 @@ gint i, j;
 
 		entry->date = DATE_DECAY + amiga_ulong(ptr, 0);
 		entry->amount = amiga_double(ptr, 4);
-		entry->account = ptr[12];
-		entry->dst_account = ptr[13];
+		entry->account = ptr[12]+1;
+		entry->dst_account = ptr[13]+1;
 		entry->paymode = ptr[14];
 		entry->flags = ptr[15];
 		entry->payee = amiga_uword(ptr, 16);
@@ -351,9 +354,9 @@ gint i, j;
 		//add of standing order
 		//if(entry->ope_Mode >= 4) entry->ope_Mode++;
 
-		DB( g_printf(" + %d, inserting :: %d %s %.2f %d=>%d\n", i, entry->date, entry->wording, entry->amount, entry->account, entry->dst_account) );
+		DB( g_printf(" + %3d, inserting :: %d %s %.2f %d=>%d\n", i, entry->date, entry->wording, entry->amount, entry->account, entry->dst_account) );
 
-		GLOBALS->ope_list = g_list_append(GLOBALS->ope_list, entry);
+		da_operation_append(entry);
 
 		ptr += AM_SIZE_OPERATION;
 		GLOBALS->change++;

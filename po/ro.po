@@ -1,0 +1,1928 @@
+# Romanian translation for homebank
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the homebank package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: homebank\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-09-13 23:35+0200\n"
+"PO-Revision-Date: 2008-05-11 09:19+0000\n"
+"Last-Translator: Ionuț Jula <ionutjula@gmail.com>\n"
+"Language-Team: Romanian <ro@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-11-22 13:12+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#. "translator-credits"	, "trans",
+#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:720
+msgid "Free, easy, personal accounting for everyone."
+msgstr "Contabilitate personală pentru fiecare, gratis și ușor"
+
+#: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:29
+msgid "HomeBank"
+msgstr "HomeBank"
+
+#: ../src/def_archive.c:114
+msgid "Day"
+msgstr "Zi"
+
+#: ../src/def_archive.c:114
+msgid "Week"
+msgstr "Săptămână"
+
+#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+msgid "Month"
+msgstr "Lună"
+
+#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+msgid "Year"
+msgstr "An"
+
+#: ../src/def_archive.c:139 ../src/dsp_account.c:659
+msgid "(new archive)"
+msgstr "(tranzacţie automată nouă)"
+
+#: ../src/def_archive.c:603
+msgid "Manage Archives"
+msgstr ""
+
+#: ../src/def_archive.c:667
+msgid "<b>General infos</b>"
+msgstr "<b>Informaţii generale</b>"
+
+#: ../src/def_archive.c:675
+msgid "_Wording:"
+msgstr "_Redactare:"
+
+#: ../src/def_archive.c:683 ../src/def_operation.c:684
+msgid "_Amount:"
+msgstr "_Sumă"
+
+#: ../src/def_archive.c:699 ../src/def_operation.c:700 ../src/import.c:1725
+#: ../src/rep_over.c:621
+msgid "A_ccount:"
+msgstr "_Cont:"
+
+#: ../src/def_archive.c:707 ../src/def_operation.c:708
+msgid "_Validated"
+msgstr "_Validat(ă)"
+
+#: ../src/def_archive.c:715
+msgid "<b>Optional infos</b>"
+msgstr "<b>Informaţii opţionale</b>"
+
+#: ../src/def_archive.c:719 ../src/def_operation.c:740
+msgid "Pay_ment:"
+msgstr "P_lată"
+
+#: ../src/def_archive.c:738 ../src/def_operation.c:759
+msgid "Of notebook _2"
+msgstr "din carnetul _2"
+
+#: ../src/def_archive.c:744 ../src/def_operation.c:765
+msgid "_To account:"
+msgstr "În con_tul:"
+
+#: ../src/def_archive.c:751 ../src/def_operation.c:781
+msgid "_Payee:"
+msgstr "_Beneficiar:"
+
+#: ../src/def_archive.c:759 ../src/def_operation.c:791 ../src/def_wallet.c:235
+msgid "_Category:"
+msgstr "_Categorie"
+
+#: ../src/def_archive.c:771
+msgid "<b>Automated insertion</b>"
+msgstr "<b>Introducere automată</b>"
+
+#: ../src/def_archive.c:775
+msgid "_Activate"
+msgstr "_Activează"
+
+#: ../src/def_archive.c:782
+msgid "_Limit to:"
+msgstr "_Limitează la:"
+
+#: ../src/def_archive.c:790
+msgid "t_imes"
+msgstr "or_i"
+
+#: ../src/def_archive.c:795
+msgid "Ever_y:"
+msgstr "Fi_ecare:"
+
+#: ../src/def_archive.c:804
+msgid "_Unit:"
+msgstr "_Unitate:"
+
+#: ../src/def_archive.c:811
+msgid "_Next on:"
+msgstr "U_rmătoarea pe:"
+
+#: ../src/def_budget.c:322 ../src/ui_category.c:866
+msgid "File format error"
+msgstr "Eroare la formatul fişierului"
+
+#: ../src/def_budget.c:323
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, read the help for more details."
+msgstr ""
+"Fişierul csv trebuie să conţină un număr exact de coloane\n"
+"separate prin punct şi virgulă. Citeşte ajutorul pentru mai multe detalii, "
+"te rog."
+
+#: ../src/def_budget.c:691
+msgid "Manage Budget"
+msgstr ""
+
+#: ../src/def_budget.c:749
+msgid "<b>Budget for each month</b>"
+msgstr "<b>Buget pentru fiecare lună</b>"
+
+#: ../src/def_budget.c:757
+msgid "is the same"
+msgstr "este la fel"
+
+#: ../src/def_budget.c:775
+msgid "is different"
+msgstr "este diferit(ă)"
+
+#: ../src/def_budget.c:806 ../src/ui_category.c:1523 ../src/ui_payee.c:895
+msgid "_Import"
+msgstr "_Importă"
+
+#: ../src/def_budget.c:810 ../src/ui_category.c:1527 ../src/ui_payee.c:899
+msgid "E_xport"
+msgstr "E_xportă"
+
+#: ../src/def_budget.c:921 ../src/rep_stats.c:939 ../src/rep_stats.c:955
+#: ../src/rep_stats.c:962 ../src/ui_account.c:344 ../src/ui_category.c:187
+#: ../src/ui_category.c:441 ../src/ui_payee.c:147 ../src/ui_payee.c:319
+#: ../src/widgets.c:64
+msgid "(none)"
+msgstr "(niciunul)"
+
+#: ../src/def_filter.c:54
+msgid "Inactive"
+msgstr "Inactiv"
+
+#: ../src/def_filter.c:54
+msgid "Include"
+msgstr "Include"
+
+#: ../src/def_filter.c:54
+msgid "Exclude"
+msgstr "Exclude"
+
+#: ../src/def_filter.c:801 ../src/def_filter.c:850 ../src/def_filter.c:899
+#: ../src/def_filter.c:977 ../src/def_filter.c:1072 ../src/def_filter.c:1116
+msgid "_Option:"
+msgstr "_Opţiune:"
+
+#: ../src/def_filter.c:822 ../src/def_filter.c:871 ../src/def_filter.c:920
+msgid "All"
+msgstr "Toate"
+
+#: ../src/def_filter.c:826 ../src/def_filter.c:875 ../src/def_filter.c:924
+msgid "None"
+msgstr "Niciunul"
+
+#: ../src/def_filter.c:830 ../src/def_filter.c:879 ../src/def_filter.c:928
+msgid "Invert"
+msgstr "Invers"
+
+#: ../src/def_filter.c:968
+msgid "<b>Filter Date</b>"
+msgstr "<b>Filtru dată</b>"
+
+#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:915
+#: ../src/rep_car.c:649 ../src/rep_over.c:642 ../src/rep_stats.c:1466
+msgid "_From:"
+msgstr "De la:"
+
+#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:921
+#: ../src/rep_car.c:656 ../src/rep_over.c:648 ../src/rep_stats.c:1472
+msgid "_To:"
+msgstr "_Până la:"
+
+#: ../src/def_filter.c:1015
+msgid "<b>Filter State</b>"
+msgstr "<b>Filtru stare</b>"
+
+#: ../src/def_filter.c:1023
+msgid "Validated:"
+msgstr "Validat(ă):"
+
+#: ../src/def_filter.c:1032
+msgid "Force:"
+msgstr "Forţează:"
+
+#. label = gtk_label_new(NULL);
+#. ----------------------------------------- l, r, t, b
+#. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
+#: ../src/def_filter.c:1038
+msgid "display 'Added'"
+msgstr "afişare 'Adăugat'"
+
+#. label = gtk_label_new(NULL);
+#. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
+#: ../src/def_filter.c:1045
+msgid "display 'Edited'"
+msgstr "afişare 'Editat'"
+
+#: ../src/def_filter.c:1064
+msgid "<b>Filter Amount</b>"
+msgstr "<b>Filtru sumă</b>"
+
+#: ../src/def_filter.c:1107
+msgid "<b>Filter Payment</b>"
+msgstr "<b>Filtru plată</b>"
+
+#: ../src/def_filter.c:1167
+msgid "Edit Filter"
+msgstr "Editează filtru"
+
+#. common (date + state + amount)
+#: ../src/def_filter.c:1201 ../src/def_pref.c:154
+msgid "General"
+msgstr "Generale"
+
+#: ../src/def_filter.c:1207 ../src/def_pref.c:1773 ../src/list_operation.c:378
+#: ../src/list_operation.c:762 ../src/rep_budget.c:1239 ../src/rep_stats.c:198
+msgid "Category"
+msgstr "Categorie"
+
+#: ../src/def_filter.c:1212 ../src/def_pref.c:1768 ../src/list_operation.c:316
+#: ../src/list_operation.c:751 ../src/list_upcoming.c:172
+#: ../src/rep_stats.c:198
+msgid "Payee"
+msgstr "Beneficiar"
+
+#: ../src/def_filter.c:1221 ../src/list_operation.c:691
+msgid "Account"
+msgstr "Cont"
+
+#: ../src/def_operation.c:90 ../src/dsp_wallet.c:226
+msgid "Add transaction"
+msgstr "Adaugă tranzacţie"
+
+#: ../src/def_operation.c:91
+msgid "Inherit transaction"
+msgstr "Moşteneşte tranzacţie"
+
+#: ../src/def_operation.c:92
+msgid "Modify transaction"
+msgstr "Modifică tranzacţie"
+
+#. warn the user we have not found the child internal transfert
+#: ../src/def_operation.c:181
+#, c-format
+msgid ""
+"Could not propagate changes to child transfert:\n"
+"\n"
+"account:  %s\n"
+"date:  %s\n"
+"amount:  %s\n"
+"\n"
+"You should fix the problem manually."
+msgstr ""
+"Nu s-au putut face modificări asupra transferului copil:\n"
+"\n"
+"cont: %s\n"
+"dată: %s\n"
+"sumă: %s\n"
+"\n"
+"Trebuie să repari manual problema."
+
+#: ../src/def_operation.c:655
+msgid "<b>General information</b>"
+msgstr "<b>Informaţii generale</b>"
+
+#: ../src/def_operation.c:663
+msgid "_Date:"
+msgstr "_Dată:"
+
+#: ../src/def_operation.c:671
+msgid ""
+"Date accepted here are:\n"
+"day,\n"
+"day/month or month/day,\n"
+"and complete date into your locale"
+msgstr ""
+
+#: ../src/def_operation.c:674
+msgid "_Description:"
+msgstr "_Descriere:"
+
+#: ../src/def_operation.c:713
+msgid "_Remind"
+msgstr "_Reamintire"
+
+#: ../src/def_operation.c:732
+msgid "<b>Optional information</b>"
+msgstr "<b>Informaţii opţionale</b>"
+
+#: ../src/def_operation.c:772
+msgid "_Info:"
+msgstr "_Informaţii:"
+
+#: ../src/def_operation.c:788
+msgid ""
+"Autocompletion and direct saise\n"
+"is available for Payee"
+msgstr ""
+
+#: ../src/def_operation.c:798
+msgid ""
+"Autocompletion and direct saise\n"
+"is available for Category"
+msgstr ""
+
+#: ../src/def_operation.c:801
+msgid "_Tags:"
+msgstr ""
+
+#: ../src/def_operation.c:906
+msgid "_Fill with archive:"
+msgstr "_Completează cu înregistrare:"
+
+#: ../src/def_pref.c:155
+msgid "Interface"
+msgstr "Interfaţă"
+
+#: ../src/def_pref.c:156
+msgid "Columns"
+msgstr "Coloane"
+
+#: ../src/def_pref.c:157
+msgid "Display format"
+msgstr "Afişează format"
+
+#. N_("Help system"),
+#: ../src/def_pref.c:159
+msgid "Euro options"
+msgstr "Opţiuni pentru Euro"
+
+#: ../src/def_pref.c:160
+msgid "Report options"
+msgstr "Opţiuni pentru raport"
+
+#: ../src/def_pref.c:165
+msgid "System defaults"
+msgstr "Implicite sistemului"
+
+#: ../src/def_pref.c:166
+msgid "Icons only"
+msgstr "Doar iconiţe"
+
+#: ../src/def_pref.c:167
+msgid "Text only"
+msgstr "Doar text"
+
+#: ../src/def_pref.c:168
+msgid "Text under icons"
+msgstr "Text sub iconiţe"
+
+#: ../src/def_pref.c:169
+msgid "Text beside icons"
+msgstr "Text lângă iconiţe"
+
+#: ../src/def_pref.c:762
+msgid "<b>Statistics options</b>"
+msgstr "<b>Oţiuni pentru statistici</b>"
+
+#: ../src/def_pref.c:770
+msgid "Show by _amount"
+msgstr "Afişe_ază după sumă"
+
+#: ../src/def_pref.c:775
+msgid "Show _rate column"
+msgstr "Afişează coloana _rată"
+
+#: ../src/def_pref.c:780 ../src/def_pref.c:790
+msgid "Show _details"
+msgstr "Afişează _detalii"
+
+#: ../src/def_pref.c:786
+msgid "<b>Budget options</b>"
+msgstr "<b>Opţiuni buget</b>"
+
+#: ../src/def_pref.c:819 ../src/def_pref.c:1181 ../src/def_wallet.c:195
+msgid "<b>General</b>"
+msgstr "<b>Generale</b>"
+
+#: ../src/def_pref.c:828
+msgid "Fill from:"
+msgstr "Umple de la:"
+
+#: ../src/def_pref.c:837
+msgid "Country:"
+msgstr "Ţară:"
+
+#: ../src/def_pref.c:846
+msgid "Value:"
+msgstr "Valoare:"
+
+#: ../src/def_pref.c:856
+msgid "<b>Numbers format</b>"
+msgstr "<b>Format numere</b>"
+
+#: ../src/def_pref.c:860 ../src/def_pref.c:1016
+msgid "Prefix symbol:"
+msgstr "Simbol prefix:"
+
+#: ../src/def_pref.c:867 ../src/def_pref.c:1023
+msgid "Suffix symbol:"
+msgstr "Simbol sufix:"
+
+#: ../src/def_pref.c:874 ../src/def_pref.c:1030
+msgid "Decimal char:"
+msgstr "Caracter zecimal:"
+
+#: ../src/def_pref.c:881 ../src/def_pref.c:1037
+msgid "Grouping char:"
+msgstr "Caracter de grupare:"
+
+#: ../src/def_pref.c:888 ../src/def_pref.c:1044
+msgid "_Frac digits:"
+msgstr "_Zecimale"
+
+#: ../src/def_pref.c:987
+msgid "<b>Date options</b>"
+msgstr "<b>Opţiuni dată</b>"
+
+#: ../src/def_pref.c:995
+msgid "_Date format:"
+msgstr "Format _dată:"
+
+#: ../src/def_pref.c:1012
+msgid "<b>Numbers options</b>"
+msgstr "<b>Opţiuni numere</b>"
+
+#: ../src/def_pref.c:1075
+msgid "<b>Measurement units</b>"
+msgstr "<b>Unităţi de măsură</b>"
+
+#: ../src/def_pref.c:1079
+msgid "Use _Imperial units"
+msgstr ""
+
+#: ../src/def_pref.c:1105
+msgid "<b>Transaction list</b>"
+msgstr "<b>Listă tranzacţii</b>"
+
+#: ../src/def_pref.c:1185
+msgid "_Toolbar:"
+msgstr "_Bară de unelte:"
+
+#: ../src/def_pref.c:1209
+msgid "<b>Amount colors</b>"
+msgstr "<b>Culori sumă</b>"
+
+#: ../src/def_pref.c:1213
+msgid "_Expense:"
+msgstr "_Cheltuieli:"
+
+#: ../src/def_pref.c:1223
+msgid "_Income:"
+msgstr "_Venituri:"
+
+#: ../src/def_pref.c:1233
+msgid "_Warning:"
+msgstr "_Avertisment:"
+
+#: ../src/def_pref.c:1262
+msgid "<b>Folders</b>"
+msgstr "<b>Dosare</b>"
+
+#: ../src/def_pref.c:1270
+msgid "_Wallet:"
+msgstr "Portofel:"
+
+#: ../src/def_pref.c:1286
+msgid "_Import:"
+msgstr "_Importă:"
+
+#: ../src/def_pref.c:1302
+msgid "_Export:"
+msgstr ""
+
+#: ../src/def_pref.c:1320
+msgid "_Run the wizard"
+msgstr "_Rulează vrăjitorul"
+
+#: ../src/def_pref.c:1329
+msgid "<b>Initial date filter</b>"
+msgstr "<b>Filtru iniţial pentru dată</b>"
+
+#: ../src/def_pref.c:1333 ../src/dsp_account.c:2034 ../src/rep_budget.c:927
+#: ../src/rep_car.c:662 ../src/rep_over.c:654 ../src/rep_stats.c:1478
+msgid "_Range:"
+msgstr "A_ranjament:"
+
+#: ../src/def_pref.c:1343
+msgid "<b>Start behaviour</b>"
+msgstr ""
+
+#: ../src/def_pref.c:1347
+msgid "Load last opened file"
+msgstr ""
+
+#: ../src/def_pref.c:1448
+msgid "Preferences"
+msgstr "Preferinţe"
+
+#. {	N_(""), COL_OPE_STATUS,		},
+#. {	N_(""), COL_OPE_DATE,		},
+#: ../src/def_pref.c:1767 ../src/list_operation.c:291
+#: ../src/list_operation.c:735
+msgid "Info"
+msgstr "Informaţii"
+
+#: ../src/def_pref.c:1769 ../src/list_operation.c:334
+#: ../src/list_operation.c:713 ../src/list_upcoming.c:184
+#: ../src/rep_over.c:979
+msgid "Description"
+msgstr "Descriere"
+
+#. column: Amount
+#: ../src/def_pref.c:1770 ../src/list_operation.c:509
+#: ../src/list_operation.c:723 ../src/list_upcoming.c:196
+#: ../src/rep_car.c:1039
+msgid "Amount"
+msgstr "Sumă"
+
+#. column: Expense
+#: ../src/def_pref.c:1771 ../src/list_operation.c:512 ../src/rep_budget.c:101
+#: ../src/rep_over.c:989 ../src/rep_stats.c:202 ../src/rep_stats.c:1842
+msgid "Expense"
+msgstr "Cheltuieli"
+
+#. column: Income
+#: ../src/def_pref.c:1772 ../src/list_operation.c:515 ../src/rep_budget.c:101
+#: ../src/rep_over.c:993 ../src/rep_stats.c:202 ../src/rep_stats.c:1848
+msgid "Income"
+msgstr "Venituri"
+
+#: ../src/def_pref.c:1774 ../src/list_operation.c:396
+msgid "Tags"
+msgstr ""
+
+#: ../src/def_pref.c:1893 ../src/ui_account.c:495 ../src/ui_payee.c:449
+msgid "Visible"
+msgstr "Vizibil(ă)"
+
+#: ../src/def_pref.c:1904
+msgid "Column"
+msgstr "Coloană"
+
+#: ../src/def_wallet.c:164
+msgid "Wallet properties"
+msgstr "Proprietăţi portofel"
+
+#: ../src/def_wallet.c:203
+msgid "_Owner:"
+msgstr "Deţinăt_or:"
+
+#: ../src/def_wallet.c:212
+msgid "<b>Automatic transactions</b>"
+msgstr "<b>Tranzacţii automate</b>"
+
+#: ../src/def_wallet.c:219
+msgid "_Insert:"
+msgstr "_Inserează:"
+
+#: ../src/def_wallet.c:224
+msgid "days into the future"
+msgstr "zile în viitor"
+
+#: ../src/def_wallet.c:231
+msgid "<b>Car cost</b>"
+msgstr "<b>Cost maşină</b>"
+
+#. name, stock id, label
+#: ../src/dsp_account.c:155
+msgid "_Account"
+msgstr "_Cont"
+
+#: ../src/dsp_account.c:156
+msgid "Transacti_on"
+msgstr "_Tranzacţie"
+
+#: ../src/dsp_account.c:157
+msgid "_Tools"
+msgstr "_Unelte"
+
+#: ../src/dsp_account.c:159 ../src/dsp_wallet.c:210
+msgid "_Close"
+msgstr "În_chide"
+
+#: ../src/dsp_account.c:159
+msgid "Close the current account"
+msgstr "Închide contul curent"
+
+#. name, stock id, label, accelerator, tooltip
+#: ../src/dsp_account.c:162
+msgid "_Filter..."
+msgstr "_Filtrează..."
+
+#: ../src/dsp_account.c:162
+msgid "Open the list filter"
+msgstr "Deschide lista de filtre"
+
+#: ../src/dsp_account.c:164
+msgid "_Add..."
+msgstr "_Adaugă..."
+
+#: ../src/dsp_account.c:164
+msgid "Add a new transaction"
+msgstr "Adaugă o tranzacţie nouă"
+
+#: ../src/dsp_account.c:165
+msgid "_Inherit..."
+msgstr "_Moştenire..."
+
+#: ../src/dsp_account.c:165
+msgid "Inherit from the active transaction"
+msgstr "Moşteneşte tranzacţia activă"
+
+#: ../src/dsp_account.c:166
+msgid "_Edit..."
+msgstr "_Editează..."
+
+#: ../src/dsp_account.c:166
+msgid "Edit the active transaction"
+msgstr "Editează tranzacţia activă"
+
+#: ../src/dsp_account.c:167
+msgid "(In)_Validate..."
+msgstr "(In)_validează..."
+
+#: ../src/dsp_account.c:167
+msgid "Validate the active transactions"
+msgstr "Validează tranzacţiile active"
+
+#: ../src/dsp_account.c:168
+msgid "_Remove..."
+msgstr "Şte_rge..."
+
+#: ../src/dsp_account.c:168
+msgid "Remove the active transactions"
+msgstr "Şterge tranzacţiile active"
+
+#: ../src/dsp_account.c:169
+msgid "Make an archive..."
+msgstr "Crează o tranzacţie automată..."
+
+#: ../src/dsp_account.c:171
+msgid "Export CSV..."
+msgstr "Exportă CSV..."
+
+#: ../src/dsp_account.c:348
+msgid "No corresponding transfert can be found."
+msgstr "Nu poate fi găsit niciun transfer corespunzător"
+
+#. warn the useer we have notfound the child internal transfert
+#: ../src/dsp_account.c:368
+#, c-format
+msgid ""
+"Could not delete child transfert:\n"
+"\n"
+"account:  %s\n"
+"date:  %s\n"
+"amount:  %s\n"
+"\n"
+"You should fix the problem manually."
+msgstr ""
+"Transferul copil nu poate fi şters:\n"
+"\n"
+"cont: %s\n"
+"dată: %s\n"
+"sumă: %s\n"
+"\n"
+"Trebuie să rezolvi manual problema."
+
+#: ../src/dsp_account.c:614
+msgid ""
+"Do you want to create an Archive with\n"
+"each of the selected transaction ?"
+msgstr ""
+"Vrei să creezi o tranzacţie automată\n"
+"din fiecare tranzacţie selectată?"
+
+#: ../src/dsp_account.c:1212
+msgid ""
+"Do you want to delete\n"
+"each of the selected transaction ?"
+msgstr ""
+"Vrei să ştergi\n"
+"toate tranzacţiile selectate?"
+
+#: ../src/dsp_account.c:1516
+#, c-format
+msgid "%d transactions selected, %d hidden"
+msgstr "%d tranzacţii selectate, %d ascunse"
+
+#: ../src/dsp_account.c:1518
+#, c-format
+msgid "%d transactions selected, %d hidden :: %s ( %s - %s)"
+msgstr "%d tranzacţii selectate, %d ascunse :: %s (%s-%s)"
+
+#: ../src/dsp_account.c:1583
+msgid "Modify date..."
+msgstr "Modifică data..."
+
+#: ../src/dsp_account.c:1588
+msgid "Modify info..."
+msgstr "Modifică informaţii..."
+
+#: ../src/dsp_account.c:1595
+msgid "Modify payee..."
+msgstr "Modifică beneficiar..."
+
+#: ../src/dsp_account.c:1601
+msgid "Modify description..."
+msgstr "Modifică descriere..."
+
+#: ../src/dsp_account.c:1607
+msgid "Modify amount..."
+msgstr "Modifică sumă..."
+
+#: ../src/dsp_account.c:1612
+msgid "Modify category..."
+msgstr "Modifică categorie..."
+
+#: ../src/dsp_account.c:2039 ../src/rep_budget.c:933 ../src/rep_car.c:668
+#: ../src/rep_over.c:660 ../src/rep_stats.c:1484
+msgid "_Month:"
+msgstr "_Lună:"
+
+#: ../src/dsp_account.c:2044 ../src/rep_budget.c:939 ../src/rep_car.c:674
+#: ../src/rep_over.c:666 ../src/rep_stats.c:1490
+msgid "_Year:"
+msgstr "_An:"
+
+#: ../src/dsp_account.c:2064
+msgid "Future:"
+msgstr "În viitor:"
+
+#: ../src/dsp_account.c:2073
+msgid "Today:"
+msgstr "Azi:"
+
+#: ../src/dsp_account.c:2082
+msgid "Bank:"
+msgstr "Bancă:"
+
+#: ../src/dsp_account.c:2088
+msgid "Minor"
+msgstr "Minor"
+
+#. name, stock id, label
+#: ../src/dsp_wallet.c:189
+msgid "_File"
+msgstr "_Fişier"
+
+#: ../src/dsp_wallet.c:190
+msgid "_Edit"
+msgstr "_Editează"
+
+#: ../src/dsp_wallet.c:191
+msgid "_View"
+msgstr ""
+
+#: ../src/dsp_wallet.c:192
+msgid "_Transactions"
+msgstr "_Tranzacţii"
+
+#: ../src/dsp_wallet.c:193
+msgid "_Reports"
+msgstr "_Rapoarte"
+
+#: ../src/dsp_wallet.c:194
+msgid "T_ools"
+msgstr ""
+
+#: ../src/dsp_wallet.c:195
+msgid "_Help"
+msgstr "_Ajutor"
+
+#: ../src/dsp_wallet.c:197
+msgid "Open _Recent"
+msgstr "Deschide _recente"
+
+#: ../src/dsp_wallet.c:198
+msgid "Export to"
+msgstr ""
+
+#. name, stock id, label, accelerator, tooltip
+#. FileMenu
+#: ../src/dsp_wallet.c:202
+msgid "_New"
+msgstr "_Nou"
+
+#: ../src/dsp_wallet.c:202
+msgid "Create a new wallet"
+msgstr "Creează un portofel nou"
+
+#: ../src/dsp_wallet.c:203
+msgid "_Open..."
+msgstr "_Deschide..."
+
+#: ../src/dsp_wallet.c:203
+msgid "Open a wallet"
+msgstr "Deschide un portofel"
+
+#: ../src/dsp_wallet.c:204
+msgid "_Save"
+msgstr "_Salvează"
+
+#: ../src/dsp_wallet.c:204
+msgid "Save the current wallet"
+msgstr "Salvează portofelul curent"
+
+#: ../src/dsp_wallet.c:205
+msgid "Save As..."
+msgstr "Salvează ca..."
+
+#: ../src/dsp_wallet.c:205
+msgid "Save the current wallet with a different name"
+msgstr "Salvează portofelul curent cu un nume diferit"
+
+#: ../src/dsp_wallet.c:206
+msgid "Revert"
+msgstr "Revino"
+
+#: ../src/dsp_wallet.c:206
+msgid "Revert to a saved version of this file"
+msgstr "Revino la versiune salvată a acestui fişier"
+
+#: ../src/dsp_wallet.c:207
+msgid "Import..."
+msgstr "Importă..."
+
+#: ../src/dsp_wallet.c:207
+msgid "Open the import assistant"
+msgstr "Deschide asistentul de importare"
+
+#: ../src/dsp_wallet.c:209
+msgid "_Properties..."
+msgstr "_Proprietăţi..."
+
+#: ../src/dsp_wallet.c:209
+msgid "Configure wallet"
+msgstr "Configurează portofel"
+
+#: ../src/dsp_wallet.c:210
+msgid "Close the current wallet"
+msgstr "Închide portofelul curent"
+
+#: ../src/dsp_wallet.c:211
+msgid "_Quit"
+msgstr "I_eşire"
+
+#: ../src/dsp_wallet.c:211
+msgid "Quit homebank"
+msgstr "Ieşire din HomeBank"
+
+#. Export Menu
+#: ../src/dsp_wallet.c:214
+msgid "QIF Format..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:214
+msgid "Open the export to QIF assistant"
+msgstr ""
+
+#. EditMenu
+#: ../src/dsp_wallet.c:217
+msgid "Acc_ounts..."
+msgstr "_Conturi..."
+
+#: ../src/dsp_wallet.c:217
+msgid "Configure the accounts"
+msgstr "Configurează conturi"
+
+#: ../src/dsp_wallet.c:218
+msgid "_Payees..."
+msgstr "_Beneficiari..."
+
+#: ../src/dsp_wallet.c:218
+msgid "Configure the payees"
+msgstr "Configurează beneficiari"
+
+#: ../src/dsp_wallet.c:219
+msgid "Categories..."
+msgstr "Categorii..."
+
+#: ../src/dsp_wallet.c:219
+msgid "Configure the categories"
+msgstr "Configurează categorii"
+
+#: ../src/dsp_wallet.c:220
+msgid "Arc_hives..."
+msgstr "Tranzacţii auto_mate..."
+
+#: ../src/dsp_wallet.c:220
+msgid "Configure the archives"
+msgstr "Configurează tranzacţiile automate"
+
+#: ../src/dsp_wallet.c:221
+msgid "Budget..."
+msgstr "Buget..."
+
+#: ../src/dsp_wallet.c:221
+msgid "Configure the budget"
+msgstr "Configurează buget"
+
+#: ../src/dsp_wallet.c:222
+msgid "Preferences..."
+msgstr "Preferinţe..."
+
+#: ../src/dsp_wallet.c:222
+msgid "Configure homebank"
+msgstr "Configurează HomeBank"
+
+#. OperationMenu
+#: ../src/dsp_wallet.c:225
+msgid "Show..."
+msgstr "Afişează..."
+
+#: ../src/dsp_wallet.c:225
+msgid "Shows selected account transactions"
+msgstr "Afişează tranzacţiile de cont selectate"
+
+#: ../src/dsp_wallet.c:226
+msgid "Add..."
+msgstr "Adaugă..."
+
+#: ../src/dsp_wallet.c:227
+msgid "Check automated..."
+msgstr "Verifică operaţiunile automate..."
+
+#: ../src/dsp_wallet.c:227
+msgid "Insert pending automated transactions"
+msgstr "Inserează tranzacţiile automate aflate în aşteptare"
+
+#. ReportMenu
+#: ../src/dsp_wallet.c:230
+msgid "_Statistics..."
+msgstr "_Statistici..."
+
+#: ../src/dsp_wallet.c:230
+msgid "Open the Statistics report"
+msgstr "Deschide raportul de statistici"
+
+#: ../src/dsp_wallet.c:231
+msgid "B_udget..."
+msgstr "B_uget..."
+
+#: ../src/dsp_wallet.c:231
+msgid "Open the Budget report"
+msgstr "Deschide raportul de buget"
+
+#: ../src/dsp_wallet.c:232
+msgid "Ove_rdrawn..."
+msgstr "Depăşiri..."
+
+#: ../src/dsp_wallet.c:232
+msgid "Open the Overdrawn report"
+msgstr "Deschide raportul depăşirilor"
+
+#: ../src/dsp_wallet.c:233
+msgid "_Car cost..."
+msgstr "_Costuri maşină..."
+
+#: ../src/dsp_wallet.c:233
+msgid "Open the Car cost report"
+msgstr "Deschide raportul costurilor de maşină"
+
+#. ToolsMenu
+#: ../src/dsp_wallet.c:236
+msgid "Import Amiga..."
+msgstr "Importă Amiga..."
+
+#: ../src/dsp_wallet.c:236
+msgid "Import a file in Amiga 3.0 format"
+msgstr "Importă un fişier cu formatul Amiga 3.0"
+
+#. HelpMenu
+#: ../src/dsp_wallet.c:239
+msgid "_Contents"
+msgstr "_Conţinut"
+
+#: ../src/dsp_wallet.c:239
+msgid "Documentation about HomeBank"
+msgstr "Documentaţie despre HomeBank"
+
+#: ../src/dsp_wallet.c:240
+msgid "Get Help Online..."
+msgstr "Primește ajutor online..."
+
+#: ../src/dsp_wallet.c:240
+msgid "Connect to the LaunchPad website for online help"
+msgstr "Conectează website-ul LaunchPad pentru ajutorul online"
+
+#: ../src/dsp_wallet.c:241
+msgid "Translate this Application..."
+msgstr "Tradu această aplicaţie..."
+
+#: ../src/dsp_wallet.c:241
+msgid "Connect to the LaunchPad website to help translate this application"
+msgstr ""
+"Conectează-te la website-ul LauncPad pentru ajutor în traducerea acestei "
+"aplicaţii"
+
+#: ../src/dsp_wallet.c:242
+msgid "Report a Problem..."
+msgstr "Raportează o problemă..."
+
+#: ../src/dsp_wallet.c:242
+msgid "Connect to the LaunchPad website to help fix problems"
+msgstr ""
+"Conectează-te la website-ul LaunchPad pentru ajutorul la rezolvarea "
+"problemelor"
+
+#: ../src/dsp_wallet.c:244
+msgid "_About"
+msgstr "_Despre"
+
+#: ../src/dsp_wallet.c:244
+msgid "About HomeBank"
+msgstr "Despre HomeBank"
+
+#. name         , stockid, label, accelerator, tooltip, callback, is_active
+#: ../src/dsp_wallet.c:252
+msgid "Minor currency"
+msgstr "Valută minoră"
+
+#: ../src/dsp_wallet.c:596 ../src/dsp_wallet.c:649 ../src/dsp_wallet.c:665
+msgid "No suitable web browser executable could be found."
+msgstr "Nu s-a putut găsi niciun web browser executabil."
+
+#: ../src/dsp_wallet.c:597 ../src/dsp_wallet.c:618 ../src/dsp_wallet.c:634
+#: ../src/dsp_wallet.c:650 ../src/dsp_wallet.c:666
+#, c-format
+msgid "Could not display the URL '%s'"
+msgstr "Nu a putut fi afişat URL-ul '%s'"
+
+#: ../src/dsp_wallet.c:617 ../src/dsp_wallet.c:633
+msgid "No suitable web browser application could be found."
+msgstr "Nu a putut fi găsită aplicaţia web browser."
+
+#: ../src/dsp_wallet.c:754
+msgid ""
+"Do you want to save the changes\n"
+"in the current file ?"
+msgstr ""
+"Vrei să salvezi schimbările\n"
+"în fişierul curent?"
+
+#: ../src/dsp_wallet.c:758
+#, c-format
+msgid ""
+"If you do not save, %d changes will be\n"
+"definitively lost."
+msgstr ""
+"Dacă nu salvezi, %d schimbări vor fi\n"
+"pierdute definitiv."
+
+#: ../src/dsp_wallet.c:763
+msgid "Do _not save"
+msgstr "_Nu salvez"
+
+#. fix: v4.0
+#: ../src/dsp_wallet.c:835 ../src/homebank.c:1135
+msgid "(Nobody)"
+msgstr "(Nimeni)"
+
+#: ../src/dsp_wallet.c:1139
+msgid "No transaction to insert"
+msgstr "Nicio tranzacţie de inserat"
+
+#: ../src/dsp_wallet.c:1141
+#, c-format
+msgid "%d transactions inserted"
+msgstr "%d tranzacţii inserate"
+
+#: ../src/dsp_wallet.c:1144
+msgid "Check automated transactions result"
+msgstr "Verifică rezultatul tranzacţiilor automate"
+
+#: ../src/dsp_wallet.c:1169
+msgid "Import Amiga file"
+msgstr "Importă fişier Amiga"
+
+#: ../src/dsp_wallet.c:1211
+#, c-format
+msgid "Revert to the previously saved file of '%s'?"
+msgstr "Revii la fişierul salvat anterior al '%s'?"
+
+#: ../src/dsp_wallet.c:1217
+msgid ""
+"- Changes made to the wallet will be permanently lost\n"
+"- Wallet will be restored to the last save (.old)"
+msgstr ""
+"- Schimbările făcute în portofel vor fi pierdute pentru totodeauna\n"
+"- Portofelul va fi restaurat la ultima salvare (.old)"
+
+#: ../src/dsp_wallet.c:1315
+msgid "File error"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1316
+#, c-format
+msgid "The file %s is not a valid HomeBank file."
+msgstr ""
+
+#: ../src/dsp_wallet.c:2297
+msgid "<b>Accounts summary</b>"
+msgstr "<b>Sumar conturi</b>"
+
+#: ../src/dsp_wallet.c:2313
+msgid "<b>Upcoming automated transactions</b>"
+msgstr "<b>Tranzacţii automate pe cale să se realizeze</b>"
+
+#: ../src/homebank.c:106
+msgid "Output version information and exit"
+msgstr "Informaţii pentru versiunea de producţie şi ieşire"
+
+#: ../src/homebank.c:109
+msgid "[FILE]"
+msgstr "[FIŞIER]"
+
+#: ../src/homebank.c:196
+msgid "Export as QIF"
+msgstr ""
+
+#: ../src/homebank.c:207
+msgid "QIF files"
+msgstr ""
+
+#: ../src/homebank.c:212 ../src/homebank.c:277 ../src/homebank.c:342
+#: ../src/homebank.c:463
+msgid "All files"
+msgstr ""
+
+#: ../src/homebank.c:251
+msgid "Import from CSV"
+msgstr "Importă din CSV"
+
+#: ../src/homebank.c:257
+msgid "Export as CSV"
+msgstr "Exportă ca CSV"
+
+#: ../src/homebank.c:272
+msgid "CSV files"
+msgstr "Fişiere CSV"
+
+#: ../src/homebank.c:320
+msgid "Open homebank file"
+msgstr ""
+
+#: ../src/homebank.c:325
+msgid "Save homebank file as"
+msgstr ""
+
+#: ../src/homebank.c:337
+msgid "HomeBank files"
+msgstr ""
+
+#: ../src/homebank.c:458
+msgid "Amiga files"
+msgstr "Fişiere Amiga"
+
+#: ../src/homebank.c:1244 ../src/homebank.c:1245
+msgid "HomeBank options"
+msgstr "Opţiuni HomeBank"
+
+#: ../src/homebank.c:1363
+#, c-format
+msgid "Unable to open '%s', the file does not exist.\n"
+msgstr "Nu s-a putut deschide '%s', fişierul nu există.\n"
+
+#: ../src/imp_amiga.c:105
+msgid "Import HomeBank Amiga File"
+msgstr "Importă fişier HomeBank Amiga"
+
+#: ../src/imp_amiga.c:106
+#, c-format
+msgid ""
+"Wrong Amiga file version %d.%d\n"
+"( must be > 3.0 )"
+msgstr ""
+"Versiune greşită de fişier Amiga %d. %d\n"
+"(trebuie să fie > 3.0)"
+
+#: ../src/import.c:58
+msgid "Import assistant"
+msgstr ""
+
+#: ../src/import.c:59
+msgid "Select a file to import"
+msgstr ""
+
+#: ../src/import.c:60
+msgid "File content"
+msgstr ""
+
+#: ../src/import.c:61
+msgid "Transaction selection"
+msgstr ""
+
+#: ../src/import.c:62
+msgid "Update your accounts"
+msgstr "Actualizează-ţi conturile"
+
+#: ../src/import.c:672
+msgid "Please select a file..."
+msgstr ""
+
+#: ../src/import.c:683
+msgid "Unknown/Invalid file..."
+msgstr "Fişier necunoscut/invalid"
+
+#: ../src/import.c:687
+msgid "QIF file recognised !"
+msgstr ""
+
+#: ../src/import.c:694
+msgid "OFX file recognised !"
+msgstr "Fişier OFX recunoscut!"
+
+#: ../src/import.c:697
+msgid "** OFX support is disabled **"
+msgstr ""
+
+#: ../src/import.c:702
+msgid "CSV operation file recognised !"
+msgstr "Operaţie cu fişier CSV recunoscută!"
+
+#: ../src/import.c:1239
+#, c-format
+msgid ""
+"%d accounts\n"
+"%d transactions\n"
+"%d payees\n"
+"%d categories\n"
+msgstr ""
+
+#: ../src/import.c:1362
+#, c-format
+msgid ""
+"%d accounts will be created.\n"
+"\n"
+"%d transactions will be imported.\n"
+"%d transactions will be rejected."
+msgstr ""
+"%d conturi vor fi create.\n"
+"\n"
+"%d tranzacţii vor fi importate.\n"
+"%d tranzacţii vor fi aruncate."
+
+#: ../src/import.c:1379
+#, c-format
+msgid "Import assistant (%d of %d)"
+msgstr "Asistent de importare (%d din %d)"
+
+#: ../src/import.c:1518
+msgid ""
+"HomeBank can import transactions from several file formats:\n"
+"\n"
+"- QIF\n"
+"- OFX/QFX (optional at compilation time)\n"
+"- CSV (Homebank transaction CSV export format only)\n"
+"\n"
+"Other formats or not supported at the moment.\n"
+"\n"
+"The import process has several steps. Your HomeBank accounts\n"
+"will not be changed until you click \"Apply\" at the end of this assistant.\n"
+"\n"
+"Now, click \"forward\" to start importing a file."
+msgstr ""
+
+#: ../src/import.c:1658
+msgid "<b>File analysis summary</b>"
+msgstr ""
+
+#: ../src/import.c:1666
+msgid "Filename:"
+msgstr ""
+
+#: ../src/import.c:1674
+msgid "Details:"
+msgstr ""
+
+#: ../src/import.c:1685
+msgid "<b>Unamed account selection</b>"
+msgstr ""
+
+#: ../src/import.c:1697
+msgid ""
+"The file that you just loaded appears to contain transactions for an account "
+"without specifying\n"
+"the name of that account. Please select the account to which these "
+"transactions can be attached."
+msgstr ""
+
+#: ../src/import.c:1707
+msgid "new account"
+msgstr ""
+
+#: ../src/import.c:1712
+msgid "_Name:"
+msgstr ""
+
+#: ../src/import.c:1720
+msgid "existing account"
+msgstr ""
+
+#: ../src/import.c:1775
+msgid "<b>Duplicate match options</b>"
+msgstr ""
+
+#: ../src/import.c:1787
+msgid "Date _tolerance:"
+msgstr "_Toleranţă dată:"
+
+#: ../src/import.c:1797
+msgid "days"
+msgstr "zile"
+
+#: ../src/import.c:1814
+msgid ""
+"The match is done in order: by account, amount and date.\n"
+"A date tolerance of 0 days means an exact match"
+msgstr ""
+
+#: ../src/import.c:1827
+msgid "<b>Transactions to import</b>"
+msgstr "<b>Tranzacţii pentru importare</b>"
+
+#: ../src/import.c:1847
+msgid "<b>Possible duplicate for the above selected transaction</b>"
+msgstr "<b>Posibilă duplicare pentru tranzacţia selectată de mai sus</b>"
+
+#. Create the expander
+#: ../src/import.c:1851
+msgid "Details"
+msgstr "Detalii"
+
+#: ../src/import.c:1916
+msgid ""
+"Click \"Apply\" to update your accounts.\n"
+"\n"
+msgstr ""
+"Clic pe „Aplică” pentru a-ţi actualiza conturile.\n"
+"\n"
+
+#: ../src/list_account.c:253 ../src/list_operation.c:468
+msgid "State"
+msgstr "Stare"
+
+#. column 4: Bank
+#: ../src/list_account.c:273
+msgid "Bank"
+msgstr "Bancă"
+
+#. column 5: Today
+#: ../src/list_account.c:277
+msgid "Today"
+msgstr "Azi"
+
+#. column 6: Future
+#: ../src/list_account.c:281
+msgid "Future"
+msgstr "În viitor"
+
+#: ../src/list_operation.c:491 ../src/list_operation.c:702
+#: ../src/rep_car.c:995 ../src/rep_over.c:968
+msgid "Date"
+msgstr "Dată"
+
+#: ../src/list_upcoming.c:208
+msgid "Next on"
+msgstr "Mai departe"
+
+#: ../src/list_upcoming.c:220
+msgid "Remaining"
+msgstr "Rămase"
+
+#: ../src/rep_budget.c:99
+msgid "Spent & Budget"
+msgstr "Cheltuieli & Buget"
+
+#. column: Expense
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1250
+msgid "Spent"
+msgstr "Cheltuiţi"
+
+#. column: Income
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1254
+msgid "Budget"
+msgstr "Buget"
+
+#. column: Balance
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1258
+msgid "Decay"
+msgstr "Diferenţă"
+
+#: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
+msgid "List"
+msgstr "Listă"
+
+#: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
+msgid "View results as list"
+msgstr "Afişează rezultatele sub formă de listă"
+
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:127
+msgid "Bar"
+msgstr "Bară"
+
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:127
+msgid "View results as bars"
+msgstr "Afişează rezultatele sub formă de bare"
+
+#: ../src/rep_budget.c:110 ../src/rep_stats.c:130
+msgid "Detail"
+msgstr "Detalii"
+
+#: ../src/rep_budget.c:110 ../src/rep_stats.c:130
+msgid "Toggle detail"
+msgstr "Comută detalii"
+
+#: ../src/rep_budget.c:111 ../src/rep_stats.c:131
+msgid "Legend"
+msgstr "Legendă"
+
+#: ../src/rep_budget.c:111 ../src/rep_stats.c:131
+msgid "Toggle legend"
+msgstr "Comută legendă"
+
+#: ../src/rep_budget.c:113 ../src/rep_over.c:96 ../src/rep_stats.c:135
+msgid "Refresh"
+msgstr "Reîmprospătează"
+
+#: ../src/rep_budget.c:113 ../src/rep_over.c:96 ../src/rep_stats.c:135
+msgid "Refresh results"
+msgstr "Rîmprospătează rezultate"
+
+#: ../src/rep_budget.c:857
+msgid "Budget report"
+msgstr "Raport buget"
+
+#: ../src/rep_budget.c:883 ../src/rep_car.c:623 ../src/rep_over.c:617
+#: ../src/rep_stats.c:1423
+msgid "<b>Display</b>"
+msgstr "<b>Afişează</b>"
+
+#: ../src/rep_budget.c:887
+msgid "_Kind:"
+msgstr "_Tip:"
+
+#: ../src/rep_budget.c:894 ../src/rep_stats.c:1434
+msgid "_View:"
+msgstr "_Afişează:"
+
+#: ../src/rep_budget.c:901 ../src/rep_car.c:635 ../src/rep_over.c:628
+#: ../src/rep_stats.c:1446
+msgid "_Minor currency"
+msgstr "Valută _minoră"
+
+#: ../src/rep_budget.c:911 ../src/rep_car.c:645 ../src/rep_over.c:638
+#: ../src/rep_stats.c:1462
+msgid "<b>Date filter</b>"
+msgstr "<b>Filtru pentru dată</b>"
+
+#: ../src/rep_budget.c:987
+msgid "Decay:"
+msgstr "Diferenţă:"
+
+#: ../src/rep_budget.c:996
+msgid "Budget:"
+msgstr "Buget"
+
+#: ../src/rep_budget.c:1005
+msgid "Spent:"
+msgstr "Cheltuiţi:"
+
+#: ../src/rep_car.c:596
+msgid "Car report"
+msgstr "Raport maşină"
+
+#: ../src/rep_car.c:627
+msgid "_Car category:"
+msgstr "Categorie _maşină:"
+
+#. column: consumption for 100Km
+#: ../src/rep_car.c:711 ../src/rep_car.c:1047
+msgid "100 Km"
+msgstr "100 km"
+
+#: ../src/rep_car.c:714
+msgid "Total"
+msgstr "Total"
+
+#: ../src/rep_car.c:718
+msgid "Meter:"
+msgstr "Măsură:"
+
+#: ../src/rep_car.c:722
+msgid "Consumption:"
+msgstr "Consum"
+
+#: ../src/rep_car.c:726
+msgid "Fuel cost:"
+msgstr "Costuri pentru combustibil:"
+
+#: ../src/rep_car.c:730
+msgid "Other cost:"
+msgstr "Alte costuri:"
+
+#: ../src/rep_car.c:734
+msgid "Total cost:"
+msgstr "Costuri totale:"
+
+#. 
+#. LST_CAR_DATE,
+#. LST_CAR_WORDING,
+#. LST_CAR_METER,
+#. LST_CAR_FUEL,
+#. LST_CAR_PRICE,
+#. LST_CAR_AMOUNT,
+#. LST_CAR_DIST,
+#. LST_CAR_100KM
+#. 
+#. 
+#. column: Wording
+#. 
+#. column = gtk_tree_view_column_new();
+#. gtk_tree_view_column_set_title(column, _("Wording"));
+#. gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+#. renderer = gtk_cell_renderer_text_new();
+#. gtk_tree_view_column_pack_start(column, renderer, TRUE);
+#. gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_WORDING);
+#. //gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_text_cell_data_function, NULL, NULL);
+#. 
+#. column: Meter
+#: ../src/rep_car.c:1027
+msgid "Meter"
+msgstr "Măsură"
+
+#. column: Fuel load
+#: ../src/rep_car.c:1031
+msgid "Fuel"
+msgstr "Combustibil"
+
+#. column: Price by unit
+#: ../src/rep_car.c:1035
+msgid "Price"
+msgstr "Preţ"
+
+#. column: Distance done
+#: ../src/rep_car.c:1043
+msgid "Dist."
+msgstr "Dist."
+
+#: ../src/rep_over.c:94
+msgid "Line"
+msgstr "Linie"
+
+#: ../src/rep_over.c:94
+msgid "View results as lines"
+msgstr "Afişează rezultatele sub formă de linii"
+
+#: ../src/rep_over.c:302
+#, c-format
+msgid "%d/%d under %s"
+msgstr ""
+
+#: ../src/rep_over.c:588
+msgid "Overdrawn report"
+msgstr "Raport depăşiri"
+
+#. column: Balance
+#: ../src/rep_over.c:997 ../src/rep_stats.c:202 ../src/rep_stats.c:1854
+msgid "Balance"
+msgstr "Balanţă"
+
+#: ../src/rep_stats.c:128
+msgid "Pie"
+msgstr "Plăcintă"
+
+#: ../src/rep_stats.c:128
+msgid "View results as pies"
+msgstr "Afişează rezultatele sub formă de plăcinte"
+
+#: ../src/rep_stats.c:132
+msgid "Rate"
+msgstr "Rată"
+
+#: ../src/rep_stats.c:132
+msgid "Toggle rate"
+msgstr "Comută rată"
+
+#: ../src/rep_stats.c:134
+msgid "Filter"
+msgstr "Filtru"
+
+#: ../src/rep_stats.c:134
+msgid "Edit the filter"
+msgstr "Editează filtru"
+
+#: ../src/rep_stats.c:198
+msgid "Subcategory"
+msgstr ""
+
+#: ../src/rep_stats.c:198
+msgid "Tag"
+msgstr ""
+
+#: ../src/rep_stats.c:202
+msgid "Exp. & Inc."
+msgstr "Chelt. & ven."
+
+#: ../src/rep_stats.c:206
+msgid "All date"
+msgstr "Toate datele"
+
+#: ../src/rep_stats.c:207
+msgid "Current month"
+msgstr "Luna curentă"
+
+#: ../src/rep_stats.c:208
+msgid "Current year"
+msgstr "Anul curent"
+
+#: ../src/rep_stats.c:209
+msgid "Previous month"
+msgstr "Luna trecută"
+
+#: ../src/rep_stats.c:210
+msgid "Previous year"
+msgstr "Anul trecut"
+
+#: ../src/rep_stats.c:211
+msgid "Last 30 days"
+msgstr "Ultimele 30 zile"
+
+#: ../src/rep_stats.c:212
+msgid "Last 2 months"
+msgstr "Ultimele 2 luni"
+
+#: ../src/rep_stats.c:213
+msgid "Last 3 months"
+msgstr "Ultimele 3 luni"
+
+#: ../src/rep_stats.c:214
+msgid "Last 4 months"
+msgstr "Ultimele 4 luni"
+
+#: ../src/rep_stats.c:215
+msgid "Last 6 months"
+msgstr "Ultimele 6 luni"
+
+#: ../src/rep_stats.c:216
+msgid "Last 12 months"
+msgstr "Ultimele 12 luni"
+
+#: ../src/rep_stats.c:223
+msgid "All month"
+msgstr "Toate lunile"
+
+#: ../src/rep_stats.c:224 ../src/rep_stats.c:242
+msgid "January"
+msgstr "Ianuarie"
+
+#: ../src/rep_stats.c:225 ../src/rep_stats.c:243
+msgid "February"
+msgstr "Februarie"
+
+#: ../src/rep_stats.c:226 ../src/rep_stats.c:244
+msgid "March"
+msgstr "Martie"
+
+#: ../src/rep_stats.c:227 ../src/rep_stats.c:245
+msgid "April"
+msgstr "Aprilie"
+
+#: ../src/rep_stats.c:228 ../src/rep_stats.c:246
+msgid "May"
+msgstr "Mai"
+
+#: ../src/rep_stats.c:229 ../src/rep_stats.c:247
+msgid "June"
+msgstr "Iunie"
+
+#: ../src/rep_stats.c:230 ../src/rep_stats.c:248
+msgid "July"
+msgstr "Iulie"
+
+#: ../src/rep_stats.c:231 ../src/rep_stats.c:249
+msgid "August"
+msgstr "August"
+
+#: ../src/rep_stats.c:232 ../src/rep_stats.c:250
+msgid "September"
+msgstr "Septembrie"
+
+#: ../src/rep_stats.c:233 ../src/rep_stats.c:251
+msgid "October"
+msgstr "Octombrie"
+
+#: ../src/rep_stats.c:234 ../src/rep_stats.c:252
+msgid "November"
+msgstr "Noiembrie"
+
+#: ../src/rep_stats.c:235 ../src/rep_stats.c:253
+msgid "December"
+msgstr "Decembrie"
+
+#: ../src/rep_stats.c:1397
+msgid "Statistics Report"
+msgstr "Raport statistici"
+
+#: ../src/rep_stats.c:1427
+msgid "_For:"
+msgstr "_Pentru:"
+
+#: ../src/rep_stats.c:1441
+msgid "By _amount"
+msgstr "După _sumă"
+
+#: ../src/rep_stats.c:1539
+msgid "Balance:"
+msgstr "Balanţă:"
+
+#: ../src/rep_stats.c:1548
+msgid "Income:"
+msgstr "Venituri"
+
+#: ../src/rep_stats.c:1557
+msgid "Expense:"
+msgstr "Cheltuieli:"
+
+#: ../src/rep_stats.c:1831
+msgid "Result"
+msgstr "Rezultat"
+
+#: ../src/ui_account.c:864
+#, c-format
+msgid "(account %d)"
+msgstr ""
+
+#: ../src/ui_account.c:896
+msgid "Remove not allowed"
+msgstr ""
+
+#: ../src/ui_account.c:897
+msgid "This account is used and cannot be removed."
+msgstr ""
+
+#: ../src/ui_account.c:1004
+msgid "Manage Accounts"
+msgstr ""
+
+#: ../src/ui_account.c:1077
+msgid "<b>Informations</b>"
+msgstr "<b>Informații</b>"
+
+#: ../src/ui_account.c:1085
+msgid "_Heading:"
+msgstr "_Titlu:"
+
+#: ../src/ui_account.c:1102
+msgid "_Number:"
+msgstr "_Număr"
+
+#: ../src/ui_account.c:1109
+msgid "_Bank name:"
+msgstr "Nume _bancă"
+
+#: ../src/ui_account.c:1116
+msgid "Include in the budget"
+msgstr "Include în buget"
+
+#: ../src/ui_account.c:1121
+msgid "This account was closed"
+msgstr "Acest cont a fost închis"
+
+#: ../src/ui_account.c:1133
+msgid "<b>Balances</b>"
+msgstr "<b>Balanțe</b>"
+
+#: ../src/ui_account.c:1137
+msgid "_Initial:"
+msgstr "_Inițial:"
+
+#: ../src/ui_account.c:1148
+msgid "_Overdrawn at:"
+msgstr "De_pășire la:"
+
+#: ../src/ui_account.c:1162
+msgid "<b>Cheque number</b>"
+msgstr "<b>Număr cec</b>"
+
+#: ../src/ui_account.c:1166
+msgid "Notebook _1:"
+msgstr "Carnet _1:"
+
+#: ../src/ui_account.c:1180
+msgid "Notebook _2:"
+msgstr "Carnet _2:"
+
+#: ../src/ui_category.c:867
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, please see the help for more details."
+msgstr ""
+"Fişierul csv trebuie să conţină un număr exact de coloane\n"
+"separate prin punct şi virgulă. Citeşte ajutorul pentru mai multe detalii, "
+"te rog."
+
+#: ../src/ui_category.c:996 ../src/ui_payee.c:579
+msgid "Modify..."
+msgstr "Modifică..."
+
+#: ../src/ui_category.c:1018
+msgid "_Income"
+msgstr "Ven_it"
+
+#: ../src/ui_category.c:1100 ../src/ui_payee.c:620
+msgid "Error"
+msgstr ""
+
+#: ../src/ui_category.c:1101
+#, c-format
+msgid ""
+"Cannot rename this Category,\n"
+"from '%s' to '%s',\n"
+"this name already exists."
+msgstr ""
+
+#: ../src/ui_category.c:1219
+msgid "Remove a category ?"
+msgstr ""
+
+#: ../src/ui_category.c:1220
+#, c-format
+msgid ""
+"If you remove '%s', archive and operation referencing this category\n"
+"will set place to 'no category'"
+msgstr ""
+
+#: ../src/ui_category.c:1428
+msgid "Manage Categories"
+msgstr ""
+
+#: ../src/ui_category.c:1466
+msgid "I_ncome"
+msgstr "Ve_nit"
+
+#: ../src/ui_payee.c:621
+#, c-format
+msgid ""
+"Cannot rename this Payee,\n"
+"from '%s' to '%s',\n"
+"this name already exists."
+msgstr ""
+
+#: ../src/ui_payee.c:741
+msgid "Remove a payee ?"
+msgstr ""
+
+#: ../src/ui_payee.c:742
+#, c-format
+msgid ""
+"If you remove '%s', archive and operation referencing this payee\n"
+"will set place to 'no payee'"
+msgstr ""
+
+#: ../src/ui_payee.c:826
+msgid "Manage Payees"
+msgstr ""
+
+#: ../src/widgets.c:65
+msgid "Credit card"
+msgstr "Card de credit"
+
+#: ../src/widgets.c:66
+msgid "Cheque"
+msgstr "Cec"
+
+#: ../src/widgets.c:67
+msgid "Cash"
+msgstr "Numerar"
+
+#: ../src/widgets.c:68
+msgid "Bank transfer"
+msgstr "Transfer bancar"
+
+#: ../src/widgets.c:69
+msgid "Internal transfer"
+msgstr "Transfer intern"

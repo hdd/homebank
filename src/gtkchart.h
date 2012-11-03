@@ -1,19 +1,20 @@
-/* HomeBank -- Free easy personal accounting for all !
- * Copyright (C) 1995-2007 Maxime DOYEN
+/*  HomeBank -- Free, easy, personal accounting for everyone.
+ *  Copyright (C) 1995-2008 Maxime DOYEN
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  This file is part of HomeBank.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  HomeBank is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  HomeBank is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __GTK_CHART_H__
@@ -70,6 +71,9 @@ struct _GtkChart
 
 	gint			type;
 	gboolean		minor;
+	gboolean		show_over;
+	gboolean		show_xval;
+	gint			decy_xval;
 
 	gdouble			minor_rate;
 	gchar			*minor_symbol;
@@ -93,7 +97,12 @@ struct _GtkChart
 	gboolean	dual;
 	/*gint		test;*/
 
-	gint		ox, oy;
+	double		l, t, b, r, w, h;
+	/* our drawing rectangle with margin */
+	double		legend_w;
+
+
+	double		ox, oy;
 	gint		lastx, lasty, lastactive;
 	gint		lastpress_x, lastpress_y;
 	gint		active;
@@ -104,14 +113,14 @@ struct _GtkChart
 	gint		rayon, left, top;
 
 	/* bar specifics */
-	gdouble	range, min, max, unit, minimum;
+	double	range, min, max, unit, minimum;
 	gint	div;
 	gint visible;
 
-	gint scale_width, scale_height;	//scale text dimension
-	gint graph_width, graph_height;	//graph dimension
-	gint unit_height;
-	gint barw, posbarh, negbarh;
+	double font_h;
+
+	double graph_width, graph_height;	//graph dimension
+	double barw, posbarh, negbarh;
 
 	gchar			buffer[CHART_BUFFER_LENGTH];
 };
@@ -126,7 +135,7 @@ struct _GtkChartClass {
   void (*_gtk_reserved4) (void);
 };
 
-GtkType      gtk_chart_get_type              (void);
+GType      gtk_chart_get_type              (void);
 
 /* public function */
 GtkWidget *gtk_chart_new(gint type);
@@ -138,10 +147,15 @@ void gtk_chart_set_dualdatas(GtkChart *chart, GtkTreeModel *model, guint column1
 
 void gtk_chart_set_title(GtkChart * chart, gchar *title);
 
-void gtk_chart_set_legend(GtkChart * chart, gboolean visible);
-void gtk_chart_set_minor(GtkChart * chart, gboolean minor);
 void gtk_chart_set_minor_prefs(GtkChart * chart, gdouble rate, gchar *symbol);
+void gtk_chart_set_overdrawn(GtkChart * chart, gdouble minimum);
+void gtk_chart_set_decy_xval(GtkChart * chart, gint decay);
+void gtk_chart_set_barw(GtkChart * chart, gdouble barw);
 
+void gtk_chart_show_legend(GtkChart * chart, gboolean visible);
+void gtk_chart_show_overdrawn(GtkChart * chart, gboolean visible);
+void gtk_chart_show_xval(GtkChart * chart, gboolean visible);
+void gtk_chart_show_minor(GtkChart * chart, gboolean minor);
 
 
 #ifdef __cplusplus

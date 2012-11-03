@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Importing transactions</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY >
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=27>
+			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="03trans_add.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<P><A HREF="03trans_auto.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+	</TR>
+</TABLE>
+<HR SIZE=1 COLOR="#000000">
+<H2>Importing transactions</H2>
+<P>The import wizard will guide you through the 5 steps for importing
+a file.</P>
+<H3>Supported format</H3>
+<P>At the present time the following file format can be imported into
+HomeBank:
+</P>
+<UL>
+	<LI> QIF (Quicken Interchange Format)
+
+	<LI> OFX (Open Financial Exchange)
+
+	<LI> CSV, but column must have a specific order and contents, <A HREF="06csvformat.html">see
+	details here</A>
+
+</UL>
+<H3>Step 1: Introduction</H3>
+<P>This step is a simple introduction
+</P>
+<H3>Step 2: File selection</H3>
+<P>You must select a file here, HomeBank will tell you if you can
+import that file or not:
+</P>
+<P>If the file is supported:<BR><IMG SRC="images/00import1.png">
+</P>
+<P>If the file is not supported:<BR><IMG SRC="images/00import2.png">
+</P>
+<H3>Step 3: File content</H3>
+<H4>File analysis summary</H4>
+<P><IMG SRC="images/03import3a.png"></P>
+<P>HomeBank will inform here about the file contents: number of
+accounts, transactions, payees and categories.
+</P>
+<H4>Unnamed account selection</H4>
+<P><IMG SRC="images/03import3b.png"></P>
+<P>There is some case (CSV, QIF) when the file does not specify the
+name of the account the transactions should be attached to. In that
+case, HomeBank will detect it and let you choose to create a new
+account, or to attach the transaction to an existing account, if any.
+</P>
+<H3>Step 4: Transaction selection</H3>
+<P><IMG SRC="images/03import4.png"></P>
+<P>That step is the most important one. HomeBank will detect for
+duplicate transaction here, and you are able to modify in realtime
+the date tolerance.<BR><BR>The match is done in order: by account,
+amount and date.<BR>If you want that HomeBank match really equal
+date, then let that parameter to 0.<BR>A little warning symbol will
+inform you when a transaction has some duplicate, and you can see the
+duplicate at the bottom part of the dialog: 'Possible
+duplicate...'.<BR>At last the duplicate transaction are not selected
+and will not be imported, except if you select it manually.
+</P>
+<H3>Step 5: Update your accounts</H3>
+<P>The last summary, according to the transaction you selected or
+not, then you can 'Apply' it !
+</P>
+</BODY>
+</HTML>
