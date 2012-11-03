@@ -1,0 +1,4 @@
+SUBDIRS = src \
+          po \
+          images
+ 
