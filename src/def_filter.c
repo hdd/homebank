@@ -120,21 +120,21 @@ guint count;
 
 	g_free(flt->acc);
 	count = g_list_length(GLOBALS->acc_list);
-	DB( g_printf(" %d account(s)\n", count) );
+	DB( g_printf(" %d accounts\n", count) );
 	flt->acc = g_malloc0(sizeof(gboolean)*count);
 	for(i=0;i<count;i++)
 		flt->acc[i] = TRUE;
 
 	g_free(flt->pay);
 	count = g_list_length(GLOBALS->pay_list);
-	DB( g_printf(" %d payee(s)\n", count) );
+	DB( g_printf(" %d payees\n", count) );
 	flt->pay = g_malloc0(sizeof(gboolean)*count);
 	for(i=0;i<count;i++)
 		flt->pay[i] = TRUE;
 
 	g_free(flt->cat);
 	count = g_list_length(GLOBALS->cat_list);
-	DB( g_printf(" %d categorie(s)\n", count) );
+	DB( g_printf(" %d categories\n", count) );
 	flt->cat = g_malloc0(sizeof(gboolean)*count);
 	for(i=0;i<count;i++)
 		flt->cat[i] = TRUE;

@@ -72,13 +72,26 @@ start_element_handler (GMarkupParseContext *context,
 //ParseContext *ctx = user_data;
 //GtkUIManager *self = ctx->self;
 gint i, j;
+gdouble version;
 
-	DB( g_printf("** element: %s\n", element_name) );
+	DB( g_print("** start element: %s\n", element_name) );
 
 
 	switch(element_name[0])
 	{
-		//todo: add version control here
+		//get file version
+		case 'h':
+		{
+			if(!strcmp (element_name, "homebank"))
+			{
+			     if(!strcmp (attribute_names[0], "v" ))
+			     {
+					version = g_ascii_strtod(attribute_values[0], NULL);
+			     	DB( g_print(" version %f\n", version) );
+			     }
+			
+			}
+		}
 
 		case 'a':
 		{
@@ -88,10 +101,12 @@ gint i, j;
 
 				for (i = 0; attribute_names[i] != NULL; i++)
 				{
-					DB( g_printf(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
+					DB( g_print(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
 
 					     if(!strcmp (attribute_names[i], "key"     )) { entry->key = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "flags"   )) { entry->flags = atoi(attribute_values[i]); }
+					//todo: for stock account
+					//else if(!strcmp (attribute_names[i], "type"    )) { entry->type = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "name"    )) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != "") entry->name = g_strdup(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "number"  )) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != "") entry->number = g_strdup(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "bankname")) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != "") entry->bankname = g_strdup(attribute_values[i]); }
@@ -99,7 +114,18 @@ gint i, j;
 					else if(!strcmp (attribute_names[i], "minimum" )) { entry->minimum = g_ascii_strtod(attribute_values[i], NULL); }
 					else if(!strcmp (attribute_names[i], "cheque1" )) { entry->cheque1 = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "cheque2" )) { entry->cheque2 = atoi(attribute_values[i]); }
+				
 				}
+
+				//version upgrade: type was added in 0.2
+				//todo: for stock account
+				/*				
+				if(version <= 0.1)
+				{
+					entry->type = ACC_TYPE_BANK;
+					DB( g_print(" acctype forced to BANK\n") );
+				}
+			*/
 
 				//all attribute loaded: append
 				GLOBALS->acc_list = g_list_append(GLOBALS->acc_list, entry);
@@ -116,10 +142,10 @@ gint i, j;
 
 				for (i = 0; attribute_names[i] != NULL; i++)
 				{
-					DB( g_printf(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
+					DB( g_print(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
 
 					     if(!strcmp (attribute_names[i], "key"  )) { entry->key = atoi(attribute_values[i]); }
-					else if(!strcmp (attribute_names[i], "flags")) { entry->flags = atoi(attribute_values[i]); }
+					//else if(!strcmp (attribute_names[i], "flags")) { entry->flags = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "name" )) { entry->name = g_strdup(attribute_values[i]); }
 				}
 
@@ -148,7 +174,7 @@ gint i, j;
 
 				for (i = 0; attribute_names[i] != NULL; i++)
 				{
-					DB( g_printf(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
+					DB( g_print(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
 
 					     if(!strcmp (attribute_names[i], "key"   )) { entry->key = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "parent")) { entry->parent = atoi(attribute_values[i]); }
@@ -186,7 +212,7 @@ gint i, j;
 
 				for (i = 0; attribute_names[i] != NULL; i++)
 				{
-					DB( g_printf(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
+					DB( g_print(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
 
 					     if(!strcmp (attribute_names[i], "amount"     )) { entry->amount = g_ascii_strtod(attribute_values[i], NULL); }
 					else if(!strcmp (attribute_names[i], "account"    )) { entry->account = atoi(attribute_values[i]); }
@@ -218,7 +244,7 @@ gint i, j;
 
 				for (i = 0; attribute_names[i] != NULL; i++)
 				{
-					DB( g_printf(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
+					DB( g_print(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
 
 					     if(!strcmp (attribute_names[i], "date"       )) { entry->date = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "amount"     )) { entry->amount = g_ascii_strtod(attribute_values[i], NULL); }
@@ -255,7 +281,7 @@ end_element_handler (GMarkupParseContext *context,
 {
   ParseContext *ctx = user_data;
 
-	//DB( g_printf(" eeh: %s\n", element_name) );
+	//DB( g_print("-- end element: %s\n", element_name) );
 
 
 }
@@ -272,8 +298,9 @@ static GMarkupParser hb_parser = {
 /*
 ** XML load homebank file: wallet
 */
-void homebank_load_xml(gchar *filename)
+gint homebank_load_xml(gchar *filename)
 {
+gint retval;
 gchar *buffer;
 gsize length;
 GError *error = NULL;
@@ -281,43 +308,59 @@ ParseContext ctx = { 0 };
 GMarkupParseContext *context;
 gboolean rc;
 
+	retval = XML_OK;
 	if (!g_file_get_contents (filename, &buffer, &length, &error))
 	{
 		//g_message ("%s", error->message);
+		retval = XML_LOAD_ERROR;
 		g_error_free (error);
 	}
 	else
 	{
-		/*
-		ctx.state = STATE_START;
-		ctx.self = self;
-		ctx.current = NULL;
-		ctx.merge_id = gtk_ui_manager_new_merge_id (self);
-		*/
+	gchar *v_buffer;
+	gdouble version;
 
-		// ctx is user_data
-		context = g_markup_parse_context_new (&hb_parser, 0, &ctx, NULL);
+		/* v3.4 add :: prevent load of future file version */
+		v_buffer = g_strstr_len(buffer, 50, "<homebank v=");
+		if( v_buffer == NULL )
+			return XML_FILE_ERROR;
 
-		error = NULL;
-		rc = g_markup_parse_context_parse (context, buffer, length, &error);
+		version = g_ascii_strtod(v_buffer+13, NULL);	/* a little hacky, but works ! */
 
-		if( error )
-			g_print("failed: %s\n", error->message);
-
-		if( rc == FALSE )
+		if( version > FILE_VERSION )
 		{
+			DB( g_print("failed: version %.1f is not supported (max is %.1f\n", version, FILE_VERSION) );
+			return XML_VERSION_ERROR;
+		}
+		else
+		{		
+			DB( g_print("ok file version is: %.1f\n", version) );
+		
+			context = g_markup_parse_context_new (&hb_parser, 0, &ctx, NULL);
+
 			error = NULL;
-			g_markup_parse_context_end_parse(context, &error);
+			rc = g_markup_parse_context_parse (context, buffer, length, &error);
 
 			if( error )
 				g_print("failed: %s\n", error->message);
+
+			if( rc == FALSE )
+			{
+				error = NULL;
+				g_markup_parse_context_end_parse(context, &error);
+
+				if( error )
+					g_print("failed: %s\n", error->message);
+			}
+
+			g_markup_parse_context_free (context);
+
+
+			g_free (buffer);
 		}
-
-		g_markup_parse_context_free (context);
-
-		g_free (buffer);
 	}
 
+	return retval;
 }
 
 
@@ -363,11 +406,15 @@ gchar *tmpstr;
 
 		item->flags &= (AF_BUDGET|AF_CLOSED);
 
+		//todo: for stock account
+		//tmpstr = g_markup_printf_escaped("<account key=\"%d\" flags=\"%d\" type=\"%d\" name=\"%s\"\n"
 		tmpstr = g_markup_printf_escaped("<account key=\"%d\" flags=\"%d\" name=\"%s\"\n"
 			" number=\"%s\" bankname=\"%s\" initial=\"%s\" minimum=\"%s\"\n"
 			" cheque1=\"%d\" cheque2=\"%d\"/>\n",
 			item->key,
 			item->flags,
+			//todo: for stock account
+			//item->type,
 			item->name == NULL ? "" : item->name,
 			item->number == NULL ? "" : item->number,
 			item->bankname == NULL ? "" : item->bankname,
@@ -399,9 +446,8 @@ gchar *tmpstr;
 
 		if(item->key != 0)
 		{
-			tmpstr = g_markup_printf_escaped("<pay key=\"%d\" flags=\"%d\" name=\"%s\"/>\n",
+			tmpstr = g_markup_printf_escaped("<pay key=\"%d\" name=\"%s\"/>\n",
 				item->key,
-				item->flags,
 				item->name
 			);
 			
@@ -546,7 +592,7 @@ FILE *fp;
 	else
 	{
 		fputs("<?xml version=\"1.0\"?>\n", fp);
-		fputs("<homebank v=\"" FILE_VERSION "\">\n", fp);
+		fprintf(fp, "<homebank v=\"%.1f\">\n", FILE_VERSION);
 
 		homebank_prop_save_xml(fp);
 		homebank_acc_save_xml(fp);

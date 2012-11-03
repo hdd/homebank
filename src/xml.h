@@ -19,8 +19,16 @@
 #ifndef __HOMEBANK_XML_H__
 #define __HOMEBANK_XML_H__
 
-void homebank_load_xml(gchar *filename);
+gint homebank_load_xml(gchar *filename);
 void homebank_save_xml(gchar *filename);
+
+enum
+{
+	XML_OK,
+	XML_LOAD_ERROR,
+	XML_FILE_ERROR,
+	XML_VERSION_ERROR,
+};
 
 
 #endif /* __HOMEBANK_XML_H__ */

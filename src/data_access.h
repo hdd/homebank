@@ -34,6 +34,9 @@ struct _account
 {
 	guint	key;
 	gushort	flags;
+	
+	//todo: for stock account
+	//gushort	type;
 	gchar	*name;
 	gchar	*number;
 	gchar	*bankname;
@@ -41,12 +44,20 @@ struct _account
 	gdouble	minimum;
 	guint	cheque1;
 	guint	cheque2;
+	//currency ?
+	//note ?
+	/* non persitent datas */
+	GtkWindow	*window;	//dsp_account opened
 };
 
 #define AF_BUDGET	(1<<0)
 #define AF_CLOSED	(1<<1)
 #define AF_ADDED	(1<<2)
 #define AF_CHANGED	(1<<3)
+
+//todo: for stock account
+//#define ACC_TYPE_BANK	0
+//#define ACC_TYPE_STOCKS	1
 
 struct _payee
 {
@@ -111,7 +122,7 @@ struct _operation
 	guint	category;
 	gchar	*wording;
 	gchar	*info;
-	GList	*same;		//used for import
+	GList	*same;		//used for import todo: change this
 };
 
 #define OF_VALID	(1<<0)
@@ -122,6 +133,19 @@ struct _operation
 #define OF_REMIND	(1<<5)
 #define OF_CHEQ2	(1<<6)
 #define OF_LIMIT	(1<<7)
+
+struct _investment
+{
+	guint	date;
+	gdouble	buy_amount;
+	gdouble	curr_amount;
+	gdouble	commission;
+	guint	number;
+	guint	account;
+	gchar	*name;
+	gchar	*symbol;
+	gchar	*note;
+};
 
 
 /* secondary structures */

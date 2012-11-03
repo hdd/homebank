@@ -16,13 +16,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/* wallet/account update flags */
+/* wallet/account/import update flags */
 enum
 {
 	UF_TITLE     = 1 << 0,
 	UF_SENSITIVE = 1 << 1,
 	UF_BALANCE   = 1 << 2,
 	UF_VISUAL    = 1 << 3
+};
+
+/*
+** filter options
+*/
+enum
+{
+	FILTER_DATE,
+	FILTER_STATUS,
+	FILTER_PAYMODE,
+	FILTER_AMOUNT,
+	FILTER_ACCOUNT,
+	FILTER_CATEGORY,
+	FILTER_PAYEE,
+	//FILTER_TEXT,
+	FILTER_MAX
 };
 
 /*
@@ -53,21 +69,7 @@ enum
 	NUM_PAYMODE_MAX
 };
 
-/*
-** filter options
-*/
-enum
-{
-	FILTER_DATE,
-	FILTER_STATUS,
-	FILTER_PAYMODE,
-	FILTER_AMOUNT,
-	FILTER_ACCOUNT,
-	FILTER_CATEGORY,
-	FILTER_PAYEE,
-	//FILTER_TEXT,
-	FILTER_MAX
-};
+
 
 /*
 ** operation edit type
@@ -150,6 +152,8 @@ enum
 	LST_DEFACC_TOGGLE,
 	LST_DEFACC_DATAS,
 	LST_DEFACC_OLDPOS,
+	//todo: for stock account	
+	//LST_DEFACC_NEW,
 	NUM_LST_DEFACC
 };
 

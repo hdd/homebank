@@ -520,12 +520,20 @@ void repcar_setup(struct repcar_data *data)
 gboolean repcar_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct repcar_data *data = user_data;
+struct WinGeometry *wg;
 
 	DB( g_print("(repcar) dispose\n") );
 
 	da_carcost_destroy(data->car_list);
 
 	g_free(data);
+
+	//store position and size
+	wg = &PREFS->car_wg;
+	gtk_window_get_position(GTK_WINDOW(widget), &wg->l, &wg->t);
+	gtk_window_get_size(GTK_WINDOW(widget), &wg->w, &wg->h);
+	
+	DB( g_printf(" window: l=%d, t=%d, w=%d, h=%d\n", wg->l, wg->t, wg->w, wg->h) );
 
 	//enable define windows
 	GLOBALS->define_off--;
@@ -539,6 +547,7 @@ struct repcar_data *data = user_data;
 GtkWidget *repcar_window_new(void)
 {
 struct repcar_data *data;
+struct WinGeometry *wg;
 GtkWidget *window, *mainvbox, *hbox, *vbox, *treeview;
 GtkWidget *label, *widget, *table, *alignment;
 gint row, col;
@@ -764,9 +773,10 @@ gint row, col;
 		gtk_toolbar_set_style(GTK_TOOLBAR(data->TB_bar), PREFS->toolbar_style-1);
 	*/
 
-    /* finish & show */
-    gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
-
+	//setup, init and show window
+	wg = &PREFS->car_wg;
+	gtk_window_move(GTK_WINDOW(window), wg->l, wg->t);
+	gtk_window_resize(GTK_WINDOW(window), wg->w, wg->h);
 
 	gtk_widget_show_all (window);
 

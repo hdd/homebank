@@ -122,8 +122,8 @@ void statistic_busy(GtkWidget *widget, gboolean state);
 
 static GtkActionEntry entries[] = {
   { "List"    , "hb-stock-view-list" , N_("List")   , NULL,    N_("View results as list"), G_CALLBACK (statistic_action_viewlist) },
-  { "Bar"     , "hb-stock-view-bar"  , N_("Bar")    , NULL,    N_("View results as 2d-bars"), G_CALLBACK (statistic_action_viewbar) },
-  { "Pie"     , "hb-stock-view-pie"  , N_("Pie")    , NULL,    N_("View results as 2d-pies"), G_CALLBACK (statistic_action_viewpie) },
+  { "Bar"     , "hb-stock-view-bar"  , N_("Bar")    , NULL,    N_("View results as bars"), G_CALLBACK (statistic_action_viewbar) },
+  { "Pie"     , "hb-stock-view-pie"  , N_("Pie")    , NULL,    N_("View results as pies"), G_CALLBACK (statistic_action_viewpie) },
 
   { "Detail"  , "hb-stock-ope-show"  , N_("Detail") , NULL,    N_("Toggle detail"), G_CALLBACK (statistic_action_detail) },
   { "Legend"  , "hb-stock-legend"    , N_("Legend") , NULL,    N_("Toggle legend"), G_CALLBACK (statistic_action_legend) },
@@ -534,9 +534,8 @@ GtkTreeIter  iter;
 
 			//DB( g_print(" get %s\n", ope->ope_Word) );
 
-
 			//filter here
-			if( !(ope->flags & OF_REMIND) && ope->date >= data->filter->mindate && ope->date <= data->filter->maxdate)
+			if(filter_test(data->filter, ope) == 1)
 			{
 			gint pos = 0;
 
@@ -1107,6 +1106,10 @@ void statistic_setup(struct statistic_data *data)
 	statistic_toggle_rate(data->window, NULL);
 
 	filter_reset(data->filter);
+	
+	/* 3.4 : make int transfert out of stats */
+	data->filter->option[FILTER_PAYMODE] = 1;
+	data->filter->paymode[PAYMODE_PERSTRANSFERT] = FALSE;
 
 	/* if ope get date bounds */
 	if(g_list_length(GLOBALS->ope_list) > 0)
@@ -1183,12 +1186,22 @@ guint key;
 gboolean statistic_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct statistic_data *data = user_data;
+struct WinGeometry *wg;
 
 	DB( g_print("(statistic) dispose\n") );
 
 	da_filter_free(data->filter);
 
 	g_free(data);
+
+	//store position and size
+	wg = &PREFS->sta_wg;
+	gtk_window_get_position(GTK_WINDOW(widget), &wg->l, &wg->t);
+	gtk_window_get_size(GTK_WINDOW(widget), &wg->w, &wg->h);
+	
+	DB( g_printf(" window: l=%d, t=%d, w=%d, h=%d\n", wg->l, wg->t, wg->w, wg->h) );
+
+
 
 	//enable define windows
 	GLOBALS->define_off--;
@@ -1201,6 +1214,7 @@ struct statistic_data *data = user_data;
 GtkWidget *create_statistic_window(void)
 {
 struct statistic_data *data;
+struct WinGeometry *wg;
 GtkWidget *window, *mainvbox, *hbox, *vbox, *notebook, *treeview;
 GtkWidget *label, *widget, *table, *alignment, *vbar, *entry;
 gint row;
@@ -1474,16 +1488,14 @@ GError *error = NULL;
 	else
 		gtk_toolbar_set_style(GTK_TOOLBAR(data->TB_bar), PREFS->toolbar_style-1);
 
-    /* finish & show */
-    gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
-
+	//setup, init and show window
+	wg = &PREFS->sta_wg;
+	gtk_window_move(GTK_WINDOW(window), wg->l, wg->t);
+	gtk_window_resize(GTK_WINDOW(window), wg->w, wg->h);
 
 	gtk_widget_show_all (window);
 
-
 	statistic_busy(window, TRUE);
-
-
 
 	//minor ?
 	if( PREFS->euro_active )

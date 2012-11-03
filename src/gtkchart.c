@@ -104,6 +104,7 @@ struct mycolors colors[] =
 	{  91, 160, 154 },
 	{ 207,  93,  96 },
 	{  70, 136, 106 },
+	
 	{ 245, 163,  97 },
 	{ 158, 153,  88 },
 	{ 255, 140,  90 },
@@ -112,6 +113,7 @@ struct mycolors colors[] =
 	{ 185, 201, 149 },
 	{ 165,  99, 103 },
 	{  77, 140, 172 },
+	
 	{ 251, 228, 128 },
 	{  73,  99, 149 },
 	{ 192,  80,  77 },
@@ -440,6 +442,11 @@ double truc, base10, unit;
 */
 gchar *chart_print_int(GtkChart *chart, gint value)
 {
+
+	//mystrfmon(chart->buffer, CHART_BUFFER_LENGTH-1, (gdouble)value, chart->minor);
+	mystrfmon_int(chart->buffer, CHART_BUFFER_LENGTH-1, (gdouble)value, chart->minor);
+	
+	/*
 	if(chart->minor)
 	{
 		value *= chart->minor_rate;
@@ -448,6 +455,7 @@ gchar *chart_print_int(GtkChart *chart, gint value)
 	}
 	else
 		strfmon(chart->buffer, CHART_BUFFER_LENGTH-1, "%.0n", (gdouble)value);
+	*/
 
 	return chart->buffer;
 }
@@ -458,6 +466,9 @@ gchar *chart_print_int(GtkChart *chart, gint value)
 gchar *chart_print_double(GtkChart *chart, gdouble value)
 {
 
+	mystrfmon(chart->buffer, CHART_BUFFER_LENGTH-1, value, chart->minor);
+
+	/*
 	if(chart->minor)
 	{
 		value *= chart->minor_rate;
@@ -466,6 +477,7 @@ gchar *chart_print_double(GtkChart *chart, gdouble value)
 	}
 	else
 		strfmon(chart->buffer, CHART_BUFFER_LENGTH-1, "%n", (gdouble)value);
+	*/
 
 	return chart->buffer;
 }

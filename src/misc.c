@@ -45,6 +45,78 @@ gdouble fi;
 	return(fi);
 }
 
+gint mystrfmon_int(gchar *outstr, gint outlen, gdouble value, gboolean minor)
+{
+struct Currency *cur;
+gint size = 0;
+gchar buf1[G_ASCII_DTOSTR_BUF_SIZE];
+gchar groupbuf[G_ASCII_DTOSTR_BUF_SIZE];
+guint i, length;
+gchar *monstr;
+
+	cur = minor ? &PREFS->minor_cur : &PREFS->base_cur;	
+
+	g_ascii_formatd(buf1, sizeof (buf1), "%0.f", value);
+
+	length = strlen(buf1);
+	
+	if( cur->grouping_char == NULL )
+	{
+		monstr = buf1;
+	}
+	else
+	{
+	gchar *s = buf1;
+	gchar *d = groupbuf;
+
+		i = 0;
+		// avoid the - for negative amount
+		if( *s == '-')
+		{
+			*d++ = *s++;
+			length--;
+		}
+		
+		// do the grouping
+		do
+		{
+			if( i!=0 && (length % 3) == 0 )
+				*d++ = *cur->grouping_char;
+		
+			*d++ = *s;
+			length--;
+			i++;	
+		}
+		while (length && *s++ != '\0');
+		*d = 0;
+
+		monstr = groupbuf;
+
+	}
+
+	//debug
+	//g_print("mystrfmon %.2f %s [%d] %s\n", value, str_array[0], length, str_array[1] );
+	//g_print(" => %s :: %s\n", monstr, groupbuf);
+
+	if(monstr!=NULL)
+	{
+	gchar *ptr = outstr;
+	
+		//todo: improve this
+		if(cur->prefix_symbol != NULL) ptr = g_stpcpy(ptr, cur->prefix_symbol);
+		ptr = g_stpcpy(ptr, " ");
+		if(monstr != NULL) ptr = g_stpcpy(ptr, monstr);
+		ptr = g_stpcpy(ptr, " ");
+		if(cur->suffix_symbol != NULL) ptr = g_stpcpy(ptr, cur->suffix_symbol);
+	
+		
+		//strncpy(outstr, monstr, outlen-1);
+		
+		//g_free(monstr);
+	}
+
+	return size;
+}
 
 gint mystrfmon(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
@@ -67,12 +139,12 @@ gchar *monstr;
 
 	g_ascii_formatd(buf1, sizeof (buf1), cur->format, value);
 
-	str_array = g_strsplit(buf1, ".", 0);
+	str_array = g_strsplit(buf1, ".", 2);
 	monstr = NULL;
 
 	length = strlen(str_array[0]);
 	
-	if( cur->grouping_char == NULL )
+	if( cur->grouping_char == NULL || !strlen(cur->grouping_char) )
 	{
 		monstr = g_strjoinv(cur->decimal_char, str_array);
 	}
@@ -107,7 +179,7 @@ gchar *monstr;
 	}
 
 	//debug
-	//g_print("mystrfmon %.2f %s [%d] %s\n", value, str_array[0], length, str_array[1] );
+	//g_print("**\nmystrfmon %.2f\n 0=%s\n 1=%s\n [%d]\n", value, str_array[0], str_array[1], length );
 	//g_print(" => %s :: %s\n", monstr, groupbuf);
 
 	g_strfreev(str_array);

@@ -36,11 +36,13 @@ extern struct HomeBank *GLOBALS;
 /* = = = = = = = = = = = = = = = = = = = = */
 /* Account */
 
+//used :: def_account, imp_amiga, import, xml
 Account *da_account_malloc(void)
 {
 	return g_malloc0(sizeof(Account));
 }
 
+//used :: import
 Account *da_account_clone(Account *src_item)
 {
 Account *new_item = g_memdup(src_item, sizeof(Account));
@@ -66,6 +68,7 @@ void da_account_free(Account *item)
 	}
 }
 
+//used :: def_account, dsp_wallet, homebank, import
 void da_account_destroy(GList *list)
 {
 GList *tmplist = g_list_first(list);
@@ -368,6 +371,7 @@ GList *tmplist = g_list_first(list);
 /* = = = = = = = = = = = = = = = = = = = = */
 /* View populate */
 
+//used :: def_account, def_filter
 void populate_view_acc(GtkWidget *dst_view, GList *src_list, gboolean clone)
 {
 GtkTreeModel *model;
@@ -390,6 +394,9 @@ gint i;
 		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
 			LST_DEFACC_DATAS, item, 	//data struct
 			LST_DEFACC_OLDPOS, i,  		//oldpos
+
+		//todo: for stock account
+			//LST_DEFACC_NEW, FALSE,		//to filter type on def_account
 			-1);
 
 		//DB( g_printf(" populate_view_acc: %d %08x, %d\n", i, list->data, clone) );

@@ -10,9 +10,6 @@ archive.svg \
 budget.svg \
 category.svg \
 payee.svg \
-document-new.svg \
-document-open.svg \
-document-save.svg \
 filter.svg \
 homebank.svg \
 legend.svg \

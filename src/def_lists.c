@@ -139,6 +139,8 @@ GtkTreeViewColumn  *column;
 		G_TYPE_BOOLEAN,
 		G_TYPE_POINTER,
 		G_TYPE_UINT
+		//todo: for stock account
+		//G_TYPE_BOOLEAN
 		);
 
 	//treeview

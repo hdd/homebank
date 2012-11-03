@@ -1,0 +1,190 @@
+<html>
+<head>
+  <title>Transactions</title>
+  <meta name="Generator" content="GuideML 2.2">
+  <meta http-equiv="Content-Type" content="text/html">
+  <link rel="stylesheet" href="help.css">
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+    <td width="27"><a href="main.html"><img src="images/home.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="04acco.html"><img src="images/prev.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="04arch.html"><img src="images/next.gif" width="27" height="27" border="0"></a></td>
+  </tr>
+</table>
+<hr size="1">
+<h2>Transactions dialog</h2>
+
+<div class="gtkshot">
+<img src="images/04transaction1.png">
+</div>
+
+
+<p>
+The transaction dialog is used to add, edit and manage the <a href="02concepts.html#transactions">transactions</a>.<br>
+Read also the <a href="03transactions.html">working with transactions</a> to know more about HomeBank possibilities.
+</p>
+
+<h3>Dialog call</h3>
+This dialog can be called in the following way:
+<ul>
+<li>from the mainwindow-menu: Transaction / Add...
+<li>from the mainwindow-toolbar.
+<li>from the accountwindow-menu: Transaction / Add... / Inherit... / Edit...
+<li>from the accountwindow transaction list: by double-click on an oparation
+</ul>
+
+<p>
+<h3>Using transaction dialog</h3>
+<p>
+The 'Add' button enable to add an transaction and keep the transaction dialog open to add more transactions.
+</p>
+
+
+<h4><img src="images/1.png"> General infos</h4>
+<p>
+<div class="gtkgroup">
+  <table class="widgetinfo">
+    <tr>
+      <td class="wname">
+      Date
+      </td>
+      <td class="winfo">
+      date of the transaction (dd.mm.yy).<br>
+      - use shift key + arrow up/down to increase/decrease date.<br>
+      - the right side button popu a full calendar
+      </td>
+    </tr>
+    <tr>
+      <td class="wname">
+      Description
+      </td>
+      <td class="winfo">
+      description of transaction.<br>
+      and optionally carcost datas, see <a href="05cost.html">carcost</a>.
+      </td>
+    </tr>
+    <tr>
+      <td class="wname">
+      Amount
+      </td>
+      <td class="winfo">
+      amount of the transaction<br>
+      - the right side +/- button togle between expense/income
+      </td>
+    </tr>
+    <tr>
+      <td class="wname">
+      Account
+      </td>
+      <td class="winfo">
+      account the transaction should be attached to.
+      </td>
+    </tr>
+    <tr>
+      <td class="wname">
+      Validated
+      </td>
+      <td class="winfo">
+      when the transaction has been checked with your bank statement, you can mark transaction as 'validated'.<br>
+      the amount will be then integrated in the bank balance.
+      </td>
+    </tr>
+    <tr>
+      <td class="wname">
+      Remind
+      </td>
+      <td class="winfo">
+      when you are in add mode, if you set this option, an
+        transaction of the opposite amount will be inserted also (marked in the
+        list with an '!'), this is very useful when you lent money and don't want
+        to forget about it. The remind transaction are never computed into the balances
+        and are always displayed.
+
+      an transaction can be a transparent reminder when this is checked. See <a href="03transactions.html#remind">working with transaction</a>.
+      </td>
+    </tr>
+
+  </table>
+</div>
+
+
+<p>
+
+<h4><img src="images/2.png"> Optional infos</h4>
+<p>
+<div class="gtkgroup">
+  <table class="widgetinfo">
+    <tr>
+      <td class="wname">
+      Payement
+      </td>
+      <td class="winfo">
+      payement for the transaction. It will be diaplyed as small icons. Possible values are:
+      <ul>
+      	<li>credit card
+      	<li>cheque
+      	<li>cash
+      	<li>bank transfert
+      	<li>internal transfert
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="wname">
+      <br>
+      Of notebook 2<br>
+      To account
+      </td>
+      <td class="winfo">
+      these fields appears depending on the payement selected:<br>
+      for cheque: select the 2nd cheque notebook
+      for internal transfert: select the destination account
+      </td>
+    </tr>
+
+    <tr>
+      <td class="wname">
+      Info
+      </td>
+      <td class="winfo">
+      additional informations about payement, such as value date, numbers, cheque numbers.<br>
+      this is automatically filled for cheque numbers.
+      </td>
+    </tr>
+
+    <tr>
+      <td class="wname">
+      Payee
+      </td>
+      <td class="winfo">
+      payee of the transaction, see <a href="02concepts.html#payee">basic concepts</a> for further details.
+      </td>
+    </tr>
+
+    <tr>
+      <td class="wname">
+      Category
+      </td>
+      <td class="winfo">
+      category of the transaction, see <a href="02concepts.html#category">basic concepts</a> for further details.
+      </td>
+    </tr>
+
+
+    </table>
+</div>
+
+
+<p>
+
+<h4><img src="images/3.png"> Fill with archive</h4>
+<div class="gtkgroup">
+Select a source <a href="02concepts.html#archives">archive</a> to fill in the transaction dialog fields.
+</div>
+
+
+</body>
+</html>

@@ -34,6 +34,7 @@
 
 /* our global datas */
 extern struct HomeBank *GLOBALS;
+extern struct Preferences *PREFS;
 
 struct defoperation_data
 {
@@ -77,9 +78,9 @@ void defoperation_setup(struct defoperation_data *data);
 extern gchar *CYA_TYPE[];
 
 gchar *CYA_OPERATION[] = {
-	N_("Add operation(s)"),
-	N_("Inherit operation"),
-	N_("Modify operation")
+	N_("Add transaction"),
+	N_("Inherit transaction"),
+	N_("Modify transaction")
 };
 
 /*
@@ -183,6 +184,21 @@ gboolean sensitive, bool;
 	gtk_widget_set_sensitive(data->CM_remind, sensitive);
 	if(bool)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_remind), 0);
+
+	/* transfert integrity */
+	sensitive = TRUE;
+	if( data->type == OPERATION_EDIT_MODIFY && data->ope !=NULL )
+	{
+		if( data->ope->paymode == PAYMODE_PERSTRANSFERT )
+		{
+			sensitive = FALSE;
+		}
+	
+	}
+	gtk_widget_set_sensitive(data->PO_acc, sensitive);
+	gtk_widget_set_sensitive(data->PO_accto, sensitive);
+	gtk_widget_set_sensitive(data->NU_mode, sensitive);
+	
 }
 
 /*
@@ -228,6 +244,55 @@ gint n_arc;
 		gtk_combo_box_set_active(GTK_COMBO_BOX(data->PO_arc), 0);
 	}
 }
+
+void defoperation_update_child_transfert(Operation *src)
+{
+GList *list;
+Operation *dst;
+Account *acc;
+gboolean active;
+
+	DB( g_print("(defoperation) update child ransfert\n") );
+
+	DB( g_print(" search: %d %s %f %d=>%d\n", src->date, src->wording, src->amount, src->account, src->dst_account) );
+
+	dst = operation_get_child_transfert( src );
+	
+	if( dst == NULL )
+	{
+		/* warn the useer we have notfound the child internal transfert */
+		operation_warn_transfert( src, _("Could not propagate changes to child transfert:\n\n"
+			"account:  %s\n"
+			"date:  %s\n"
+			"amount:  %s\n"
+			"\nYou should fix the problem manually.") );
+	}
+	else
+	{
+
+		/* update the child transfert */
+		dst->date      = src->date;
+		dst->amount	  = -src->amount;
+		dst->payee	  = src->payee;
+		dst->category = src->category;
+		if( dst->wording ) { g_free(dst->wording); dst->wording = NULL; }
+		if( src->wording ) dst->wording = g_strdup(src->wording);
+		if( dst->info ) { g_free(dst->info); dst->info = NULL; }
+		if( src->info ) dst->info = g_strdup(src->info);
+
+		dst->flags ^= OF_INCOME;			
+		active = dst->amount > 0 ? TRUE : FALSE;
+		if(active == TRUE) dst->flags |= OF_INCOME;
+
+		/* mark account as changed */
+		acc = g_list_nth_data(GLOBALS->acc_list, src->dst_account);
+		if( acc)
+			acc->flags |= AF_CHANGED;
+	}
+
+}
+
+
 
 /*
 ** set widgets contents from the selected account
@@ -308,9 +373,39 @@ gint active;
 		entry->wording = g_strdup(txt);
 	}
 
+	entry->paymode    = gtk_combo_box_get_active(GTK_COMBO_BOX(data->NU_mode));
+
 	value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_amount));
 	entry->amount = value;
 
+	/* for internal transfert add, amount must be expense */
+	if( entry->paymode == PAYMODE_PERSTRANSFERT && data->type == OPERATION_EDIT_ADD )
+	{
+		if( entry->amount > 0 )
+			entry->amount *= -1;
+	}
+
+
+
+	//free any previous string
+	if(	entry->info )
+	{
+		g_free(entry->info);
+		entry->info = NULL;
+	}
+	txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_info));
+	// ignore if entry is empty
+	if (txt && *txt)
+	{
+		entry->info = g_strdup(txt);
+	}
+
+	entry->category   = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_grp));
+	entry->payee   = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_pay));
+	entry->account = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_acc));
+	entry->dst_account = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_accto));
+
+	/* flags */
 	entry->flags &= (OF_AUTO|OF_ADDED);
 
 	if(	data->type == OPERATION_EDIT_ADD || data->type == OPERATION_EDIT_INHERIT)
@@ -332,25 +427,10 @@ gint active;
 	active = entry->amount > 0 ? TRUE : FALSE;
 	if(active == TRUE) entry->flags |= OF_INCOME;
 
-	entry->paymode    = gtk_combo_box_get_active(GTK_COMBO_BOX(data->NU_mode));
-
-	//free any previous string
-	if(	entry->info )
+	if( entry->paymode == PAYMODE_PERSTRANSFERT && data->type == OPERATION_EDIT_MODIFY )
 	{
-		g_free(entry->info);
-		entry->info = NULL;
+		defoperation_update_child_transfert(entry);
 	}
-	txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_info));
-	// ignore if entry is empty
-	if (txt && *txt)
-	{
-		entry->info = g_strdup(txt);
-	}
-
-	entry->category   = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_grp));
-	entry->payee   = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_pay));
-	entry->account = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_acc));
-	entry->dst_account = gtk_combo_box_get_active(GTK_COMBO_BOX(data->PO_accto));
 
 }
 
@@ -451,11 +531,13 @@ void defoperation_setup(struct defoperation_data *data)
 
     gtk_window_set_title (GTK_WINDOW (data->window), _(CYA_OPERATION[data->type]));
 
-	make_poparchive_populate(GTK_COMBO_BOX(data->PO_arc), GLOBALS->arc_list);
 	make_poppayee_populate(GTK_COMBO_BOX(data->PO_pay), GLOBALS->pay_list);
 	make_popcategory_populate(GTK_COMBO_BOX(data->PO_grp), GLOBALS->cat_list);
 	make_popaccount_populate(GTK_COMBO_BOX(data->PO_acc), GLOBALS->acc_list);
 	make_popaccount_populate(GTK_COMBO_BOX(data->PO_accto), GLOBALS->acc_list);
+
+	if( data->type != OPERATION_EDIT_MODIFY )
+		make_poparchive_populate(GTK_COMBO_BOX(data->PO_arc), GLOBALS->arc_list);
 
 }
 
@@ -474,7 +556,7 @@ gint row;
 
 	row = 0;
 	label = make_label(NULL, 0.0, 0.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>General infos</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>General information</b>"));
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
 
 	row++;
@@ -491,7 +573,7 @@ gint row;
 	gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
 	row++;
-	label = gtk_label_new_with_mnemonic (_("_Wording:"));
+	label = gtk_label_new_with_mnemonic (_("_Description:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 	widget = make_string(label);
@@ -548,7 +630,7 @@ gint row;
 
 	row = 0;
 	label = make_label(NULL, 0.0, 0.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>Optional infos</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Optional information</b>"));
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
 
 	row++;
@@ -705,14 +787,19 @@ GtkWidget *alignment;
 	gtk_box_pack_start (GTK_BOX (hbox), alignment, TRUE, TRUE, 0);
 
 	//fill from
-	hbox = gtk_hbox_new (FALSE, HB_BOX_SPACING);
-	gtk_box_pack_start (GTK_BOX (mainbox), hbox, FALSE, FALSE, 0);
+	if( type != OPERATION_EDIT_MODIFY )
+	{
+		hbox = gtk_hbox_new (FALSE, HB_BOX_SPACING);
+		gtk_box_pack_start (GTK_BOX (mainbox), hbox, FALSE, FALSE, 0);
 
-	label = make_label(_("_Fill with archive:"), 0, 0.5);
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-	widget = make_poparchive(label);
-	data->PO_arc = widget;
-	gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+		label = make_label(_("_Fill with archive:"), 0, 0.5);
+		gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+		widget = make_poparchive(label);
+		data->PO_arc = widget;
+		gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+
+		g_signal_connect (data->PO_arc, "changed", G_CALLBACK (defoperation_fillfrom), NULL);
+	}
 
 	//connect all our signals
 	// connect our dispose function
@@ -731,7 +818,6 @@ GtkWidget *alignment;
 
 	g_signal_connect (data->CM_valid, "toggled", G_CALLBACK (defoperation_update), NULL);
 
-	g_signal_connect (data->PO_arc, "changed", G_CALLBACK (defoperation_fillfrom), NULL);
 
 
 

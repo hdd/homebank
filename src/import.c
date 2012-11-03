@@ -243,7 +243,7 @@ static gint csvtype[7] = {
 	/*
 		homebank_message_dialog(data->window, error > 0 ? GTK_MESSAGE_ERROR : GTK_MESSAGE_INFO,
 			_("Operation CSV import result"),
-			_("%d operation(s) inserted\n%d error(s) in the file"),
+			_("%d operations inserted\n%d errors in the file"),
 			count, error);
 		*/ 
 	}
@@ -696,12 +696,12 @@ gint page_number;
 				break;
 #ifndef NOOFX
 			case FILETYPE_OFX:
-				gtk_label_set_text(GTK_LABEL(data->user_info), _("OFX file recognized !"));
+				gtk_label_set_text(GTK_LABEL(data->user_info), _("OFX file recognised !"));
 				data->valid = TRUE;
 				break;
 #endif
 			case FILETYPE_CSV_HB:
-				gtk_label_set_text(GTK_LABEL(data->user_info), _("CSV operation file recognized !"));
+				gtk_label_set_text(GTK_LABEL(data->user_info), _("CSV operation file recognised !"));
 				data->valid = TRUE;
 				break;
 		
@@ -1119,9 +1119,9 @@ gint accnum;
 			{
 			txt = g_strdup_printf(
 				_(
-				"%d account(s) will be created.\n\n" \
-				"%d operation(s) will be imported.\n" \
-				"%d operation(s) will be rejected."
+				"%d accounts will be created.\n\n" \
+				"%d transactions will be imported.\n" \
+				"%d transactions will be rejected."
 				),
 				g_list_length(ofx_acc_list),
 				data->imported,
@@ -1133,8 +1133,8 @@ gint accnum;
 			{
 			txt = g_strdup_printf(
 				_(
-				"%d operation(s) will be imported.\n" \
-				"%d operation(s) will be rejected."
+				"%d transactions will be imported.\n" \
+				"%d transactions will be rejected."
 				),
 				data->imported,
 				data->total-data->imported
@@ -1190,12 +1190,12 @@ GdkPixbuf *pixbuf;
 
 	label = make_label(_(
 	
-		"HomeBank can import operations from several file format:\n" \
+		"HomeBank can import transactions from several file formats:\n" \
 		"\n" \
-		"- CSV (Homebank operation csv export format only)\n" \
+		"- CSV (Homebank transaction CSV export format only)\n" \
 		"- OFX/QFX (optional)\n" \
 		"\n" \
-		"Other formats or not supported for the moment.\n" \
+		"Other formats or not supported at the moment.\n" \
 		"\n" \
 		"The import process has several steps. Your HomeBank accounts\n" \
 		"will not be changed until you click \"Apply\" at the end of this assistant.\n" \
@@ -1209,7 +1209,7 @@ GdkPixbuf *pixbuf;
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), vbox);
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), vbox, GTK_ASSISTANT_PAGE_INTRO);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), vbox, TRUE);
-  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), vbox, _("Operation import wizard"));
+  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), vbox, _("Transaction import wizard"));
 
 #if SIDE_IMAGE == 1
   pixbuf = gdk_pixbuf_new_from_file (PIXMAPS_DIR "/wizard.svg", NULL);
@@ -1269,10 +1269,10 @@ GdkPixbuf *pixbuf;
 	gtk_container_set_border_width (GTK_CONTAINER(vbox), HB_MAINBOX_SPACING);
 
 	label = make_label(
-_("The file you selected appears to contains operations\n\
+_("The file you selected appears to contains transactions\n\
 for just one account, without specifying its name.\n\n\
-Please select the account to attach thoses operations to.")
-		, 0.5, 0.5);
+Please select the account to which these transactions can \
+be attached.")		, 0.5, 0.5);
 		
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
@@ -1316,8 +1316,8 @@ GdkPixbuf *pixbuf;
 	gtk_container_set_border_width (GTK_CONTAINER(vbox), HB_MAINBOX_SPACING);
 
 	label = make_label(_(
-		"Duplicate operations will be found and unselected\n" \
-		"for import and can of course be reselected.\n"
+		"Duplicate transactions will be found and unselected\n" \
+		"for import but can, of course, be reselected.\n"
 		"\n" \
 		"The match is done in order by account, amount and date.\n" \
 		"For date, you can set a tolerance:\n\n" \
@@ -1365,7 +1365,7 @@ GdkPixbuf *pixbuf;
 	gtk_container_set_border_width (GTK_CONTAINER(vbox), HB_MAINBOX_SPACING);
 
 	label = make_label(NULL, 0.0, 1.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>Operations to import</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Transactions to import</b>"));
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 	
 	//list
@@ -1380,7 +1380,7 @@ GdkPixbuf *pixbuf;
 	gtk_container_add (GTK_CONTAINER (sw), widget);
 
 	label = make_label(NULL, 0.0, 1.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>Possible duplicate for the above selected operation</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Possible duplicate for the above selected transaction</b>"));
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
    /* Create the expander */
@@ -1408,7 +1408,7 @@ GdkPixbuf *pixbuf;
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), vbox);
   //gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), vbox, GTK_ASSISTANT_PAGE_CONFIRM);
   //gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), vbox, TRUE);
-  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), vbox, _("Select operations to import"));
+  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), vbox, _("Select transactions to import"));
 
 #if SIDE_IMAGE == 1
   pixbuf = gdk_pixbuf_new_from_file (PIXMAPS_DIR "/wizard.svg", NULL);

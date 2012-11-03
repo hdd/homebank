@@ -1026,7 +1026,7 @@ gint row;
 
 	row++;
 	label = make_label(NULL, 0.0, 0.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>Measure units</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Measurement units</b>"));
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
 
 	row++;
@@ -1056,7 +1056,7 @@ gint row;
 
 	row = 0;
 	label = make_label(NULL, 0.0, 0.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>Operation list</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Transaction list</b>"));
 	gtk_table_attach (GTK_TABLE (table), label, 0, 3, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
 	row++;
@@ -1684,7 +1684,7 @@ static struct {
 //	{	N_(""), COL_OPE_DATE,		},
 	{	N_("Info"    ), COL_OPE_INFO,		},
 	{	N_("Payee"   ), COL_OPE_PAYEE,		},
-	{	N_("Wording" ), COL_OPE_WORDING,	},
+	{	N_("Description" ), COL_OPE_WORDING,	},
 	{	N_("Amount"  ), COL_OPE_AMOUNT,		},
 	{	N_("Expense" ), COL_OPE_EXPENSE,	},
 	{	N_("Income"  ), COL_OPE_INCOME,		},

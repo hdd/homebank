@@ -1,0 +1,125 @@
+<html>
+<head>
+  <title>Accounts</title>
+  <meta name="Generator" content="GuideML 2.2">
+  <meta http-equiv="Content-Type" content="text/html">
+  <link rel="stylesheet" href="help.css">
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+    <td width="27"><a href="main.html"><img src="images/home.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="main.html"><img src="images/prev.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="02balance.html"><img src="images/next.gif" width="27" height="27" border="0"></a></td>
+  </tr>
+</table>
+<hr size="1" color="#000000">
+
+<h2>Basic concepts</h2>
+
+<p>
+This section is intended to give you a brief introduction to the basic concepts and terminology
+you will need to understand in order to make sense to the rest of the documentation.
+</p>
+
+<div class="concept">
+
+
+<a name="wallet"></a>
+<h3>Wallet</h3>
+<p>
+HomeBank wallet is the 1st level of the data hierarchy. A wallet is equivalent to a HomeBank file (.xhb).<br>
+Managing the few wallet properties is done in the <a href="04wall.html">Wallet dialog</a>.
+</p>
+
+<a name="accounts"></a>
+<h3>Accounts</h3>
+<p>
+HomeBank accounts is the 2nd level of the datas. A account is a division of the wallet, which will each
+contain your financial transactions.<br>
+Managing the accounts is done in the <a href="04acco.html">Accounts dialog</a>.
+</p>
+
+
+
+<a name="transactions"></a>
+<h3>Transactions</h3>
+<p>
+HomeBank transactions is the terminal level of datas. A transaction is a financial transaction, attached to its
+own account.
+</p>
+<p>
+In addition to the usual datas you can find in most accounting application, HomeBank offers the following:
+<ul>
+<li>payment: small image showing the payment mode
+<li>info: miscellaneous datas for payment, like date, cheque number and so on
+<li>remind state: to keep track of debt
+<li>carcost datas: description field can contain datas for your car refuels
+</ul>
+</p>
+<p>
+Managing transactions is done in the <a href="03main.html">main window</a> or the <a href="03account.html">account window</a>.
+</p>
+
+
+<a name="archives"></a>
+<h3>Archives</h3>
+<p>
+Archives is a kind of transaction bookmark, with an optional automated insertion.<br>
+Typically such transactions are the ones's occuring very often, for example: <i>Wage, Rent, Phone, Taxes, etc</i>...
+</p>
+<p>
+Managing archives is done in the <a href="04arch.html">Archive dialog</a>. If automated insertion is enable, transactions occurences
+will be created when you open the wallet, or by manually selecting the mainwindow-menu: Transaction / Check automated.
+</p>
+<p>
+Archives can also be created from existing transactions from the <a href="03account.html">Account window</a>.<br>
+Every archive is available as a bookmark for prefill purpose in the <a href="04tran.html">Transaction dialog</a>.
+</p>
+
+
+
+<a name="payees"></a>
+<h3>Payees</h3>
+<p>
+A payee can optionally be set for each transaction to later perform sorting, filtering and analysis.
+The payee identify people you give money to, as like as those you receive money from.<br>
+Managing payees is done on the <a href="04paye.html">Payee dialog</a>. Payees are global to the wallet
+and are shared between all the accounts.
+</p>
+
+
+<a name="categories">
+<h3>Categories</h3></a>
+
+<p>
+A category can optionally set for each transaction to later perform sorting, filtering and analysis.
+The categories is another classification model of your financial transactions.<br>
+Managing categories is done on the <a href="04cate.html">Caregories dialog</a>. Categories are global to the wallet
+and are shared between all the accounts.
+</p>
+<p>
+Please also note well that categories and subcategories are the same from a HomeBank point of view, the subcategories
+are only to create a hierarchy in category tree. This is especially important for the <a href="04bud1.html">budget dialog</a>
+</p>
+
+
+
+<a name="budget"></a>
+<h3>Budget</h3>
+
+<p>
+The budget is axed toward a report point of view. You will set up some limits to each categories for later
+compare the decay between these limits and the reality of the expense/income of each categories.
+</p>
+<p>
+Managing the budget is done in the <a href="04bud1.html">Budget dialog</a>. The budget is global to the wallet,so if you need to
+manage a different budget each year, you can use csv import/export capabilities.
+</p>
+
+</div>
+
+
+ </body>
+</html>

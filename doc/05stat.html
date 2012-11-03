@@ -1,0 +1,139 @@
+<html>
+<head>
+  <title>Statistics</title>
+  <meta name="Generator" content="GuideML 2.2">
+  <meta http-equiv="Content-Type" content="text/html">
+  <link rel="stylesheet" href="help.css">
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+    <td width="27"><a href="main.html"><img src="images/home.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="04pref.html"><img src="images/prev.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="05bud2.html"><img src="images/next.gif" width="27" height="27" border="0"></a></td>
+  </tr>
+</table>
+<hr size="1" color="#000000">
+
+<h2>Statistics report</h2>
+
+<div class="gtkshot">
+<img src="images/05statistics1.png">
+</div>
+
+<p>
+The statistics report is the main analysis part of HomeBank. Its will allow to focus on your financial flow in the details 
+instantly and dynamically by filtering on every axis and displaying the results for a period.
+</p>
+
+<p>
+The main view axis is on Category, Payee, Month, Year, with a possibility to focus on Expense, Income, or Balance; then a complete
+filter is also possible on transactions, see the <a href="99filt.html">filter dialog</a> for details.
+</p>
+
+<p>
+Results are displayed in 3 ways: listview, bars, pie.<br>
+At last, you can display every transactions detail of the selected view (Category, Payee, Month, Year).<br>
+A tooltip will appear on every bar/pie after a little delay,or by pressing the left mousebutton.
+</p>
+
+<h3>Window call</h3>
+This report can be called in the following way:
+<ul>
+<li>from the mainwindow-menu: Report / Statistics
+<li>from the mainwindow-toolbar.
+</ul>
+
+<h3>Using statistics report</h3>
+
+<h4><img src="images/1.png"> Display</h4>
+<div class="gtkgroup">
+  <table class="widgetinfo">
+    <tr>
+      <td class="wname">For</td>
+      <td class="winfo">
+      specify the item the result should be computed for:
+      <ul>
+      	<li>Category
+      	<li>Payee
+      	<li>Month
+      	<li>Year
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="wname">View</td>
+      <td class="winfo">
+      filter the result to: Expense, Income or Balance. Items with no results, or equal to 0 will not be displayed
+      </td>
+    </tr>
+    <tr>
+      <td class="wname">By amount</td>
+      <td class="winfo">
+      sort the result by amount instead of the default order alphabetical for Category/Payee or chronological for Month/Year
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h4><img src="images/2.png"> Date filter</h4>
+<div class="gtkgroup">
+
+  <table class="widgetinfo">
+    <tr>
+      <td class="wname">From / To</td>
+      <td class="winfo">
+		specify date bound limit to restrict the results to
+      </td>
+    </tr>
+
+    <tr>
+      <td class="wname">Range / Month / Year</td>
+      <td class="winfo">
+		fastly select a date with predefined range, or specific month and/or year
+      </td>
+    </tr>
+
+  </table>
+  
+</div>
+
+<h4><img src="images/3.png"> Toolbar</h4>
+<div class="gtkgroup">
+The toolbar is the main control of the display. All toobutton have a tooltip that will help you know what
+action will be launched when you click on the toolbutton.
+</div>
+
+<h4><img src="images/4.png"> Total</h4>
+<div class="gtkgroup">
+This is the total of columns of the listview for: Expense, Income, Balance.
+</div>
+
+<h4><img src="images/5.png"> Result list</h4>
+<div class="gtkgroup">
+The result list display the computed amounts according to the current selection and filter.
+</div>
+
+<h4><img src="images/6.png"> Transaction detail list</h4>
+<div class="gtkgroup">
+The transaction detail list will show every transaction of the selected item in the above result list.<br>
+By default it is not visible. Use the toolbar 'Toggle detail' button for changing this.<br>
+You can also default keep it visible in the <a href="04pref.html#tab6">Preference dialog</a>
+
+</div>
+
+<h3>Other screen shots</h3>
+
+<h4>Bar display</h4>
+<div class="gtkshot">
+<img src="images/05statistics2.png">
+</div>
+
+<h4>Pie display</h4>
+<div class="gtkshot">
+<img src="images/05statistics3.png">
+</div>
+
+</body>
+</html>

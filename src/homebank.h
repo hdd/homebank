@@ -58,18 +58,8 @@
 //#define PROGVERSION		"3.2"
 
 
-#define FILE_VERSION	"0.1"
-#define PREF_VERSION	"0.2"
+#define FILE_VERSION	0.1
 
-#define DEFAULT_PATH_WALLET			"/home/max/dev/gnomebank/accounts"
-#define DEFAULT_PATH_NAVIGATOR		"mozilla"
-
-#define DEFAULT_FORMAT_DECIMAL		"%.2f"
-#define DEFAULT_FORMAT_DATE			"%x"
-
-#define DEFAULT_EXP_COLOR		0xE88C00
-#define DEFAULT_INC_COLOR		0x00C800
-#define DEFAULT_WARN_COLOR		0XC80000
 
 
 /* for operatio dialog */

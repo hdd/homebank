@@ -1,0 +1,119 @@
+<html>
+<head>
+  <title>Payees</title>
+  <meta name="Generator" content="GuideML 2.2">
+  <meta http-equiv="Content-Type" content="text/html">
+  <link rel="stylesheet" href="help.css">
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+    <td width="27"><a href="main.html"><img src="images/home.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="03carcost.html"><img src="images/prev.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="04wall.html"><img src="images/next.gif" width="27" height="27" border="0"></a></td>
+  </tr>
+</table>
+<hr size="1" color="#000000">
+
+<h2>CSV file format</h2>
+
+<p>
+With HomeBank you can import/export some of the internal datas in the most common file format that is CSV.
+</p>
+<p>
+The format used for the different files is specific to HomeBank, so don't expect to import files your bank should offers you
+directly, you will need to arrange it a little in a tabler like gnumeric before.
+</p>
+<p>
+This part was fast coded with few test, so it may crash if the file does not reflect the expected format.
+ This will of course be fixed in later version.
+</p>
+
+<p>
+Below is a description with example of the CSV format that HomeBank uses.
+</p>
+
+<a name="pay"><h3>Payee</h3></a>
+<p>
+<pre>
+	Column list:
+	<i>payee_name</i><br>
+</pre>
+
+Example:
+<div class="csvexample">
+	payee_name1
+	payee_name2
+	...
+</div>
+</p>
+
+<a name="cat"><h3>Category</h3></a>
+<p>
+<pre>
+	Column list:
+	<i>level;type;category_name</i>
+
+	Values:
+	level => 1:category, 2:subcategory
+	type  => -:expense, +:income
+</pre>
+
+Example:
+<div class="csvexample">
+	1;-;Food
+	2; ;Grocer
+	2; ;Restaurant
+	1;+;Wage
+	...
+</div>
+
+</p>
+
+<a name="bud"><h3>Budget</h3></a>
+<p>
+<pre>
+	Column list:
+	<i>type;category_name;value(s)</i>
+
+	Values:
+	type     => *:monthly, <i>blank</i>:custom
+	value(s) => a single if typeis monthly, 12 ';' separated otherwise
+</pre>
+
+Example:
+<div class="csvexample">
+	*;Fuel;45.00
+	    ;Domestic animals;1.00;2.00;3.00;4.00;...
+	*;Food;17.00
+	...
+</div>
+</p>
+
+<a name="ope"><h3>Transaction</h3></a>
+<p>
+<pre>
+	Column list:
+	<i>date;mode;info;payee;description;amount;category</i>
+
+	Values:
+	date     => format should be DD-MM-YY
+	mode     => from 0=none to 5=personal transfert
+	info     => a string (16car max.)
+	payee    => a payee name
+	description  => a string (32car max.)
+	amount   => a number with a '.' as decimal seperator, ex: -24.12 or 36.75
+	category => a category name
+</pre>
+
+Example:
+<div class="csvexample">
+	15-02-04;0;;;Some cash;-40,00;Withdrawal of cash
+	15-02-04;1;;;Internet DSL;-45,00;In line service/Internet
+	...
+</div>
+
+</p>
+</body>
+</html>

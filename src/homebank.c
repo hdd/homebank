@@ -174,12 +174,12 @@ gboolean retval;
 
 	if( action == GTK_FILE_CHOOSER_ACTION_OPEN )
 	{
-		title = _("Import from csv");
+		title = _("Import from CSV");
 		button = GTK_STOCK_OPEN;
 	}
 	else
 	{
-		title = _("Export as csv");
+		title = _("Export as CSV");
 		button = GTK_STOCK_SAVE;
 	}
 
@@ -210,10 +210,10 @@ gboolean retval;
 		DB( g_printf("- filename: %s\n", filename) );
 
 		//store filename
-		g_free(*storage_ptr);
+		//g_free(*storage_ptr);
 		*storage_ptr = filename;
 
-		DB( g_printf("- filename: %s\n", GLOBALS->filename) );
+		//DB( g_printf("- filename: %s\n", GLOBALS->filename) );
 
 
 		retval = TRUE;
@@ -752,8 +752,8 @@ void homebank_cleanup()
 
 	DB( g_print("\n(homebank) cleanup\n") );
 
-	//debug
-	//homebank_pref_save();
+	//v3.4 save windows size/position
+	homebank_pref_save();
 
 	homebank_lastopenedfiles_save();
 
@@ -990,16 +990,22 @@ gboolean openlast;
 
 		if(mainwin)
 		{
+		struct WinGeometry *wg;
+		
 			//setup, init and show window
-			//gtk_window_resize(GTK_WINDOW(mainwin), 640, 480);
-			gtk_window_maximize(GTK_WINDOW(mainwin));
+			wg = &PREFS->wal_wg;
+			gtk_window_move(GTK_WINDOW(mainwin), wg->l, wg->t);
+			gtk_window_resize(GTK_WINDOW(mainwin), wg->w, wg->h);
+
+			//pause
+			g_usleep( G_USEC_PER_SEC * 1.5 );
+			gtk_widget_hide(splash);
 
 		    gtk_widget_show_all (mainwin);
 
 			while (gtk_events_pending ()) /* make sure splash is gone */
 				gtk_main_iteration ();
 
-			gtk_widget_hide(splash);
 
 			// load a file ?
 			/* load 1st file specified on commandline */

@@ -81,7 +81,7 @@ void defpayee_real_add(struct defpayee_data *data, gchar *name);
 static void defpayee_load_csv( GtkWidget *widget, gpointer user_data)
 {
 struct defpayee_data *data;
-gchar *filename;
+gchar *filename = NULL;
 GIOChannel *io;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(widget), GTK_TYPE_WINDOW)), "inst_data");
@@ -123,6 +123,8 @@ GIOChannel *io;
 			g_io_channel_unref (io);
 		}
 
+		g_free( filename );
+
 	}
 }
 
@@ -132,7 +134,7 @@ GIOChannel *io;
 static void defpayee_save_csv( GtkWidget *widget, gpointer user_data)
 {
 struct defpayee_data *data;
-gchar *filename;
+gchar *filename = NULL;
 GtkTreeModel *model;
 GtkTreeIter	iter;
 gboolean valid;
@@ -179,6 +181,8 @@ GIOChannel *io;
 
 			g_io_channel_unref (io);
 		}
+
+		g_free( filename );
 
 	}
 

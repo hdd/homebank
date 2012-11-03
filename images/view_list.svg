@@ -14,7 +14,7 @@
    id="svg1315"
    sodipodi:version="0.32"
    inkscape:version="0.45"
-   sodipodi:docbase="/home/max/dev/homebank/homebank/images"
+   sodipodi:docbase="/home/max/dev/homebank/gfx/gnome-theme"
    sodipodi:docname="view_list.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    sodipodi:modified="true">
@@ -703,7 +703,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="9.6167883"
      inkscape:cx="11.985863"
-     inkscape:cy="28.504003"
+     inkscape:cy="24.34461"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="false"
@@ -711,7 +711,7 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-width="1024"
-     inkscape:window-height="690"
+     inkscape:window-height="689"
      inkscape:window-x="0"
      inkscape:window-y="25" />
   <metadata
@@ -729,22 +729,22 @@
           </cc:Agent>
         </dc:creator>
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+           rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
       </cc:Work>
       <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/2.5/">
+         rdf:about="http://creativecommons.org/licenses/GPL/2.0/">
         <cc:permits
            rdf:resource="http://web.resource.org/cc/Reproduction" />
         <cc:permits
            rdf:resource="http://web.resource.org/cc/Distribution" />
         <cc:requires
            rdf:resource="http://web.resource.org/cc/Notice" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/Attribution" />
         <cc:permits
            rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
         <cc:requires
            rdf:resource="http://web.resource.org/cc/ShareAlike" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/SourceCode" />
       </cc:License>
     </rdf:RDF>
   </metadata>
@@ -754,7 +754,7 @@
      inkscape:groupmode="layer">
     <g
        id="g2477"
-       transform="translate(58.705882,4.3529406)">
+       transform="matrix(0.9380201,0,0,0.9380201,56.554815,6.5706637)">
       <path
          d="M -11.64229,34.631941 C -11.640638,38.720183 -21.920379,42.034639 -34.60165,42.034639 C -47.282921,42.034639 -57.56266,38.720183 -57.561009,34.631941 C -57.56266,30.543699 -47.282921,27.229243 -34.60165,27.229243 C -21.920379,27.229243 -11.640638,30.543699 -11.64229,34.631941 L -11.64229,34.631941 z "
          style="opacity:0.56725147;color:#000000;fill:url(#radialGradient2496);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"

@@ -50,13 +50,13 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_homebank_OBJECTS = gtkchart.$(OBJEXT) gtkdateentry.$(OBJEXT) \
-	amiga.$(OBJEXT) data_access.$(OBJEXT) def_account.$(OBJEXT) \
+	data_access.$(OBJEXT) def_account.$(OBJEXT) \
 	def_archive.$(OBJEXT) def_budget.$(OBJEXT) \
 	def_category.$(OBJEXT) def_filter.$(OBJEXT) \
 	def_lists.$(OBJEXT) def_operation.$(OBJEXT) \
 	def_payee.$(OBJEXT) def_pref.$(OBJEXT) def_wallet.$(OBJEXT) \
 	dsp_account.$(OBJEXT) dsp_wallet.$(OBJEXT) homebank.$(OBJEXT) \
-	import.$(OBJEXT) list_account.$(OBJEXT) \
+	imp_amiga.$(OBJEXT) import.$(OBJEXT) list_account.$(OBJEXT) \
 	list_operation.$(OBJEXT) list_upcoming.$(OBJEXT) \
 	misc.$(OBJEXT) preferences.$(OBJEXT) rep_budget.$(OBJEXT) \
 	rep_car.$(OBJEXT) rep_over.$(OBJEXT) rep_stats.$(OBJEXT) \
@@ -214,7 +214,6 @@ target_alias = @target_alias@
 homebank_SOURCES = \
 gtkchart.c \
 gtkdateentry.c \
-amiga.c \
 data_access.c \
 def_account.c \
 def_archive.c \
@@ -229,6 +228,7 @@ def_wallet.c \
 dsp_account.c \
 dsp_wallet.c \
 homebank.c \
+imp_amiga.c \
 import.c \
 list_account.c \
 list_operation.c \
@@ -241,7 +241,6 @@ rep_over.c \
 rep_stats.c \
 widgets.c \
 xml.c \
-amiga.h \
 data_access.h \
 def_account.h \
 def_archive.h \
@@ -259,6 +258,7 @@ enums.h \
 gtkchart.h \
 gtkdateentry.h \
 homebank.h \
+imp_amiga.h \
 import.h \
 list_account.h \
 list_operation.h \
@@ -276,7 +276,8 @@ homebank_LDADD = $(DEPS_LIBS)
 AM_CPPFLAGS = \
 $(DEPS_CFLAGS) \
 -DLOCALE_DIR=\""$(datadir)/locale"\" \
--DPIXMAPS_DIR=\""$(datadir)/homebank/images"\"
+-DPIXMAPS_DIR=\""$(datadir)/homebank/images"\" \
+-DHELP_DIR=\""$(datadir)/homebank/help"\"
 
 all: all-am
 
@@ -344,7 +345,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/amiga.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/data_access.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/def_account.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/def_archive.Po@am__quote@
@@ -361,6 +361,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gtkchart.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gtkdateentry.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/homebank.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imp_amiga.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/import.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list_account.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list_operation.Po@am__quote@

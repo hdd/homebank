@@ -120,6 +120,8 @@ extern gchar *CYA_SELECT[];
 
 
 /* our functions prototype */
+static void account_action_close(GtkAction *action, gpointer user_data);
+
 static void account_action_editfilter(GtkAction *action, gpointer user_data);
 
 static void account_action_add(GtkAction *action, gpointer user_data);
@@ -155,21 +157,24 @@ void account_onRowActivated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeVi
 static GtkActionEntry entries[] = {
 
   /* name, stock id, label */
-  { "OperationMenu", NULL, N_("_Operation") },
+  { "AccountMenu"  , NULL, N_("_Account") },
+  { "OperationMenu", NULL, N_("Transacti_on") },
   { "ToolsMenu"    , NULL, N_("_Tools") },
+
+  { "Close"      , GTK_STOCK_CLOSE          , N_("_Close")        , NULL, N_("Close the current account"),    G_CALLBACK (account_action_close) },
 
 	/* name, stock id, label, accelerator, tooltip */
   { "Filter"       , "hb-stock-filter", N_("_Filter..."), NULL,    N_("Open the list filter"), G_CALLBACK (account_action_editfilter) },
 
-  { "Add"          , "hb-stock-ope-add", N_("_Add..."), NULL,    N_("Add a new operation"), G_CALLBACK (account_action_add) },
-  { "Inherit"      , "hb-stock-ope-herit", N_("_Inherit..."), NULL, N_("Inherit from active operation"), G_CALLBACK (account_action_inherit) },
-  { "Edit"         , "hb-stock-ope-edit", N_("_Edit..."), NULL, N_("Edit active operation"),  G_CALLBACK (account_action_edit) },
-  { "Validate"     , "hb-stock-ope-valid", N_("(De)_Validate..."), NULL,    N_("Validate active operation(s)"), G_CALLBACK (account_action_validate) },
-  { "Remove"       , "hb-stock-ope-delete", N_("_Remove..."), NULL,    N_("Remove active operation(s)"), G_CALLBACK (account_action_remove) },
+  { "Add"          , "hb-stock-ope-add", N_("_Add..."), NULL,    N_("Add a new transaction"), G_CALLBACK (account_action_add) },
+  { "Inherit"      , "hb-stock-ope-herit", N_("_Inherit..."), NULL, N_("Inherit from the active transaction"), G_CALLBACK (account_action_inherit) },
+  { "Edit"         , "hb-stock-ope-edit", N_("_Edit..."), NULL, N_("Edit the active transaction"),  G_CALLBACK (account_action_edit) },
+  { "Validate"     , "hb-stock-ope-valid", N_("(In)_Validate..."), NULL,    N_("Validate the active transactions"), G_CALLBACK (account_action_validate) },
+  { "Remove"       , "hb-stock-ope-delete", N_("_Remove..."), NULL,    N_("Remove the active transactions"), G_CALLBACK (account_action_remove) },
   { "MakeArchive"  , NULL, N_("Make an archive..."), NULL,    NULL, G_CALLBACK (account_action_createarchive) },
 
-  { "Import"       , NULL, N_("Import csv..."), NULL,    NULL, G_CALLBACK (account_action_importcsv) },
-  { "Export"       , NULL, N_("Export csv..."), NULL,    NULL, G_CALLBACK (account_action_exportcsv) },
+  { "Import"       , NULL, N_("Import CSV..."), NULL,    NULL, G_CALLBACK (account_action_importcsv) },
+  { "Export"       , NULL, N_("Export CSV..."), NULL,    NULL, G_CALLBACK (account_action_exportcsv) },
 
 };
 static guint n_entries = G_N_ELEMENTS (entries);
@@ -177,6 +182,9 @@ static guint n_entries = G_N_ELEMENTS (entries);
 static const gchar *ui_info =
 "<ui>"
 "  <menubar name='MenuBar'>"
+"    <menu action='AccountMenu'>"
+"      <menuitem action='Close'/>"
+"    </menu>"
 "    <menu action='OperationMenu'>"
 "      <menuitem action='Add'/>"
 "      <menuitem action='Inherit'/>"
@@ -209,6 +217,23 @@ static const gchar *ui_info =
 
 
 /* account action functions -------------------- */
+static void account_action_close(GtkAction *action, gpointer user_data)
+{
+struct account_data *data = user_data;
+gboolean result;
+
+	DB( g_print("action close\n") );
+
+	DB( g_print("window %x\n", data->window) );
+
+	gtk_widget_destroy (GTK_WIDGET (data->window));
+	
+	//g_signal_emit_by_name(data->window, "delete-event", NULL, &result);
+
+}
+
+
+
 static void account_action_editfilter(GtkAction *action, gpointer user_data)
 {
 struct account_data *data = user_data;
@@ -281,7 +306,90 @@ struct account_data *data = user_data;
 
 
 
-/* these 2 functions are independant from account window */
+/* these 5 functions are independant from account window */
+Operation *
+operation_get_child_transfert(Operation *src)
+{
+GList *list;
+Operation *item;
+
+	DB( g_print("(operation) operation_get_child_transfert\n") );
+
+	DB( g_print(" search: %d %s %f %d=>%d\n", src->date, src->wording, src->amount, src->account, src->dst_account) );
+
+	list = g_list_first(GLOBALS->ope_list);
+	while (list != NULL)
+	{
+		item = list->data;
+		if( item->paymode == PAYMODE_PERSTRANSFERT)
+		{
+			if( src->date == item->date &&
+			    src->account == item->dst_account &&
+			    src->dst_account == item->account &&
+			    ABS(src->amount) == ABS(item->amount) )
+			{
+				DB( g_print(" found : %d %s %f %d=>%d\n", item->date, item->wording, item->amount, item->account, item->dst_account) );
+
+				return item;			
+			}
+		}
+		list = g_list_next(list);
+	}		
+
+	return NULL;
+}
+
+
+void operation_warn_transfert(Operation *src, gchar *msg2)
+{
+	
+	gchar str_amount[128];
+	gchar str_date[128];
+	GDate *date;
+	Account *acc;
+	
+		mystrfmon(str_amount, 127, src->amount, 0);
+
+		date = g_date_new_julian (src->date);
+		g_date_strftime (str_date, 128-1, PREFS->date_format, date);
+		g_date_free(date);
+		
+		acc = g_list_nth_data(GLOBALS->acc_list, src->dst_account);
+		
+		//warn the user
+		homebank_message_dialog(GTK_WINDOW(GLOBALS->mainwindow), GTK_MESSAGE_INFO,
+			_("No corresponding transfert can be found."),
+			msg2,
+			acc->name,	//account name
+			str_date,	//date
+			str_amount 	//amount
+			
+			);
+
+
+}
+
+void operation_delete_child_transfert(Operation *src)
+{
+Operation *dst;
+
+	dst = operation_get_child_transfert( src );
+	
+	if( dst == NULL )
+	{
+		/* warn the useer we have notfound the child internal transfert */
+		operation_warn_transfert( src, _("Could not delete child transfert:\n\n"
+			"account:  %s\n"
+			"date:  %s\n"
+			"amount:  %s\n"
+			"\nYou should fix the problem manually.") );
+	}
+	else
+	{
+		GLOBALS->ope_list = g_list_remove(GLOBALS->ope_list, dst);
+	}
+}
+
 
 
 void operation_add(Operation *ope, GtkWidget *treeview, gint accnum)
@@ -331,7 +439,8 @@ Account *acc;
 	DB( g_printf(" + add normal %x\n", newope) );
 
 	GLOBALS->ope_list = g_list_append(GLOBALS->ope_list, newope);
-	if(treeview != NULL) operation_add_treeview(newope, treeview, accnum);
+	if(treeview != NULL)
+		operation_add_treeview(newope, treeview, accnum);
 
 	/* prepare for remind or transfert */
 	ope->amount = -ope->amount;
@@ -399,7 +508,7 @@ GtkTreeIter  iter;
 void account_import_csv(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
-gchar *filename;
+gchar *filename = NULL;
 GIOChannel *io;
 static gint csvtype[7] = {
 					CSV_DATE,
@@ -447,7 +556,7 @@ static gint csvtype[7] = {
 						/* control validity here */
 						valid = hb_string_csv_valid(tmpstr, 7, csvtype);
 					
-						 g_print("valid %d, '%s'\n", valid, tmpstr) ;
+						 DB( g_print("valid %d, '%s'\n", valid, tmpstr) );
 					
 						if( !valid )
 						{
@@ -492,11 +601,13 @@ static gint csvtype[7] = {
 			g_io_channel_unref (io);
 
 			homebank_message_dialog(GTK_WINDOW(data->window), error > 0 ? GTK_MESSAGE_ERROR : GTK_MESSAGE_INFO,
-				_("Operation CSV import result"),
-				_("%d operation(s) inserted\n%d error(s) in the file"),
+				_("Transaction CSV import result"),
+				_("%d transactions inserted\n%d errors in the file"),
 				count, error);
 				 
 		}
+
+		g_free( filename );
 
 		account_update(widget, (gpointer)UF_BALANCE);
 		account_range_change(widget, NULL);
@@ -508,7 +619,7 @@ static gint csvtype[7] = {
 void account_export_csv(GtkWidget *widget, gpointer user_data)
 {
 struct account_data *data;
-gchar *filename;
+gchar *filename = NULL;
 GtkTreeModel *model;
 GtkTreeIter	iter;
 gboolean valid;
@@ -582,6 +693,8 @@ GIOChannel *io;
 			g_io_channel_unref (io);
 		}
 
+		g_free( filename );
+
 	}
 
 }
@@ -612,7 +725,7 @@ gint result, count;
 		    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 		    GTK_MESSAGE_WARNING,
 			GTK_BUTTONS_YES_NO,
-			_("Do you want to create an Archive with\neach of the selected Operation(s) ?")
+			_("Do you want to create an Archive with\neach of the selected transaction ?")
 		  );
 
 	/*
@@ -976,7 +1089,7 @@ gboolean result;
 				/* fill in the operation */
 				memset(&data->ope, 0, sizeof(Operation));
 				data->ope.date    = date;
-				data->ope.account = account;
+				data->ope.account = data->accnum;
 
 				defoperation_set_operation(window, &data->ope);
 
@@ -1142,7 +1255,7 @@ gboolean result;
 			    GTK_DIALOG_MODAL,
 			    GTK_MESSAGE_WARNING,
 				GTK_BUTTONS_YES_NO,
-				_("Do you want to delete\neach of the selected Operation(s) ?")
+				_("Do you want to delete\neach of the selected transaction ?")
 			  );
 
 			/*
@@ -1191,6 +1304,11 @@ gboolean result;
 					data->change++;
 					DB( g_printf(" -> change=%d\n", data->change) );
 
+					/* v3.4: also remove child transfert */
+					if( entry->paymode == PAYMODE_PERSTRANSFERT )
+					{
+						operation_delete_child_transfert( entry );
+					}
 
 					list = g_list_previous(list);
 				}
@@ -1412,9 +1530,9 @@ gboolean minor;
 	gtk_statusbar_pop (GTK_STATUSBAR(data->statusbar), 0); /* clear any previous message, underflow is allowed */
 
 	if( count <= 1 )
-		msg = g_strdup_printf ("%d operation(s) selected, %d hidden", count, data->hidden);
+		msg = g_strdup_printf ("%d transactions selected, %d hidden", count, data->hidden);
 	else
-		msg = g_strdup_printf ("%d operation(s) selected, %d hidden :: %s ( %s - %s)", count, data->hidden, buf3, buf1, buf2);
+		msg = g_strdup_printf ("%d transactions selected, %d hidden :: %s ( %s - %s)", count, data->hidden, buf3, buf1, buf2);
 
 	gtk_statusbar_push (GTK_STATUSBAR(data->statusbar), 0, msg);
 	g_free (msg);
@@ -1446,7 +1564,7 @@ Operation *ope;
 	gtk_tree_model_get(model, &iter, LST_DSPOPE_DATAS, &ope, -1);
 
 
-    DB( g_print ("%d row(s) been double-clicked on column=%d! ope=%s\n", count, col_id, ope->wording) );
+    DB( g_print ("%d rows been double-clicked on column=%d! ope=%s\n", count, col_id, ope->wording) );
 
 	if( count == 1)
 	{
@@ -1497,7 +1615,7 @@ Operation *ope;
 				gtk_combo_box_set_active(GTK_COMBO_BOX(widget1), ope->payee);
 				break;
 			case LST_DSPOPE_WORDING:
-				gtk_window_set_title (GTK_WINDOW (window), _("Modify wording..."));
+				gtk_window_set_title (GTK_WINDOW (window), _("Modify description..."));
 				widget1 = make_string(NULL);
 				gtk_entry_set_text(GTK_ENTRY(widget1), ope->wording);
 				break;
@@ -1687,22 +1805,67 @@ struct account_data *data;
 
 }
 
+/*
+**
+*/
+static gboolean account_getgeometry(GtkWidget         *widget,
+                                                        GdkEventConfigure *event,
+                                                        gpointer           user_data)
+{
+struct account_data *data = user_data;
+struct WinGeometry *wg;
+
+	DB( g_printf("(account) get geometry\n") );
+
+	//store position and size
+	wg = &PREFS->acc_wg;
+	gtk_window_get_position(GTK_WINDOW(widget), &wg->l, &wg->t);
+	gtk_window_get_size(GTK_WINDOW(widget), &wg->w, &wg->h);
+	
+	DB( g_printf(" window: l=%d, t=%d, w=%d, h=%d\n", wg->l, wg->t, wg->w, wg->h) );
+
+
+
+	return FALSE;
+}
 
 /*
 **
 */
-gboolean account_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+static gboolean account_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct account_data *data = user_data;
 
-	DB( g_printf("(account) dispose (delete-event)\n") );
+
+	DB( g_printf("(account) delete-event\n") );
 
 
 
-	DB( g_printf(" -> add global change=%d\n", data->change) );
+
+	return FALSE;
+}
+
+/* Another callback */
+static void account_destroy( GtkWidget *widget,
+                     gpointer   user_data )
+{
+struct account_data *data;
+
+	data = g_object_get_data(G_OBJECT(widget), "inst_data");
+
+ 
+	DB( g_print ("(account) destroy event occurred\n") );
+ 
+ 
+ 
+ 	DB( g_printf(" -> add global change=%d\n", data->change) );
 	//enable define windows
 	GLOBALS->define_off--;
 	GLOBALS->change += data->change;
+
+	/* unset operation edit mutex */
+	if(data->acc)
+		data->acc->window = NULL;
 
 	/* free title and filter */
 	DB( g_printf(" user_data=%08x to be free\n", user_data) );
@@ -1711,21 +1874,21 @@ struct account_data *data = user_data;
 	
 	da_filter_free(data->filter);
 
-	g_free(user_data);
+	g_free(data);
 
 
-	//propagate the event further
 
 	wallet_compute_balances(GLOBALS->mainwindow, NULL);
 	wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE+UF_BALANCE);
 
-	return FALSE;
 }
+
 
 // the window creation
 GtkWidget *create_account_window(gint accnum, Account *acc)
 {
 struct account_data *data;
+struct WinGeometry *wg;
 GtkWidget *window, *mainvbox, *hbox, *hbox2, *statusbar;
 GtkWidget *treeview, *check_button, *vbar, *label, *entry, *sw;
 GtkUIManager *ui;
@@ -1739,23 +1902,36 @@ GError *error = NULL;
 	GLOBALS->define_off++;
 	wallet_update(GLOBALS->mainwindow, (gpointer)UF_SENSITIVE);
 
+    /* create window, etc */
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	data->window = window;
 
 	//debug
 	data->wintitle = NULL;
 	data->accnum = accnum;
 	data->acc = acc;
 
-    /* create window, etc */
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	data->window = window;
+	/* set operation edit mutex */
+	if(data->acc)
+		data->acc->window = window;
 
 	//g_free(data->wintitle);
 	data->wintitle = g_strdup_printf("HomeBank - %s", data->acc->name);
 	gtk_window_set_title (GTK_WINDOW (window), data->wintitle);
 
 	// connect our dispose function
-    g_signal_connect (window, "delete-event",
+    g_signal_connect (window, "delete_event",
 		G_CALLBACK (account_dispose), (gpointer)data);
+
+	// connect our dispose function
+    g_signal_connect (window, "destroy",
+		G_CALLBACK (account_destroy), (gpointer)data);
+
+	// connect our dispose function
+    g_signal_connect (window, "configure-event",
+		G_CALLBACK (account_getgeometry), (gpointer)data);
+
+
 
 
 	//gtk_window_set_icon_from_file(GTK_WINDOW (WI_account), "./pixmaps/.png", NULL);
@@ -1927,8 +2103,11 @@ GError *error = NULL;
 
 	g_signal_connect (GTK_TREE_VIEW(treeview), "row-activated", G_CALLBACK (account_onRowActivated), (gpointer)2);
 
-	/* finish & show */
-	gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
+
+	//setup, init and show window
+	wg = &PREFS->acc_wg;
+	gtk_window_move(GTK_WINDOW(window), wg->l, wg->t);
+	gtk_window_resize(GTK_WINDOW(window), wg->w, wg->h);
 
 	gtk_widget_show_all (window);
 

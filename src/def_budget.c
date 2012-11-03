@@ -151,7 +151,7 @@ char buf[G_ASCII_DTOSTR_BUF_SIZE];
 static void defbudget_load_csv( GtkWidget *widget, gpointer user_data)
 {
 struct defbudget_data *data;
-gchar *filename;
+gchar *filename = NULL;
 GIOChannel *io;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(widget), GTK_TYPE_WINDOW)), "inst_data");
@@ -265,6 +265,8 @@ GIOChannel *io;
 
 		}
 
+		g_free( filename );
+
 	}
 }
 
@@ -274,7 +276,7 @@ GIOChannel *io;
 static void defbudget_save_csv( GtkWidget *widget, gpointer user_data)
 {
 struct defbudget_data *data;
-gchar *filename;
+gchar *filename = NULL;
 GtkTreeModel *model;
 GtkTreeIter	iter, child;
 gboolean valid;
@@ -349,6 +351,8 @@ GIOChannel *io;
 
 			g_io_channel_unref (io);
 		}
+
+		g_free( filename );
 
 	}
 

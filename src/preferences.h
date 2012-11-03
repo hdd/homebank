@@ -19,6 +19,32 @@
 #ifndef __PREFERENCES_H__
 #define __PREFERENCES_H__
 
+#define PREF_VERSION	"0.2"
+
+//#define DEFAULT_PATH_WALLET			"/home/max/dev/gnomebank/accounts"
+//#define DEFAULT_PATH_NAVIGATOR		"mozilla"
+
+//#define DEFAULT_FORMAT_DECIMAL		"%.2f"
+#define DEFAULT_FORMAT_DATE			"%x"
+
+#define OLD_EXP_COLOR		0xE88C00
+#define OLD_INC_COLOR		0x00C800
+#define OLD_WARN_COLOR		0XC80000
+
+//Tango light
+#define LIGHT_EXP_COLOR		0xfcaf3e	//Orange
+#define LIGHT_INC_COLOR		0x8ae234	//Chameleon
+#define LIGHT_WARN_COLOR	0Xef2929	//Scarlett Red
+
+//Tango medium
+#define MEDIUM_EXP_COLOR	0xf57900	//Orange
+#define MEDIUM_INC_COLOR	0x73d216	//Chameleon
+#define MEDIUM_WARN_COLOR	0Xcc0000	//Scarlett Red
+
+//Tango dark
+#define DEFAULT_EXP_COLOR		0xce5c00	//Orange
+#define DEFAULT_INC_COLOR		0x4e9a36	//Chameleon
+#define DEFAULT_WARN_COLOR		0Xa40000	//Scarlett Red
 
 
 /*
@@ -32,6 +58,11 @@ struct Currency
 	gchar		*grouping_char;	
 	gshort		frac_digits;
 	gchar		format[8];
+};
+
+struct WinGeometry
+{
+	gint		l, t, w, h;
 };
 
 
@@ -89,7 +120,13 @@ struct Preferences
 	//gint		last_page;
 	gboolean 	lst_ope_columns[NUM_COL_OPE+1];
 
-
+	/* windows size an position */
+	struct WinGeometry	wal_wg;
+	struct WinGeometry	acc_wg;
+	struct WinGeometry	sta_wg;
+	struct WinGeometry	ove_wg;
+	struct WinGeometry	bud_wg;
+	struct WinGeometry	car_wg;
 };
 
 

@@ -509,10 +509,18 @@ void repover_setup(struct repover_data *data)
 gboolean repover_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct repover_data *data = user_data;
+struct WinGeometry *wg;
 
 	DB( g_print("(repover) dispose\n") );
 
 	g_free(data);
+
+	//store position and size
+	wg = &PREFS->ove_wg;
+	gtk_window_get_position(GTK_WINDOW(widget), &wg->l, &wg->t);
+	gtk_window_get_size(GTK_WINDOW(widget), &wg->w, &wg->h);
+	
+	DB( g_printf(" window: l=%d, t=%d, w=%d, h=%d\n", wg->l, wg->t, wg->w, wg->h) );
 
 	//enable define windows
 	GLOBALS->define_off--;
@@ -526,6 +534,7 @@ struct repover_data *data = user_data;
 GtkWidget *repover_window_new(void)
 {
 struct repover_data *data;
+struct WinGeometry *wg;
 GtkWidget *window, *mainvbox, *hbox, *vbox, *notebook, *treeview;
 GtkWidget *label, *widget, *table, *alignment;
 gint row;
@@ -743,8 +752,10 @@ GError *error = NULL;
 		gtk_toolbar_set_style(GTK_TOOLBAR(data->TB_bar), PREFS->toolbar_style-1);
 
 
-    /* finish & show */
-    gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
+	//setup, init and show window
+	wg = &PREFS->ove_wg;
+	gtk_window_move(GTK_WINDOW(window), wg->l, wg->t);
+	gtk_window_resize(GTK_WINDOW(window), wg->w, wg->h);
 
 	gtk_widget_show_all (window);
 
@@ -941,7 +952,7 @@ GtkTreeViewColumn  *column;
 
 	/* column wording */
 	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Wording"));
+	gtk_tree_view_column_set_title(column, _("Description"));
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);

@@ -1,20 +1,45 @@
+2007-08-16  Maxime Doyen  <mdoyen@free.fr>
+
+	* Made 3.4 release.
+	* bugfix: csv import/export for category, payee, budget and account was crashing
+	* change: new GPL icon set based on gnome 2.18 icons
+	* change: new splash scrren
+	* change: native en_US strings translation changed as requested by some users
+	* change: statistics does no more include internal transfert transaction by default
+	* add   : local on disk program help documentation
+	* add   : a menu to close the account window
+
+2007-06-28  Maxime Doyen  <mdoyen@free.fr>
+
+	* Made 3.4 unstable release.
+	* bugfix: .desktop file menu Categories was wrong (GNOME instead of GTK)
+	* bugfix: charts amount display was not affected by the user preferences
+	* bugfix: account window for a same account could be opened several times
+	* bugfix: when adding transfert transaction from the account window,
+	          'account' widget was faultly set to previous 'to account' widget value
+	* bugfix: internal transfert transaction changes/deletes affect child transfert
+	* bugfix: amount display was incorrect when the grouping_char was empty
+	* change: transaction window 'fill from' widget is hidden when modifying
+	* change: converted amounts colors to Tango palette colors
+	* add   : windows position/size are now saved
+
 2007-05-24  Maxime Doyen  <mdoyen@free.fr>
 
 	* Made 3.3 release.
 	* bugfix: minor currency settings was not loaded
 	* bugfix: compilation without OFX support was ignored
-	* bugfix: operation add cheque number prefill for pad2 was not working
-	* bugfix: inherit operation with empty info or wording was severely cashing
+	* bugfix: transaction add cheque number prefill for pad2 was not working
+	* bugfix: inherit transaction with empty info or description was severely cashing
 	* bugfix: date format set in preferences was ignored
-	* bugfix: import ofx with multiple accounts was adding all the operations to the 1st wallet account
+	* bugfix: import ofx with multiple accounts was adding all the transactions to the 1st wallet account
 	* bugfix: date widget string input was always revert to calendar date
 	* change: main window is now maximized at start
 	* change: account window is now horizontaly resizable
-	* change: operation list columns can now be resized
+	* change: transaction list columns can now be resized
 	* change: new icon for the toolbar 'view as list' button
 	* add   : preference format sample preview for date and amounts
-	* add   : operation list columns visibility can be configured in preferences
-	* add   : operation list 'Amount' column
+	* add   : transaction list columns visibility can be configured in preferences
+	* add   : transaction list 'Amount' column
 	* add   : preference folder chooser button and dialog (for path)
 	* add   : preference clear button that reset all preferences to default
     * add   : backup of files: saved to <filename>.old 
@@ -33,22 +58,22 @@
 	* bugfix: budget category name with entities (& < > ...) was displayed wrong in budget list
 	* bugfix: toolbar style was wrong in report windows
 	* bugfix: fixed a possible segfault caused by automated insert on new, open, or at close time
-	* bugfix: operation list was badly sorted on income/expense
-	* bugfix: cheque auto increments was not working on operation heritance
+	* bugfix: transaction list was badly sorted on income/expense
+	* bugfix: cheque auto increments was not working on transaction heritance
 	* change: gtkdatentry: up/down keys change days, with shift for months, with ctrl for years
 	* change: list of account is now display as a tree with total
 	* change: moved the total balance in the account list
 	* change: minor currency checkbox moved to a menu with a shortcut
 	* change: number format is fully configurable in the settings
 	* change: get rid the use of strfmon func, amount number format is now HomeBank internal
-	* add   : list summary of upcoming automated operations to the main window
+	* add   : list summary of upcoming automated transactions to the main window
 	* add   : import path in the preferences
 	* add   : OFX format is now supported via an import wizard
 
 2006-11-27  Maxime Doyen  <mdoyen@free.fr>
 
 	* Made 3.2.1 release.
-	* bugfix: inherit a cheque operation was crashing
+	* bugfix: inherit a cheque transaction was crashing
 	* bugfix: overdrawn balance column was shifted 1 line down
 	* bugfix: charts tooltip was a little buggy
 	* bugfix: charts were sometimes all black colored
@@ -61,21 +86,21 @@
 2006-09-26  Maxime Doyen  <mdoyen@free.fr>
 
 	* Made 3.2 release.
-	* add   : sum of multi selected operation in account window statusbar (missing from amiga version)
+	* add   : sum of multi selected transaction in account window statusbar (missing from amiga version)
 	* add   : statistics report dual barchart display for income/expense (missing from amiga version)
 	* add   : budget report dual barchart display for spend/budget (missing from amiga version)
 	* add   : filter invert button for selection of category, payee and account list (missing from amiga version)
 	* add   : icon to indicate automated archive in the archive list
-	* add   : csv operation import wizard with user control of duplicate filter
+	* add   : csv transaction import wizard with user control of duplicate filter
 	* add   : statistics report toggle rate toolbutton
 	* add   : splash window
 
 2006-07-12  Maxime Doyen  <mdoyen@free.fr>
 
 	* Made 3.2 alpha2 release.
-	* bugfix: operation lost problem, due to xml entities not escaped. Data using "'>&< in name were well saved the 1st time but
+	* bugfix: transaction lost problem, due to xml entities not escaped. Data using "'>&< in name were well saved the 1st time but
 	          the glib xmlparser was crashing and not warn about it at reload, so if saved again, the data were lost :-/
-	* bugfix: wording & info operation field were impossible to blank
+	* bugfix: description & info transaction field were impossible to blank
 	* bugfix: empty field were badly saved with '(null)' instead of ''
 	* bugfix: a change in the wallet dialog was not enabling to save
 

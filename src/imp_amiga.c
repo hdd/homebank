@@ -17,7 +17,7 @@
  */
 
 #include "homebank.h"
-#include "amiga.h"
+#include "imp_amiga.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -351,7 +351,7 @@ gint i, j;
 		//add of standing order
 		//if(entry->ope_Mode >= 4) entry->ope_Mode++;
 
-		//DB( g_printf(" + %d, inserting :: %d %s %.2f\n", i, entry->date, entry->wording, entry->amount) );
+		DB( g_printf(" + %d, inserting :: %d %s %.2f %d=>%d\n", i, entry->date, entry->wording, entry->amount, entry->account, entry->dst_account) );
 
 		GLOBALS->ope_list = g_list_append(GLOBALS->ope_list, entry);
 

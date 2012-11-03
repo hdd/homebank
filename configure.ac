@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.52)
-AC_INIT([homebank], [3.3])
+AC_INIT([homebank], [3.4])
 
 
 AM_CONFIG_HEADER(config.h)
@@ -65,7 +65,7 @@ AC_STRUCT_TM
 AC_CHECK_FUNCS([floor memset modf pow setlocale sqrt])
 
 # International support
-ALL_LINGUAS="es fr nl pt_BR ru zh_CN"
+ALL_LINGUAS="de es fr he it nb nl pt_BR ru zh_CN"
 AM_GLIB_GNU_GETTEXT
 
 GETTEXT_PACKAGE=$PACKAGE
@@ -89,6 +89,8 @@ data/icons/hicolor/48x48/Makefile
 data/icons/hicolor/48x48/apps/Makefile
 data/icons/hicolor/scalable/Makefile
 data/icons/hicolor/scalable/apps/Makefile
+doc/Makefile
+doc/images/Makefile
 mime/Makefile
 src/Makefile 
 images/Makefile

@@ -47,6 +47,8 @@ enum
 enum
 {
 	FIELD_NAME,
+	//todo: for stock account	
+	//FIELD_TYPE,
 	FIELD_BANK,
 	FIELD_NUMBER,
 	FIELD_BUDGET,
@@ -67,6 +69,8 @@ struct defaccount_data
 
 	GtkWidget	*LV_acc;
 	GtkWidget	*ST_name;
+	//todo: for stock account	
+	//GtkWidget	*CY_type;
 	GtkWidget	*ST_bank;
 	GtkWidget	*ST_number;
 	GtkWidget	*CM_budget;
@@ -81,6 +85,10 @@ struct defaccount_data
 	gulong		handler_id[MAX_FIELD];
 
 };
+
+//todo: for stock account
+//gchar *CYA_ACCOUNT_TYPE[] = { N_("Bank Account"), N_("Stocks Account"), NULL };
+
 
 void defaccount_add			(GtkWidget *widget, gpointer user_data);
 void defaccount_remove		(GtkWidget *widget, gpointer user_data);
@@ -109,7 +117,8 @@ struct defaccount_data *data;
 GtkTreeModel		 *model;
 GtkTreeIter			 iter;
 gboolean selected, sensitive;
-
+//todo: for stock account
+//gboolean is_new;
 
 	DB( g_printf("(defaccount) update\n") );
 
@@ -150,7 +159,17 @@ gboolean selected, sensitive;
 		}
 	}	*/
 
-
+	//todo: for stock account
+	//todo: lock type if oldpos!=0
+/*
+	if( selected )
+	{
+		gtk_tree_model_get(model, &iter,
+			LST_DEFACC_NEW, &is_new,
+			-1);
+		gtk_widget_set_sensitive(data->CY_type, is_new);
+	}
+*/
 
 	sensitive = (selected == TRUE) ? TRUE : FALSE;
 	gtk_widget_set_sensitive(data->ST_name, sensitive);
@@ -205,6 +224,8 @@ Account *item;
 	gtk_list_store_set (GTK_LIST_STORE(model), &iter,
 		LST_DEFACC_DATAS, item,
 		LST_DEFACC_OLDPOS, 0,
+		//todo: for stock account		
+		//LST_DEFACC_NEW, TRUE,
 		-1);
 
 	gtk_tree_selection_select_iter (gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_acc)), &iter);
@@ -282,6 +303,12 @@ gint field = GPOINTER_TO_INT(user_data);
 				}
 				break;
 
+		//todo: for stock account			
+		/*
+			case FIELD_TYPE:
+				item->type = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_type));
+				break;
+		*/
 			case FIELD_BANK:
 				g_free(item->bankname);
 				item->bankname = g_strdup(gtk_entry_get_text(GTK_ENTRY(data->ST_bank)));
@@ -349,7 +376,10 @@ Account *item;
 		gtk_tree_model_get(model, &iter, LST_DEFACC_DATAS, &item, -1);
 
 		gtk_entry_set_text(GTK_ENTRY(data->ST_name), item->name);
-
+		
+		//todo: for stock account
+		//gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_type), item->type );
+		
 		if(item->bankname != NULL)
 			gtk_entry_set_text(GTK_ENTRY(data->ST_bank), item->bankname);
 		else
@@ -547,7 +577,7 @@ GtkWidget *create_editaccount_window (void)
 {
 struct defaccount_data data;
 GtkWidget *window, *mainbox;
-GtkWidget *vbox, *table, *label, *entry1, *entry2, *entry3;
+GtkWidget *vbox, *table, *label, *entry1, *entry2, *entry3, *widget;
 GtkWidget *spinner, *cheque1, *cheque2, *scrollwin;
 GtkWidget *bbox, *check_button;
 GtkWidget *alignment;
@@ -640,6 +670,16 @@ gint row;
 	entry1 = make_string(label);
 	data.ST_name = entry1;
 	gtk_table_attach (GTK_TABLE (table), entry1, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+
+	//todo: for stock account
+	/*	
+	row++;
+	label = make_label(_("_Type:"), 0.0, 0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+	widget = make_cycle(label, CYA_ACCOUNT_TYPE);
+	data.CY_type = widget;
+	gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+	*/
 
 	row++;
 	label = make_label(_("_Number:"), 0.0, 0.5);
@@ -742,6 +782,9 @@ gint row;
 	// modify events
 	g_signal_connect (G_OBJECT (data.ST_name), "activate", G_CALLBACK (defaccount_get), (gpointer)FIELD_NAME);
 	g_signal_connect (G_OBJECT (data.ST_name), "focus-out-event", G_CALLBACK (defaccount_focus_out), (gpointer)FIELD_NAME);
+
+	//todo: for stock account	
+	//g_signal_connect (G_OBJECT (data.CY_type), "changed", G_CALLBACK (defaccount_get), (gpointer)FIELD_TYPE);
 
 	g_signal_connect (G_OBJECT (data.ST_bank), "activate", G_CALLBACK (defaccount_get), (gpointer)FIELD_BANK);
 	g_signal_connect (G_OBJECT (data.ST_bank), "focus-out-event", G_CALLBACK (defaccount_focus_out), (gpointer)FIELD_BANK);

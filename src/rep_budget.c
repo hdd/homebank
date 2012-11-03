@@ -102,7 +102,7 @@ extern gchar *CYA_SELECT[];
 
 static GtkActionEntry entries[] = {
   { "List"    , "hb-stock-view-list" , N_("List")  , NULL,    N_("View results as list"), G_CALLBACK (repbudget_action_viewlist) },
-  { "Bar"     , "hb-stock-view-bar"  , N_("Bar")   , NULL,    N_("View results as 2d-bars"), G_CALLBACK (repbudget_action_viewbar) },
+  { "Bar"     , "hb-stock-view-bar"  , N_("Bar")   , NULL,    N_("View results as bars"), G_CALLBACK (repbudget_action_viewbar) },
 
   { "Detail"  , "hb-stock-ope-show"  , N_("Detail"), NULL,    N_("Toggle detail"), G_CALLBACK (repbudget_action_detail) },
   { "Legend"  , "hb-stock-legend"    , N_("Legend"), NULL,    N_("Toggle legend"), G_CALLBACK (repbudget_action_legend) },
@@ -768,10 +768,18 @@ guint key;
 gboolean repbudget_window_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct repbudget_data *data = user_data;
+struct WinGeometry *wg;
 
 	DB( g_print("(repbudget) start dispose\n") );
 
 	g_free(data);
+
+	//store position and size
+	wg = &PREFS->bud_wg;
+	gtk_window_get_position(GTK_WINDOW(widget), &wg->l, &wg->t);
+	gtk_window_get_size(GTK_WINDOW(widget), &wg->w, &wg->h);
+	
+	DB( g_printf(" window: l=%d, t=%d, w=%d, h=%d\n", wg->l, wg->t, wg->w, wg->h) );
 
 	//enable define windows
 	GLOBALS->define_off--;
@@ -787,6 +795,7 @@ struct repbudget_data *data = user_data;
 GtkWidget *repbudget_window_new(void)
 {
 struct repbudget_data *data;
+struct WinGeometry *wg;
 GtkWidget *window, *mainvbox, *hbox, *vbox, *notebook, *treeview;
 GtkWidget *label, *widget, *table, *alignment, *vbar, *entry;
 gint row;
@@ -1038,8 +1047,10 @@ GError *error = NULL;
 		gtk_toolbar_set_style(GTK_TOOLBAR(data->TB_bar), PREFS->toolbar_style-1);
 
 
-    /* finish & show */
-    gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
+	//setup, init and show window
+	wg = &PREFS->bud_wg;
+	gtk_window_move(GTK_WINDOW(window), wg->l, wg->t);
+	gtk_window_resize(GTK_WINDOW(window), wg->w, wg->h);
 
 	//debug
 	//get our min max date

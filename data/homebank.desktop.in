@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 _Name=HomeBank
-_Comment=Free easy personal accounting for all !
+_Comment=Free, easy, personal accounting for everyone.
 Exec=homebank %F
 Terminal=false
 StartupNotify=true
 Type=Application
 Icon=homebank
-Categories=GNOME;Applications;Office;Financial;
+Categories=GTK;Office;Finance;
 MimeType=application/x-homebank;

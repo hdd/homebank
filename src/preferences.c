@@ -84,6 +84,28 @@ struct lconv *lc = localeconv();
 
 }
 
+void homebank_pref_update_to_tango_colors(void)
+{
+	if(PREFS->color_exp == OLD_EXP_COLOR)
+		PREFS->color_exp = DEFAULT_EXP_COLOR;
+
+	if(PREFS->color_inc == OLD_INC_COLOR)
+		PREFS->color_inc  = DEFAULT_INC_COLOR;
+	
+	if(PREFS->color_warn == OLD_WARN_COLOR)
+		PREFS->color_warn = DEFAULT_WARN_COLOR;
+
+}
+
+void homebank_pref_init_wingeometry(struct WinGeometry *wg, gint l, gint t, gint w, gint h)
+{
+	wg->l = l;
+	wg->t = t;
+	wg->w = w;
+	wg->h = h;
+}
+
+
 void homebank_pref_free(void)
 {
 	DB( g_print("(preferences) free\n") );
@@ -133,6 +155,18 @@ void homebank_pref_setdefault(void)
 	DB( g_print(" + #%x\n", PREFS->color_inc) );
 	DB( g_print(" + #%x\n", PREFS->color_warn) );
 
+	/* windows position/size */
+	homebank_pref_init_wingeometry(&PREFS->wal_wg, 0, 0, 640, 480);
+	homebank_pref_init_wingeometry(&PREFS->acc_wg, 0, 0, 640, 480);
+	homebank_pref_init_wingeometry(&PREFS->sta_wg, 0, 0, 640, 480);
+	homebank_pref_init_wingeometry(&PREFS->ove_wg, 0, 0, 640, 480);
+	homebank_pref_init_wingeometry(&PREFS->bud_wg, 0, 0, 640, 480);
+	homebank_pref_init_wingeometry(&PREFS->car_wg, 0, 0, 640, 480);
+
+	PREFS->acc_wg.l = 20;
+	PREFS->acc_wg.t = 20;
+	PREFS->acc_wg.w = 640;
+	PREFS->acc_wg.h = 480;
 
 #ifdef G_OS_WIN32
 	homebank_pref_init_monetary_win32();
@@ -224,6 +258,25 @@ void homebank_pref_createformat(void)
 /*
 ** load preference from homedir/.homebank
 */
+static homebank_pref_get_wingeometry(
+	GKeyFile *key_file,
+    const gchar *group_name,
+    const gchar *key,
+	struct WinGeometry *storage)
+{
+	if( g_key_file_has_key(key_file, group_name, key, NULL) )
+	{
+	gint *wg;
+	gsize length;
+	
+		wg = g_key_file_get_integer_list(key_file, group_name, key, &length, NULL);
+		memcpy(storage, wg, 4*sizeof(gint));
+		g_free(wg);
+	}
+}
+
+
+
 
 static homebank_pref_get_boolean(
 	GKeyFile *key_file,
@@ -288,16 +341,18 @@ gchar *string;
 		if( string != "" )
 		{
 			*storage = g_strdup(string);
+			
+			DB( g_print(" store '%s' for %s at %x\n", string, key, *storage) );
 		}
 	}
 
 /*
-			if (error)
-		    {
-		      g_warning ("error: %s\n", error->message);
-		      g_error_free(error);
-		      error = NULL;
-		    }
+	if (error)
+    {
+      g_warning ("error: %s\n", error->message);
+      g_error_free(error);
+      error = NULL;
+    }
 */
 
 
@@ -324,6 +379,8 @@ GError *error = NULL;
 
 				gchar *version = g_key_file_get_string (keyfile, group, "Version", NULL);
 				DB( g_print(" version: %s\n", version) );
+
+				//todo x = strtoul(s, 0, 16); converti une chaine hexa en int
 
 				homebank_pref_get_short(keyfile, group, "BarStyle" , &PREFS->toolbar_style);
 				homebank_pref_get_integer(keyfile, group, "ColorExp" , &PREFS->color_exp);
@@ -353,6 +410,15 @@ GError *error = NULL;
 
 					g_free(pos);
 				}
+
+			group = "Windows";
+
+				homebank_pref_get_wingeometry(keyfile, group, "Wal", &PREFS->wal_wg);
+				homebank_pref_get_wingeometry(keyfile, group, "Acc", &PREFS->acc_wg);
+				homebank_pref_get_wingeometry(keyfile, group, "Sta", &PREFS->sta_wg);
+				homebank_pref_get_wingeometry(keyfile, group, "Ove", &PREFS->ove_wg);
+				homebank_pref_get_wingeometry(keyfile, group, "Bud", &PREFS->bud_wg);
+				homebank_pref_get_wingeometry(keyfile, group, "Car", &PREFS->car_wg);
 
 			group = "Format";
 
@@ -436,6 +502,9 @@ GError *error = NULL;
 		g_key_file_free (keyfile);
 	}
 
+	/* update to tango ;-) */
+	homebank_pref_update_to_tango_colors();
+
 	//homebank_pref_createformat();
 
 	return retval;
@@ -476,6 +545,15 @@ guint length;
 		//g_key_file_set_string  (keyfile, group, "NavigatorPath", PREFS->path_navigator);
 
 		g_key_file_set_boolean_list(keyfile, group, "ColumnsOpe", PREFS->lst_ope_columns, NUM_COL_OPE);
+
+		// added v3.4
+		group = "Windows";
+		g_key_file_set_integer_list(keyfile, group, "Wal", (gint *)&PREFS->wal_wg, 4);
+		g_key_file_set_integer_list(keyfile, group, "Acc", (gint *)&PREFS->acc_wg, 4);
+		g_key_file_set_integer_list(keyfile, group, "Sta", (gint *)&PREFS->sta_wg, 4);
+		g_key_file_set_integer_list(keyfile, group, "Ove", (gint *)&PREFS->ove_wg, 4);
+		g_key_file_set_integer_list(keyfile, group, "Bud", (gint *)&PREFS->bud_wg, 4);
+		g_key_file_set_integer_list(keyfile, group, "Car", (gint *)&PREFS->car_wg, 4);
 
 		group = "Format";
 		g_key_file_set_string  (keyfile, group, "DateFmt"   , PREFS->date_format);

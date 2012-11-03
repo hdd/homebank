@@ -304,7 +304,7 @@ GtkTreeViewColumn  *column;
 GtkCellRenderer    *renderer;
 
 	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Wording"));
+	gtk_tree_view_column_set_title(column, _("Description"));
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, ope_wording_cell_data_function, NULL, NULL);
@@ -699,7 +699,7 @@ GtkTreeViewColumn  *column;
 */
 	/* column: Wording */
 	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_title(column, _("Wording"));
+	gtk_tree_view_column_set_title(column, _("Description"));
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	gtk_tree_view_column_set_cell_data_func(column, renderer, ope_wording_cell_data_function, NULL, NULL);

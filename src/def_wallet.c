@@ -191,7 +191,7 @@ gint row;
 // frame 2
 	row++;
 	label = make_label(NULL, 0.0, 0.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>Automatic operations</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Automatic transactions</b>"));
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
 
 	row++;
@@ -203,7 +203,7 @@ gint row;
 	spinner = make_numeric(label, 0, 100);
 	data.NU_arc = spinner;
     gtk_box_pack_start (GTK_BOX (hbox), spinner, FALSE, FALSE, 0);
-	label = make_label(_("days in the future"), 1, 0.5);
+	label = make_label(_("days into the future"), 1, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 	gtk_table_attach (GTK_TABLE (table), hbox, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 

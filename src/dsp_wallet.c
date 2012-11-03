@@ -6,7 +6,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,h
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -42,10 +42,11 @@
 
 #include "import.h"
 
-#include "amiga.h"
+#include "imp_amiga.h"
 #include "list_account.h"
 
-#define HOMEBANK_URL_HELP           "http://homebank.free.fr/help/"
+//#define HOMEBANK_URL_HELP           "http://homebank.free.fr/help/"
+#define HOMEBANK_URL_HELP           HELP_DIR "/index.html"
 #define HOMEBANK_URL_HELP_ONLINE    "https://answers.launchpad.net/homebank/+addquestion"
 #define HOMEBANK_URL_HELP_TRANSLATE "https://launchpad.net/homebank/+translations"
 #define HOMEBANK_URL_HELP_PROBLEM   "https://launchpad.net/homebank/+filebug"
@@ -189,7 +190,7 @@ static GtkActionEntry entries[] = {
   { "FileMenu"     , NULL, N_("_File") },
   { "EditMenu"     , NULL, N_("_Edit") },
   { "DisplayMenu"  , NULL, N_("_Display") },
-  { "OperationMenu", NULL, N_("_Operations") },
+  { "OperationMenu", NULL, N_("_Transactions") },
   { "ReportMenu"   , NULL, N_("_Reports")  },
   { "HelpMenu"     , NULL, N_("_Help") },
 
@@ -201,12 +202,12 @@ static GtkActionEntry entries[] = {
   { "OpenRecent" , NULL                     , N_("Open _Recent") },
   { "Save"       , GTK_STOCK_SAVE           , N_("_Save")         , NULL, N_("Save the current wallet"),    G_CALLBACK (wallet_action_save) },
   { "SaveAs"     , GTK_STOCK_SAVE_AS        , N_("Save As...")    , NULL, N_("Save the current wallet with a different name"),    G_CALLBACK (wallet_action_saveas) },
-  { "Revert"     , GTK_STOCK_REVERT_TO_SAVED, N_("Revert")        , NULL, N_("Revert to a saved version of the file"),    G_CALLBACK (wallet_action_revert) },
+  { "Revert"     , GTK_STOCK_REVERT_TO_SAVED, N_("Revert")        , NULL, N_("Revert to a saved version of this file"),    G_CALLBACK (wallet_action_revert) },
   { "Import"     , NULL                     , N_("Import...")     , NULL, N_("Open the import assistant"),    G_CALLBACK (wallet_action_import) },
   { "ImportAmiga", NULL                     , N_("Import Amiga..."), NULL, N_("Import a file in Amiga 3.0 format"),    G_CALLBACK (wallet_action_importamiga) },
   { "Properties" , GTK_STOCK_PROPERTIES     , N_("_Properties..."), NULL, N_("Configure wallet"),    G_CALLBACK (wallet_action_defwallet) },
   { "Close"      , GTK_STOCK_CLOSE          , N_("_Close")        , NULL, N_("Close the current wallet"),    G_CALLBACK (wallet_action_close) },
-  { "Quit"       , GTK_STOCK_QUIT           , N_("_Quit")         , NULL, N_("Quit the program"),    G_CALLBACK (wallet_action_quit) },
+  { "Quit"       , GTK_STOCK_QUIT           , N_("_Quit")         , NULL, N_("Quit homebank"),    G_CALLBACK (wallet_action_quit) },
 
   /* EditMenu */
   { "Account"    , "hb-stock-account"   , N_("Acc_ounts...")  , NULL,    N_("Configure the accounts"), G_CALLBACK (wallet_action_defaccount) },
@@ -214,18 +215,18 @@ static GtkActionEntry entries[] = {
   { "Category"   , "hb-stock-category"  , N_("Categories...") , NULL,    N_("Configure the categories"),    G_CALLBACK (wallet_action_defcategory) },
   { "Archive"    , "hb-stock-archive"   , N_("Arc_hives...")  , NULL,    N_("Configure the archives"),    G_CALLBACK (wallet_action_defarchive) },
   { "Budget"     , "hb-stock-budget"    , N_("Budget...")     , NULL,    N_("Configure the budget"),    G_CALLBACK (wallet_action_defbudget) },
-  { "Preferences", GTK_STOCK_PREFERENCES, N_("Preferences..."), NULL,    N_("Configure the application"),    G_CALLBACK (wallet_action_preferences) },
+  { "Preferences", GTK_STOCK_PREFERENCES, N_("Preferences..."), NULL,    N_("Configure homebank"),    G_CALLBACK (wallet_action_preferences) },
 
   /* OperationMenu */
-  { "ShowOpe"    , "hb-stock-ope-show"  , N_("Show...")           , NULL,    N_("Shows selected account operations"),    G_CALLBACK (wallet_action_showoperations) },
-  { "AddOpe"     , "hb-stock-ope-add"   , N_("Add...")            , NULL,    N_("Add operation(s)"),    G_CALLBACK (wallet_action_addoperations) },
-  { "Automated"  , NULL                 , N_("Check automated..."), NULL,    N_("Insert pending automated operations"),    G_CALLBACK (wallet_action_checkautomated) },
+  { "ShowOpe"    , "hb-stock-ope-show"  , N_("Show...")           , NULL,    N_("Shows selected account transactions"),    G_CALLBACK (wallet_action_showoperations) },
+  { "AddOpe"     , "hb-stock-ope-add"   , N_("Add...")            , NULL,    N_("Add transaction"),    G_CALLBACK (wallet_action_addoperations) },
+  { "Automated"  , NULL                 , N_("Check automated..."), NULL,    N_("Insert pending automated transactions"),    G_CALLBACK (wallet_action_checkautomated) },
 
   /* ReportMenu */
   { "Statistics" , "hb-stock-rep-stats" , N_("_Statistics..."), NULL,    N_("Open the Statistics report"),    G_CALLBACK (wallet_action_statistic) },
   { "BudgetR"    , "hb-stock-rep-budget", N_("B_udget...")    , NULL,    N_("Open the Budget report"),    G_CALLBACK (wallet_action_budget) },
   { "Overdrawn"  , "hb-stock-rep-over"  , N_("Ove_rdrawn...") , NULL,    N_("Open the Overdrawn report"),    G_CALLBACK (wallet_action_overdrawn) },
-  { "Carcost"    , "hb-stock-rep-car"   , N_("_Carcost...")   , NULL,    N_("Open the Car cost report"),    G_CALLBACK (wallet_action_carcost) },
+  { "Carcost"    , "hb-stock-rep-car"   , N_("_Car cost...")   , NULL,    N_("Open the Car cost report"),    G_CALLBACK (wallet_action_carcost) },
 
   /* HelpMenu */
   { "Contents"   , GTK_STOCK_HELP       , N_("_Contents")  , "F1", N_("Documentation about HomeBank"), G_CALLBACK (wallet_action_help) },
@@ -233,7 +234,7 @@ static GtkActionEntry entries[] = {
   { "Translate"  , "hb-lpi-translate"   , N_("Translate this Application...")  , NULL, N_("Connect to the LaunchPad website to help translate this application"), G_CALLBACK (wallet_action_help_translate) },
   { "Problem"    , "hb-lpi-bug"         , N_("Report a Problem...")  , NULL, N_("Connect to the LaunchPad website to help fix problems"), G_CALLBACK (wallet_action_help_problem) },
 
-  { "About"      , GTK_STOCK_ABOUT      , N_("_About")     , NULL, N_("Shows the About Dialog")      ,G_CALLBACK (wallet_about) },
+  { "About"      , GTK_STOCK_ABOUT      , N_("_About")     , NULL, N_("About HomeBank")      ,G_CALLBACK (wallet_about) },
 
 };
 static guint n_entries = G_N_ELEMENTS (entries);
@@ -497,11 +498,21 @@ static void wallet_action_showoperations(void)
 struct wallet_data *data = g_object_get_data(G_OBJECT(GLOBALS->mainwindow), "inst_data");
 GtkWidget *window;
 
-	window = create_account_window(data->accnum, data->acc);
-	
-	account_init_window(window, NULL);
-	
-	
+	//todo:change this
+	if( data->acc )
+	{
+		if( data->acc->window == NULL )
+		{
+			window = create_account_window(data->accnum, data->acc);
+			account_init_window(window, NULL);
+		}	
+		else
+		{
+			if(GTK_IS_WINDOW(data->acc->window))
+				gtk_window_present(data->acc->window);
+		
+		}
+	}
 }
 
 
@@ -575,7 +586,7 @@ gboolean retval;
 	if (!retval)
 	{
 		homebank_message_dialog(GTK_WINDOW(GLOBALS->mainwindow), GTK_MESSAGE_INFO,
-			_("No suitable web browser executable could be found."),
+			_("No suitable web browser application could be found."),
 			_("Could not display the URL '%s'"),
 			link
 			);
@@ -591,7 +602,7 @@ const gchar *link = HOMEBANK_URL_HELP_ONLINE;
 	if (!retval)
 	{
 		homebank_message_dialog(GTK_WINDOW(GLOBALS->mainwindow), GTK_MESSAGE_INFO,
-			_("No suitable web browser executable could be found."),
+			_("No suitable web browser application could be found."),
 			_("Could not display the URL '%s'"),
 			link
 			);
@@ -655,7 +666,7 @@ static void wallet_about(void)
 */
 
 	static const gchar license[] =
-		N_("This program is free software; you can redistribute it and/or modify\n"
+		"This program is free software; you can redistribute it and/or modify\n"
 		  "it under the terms of the GNU General Public License as\n"
 		  "published by the Free Software Foundation; either version 2 of the\n"
 		  "License, or (at your option) any later version.\n\n"
@@ -666,7 +677,7 @@ static void wallet_about(void)
 		  "You should have received a copy of the GNU General Public License\n"
 		  "along with this program; if not, write to the Free Software\n"
 		  "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, "
-		  "MA 02110-1301, USA.");
+		  "MA 02110-1301, USA.";
 		  
 	static const gchar *copyright = "Copyright \xc2\xa9 1995-2007 Maxime DOYEN";
 
@@ -678,8 +689,8 @@ static void wallet_about(void)
 		"artists"	, artists,
 		"authors"	, authors,
 	//	"translator-credits"	, "trans",
-		"comments"	, _("Free easy personal accounting for all !"),
-		"license"	, _(license),
+		"comments"	, _("Free, easy, personal accounting for everyone !"),
+		"license"	, license,
 		"copyright"	, copyright,
 		"version"	, PACKAGE_VERSION,
 		"website"	, "http://homebank.free.fr",
@@ -1094,12 +1105,12 @@ nextarchive:
 	gchar *txt;
 
 		if(count == 0)
-			txt = _("No operation to insert");
+			txt = _("No transaction to insert");
 		else
-			txt = _("%d operations inserted");
+			txt = _("%d transactions inserted");
 
 		homebank_message_dialog(GTK_WINDOW(GLOBALS->mainwindow), GTK_MESSAGE_INFO,
-			_("Check automated operations result"),
+			_("Check automated transactions result"),
 			txt,
 			count);
 	}
@@ -1295,6 +1306,8 @@ struct wallet_data *data;
 		if(homebank_file_chooser(GTK_FILE_CHOOSER_ACTION_OPEN) == TRUE)
 		{
 			wallet_open_internal(widget, NULL);
+			
+			
 		}
 	}
 }
@@ -1306,6 +1319,7 @@ void wallet_open_internal(GtkWidget *widget, gpointer user_data)
 {
 struct wallet_data *data;
 gchar *basename;
+gint r;
 
 	DB( g_printf("(wallet) open internal\n") );
 
@@ -1331,15 +1345,17 @@ gchar *basename;
 	DB( g_printf(" filename: %s\n", GLOBALS->filename) );
 	DB( g_printf(" oldfilename: %s, exists: %d\n", GLOBALS->oldfilename, GLOBALS->exists_old) );
 
+	r = homebank_load_xml(GLOBALS->filename);
+	if( r == XML_OK )
+	{
+		wallet_populate_listview(GLOBALS->mainwindow, NULL);
+		wallet_check_automated(GLOBALS->mainwindow, GINT_TO_POINTER(FALSE));
+		wallet_refresh_upcoming(GLOBALS->mainwindow, NULL);
+		wallet_compute_balances(GLOBALS->mainwindow, NULL);
+		wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE+UF_VISUAL+UF_BALANCE);
+		wallet_recent_add(data, GLOBALS->filename);
+	}
 
-	homebank_load_xml(GLOBALS->filename);
-
-	wallet_populate_listview(GLOBALS->mainwindow, NULL);
-	wallet_check_automated(GLOBALS->mainwindow, GINT_TO_POINTER(FALSE));
-	wallet_refresh_upcoming(GLOBALS->mainwindow, NULL);
-	wallet_compute_balances(GLOBALS->mainwindow, NULL);
-	wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE+UF_VISUAL+UF_BALANCE);
-	wallet_recent_add(data, GLOBALS->filename);
 }
 
 /*
@@ -1349,10 +1365,14 @@ void wallet_save(GtkWidget *widget, gpointer user_data)
 {
 struct wallet_data *data;
 gboolean saveas = (gboolean)user_data;
+gboolean update = FALSE;
 
 	DB( g_printf("(wallet) save\n") );
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	if( GLOBALS->wallet_is_new == TRUE )
+		saveas = 1;
 
 	if(saveas == 1)
 	{
@@ -1362,6 +1382,8 @@ gboolean saveas = (gboolean)user_data;
 			homebank_backup_current_file(GLOBALS->filename);
 			homebank_file_ensure_xhb();
 			homebank_save_xml(GLOBALS->filename);
+			GLOBALS->wallet_is_new = FALSE;
+			update = TRUE;
 		}
 	}
 	else
@@ -1370,13 +1392,16 @@ gboolean saveas = (gboolean)user_data;
 		homebank_backup_current_file(GLOBALS->filename);
 		homebank_file_ensure_xhb();
 		homebank_save_xml(GLOBALS->filename);
+		update = TRUE;
 	}
 
-	wallet_recent_add(data, GLOBALS->filename);
+	if( update == TRUE )
+	{
+		wallet_recent_add(data, GLOBALS->filename);
 
-	GLOBALS->change = 0;
-	wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE);
-
+		GLOBALS->change = 0;
+		wallet_update(GLOBALS->mainwindow, (gpointer)UF_TITLE+UF_SENSITIVE);
+	}
 }
 
 
@@ -1389,7 +1414,7 @@ void wallet_populate_listview(GtkWidget *widget, gpointer user_data)
 {
 struct wallet_data *data;
 GtkTreeModel *model;
-GtkTreeIter  iter, child_iter;
+GtkTreeIter  iter1, iter2, child_iter;
 GList *list;
 Account *acc;
 
@@ -1401,12 +1426,21 @@ Account *acc;
 
 	gtk_tree_store_clear (GTK_TREE_STORE(model));
 
-	//insert group line
-	gtk_tree_store_append (GTK_TREE_STORE(model), &iter, NULL);
-	gtk_tree_store_set (GTK_TREE_STORE(model), &iter,
+	//1: bank accounts
+	gtk_tree_store_append (GTK_TREE_STORE(model), &iter1, NULL);
+	gtk_tree_store_set (GTK_TREE_STORE(model), &iter1,
 			  LST_DSPACC_DATAS, NULL,
 			  LST_DSPACC_NAME, "<b>Bank accounts</b>",
 			  -1);
+
+	//2: stocks accounts
+	/*
+	gtk_tree_store_append (GTK_TREE_STORE(model), &iter2, NULL);
+	gtk_tree_store_set (GTK_TREE_STORE(model), &iter2,
+			  LST_DSPACC_DATAS, NULL,
+			  LST_DSPACC_NAME, "<b>Stocks accounts</b>",
+			  -1);
+	*/
 
 	//insert all glist item into treeview
 	list = g_list_first(GLOBALS->acc_list);
@@ -1414,11 +1448,15 @@ Account *acc;
 	{
 		acc = list->data;
 
-		gtk_tree_store_append (GTK_TREE_STORE(model), &child_iter, &iter);
+	//todo: for stock account
+	/*
+		if( acc->type == ACC_TYPE_STOCKS )
+			gtk_tree_store_append (GTK_TREE_STORE(model), &child_iter, &iter2);
+		else
+	*/
+			gtk_tree_store_append (GTK_TREE_STORE(model), &child_iter, &iter1);
 
-     	 DB( g_printf(" populate: %s\n", acc->name) );
-
-     	 gtk_tree_store_set (GTK_TREE_STORE(model), &child_iter,
+		gtk_tree_store_set (GTK_TREE_STORE(model), &child_iter,
 			  LST_DSPACC_DATAS, acc,
 			  -1);
 
@@ -1426,7 +1464,6 @@ Account *acc;
 	}
 
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(data->LV_acc));
-
 
 }
 
@@ -1634,9 +1671,12 @@ gint flags;
 		}
 
 		// no change: disable save
+		DB( printf(" changes %d - new %d\n", GLOBALS->change, GLOBALS->wallet_is_new) );
+		
+		
 		sensitive = (GLOBALS->change != 0 ) ? TRUE : FALSE;
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/FileMenu/SaveAs"), sensitive);
-		if(sensitive == TRUE && GLOBALS->wallet_is_new == TRUE) sensitive = FALSE;
+		//if(sensitive == TRUE && GLOBALS->wallet_is_new == TRUE) sensitive = FALSE;
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/FileMenu/Save"), sensitive);
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/FileMenu/Revert"), GLOBALS->exists_old);
 
@@ -1676,6 +1716,9 @@ gint flags;
 
 	// no active account: disable Edit, Over
 		sensitive = (active == TRUE ) ? TRUE : FALSE;
+		if(data->acc && data->acc->window != NULL)
+			sensitive = FALSE;
+		
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/OperationMenu/ShowOpe"), sensitive);
 
 	}
@@ -1823,6 +1866,7 @@ void
 gboolean wallet_dispose(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 struct wallet_data *data = user_data;
+struct WinGeometry *wg;
 gboolean retval = FALSE;
 
 	DB( g_printf("(wallet) dispose\n") );
@@ -1849,6 +1893,15 @@ gboolean retval = FALSE;
 		gtk_main_quit();
 
 	}
+
+	//store position and size
+	wg = &PREFS->wal_wg;
+	gtk_window_get_position(GTK_WINDOW(widget), &wg->l, &wg->t);
+	gtk_window_get_size(GTK_WINDOW(widget), &wg->w, &wg->h);
+	
+	DB( g_printf(" window: l=%d, t=%d, w=%d, h=%d\n", wg->l, wg->t, wg->w, wg->h) );
+
+
 	//delete-event TRUE abort/FALSE destroy
 	return retval;
 }
@@ -2229,7 +2282,7 @@ GtkWidget *statusbar;
 
 	/* bill book :: échéancier */
 		label = make_label(NULL, 0.0, 0.0);
-		gtk_label_set_markup (GTK_LABEL(label), _("<b>Upcoming automated operations</b>"));
+		gtk_label_set_markup (GTK_LABEL(label), _("<b>Upcoming automated transactions</b>"));
 	    gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, HB_BOX_SPACING);
 
 		sw = gtk_scrolled_window_new (NULL, NULL);
@@ -2276,4 +2329,5 @@ GtkWidget *statusbar;
 
   return window;
 }
+
 

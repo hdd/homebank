@@ -7,19 +7,21 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="48"
    height="48"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.43"
+   inkscape:version="0.45"
    version="1.0"
-   sodipodi:docbase="/home/max/dev/homebank/images/max_art"
-   sodipodi:docname="ope_show.png.svg"
+   sodipodi:docbase="/home/max/Desktop/dev/homebank/art/gnome-theme"
+   sodipodi:docname="ope_show.svg"
    inkscape:export-filename="/home/ulisse/Desktop/accessories-dictionary.png"
    inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:export-ydpi="90"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:modified="true">
   <defs
      id="defs4">
     <linearGradient
@@ -225,7 +227,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="7.919596"
      inkscape:cx="41.482905"
-     inkscape:cy="24.488951"
+     inkscape:cy="24.425816"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:showpageshadow="false"
@@ -236,9 +238,9 @@
      gridspacingy="0.5px"
      gridempspacing="2"
      inkscape:window-width="872"
-     inkscape:window-height="687"
-     inkscape:window-x="0"
-     inkscape:window-y="23"
+     inkscape:window-height="684"
+     inkscape:window-x="50"
+     inkscape:window-y="25"
      fill="#75507b" />
   <metadata
      id="metadata7">

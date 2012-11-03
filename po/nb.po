@@ -1,0 +1,1733 @@
+# Norwegian Bokmal translation for homebank
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the homebank package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: homebank\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-16 18:19+0200\n"
+"PO-Revision-Date: 2007-06-28 21:56+0000\n"
+"Last-Translator: Håvard Davidsen <havard.davidsen@gmail.com>\n"
+"Language-Team: Norwegian Bokmal <nb@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Rosetta-Export-Date: 2007-08-16 08:58:32+0000\n"
+
+#: ../data/homebank.desktop.in.in.h:1
+msgid "Free, easy, personal accounting for everyone."
+msgstr ""
+
+#: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:35
+msgid "HomeBank"
+msgstr "HjemmeBank"
+
+#: ../src/def_account.c:221
+msgid "(new account)"
+msgstr "Ny Konto"
+
+#: ../src/def_account.c:586
+msgid "Edit Accounts"
+msgstr "Rediger kontoer"
+
+#: ../src/def_account.c:660
+msgid "<b>Informations</b>"
+msgstr "<b> Informasjon</b>"
+
+#: ../src/def_account.c:668
+msgid "_Heading:"
+msgstr "_Overskrift"
+
+#: ../src/def_account.c:685
+msgid "_Number:"
+msgstr "_Nummer:"
+
+#: ../src/def_account.c:692
+msgid "_Bank name:"
+msgstr "_Bank navn:"
+
+#: ../src/def_account.c:699
+msgid "Include in the budget"
+msgstr "Inkluder i budsjettet"
+
+#: ../src/def_account.c:704
+msgid "This account was closed"
+msgstr "Denne kontoen var stengt"
+
+#: ../src/def_account.c:716
+msgid "<b>Balances</b>"
+msgstr "<b>Balanse</b>"
+
+#: ../src/def_account.c:720
+#, fuzzy
+msgid "_Initial:"
+msgstr "_Initial:"
+
+#: ../src/def_account.c:731
+msgid "_Overdrawn at:"
+msgstr "_Overtrukket av:"
+
+#: ../src/def_account.c:745
+msgid "<b>Cheque number</b>"
+msgstr "<b>Kø nummer</b>"
+
+#: ../src/def_account.c:749
+msgid "Notebook _1:"
+msgstr "Notatbok_1:"
+
+#: ../src/def_account.c:763
+msgid "Notebook _2:"
+msgstr "Notatbok_3:"
+
+#: ../src/def_archive.c:108
+msgid "Day"
+msgstr "Dag"
+
+#: ../src/def_archive.c:108
+msgid "Week"
+msgstr "Uke"
+
+#: ../src/def_archive.c:108 ../src/rep_stats.c:189
+msgid "Month"
+msgstr "Måned"
+
+#: ../src/def_archive.c:108 ../src/rep_stats.c:189
+msgid "Year"
+msgstr "År"
+
+#: ../src/def_archive.c:133
+msgid "(new archive)"
+msgstr "Nytt arkiv"
+
+#: ../src/def_archive.c:593
+#, fuzzy
+msgid "Edit Archives"
+msgstr "Endre arkiv"
+
+#: ../src/def_archive.c:658
+msgid "<b>General infos</b>"
+msgstr "<b>Generell informasjon</b>"
+
+#: ../src/def_archive.c:666
+#, fuzzy
+msgid "_Wording:"
+msgstr "_Ord"
+
+#: ../src/def_archive.c:674 ../src/def_operation.c:585
+msgid "_Amount:"
+msgstr "_Mengde:"
+
+#: ../src/def_archive.c:690 ../src/def_operation.c:601 ../src/import.c:1282
+#: ../src/rep_over.c:594
+msgid "A_ccount:"
+msgstr "K_onto:"
+
+#: ../src/def_archive.c:698 ../src/def_operation.c:609
+msgid "_Validated"
+msgstr "_Validert"
+
+#: ../src/def_archive.c:706
+#, fuzzy
+msgid "<b>Optional infos</b>"
+msgstr "<b>Selvalgte informasjoner</b>"
+
+#: ../src/def_archive.c:710 ../src/def_operation.c:641
+msgid "Pay_ment:"
+msgstr "Be_taling:"
+
+#: ../src/def_archive.c:729 ../src/def_operation.c:660
+msgid "Of notebook _2"
+msgstr "Av notatbok_2"
+
+#: ../src/def_archive.c:735 ../src/def_operation.c:666
+msgid "_To account:"
+msgstr "_Til konto:"
+
+#: ../src/def_archive.c:742 ../src/def_operation.c:682
+msgid "_Payee:"
+msgstr "_Betaler"
+
+#: ../src/def_archive.c:750 ../src/def_operation.c:690 ../src/def_wallet.c:217
+msgid "_Category:"
+msgstr "_Kategori:"
+
+#: ../src/def_archive.c:762
+msgid "<b>Automated insertion</b>"
+msgstr "<b>Automatisk insetting</b>"
+
+#: ../src/def_archive.c:766
+msgid "_Activate"
+msgstr "_Aktiver"
+
+#: ../src/def_archive.c:773
+msgid "_Limit to:"
+msgstr "_Begrens til:"
+
+#: ../src/def_archive.c:781
+msgid "t_imes"
+msgstr "t_ider"
+
+#: ../src/def_archive.c:786
+msgid "Ever_y:"
+msgstr "Hve_r:"
+
+#: ../src/def_archive.c:795
+msgid "_Unit:"
+msgstr "_Enhet:"
+
+#: ../src/def_archive.c:802
+msgid "_Next on:"
+msgstr "_Neste på:"
+
+#: ../src/def_budget.c:261 ../src/def_category.c:208
+msgid "File format error"
+msgstr "Filformat feil"
+
+#: ../src/def_budget.c:262
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, read the help for more details."
+msgstr ""
+"csv filen må inneholde nøyaktig antall kolonner, \n"
+"separert av semikolon, les hjelp for flere detaljer."
+
+#: ../src/def_budget.c:672
+msgid "Edit Budget"
+msgstr "Endre Budsjett"
+
+#: ../src/def_budget.c:733
+msgid "<b>Budget for each month</b>"
+msgstr "<b>Budsjett for hver måned</b>"
+
+#: ../src/def_budget.c:741
+msgid "is the same"
+msgstr "er det samme"
+
+#: ../src/def_budget.c:759
+msgid "is different"
+msgstr "er forskjellig"
+
+#: ../src/def_budget.c:790 ../src/def_category.c:1179 ../src/def_payee.c:781
+msgid "_Import"
+msgstr "_Importèr"
+
+#: ../src/def_budget.c:794 ../src/def_category.c:1183 ../src/def_payee.c:785
+msgid "E_xport"
+msgstr "E_ksporter"
+
+#: ../src/def_category.c:209
+msgid ""
+"The csv file must contains the exact numbers of column,\n"
+"separated by a semi-colon, please see the help for more details."
+msgstr ""
+
+#: ../src/def_category.c:652 ../src/def_payee.c:465
+msgid "Modify..."
+msgstr "Endre..."
+
+#: ../src/def_category.c:674
+msgid "_Income"
+msgstr "_Inntekt"
+
+#: ../src/def_category.c:1081
+msgid "Edit Categories"
+msgstr "Rediger kategorier"
+
+#: ../src/def_category.c:1122
+msgid "I_ncome"
+msgstr "I_nntekt"
+
+#: ../src/def_filter.c:51
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: ../src/def_filter.c:51
+msgid "Include"
+msgstr "Inkludér"
+
+#: ../src/def_filter.c:51
+msgid "Exclude"
+msgstr "Ekskludér"
+
+#: ../src/def_filter.c:738 ../src/def_filter.c:787 ../src/def_filter.c:836
+#: ../src/def_filter.c:914 ../src/def_filter.c:1009 ../src/def_filter.c:1053
+msgid "_Option:"
+msgstr "_Valg:"
+
+#: ../src/def_filter.c:759 ../src/def_filter.c:808 ../src/def_filter.c:857
+#: ../src/dsp_wallet.c:1195 ../src/homebank.c:199 ../src/homebank.c:299
+msgid "All"
+msgstr "Alle"
+
+#: ../src/def_filter.c:763 ../src/def_filter.c:812 ../src/def_filter.c:861
+msgid "None"
+msgstr "ingen"
+
+#: ../src/def_filter.c:767 ../src/def_filter.c:816 ../src/def_filter.c:865
+msgid "Invert"
+msgstr "Inverter"
+
+#: ../src/def_filter.c:905
+msgid "<b>Filter Date</b>"
+msgstr "<b>Filtrer Dato</b>"
+
+#: ../src/def_filter.c:922 ../src/def_filter.c:1018 ../src/rep_budget.c:880
+#: ../src/rep_car.c:624 ../src/rep_over.c:615 ../src/rep_stats.c:1308
+msgid "_From:"
+msgstr "_Fra:"
+
+#: ../src/def_filter.c:930 ../src/def_filter.c:1025 ../src/rep_budget.c:886
+#: ../src/rep_car.c:631 ../src/rep_over.c:621 ../src/rep_stats.c:1314
+msgid "_To:"
+msgstr "_Til:"
+
+#: ../src/def_filter.c:952
+msgid "<b>Filter State</b>"
+msgstr "<b>Filtrer Status</b>"
+
+#: ../src/def_filter.c:960
+msgid "Validated:"
+msgstr "Valider"
+
+#: ../src/def_filter.c:969
+msgid "Force:"
+msgstr "Tving"
+
+#. label = gtk_label_new(NULL);
+#. ----------------------------------------- l, r, t, b
+#. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
+#: ../src/def_filter.c:975
+msgid "display 'Added'"
+msgstr "vis 'Lagt til'"
+
+#. label = gtk_label_new(NULL);
+#. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
+#: ../src/def_filter.c:982
+msgid "display 'Edited'"
+msgstr "vis 'Endret'"
+
+#: ../src/def_filter.c:1001
+msgid "<b>Filter Amount</b>"
+msgstr "<b>Filtrer Sum</b>"
+
+#: ../src/def_filter.c:1044
+msgid "<b>Filter Payment</b>"
+msgstr "<b>Filtrer Betaling</b>"
+
+#: ../src/def_filter.c:1104
+msgid "Edit Filter"
+msgstr "Rediger Filter"
+
+#. common (date + state + amount)
+#: ../src/def_filter.c:1138 ../src/def_pref.c:153
+msgid "General"
+msgstr "Generelt"
+
+#: ../src/def_filter.c:1144 ../src/def_pref.c:1691 ../src/list_operation.c:350
+#: ../src/rep_budget.c:1204 ../src/rep_stats.c:189
+msgid "Category"
+msgstr "Kategori"
+
+#: ../src/def_filter.c:1149 ../src/def_pref.c:1686 ../src/list_operation.c:290
+#: ../src/list_upcoming.c:172 ../src/rep_stats.c:189
+msgid "Payee"
+msgstr "Betaler"
+
+#: ../src/def_filter.c:1158 ../src/list_account.c:255
+#: ../src/list_operation.c:655
+msgid "Account"
+msgstr "Konto"
+
+#: ../src/def_lists.c:153 ../src/def_lists.c:273 ../src/def_lists.c:413
+#: ../src/def_pref.c:1810
+msgid "Visible"
+msgstr "Synlig"
+
+#: ../src/def_lists.c:228 ../src/def_lists.c:359 ../src/def_lists.c:575
+#: ../src/widgets.c:60 ../src/widgets.c:506 ../src/widgets.c:651
+msgid "(none)"
+msgstr "(ingen)"
+
+#: ../src/def_operation.c:81 ../src/dsp_wallet.c:222
+msgid "Add transaction"
+msgstr ""
+
+#: ../src/def_operation.c:82
+msgid "Inherit transaction"
+msgstr ""
+
+#: ../src/def_operation.c:83
+msgid "Modify transaction"
+msgstr ""
+
+#. warn the useer we have notfound the child internal transfert
+#: ../src/def_operation.c:264
+#, c-format
+msgid ""
+"Could not propagate changes to child transfert:\n"
+"\n"
+"account:  %s\n"
+"date:  %s\n"
+"amount:  %s\n"
+"\n"
+"You should fix the problem manually."
+msgstr ""
+
+#: ../src/def_operation.c:559
+msgid "<b>General information</b>"
+msgstr ""
+
+#: ../src/def_operation.c:567
+msgid "_Date:"
+msgstr "_Dato:"
+
+#: ../src/def_operation.c:576
+msgid "_Description:"
+msgstr ""
+
+#: ../src/def_operation.c:614
+msgid "_Remind"
+msgstr "_Varsel"
+
+#: ../src/def_operation.c:633
+msgid "<b>Optional information</b>"
+msgstr ""
+
+#: ../src/def_operation.c:673
+msgid "_Info:"
+msgstr "_Informasjon:"
+
+#: ../src/def_operation.c:795
+#, fuzzy
+msgid "_Fill with archive:"
+msgstr "_Fyll med arkivet:"
+
+#: ../src/def_payee.c:711
+msgid "Edit Payees"
+msgstr "Endre Betalere"
+
+#: ../src/def_pref.c:154
+msgid "Interface"
+msgstr "Grensesnitt"
+
+#: ../src/def_pref.c:155
+msgid "Columns"
+msgstr "Kolonner"
+
+#: ../src/def_pref.c:156
+msgid "Display format"
+msgstr "Vis format"
+
+#. N_("Help system"),
+#: ../src/def_pref.c:158
+msgid "Euro options"
+msgstr "Euro muligheter"
+
+#: ../src/def_pref.c:159
+msgid "Report options"
+msgstr "Raport muligheter"
+
+#: ../src/def_pref.c:164
+msgid "System defaults"
+msgstr "System standarder"
+
+#: ../src/def_pref.c:165
+msgid "Icons only"
+msgstr "Kun ikoner"
+
+#: ../src/def_pref.c:166
+msgid "Text only"
+msgstr "Kun tekst"
+
+#: ../src/def_pref.c:167
+msgid "Text under icons"
+msgstr "Tekst under ikoner"
+
+#: ../src/def_pref.c:168
+msgid "Text beside icons"
+msgstr "Tekst ved siden av ikoner"
+
+#: ../src/def_pref.c:716
+msgid "<b>Statistics options</b>"
+msgstr "<b>Statistikk valg</b>"
+
+#: ../src/def_pref.c:724
+msgid "Show by _amount"
+msgstr "Vis av _beløp"
+
+#: ../src/def_pref.c:729
+msgid "Show _rate column"
+msgstr "Vis _kurs kolonne"
+
+#: ../src/def_pref.c:734 ../src/def_pref.c:744
+msgid "Show _details"
+msgstr "Vis _detaljer"
+
+#: ../src/def_pref.c:740
+msgid "<b>Budget options</b>"
+msgstr "<b>Budsjettvalg</b>"
+
+#: ../src/def_pref.c:773 ../src/def_pref.c:1135 ../src/def_wallet.c:177
+msgid "<b>General</b>"
+msgstr "<b>Generell</b>"
+
+#: ../src/def_pref.c:782
+msgid "Fill from:"
+msgstr "Fyll fra:"
+
+#: ../src/def_pref.c:791
+msgid "Country:"
+msgstr "Land:"
+
+#: ../src/def_pref.c:800
+msgid "Value:"
+msgstr "Verdi:"
+
+#: ../src/def_pref.c:810
+msgid "<b>Numbers format</b>"
+msgstr "<b>Nummerformat</b>"
+
+#: ../src/def_pref.c:814 ../src/def_pref.c:970
+#, fuzzy
+msgid "Prefix symbol:"
+msgstr "Prefix symbol:"
+
+#: ../src/def_pref.c:821 ../src/def_pref.c:977
+#, fuzzy
+msgid "Suffix symbol:"
+msgstr "Suffix symbol"
+
+#: ../src/def_pref.c:828 ../src/def_pref.c:984
+#, fuzzy
+msgid "Decimal char:"
+msgstr "Desimal karakter:"
+
+#: ../src/def_pref.c:835 ../src/def_pref.c:991
+#, fuzzy
+msgid "Grouping char:"
+msgstr "Grupperings karakter:"
+
+#: ../src/def_pref.c:842 ../src/def_pref.c:998
+msgid "_Frac digits:"
+msgstr "_Fraktaltall:"
+
+#: ../src/def_pref.c:941
+msgid "<b>Date options</b>"
+msgstr "<b>Dato valg</b>"
+
+#: ../src/def_pref.c:949
+msgid "_Date format:"
+msgstr "_Datoformat:"
+
+#: ../src/def_pref.c:966
+msgid "<b>Numbers options</b>"
+msgstr "<b>Nummervalg</b>"
+
+#: ../src/def_pref.c:1029
+msgid "<b>Measurement units</b>"
+msgstr ""
+
+#: ../src/def_pref.c:1033
+msgid "Use _British units"
+msgstr "Bruk _Britisk enhet"
+
+#: ../src/def_pref.c:1059
+msgid "<b>Transaction list</b>"
+msgstr ""
+
+#: ../src/def_pref.c:1139
+msgid "_Toolbar:"
+msgstr "_Verktøylinje:"
+
+#: ../src/def_pref.c:1163
+msgid "<b>Amount colors</b>"
+msgstr "<b>Mengdefarger</b>"
+
+#: ../src/def_pref.c:1167
+msgid "_Expense:"
+msgstr "_Utgift:"
+
+#: ../src/def_pref.c:1177
+msgid "_Income:"
+msgstr "_Inntekt"
+
+#: ../src/def_pref.c:1187
+msgid "_Warning:"
+msgstr "_Advarsel"
+
+#: ../src/def_pref.c:1216
+msgid "<b>Folders</b>"
+msgstr "<b>Mapper</b>"
+
+#: ../src/def_pref.c:1224
+#, fuzzy
+msgid "_Wallet:"
+msgstr "_Pengebok:"
+
+#: ../src/def_pref.c:1240
+msgid "_Import:"
+msgstr "_Import:"
+
+#: ../src/def_pref.c:1258
+#, fuzzy
+msgid "_Run the wizard"
+msgstr "_Kjør wizard"
+
+#: ../src/def_pref.c:1267
+msgid "<b>Initial date filter</b>"
+msgstr "<b>Start datofilter</b>"
+
+#: ../src/def_pref.c:1271 ../src/dsp_account.c:2006 ../src/rep_budget.c:892
+#: ../src/rep_car.c:637 ../src/rep_over.c:627 ../src/rep_stats.c:1320
+#, fuzzy
+msgid "_Range:"
+msgstr "_Tid:"
+
+#: ../src/def_pref.c:1376
+msgid "Preferences"
+msgstr "Preferanser"
+
+#. {	N_(""), COL_OPE_STATUS,		},
+#. {	N_(""), COL_OPE_DATE,		},
+#: ../src/def_pref.c:1685 ../src/list_operation.c:267
+#: ../src/list_operation.c:676
+msgid "Info"
+msgstr "Info"
+
+#: ../src/def_pref.c:1687 ../src/list_operation.c:307
+#: ../src/list_operation.c:702 ../src/list_upcoming.c:183
+#: ../src/rep_over.c:955
+msgid "Description"
+msgstr ""
+
+#. column: Amount
+#: ../src/def_pref.c:1688 ../src/list_operation.c:462
+#: ../src/list_operation.c:712 ../src/list_upcoming.c:194
+#: ../src/rep_car.c:1012
+msgid "Amount"
+msgstr "Beløp"
+
+#. column: Expense
+#: ../src/def_pref.c:1689 ../src/list_operation.c:465 ../src/rep_budget.c:98
+#: ../src/rep_over.c:964 ../src/rep_stats.c:193 ../src/rep_stats.c:1682
+msgid "Expense"
+msgstr "Utgift"
+
+#. column: Income
+#: ../src/def_pref.c:1690 ../src/list_operation.c:468 ../src/rep_budget.c:98
+#: ../src/rep_over.c:968 ../src/rep_stats.c:193 ../src/rep_stats.c:1688
+msgid "Income"
+msgstr "Inntekt"
+
+#: ../src/def_pref.c:1821
+msgid "Column"
+msgstr "Kolonne"
+
+#: ../src/def_wallet.c:145
+msgid "Wallet properties"
+msgstr "Lommebok egenskaper"
+
+#: ../src/def_wallet.c:185
+msgid "_Owner:"
+msgstr "_Eier:"
+
+#: ../src/def_wallet.c:194
+msgid "<b>Automatic transactions</b>"
+msgstr ""
+
+#: ../src/def_wallet.c:201
+msgid "_Insert:"
+msgstr "_Sett inn"
+
+#: ../src/def_wallet.c:206
+msgid "days into the future"
+msgstr ""
+
+#: ../src/def_wallet.c:213
+msgid "<b>Car cost</b>"
+msgstr "<b>Bil kostnad</b>"
+
+#. name, stock id, label
+#: ../src/dsp_account.c:160
+msgid "_Account"
+msgstr ""
+
+#: ../src/dsp_account.c:161
+msgid "Transacti_on"
+msgstr ""
+
+#: ../src/dsp_account.c:162
+msgid "_Tools"
+msgstr "Ve_rktøy"
+
+#: ../src/dsp_account.c:164 ../src/dsp_wallet.c:209
+msgid "_Close"
+msgstr "_Lukk"
+
+#: ../src/dsp_account.c:164
+msgid "Close the current account"
+msgstr ""
+
+#. name, stock id, label, accelerator, tooltip
+#: ../src/dsp_account.c:167
+msgid "_Filter..."
+msgstr "_Filtrer..."
+
+#: ../src/dsp_account.c:167
+msgid "Open the list filter"
+msgstr "Åpne liste filtret"
+
+#: ../src/dsp_account.c:169
+msgid "_Add..."
+msgstr "_Legg til..."
+
+#: ../src/dsp_account.c:169
+msgid "Add a new transaction"
+msgstr ""
+
+#: ../src/dsp_account.c:170
+msgid "_Inherit..."
+msgstr "_Arv..."
+
+#: ../src/dsp_account.c:170
+msgid "Inherit from the active transaction"
+msgstr ""
+
+#: ../src/dsp_account.c:171
+msgid "_Edit..."
+msgstr "_Rediger..."
+
+#: ../src/dsp_account.c:171
+msgid "Edit the active transaction"
+msgstr ""
+
+#: ../src/dsp_account.c:172
+msgid "(In)_Validate..."
+msgstr ""
+
+#: ../src/dsp_account.c:172
+msgid "Validate the active transactions"
+msgstr ""
+
+#: ../src/dsp_account.c:173
+msgid "_Remove..."
+msgstr "Fje_rn..."
+
+#: ../src/dsp_account.c:173
+msgid "Remove the active transactions"
+msgstr ""
+
+#: ../src/dsp_account.c:174
+msgid "Make an archive..."
+msgstr "Lag et arkiv..."
+
+#: ../src/dsp_account.c:176
+msgid "Import CSV..."
+msgstr ""
+
+#: ../src/dsp_account.c:177
+msgid "Export CSV..."
+msgstr ""
+
+#: ../src/dsp_account.c:361
+msgid "No corresponding transfert can be found."
+msgstr ""
+
+#. warn the useer we have notfound the child internal transfert
+#: ../src/dsp_account.c:381
+#, c-format
+msgid ""
+"Could not delete child transfert:\n"
+"\n"
+"account:  %s\n"
+"date:  %s\n"
+"amount:  %s\n"
+"\n"
+"You should fix the problem manually."
+msgstr ""
+
+#: ../src/dsp_account.c:604
+msgid "Transaction CSV import result"
+msgstr ""
+
+#: ../src/dsp_account.c:605
+#, c-format
+msgid ""
+"%d transactions inserted\n"
+"%d errors in the file"
+msgstr ""
+
+#: ../src/dsp_account.c:728
+msgid ""
+"Do you want to create an Archive with\n"
+"each of the selected transaction ?"
+msgstr ""
+
+#: ../src/dsp_account.c:1258
+msgid ""
+"Do you want to delete\n"
+"each of the selected transaction ?"
+msgstr ""
+
+#: ../src/dsp_account.c:1600
+msgid "Modify date..."
+msgstr "Modifisèr dato..."
+
+#: ../src/dsp_account.c:1605
+msgid "Modify info..."
+msgstr "Modifisèr informasjon..."
+
+#: ../src/dsp_account.c:1612
+msgid "Modify payee..."
+msgstr "Modifisèr betaler..."
+
+#: ../src/dsp_account.c:1618
+msgid "Modify description..."
+msgstr ""
+
+#: ../src/dsp_account.c:1624
+msgid "Modify amount..."
+msgstr "Modifisèr beløp..."
+
+#: ../src/dsp_account.c:1629
+msgid "Modify category..."
+msgstr "Modifisèr kategori..."
+
+#: ../src/dsp_account.c:2011 ../src/rep_budget.c:898 ../src/rep_car.c:643
+#: ../src/rep_over.c:633 ../src/rep_stats.c:1326
+msgid "_Month:"
+msgstr "_Måned:"
+
+#: ../src/dsp_account.c:2016 ../src/rep_budget.c:904 ../src/rep_car.c:649
+#: ../src/rep_over.c:639 ../src/rep_stats.c:1332
+msgid "_Year:"
+msgstr "_År:"
+
+#: ../src/dsp_account.c:2036
+msgid "Future:"
+msgstr "Fremtidig:"
+
+#: ../src/dsp_account.c:2045
+msgid "Today:"
+msgstr "Idag:"
+
+#: ../src/dsp_account.c:2054
+msgid "Bank:"
+msgstr "Bank:"
+
+#: ../src/dsp_account.c:2060
+msgid "Minor"
+msgstr "Mindre"
+
+#. name, stock id, label
+#: ../src/dsp_wallet.c:190
+msgid "_File"
+msgstr "_Fil"
+
+#: ../src/dsp_wallet.c:191
+msgid "_Edit"
+msgstr "R_edigér"
+
+#: ../src/dsp_wallet.c:192
+msgid "_Display"
+msgstr "_Vis"
+
+#: ../src/dsp_wallet.c:193
+msgid "_Transactions"
+msgstr ""
+
+#: ../src/dsp_wallet.c:194
+msgid "_Reports"
+msgstr "_Rapporter"
+
+#: ../src/dsp_wallet.c:195
+msgid "_Help"
+msgstr "_Hjelp"
+
+#. name, stock id, label, accelerator, tooltip
+#. FileMenu
+#: ../src/dsp_wallet.c:200
+msgid "_New"
+msgstr "_Ny"
+
+#: ../src/dsp_wallet.c:200
+msgid "Create a new wallet"
+msgstr "Lag en ny konto"
+
+#: ../src/dsp_wallet.c:201
+msgid "_Open..."
+msgstr "_Åpne"
+
+#: ../src/dsp_wallet.c:201
+msgid "Open a wallet"
+msgstr "Åpne en konto"
+
+#: ../src/dsp_wallet.c:202
+msgid "Open _Recent"
+msgstr "Åpne _nylig brukte"
+
+#: ../src/dsp_wallet.c:203
+msgid "_Save"
+msgstr "_Lagre"
+
+#: ../src/dsp_wallet.c:203
+msgid "Save the current wallet"
+msgstr ""
+
+#: ../src/dsp_wallet.c:204
+msgid "Save As..."
+msgstr "Lagre som..."
+
+#: ../src/dsp_wallet.c:204
+msgid "Save the current wallet with a different name"
+msgstr "Lagre nåværende kont med et annet navn"
+
+#: ../src/dsp_wallet.c:205
+msgid "Revert"
+msgstr "Tilbakestill"
+
+#: ../src/dsp_wallet.c:205
+msgid "Revert to a saved version of this file"
+msgstr ""
+
+#: ../src/dsp_wallet.c:206
+msgid "Import..."
+msgstr "Importer ..."
+
+#: ../src/dsp_wallet.c:206
+msgid "Open the import assistant"
+msgstr "Åpne importassistenten"
+
+#: ../src/dsp_wallet.c:207
+msgid "Import Amiga..."
+msgstr "Importer Amiga..."
+
+#: ../src/dsp_wallet.c:207
+msgid "Import a file in Amiga 3.0 format"
+msgstr "Importèr en fil i Amiga 3.0 format"
+
+#: ../src/dsp_wallet.c:208
+msgid "_Properties..."
+msgstr "_Egenskaper ..."
+
+#: ../src/dsp_wallet.c:208
+msgid "Configure wallet"
+msgstr "Konfigurer konto"
+
+#: ../src/dsp_wallet.c:209
+msgid "Close the current wallet"
+msgstr "Lukk nåværende konto"
+
+#: ../src/dsp_wallet.c:210
+msgid "_Quit"
+msgstr "Av_slutt"
+
+#: ../src/dsp_wallet.c:210
+msgid "Quit homebank"
+msgstr ""
+
+#. EditMenu
+#: ../src/dsp_wallet.c:213
+msgid "Acc_ounts..."
+msgstr "Kon_toer..."
+
+#: ../src/dsp_wallet.c:213
+msgid "Configure the accounts"
+msgstr "Konfigurèr kontoer"
+
+#: ../src/dsp_wallet.c:214
+msgid "_Payees..."
+msgstr "_Betalere..."
+
+#: ../src/dsp_wallet.c:214
+msgid "Configure the payees"
+msgstr "Konfigurèr betalere"
+
+#: ../src/dsp_wallet.c:215
+msgid "Categories..."
+msgstr "Kategorier..."
+
+#: ../src/dsp_wallet.c:215
+msgid "Configure the categories"
+msgstr "Konfigurèr kategoriene"
+
+#: ../src/dsp_wallet.c:216
+msgid "Arc_hives..."
+msgstr "Ark_iv..."
+
+#: ../src/dsp_wallet.c:216
+msgid "Configure the archives"
+msgstr "Konfigurèr arkivene"
+
+#: ../src/dsp_wallet.c:217
+msgid "Budget..."
+msgstr "Budsjett..."
+
+#: ../src/dsp_wallet.c:217
+msgid "Configure the budget"
+msgstr "Konfigurèr budsjettet"
+
+#: ../src/dsp_wallet.c:218
+msgid "Preferences..."
+msgstr "innstillinger ..."
+
+#: ../src/dsp_wallet.c:218
+msgid "Configure homebank"
+msgstr ""
+
+#. OperationMenu
+#: ../src/dsp_wallet.c:221
+msgid "Show..."
+msgstr "Vis..."
+
+#: ../src/dsp_wallet.c:221
+msgid "Shows selected account transactions"
+msgstr ""
+
+#: ../src/dsp_wallet.c:222
+msgid "Add..."
+msgstr "Legg til..."
+
+#: ../src/dsp_wallet.c:223
+msgid "Check automated..."
+msgstr "Sjekk automatisert..."
+
+#: ../src/dsp_wallet.c:223
+msgid "Insert pending automated transactions"
+msgstr ""
+
+#. ReportMenu
+#: ../src/dsp_wallet.c:226
+msgid "_Statistics..."
+msgstr "_Statistikk"
+
+#: ../src/dsp_wallet.c:226
+msgid "Open the Statistics report"
+msgstr "Åpne Statistikkrapport"
+
+#: ../src/dsp_wallet.c:227
+msgid "B_udget..."
+msgstr "B_udsjett..."
+
+#: ../src/dsp_wallet.c:227
+msgid "Open the Budget report"
+msgstr "Åpne Budsjettrapport"
+
+#: ../src/dsp_wallet.c:228
+msgid "Ove_rdrawn..."
+msgstr "Ove_rtrukket..."
+
+#: ../src/dsp_wallet.c:228
+msgid "Open the Overdrawn report"
+msgstr "Åpne Overtrukketrapport"
+
+#: ../src/dsp_wallet.c:229
+msgid "_Car cost..."
+msgstr ""
+
+#: ../src/dsp_wallet.c:229
+msgid "Open the Car cost report"
+msgstr "Åpne Bilkostnadsrapport"
+
+#. HelpMenu
+#: ../src/dsp_wallet.c:232
+msgid "_Contents"
+msgstr "_Innhold"
+
+#: ../src/dsp_wallet.c:232
+msgid "Documentation about HomeBank"
+msgstr "Dokumentasjon om HjemmeBank"
+
+#: ../src/dsp_wallet.c:233
+msgid "Get Help Online..."
+msgstr "Få hjelp på nettet..."
+
+#: ../src/dsp_wallet.c:233
+msgid "Connect to the LaunchPad website for online help"
+msgstr "Koble til LaunchPad nettstedet for hjelp"
+
+#: ../src/dsp_wallet.c:234
+msgid "Translate this Application..."
+msgstr "Oversett denne Applikasjonen"
+
+#: ../src/dsp_wallet.c:234
+msgid "Connect to the LaunchPad website to help translate this application"
+msgstr "Koble til LaunchPad nettstedet for å hjelpe til å oversette"
+
+#: ../src/dsp_wallet.c:235
+msgid "Report a Problem..."
+msgstr "Rapporter et Problem"
+
+#: ../src/dsp_wallet.c:235
+msgid "Connect to the LaunchPad website to help fix problems"
+msgstr "Koble til LaunchPad nettstedet for hjelp til å ordne problem"
+
+#: ../src/dsp_wallet.c:237
+msgid "_About"
+msgstr "_Om"
+
+#: ../src/dsp_wallet.c:237
+msgid "About HomeBank"
+msgstr ""
+
+#. name         , stockid, label, accelerator, tooltip, callback, is_active
+#: ../src/dsp_wallet.c:245
+msgid "Minor currency"
+msgstr "Mindre valutta"
+
+#: ../src/dsp_wallet.c:570 ../src/dsp_wallet.c:621 ../src/dsp_wallet.c:637
+msgid "No suitable web browser executable could be found."
+msgstr "Ingen egnet nettleser funnet"
+
+#: ../src/dsp_wallet.c:571 ../src/dsp_wallet.c:590 ../src/dsp_wallet.c:606
+#: ../src/dsp_wallet.c:622 ../src/dsp_wallet.c:638
+#, c-format
+msgid "Could not display the URL '%s'"
+msgstr ""
+
+#: ../src/dsp_wallet.c:589 ../src/dsp_wallet.c:605
+msgid "No suitable web browser application could be found."
+msgstr ""
+
+#. "translator-credits"	, "trans",
+#: ../src/dsp_wallet.c:692
+msgid "Free, easy, personal accounting for everyone !"
+msgstr ""
+
+#: ../src/dsp_wallet.c:726
+msgid ""
+"Do you want to save the changes\n"
+"in the current file ?"
+msgstr ""
+"Vil du lagre endringene\n"
+"i denne filen?"
+
+#: ../src/dsp_wallet.c:730
+#, c-format
+msgid ""
+"If you do not save, %d changes will be\n"
+"definitively lost."
+msgstr ""
+"Hvis du ikke lagrer, %d endringene\n"
+"gå tapt."
+
+#: ../src/dsp_wallet.c:735
+msgid "Do _not save"
+msgstr "Ikke lagre"
+
+#: ../src/dsp_wallet.c:807
+msgid "(Nobody)"
+msgstr "(Ingen)"
+
+#: ../src/dsp_wallet.c:1108
+msgid "No transaction to insert"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1110
+#, c-format
+msgid "%d transactions inserted"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1113
+msgid "Check automated transactions result"
+msgstr ""
+
+#: ../src/dsp_wallet.c:1138
+msgid "Import Amiga file"
+msgstr "Importer Amiga fil"
+
+#: ../src/dsp_wallet.c:1263
+#, c-format
+msgid "Revert to the previously saved file of '%s'?"
+msgstr "Endre tilbake til den tidligere lagrede filen '%s'?"
+
+#: ../src/dsp_wallet.c:1269
+msgid ""
+"- Changes made to the wallet will be permanently lost\n"
+"- Wallet will be restored to the last save (.old)"
+msgstr ""
+"- Endringer som er gjort i denne lommebok vil bli evig tapt\n"
+"- Lommeboken vil bli opptatt som siste lagrede (.old)"
+
+#: ../src/dsp_wallet.c:2269
+msgid "<b>Accounts summary</b>"
+msgstr "<b>Konto sammendrag</b>"
+
+#: ../src/dsp_wallet.c:2285
+msgid "<b>Upcoming automated transactions</b>"
+msgstr ""
+
+#: ../src/homebank.c:116
+msgid "Output version information and exit"
+msgstr "Vis versjoninformasjon og avslutt"
+
+#: ../src/homebank.c:119
+msgid "[FILE]"
+msgstr "[FIL]"
+
+#: ../src/homebank.c:177
+msgid "Import from CSV"
+msgstr ""
+
+#: ../src/homebank.c:182
+msgid "Export as CSV"
+msgstr ""
+
+#: ../src/homebank.c:194
+msgid "CSV files"
+msgstr "CVS filer"
+
+#: ../src/homebank.c:294
+msgid "Amiga files"
+msgstr "Amiga filer"
+
+#: ../src/homebank.c:927 ../src/homebank.c:928
+msgid "HomeBank options"
+msgstr "HjemmeBank valg"
+
+#: ../src/homebank.c:1025
+#, c-format
+msgid "Unable to open '%s', the file does not exist.\n"
+msgstr "Får ikke åpnet '%s', filen finnes ikke.\n"
+
+#: ../src/imp_amiga.c:104
+msgid "Import HomeBank Amiga File"
+msgstr "Importer HjemmeBank Amiga Fil"
+
+#: ../src/imp_amiga.c:105
+#, c-format
+msgid ""
+"Wrong Amiga file version %d.%d\n"
+"( must be > 3.0 )"
+msgstr ""
+
+#: ../src/import.c:303 ../src/import.c:650
+#, c-format
+msgid "new%d"
+msgstr "ny%d"
+
+#: ../src/import.c:695
+msgid "Unknow/Invalid file..."
+msgstr "Ukjent/Ugyldig fil..."
+
+#: ../src/import.c:699
+msgid "OFX file recognised !"
+msgstr ""
+
+#: ../src/import.c:704
+msgid "CSV operation file recognised !"
+msgstr ""
+
+#: ../src/import.c:1122
+#, c-format
+msgid ""
+"%d accounts will be created.\n"
+"\n"
+"%d transactions will be imported.\n"
+"%d transactions will be rejected."
+msgstr ""
+
+#: ../src/import.c:1136
+#, c-format
+msgid ""
+"%d transactions will be imported.\n"
+"%d transactions will be rejected."
+msgstr ""
+
+#: ../src/import.c:1152
+#, c-format
+msgid "Import assistant (%d of %d)"
+msgstr "Import assistent (%d av %d)"
+
+#: ../src/import.c:1193
+msgid ""
+"HomeBank can import transactions from several file formats:\n"
+"\n"
+"- CSV (Homebank transaction CSV export format only)\n"
+"- OFX/QFX (optional)\n"
+"\n"
+"Other formats or not supported at the moment.\n"
+"\n"
+"The import process has several steps. Your HomeBank accounts\n"
+"will not be changed until you click \"Apply\" at the end of this assistant.\n"
+"\n"
+"Now, click \"forward\" to start importing a file."
+msgstr ""
+
+#: ../src/import.c:1212
+msgid "Transaction import wizard"
+msgstr ""
+
+#. gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), vbox, GTK_ASSISTANT_PAGE_CONTENT);
+#: ../src/import.c:1247
+msgid "Select a file to load"
+msgstr "Velg en fil å laste inn"
+
+#: ../src/import.c:1272
+msgid ""
+"The file you selected appears to contains transactions\n"
+"for just one account, without specifying its name.\n"
+"\n"
+"Please select the account to which these transactions can be attached."
+msgstr ""
+
+#: ../src/import.c:1292
+msgid "Set the default account"
+msgstr "Velg standard konto"
+
+#: ../src/import.c:1319
+msgid ""
+"Duplicate transactions will be found and unselected\n"
+"for import but can, of course, be reselected.\n"
+"\n"
+"The match is done in order by account, amount and date.\n"
+"For date, you can set a tolerance:\n"
+"\n"
+"- 0 means an exact match.\n"
+"- 1-14 to match +/- 1 to 14 days\n"
+"\n"
+msgstr ""
+
+#: ../src/import.c:1332
+msgid "Date _tolerance:"
+msgstr "Dato_tolleranse:"
+
+#: ../src/import.c:1337
+msgid "days"
+msgstr "dager"
+
+#: ../src/import.c:1344
+msgid "Set the duplicate match option"
+msgstr "Gjør samsvarende treff valget"
+
+#: ../src/import.c:1368
+msgid "<b>Transactions to import</b>"
+msgstr ""
+
+#: ../src/import.c:1383
+msgid "<b>Possible duplicate for the above selected transaction</b>"
+msgstr ""
+
+#. Create the expander
+#: ../src/import.c:1387
+msgid "Details"
+msgstr "Detaljer"
+
+#. gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), vbox, GTK_ASSISTANT_PAGE_CONFIRM);
+#. gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), vbox, TRUE);
+#: ../src/import.c:1411
+msgid "Select transactions to import"
+msgstr ""
+
+#: ../src/import.c:1439
+msgid ""
+"Click \"Apply\" to update your accounts.\n"
+"\n"
+msgstr ""
+"Trykk \"Bruk\" for å oppdatere konti.\n"
+"\n"
+
+#. gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), label, TRUE);
+#: ../src/import.c:1452
+msgid "Update your accounts"
+msgstr "Oppdater dine konti"
+
+#: ../src/list_account.c:269 ../src/list_operation.c:422
+msgid "State"
+msgstr "Fylke"
+
+#. column 4: Bank
+#: ../src/list_account.c:287
+msgid "Bank"
+msgstr "Bank"
+
+#. column 5: Today
+#: ../src/list_account.c:291
+msgid "Today"
+msgstr "I dag"
+
+#. column 6: Future
+#: ../src/list_account.c:295
+msgid "Future"
+msgstr "Futurum"
+
+#: ../src/list_operation.c:444 ../src/list_operation.c:666
+#: ../src/rep_car.c:969 ../src/rep_over.c:945
+msgid "Date"
+msgstr "Dato"
+
+#: ../src/list_upcoming.c:206
+msgid "Next on"
+msgstr "Neste på"
+
+#: ../src/list_upcoming.c:218
+msgid "Remaining"
+msgstr "Gjenstår"
+
+#: ../src/rep_budget.c:96
+msgid "Spent & Budget"
+msgstr "Brukt & Budsjett"
+
+#. column: Expense
+#: ../src/rep_budget.c:96 ../src/rep_budget.c:1214
+msgid "Spent"
+msgstr "Brukt"
+
+#. column: Income
+#: ../src/rep_budget.c:96 ../src/rep_budget.c:1218
+msgid "Budget"
+msgstr "Budsjett"
+
+#. column: Balance
+#: ../src/rep_budget.c:96 ../src/rep_budget.c:1222
+msgid "Decay"
+msgstr "Forfall"
+
+#: ../src/rep_budget.c:104 ../src/rep_over.c:91 ../src/rep_stats.c:124
+msgid "List"
+msgstr "Liste"
+
+#: ../src/rep_budget.c:104 ../src/rep_over.c:91 ../src/rep_stats.c:124
+msgid "View results as list"
+msgstr "Vis resultat som liste"
+
+#: ../src/rep_budget.c:105 ../src/rep_stats.c:125
+msgid "Bar"
+msgstr "Søyle"
+
+#: ../src/rep_budget.c:105 ../src/rep_stats.c:125
+msgid "View results as bars"
+msgstr ""
+
+#: ../src/rep_budget.c:107 ../src/rep_stats.c:128
+msgid "Detail"
+msgstr "Detalj"
+
+#: ../src/rep_budget.c:107 ../src/rep_stats.c:128
+msgid "Toggle detail"
+msgstr "Bytte detalj"
+
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:129
+msgid "Legend"
+msgstr "Forklaring"
+
+#: ../src/rep_budget.c:108 ../src/rep_stats.c:129
+msgid "Toggle legend"
+msgstr ""
+
+#: ../src/rep_budget.c:110 ../src/rep_over.c:94 ../src/rep_stats.c:133
+msgid "Refresh"
+msgstr "Oppdatere"
+
+#: ../src/rep_budget.c:110 ../src/rep_over.c:94 ../src/rep_stats.c:133
+msgid "Refresh results"
+msgstr "Oppdater resultat"
+
+#: ../src/rep_budget.c:822
+msgid "Budget report"
+msgstr "Budsjett rapport"
+
+#: ../src/rep_budget.c:848 ../src/rep_car.c:598 ../src/rep_over.c:590
+#: ../src/rep_stats.c:1265
+msgid "<b>Display</b>"
+msgstr "<b>Vise</b>"
+
+#: ../src/rep_budget.c:852
+msgid "_Kind:"
+msgstr "_Sort:"
+
+#: ../src/rep_budget.c:859 ../src/rep_stats.c:1276
+msgid "_View:"
+msgstr "_Vis:"
+
+#: ../src/rep_budget.c:866 ../src/rep_car.c:610 ../src/rep_over.c:601
+#: ../src/rep_stats.c:1288
+msgid "_Minor currency"
+msgstr "_Mindre valutta"
+
+#: ../src/rep_budget.c:876 ../src/rep_car.c:620 ../src/rep_over.c:611
+#: ../src/rep_stats.c:1304
+msgid "<b>Date filter</b>"
+msgstr "<b>Datofilter</b>"
+
+#: ../src/rep_budget.c:952
+msgid "Decay:"
+msgstr ""
+
+#: ../src/rep_budget.c:961
+msgid "Budget:"
+msgstr "Budsjett:"
+
+#: ../src/rep_budget.c:970
+msgid "Spent:"
+msgstr "Brukt:"
+
+#: ../src/rep_car.c:571
+msgid "Car report"
+msgstr "Bilrapport"
+
+#: ../src/rep_car.c:602
+msgid "_Car category:"
+msgstr "_Bil kategori:"
+
+#. column: consumption for 100Km
+#: ../src/rep_car.c:686 ../src/rep_car.c:1020
+msgid "100 Km"
+msgstr "100 Km"
+
+#: ../src/rep_car.c:689
+msgid "Total"
+msgstr "Total"
+
+#: ../src/rep_car.c:693
+msgid "Meter:"
+msgstr "Meter"
+
+#: ../src/rep_car.c:697
+msgid "Consumption:"
+msgstr "Forbruk"
+
+#: ../src/rep_car.c:701
+msgid "Fuel cost:"
+msgstr "Drivstoffkostnad"
+
+#: ../src/rep_car.c:705
+msgid "Other cost:"
+msgstr "Andre kostnader"
+
+#: ../src/rep_car.c:709
+msgid "Total cost:"
+msgstr "Total kostnad:"
+
+#.
+#. LST_CAR_DATE,
+#. LST_CAR_WORDING,
+#. LST_CAR_METER,
+#. LST_CAR_FUEL,
+#. LST_CAR_PRICE,
+#. LST_CAR_AMOUNT,
+#. LST_CAR_DIST,
+#. LST_CAR_100KM
+#.
+#.
+#. column: Wording
+#.
+#. column = gtk_tree_view_column_new();
+#. gtk_tree_view_column_set_title(column, _("Wording"));
+#. gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+#. renderer = gtk_cell_renderer_text_new();
+#. gtk_tree_view_column_pack_start(column, renderer, TRUE);
+#. gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_WORDING);
+#. //gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_text_cell_data_function, NULL, NULL);
+#.
+#. column: Meter
+#: ../src/rep_car.c:1000
+msgid "Meter"
+msgstr "Meter"
+
+#. column: Fuel load
+#: ../src/rep_car.c:1004
+msgid "Fuel"
+msgstr "Drivstoff"
+
+#. column: Price by unit
+#: ../src/rep_car.c:1008
+msgid "Price"
+msgstr "Pris"
+
+#. column: Distance done
+#: ../src/rep_car.c:1016
+msgid "Dist."
+msgstr "Distanse."
+
+#: ../src/rep_over.c:92
+msgid "Line"
+msgstr "Linje"
+
+#: ../src/rep_over.c:92
+msgid "View results as lines"
+msgstr "Vis resultat som linjer"
+
+#: ../src/rep_over.c:561
+msgid "Overdrawn report"
+msgstr "Overtrekk rapport"
+
+#. column: Balance
+#: ../src/rep_over.c:972 ../src/rep_stats.c:193 ../src/rep_stats.c:1694
+msgid "Balance"
+msgstr "Balanse"
+
+#: ../src/rep_stats.c:126
+msgid "Pie"
+msgstr "Sektor"
+
+#: ../src/rep_stats.c:126
+msgid "View results as pies"
+msgstr ""
+
+#: ../src/rep_stats.c:130
+msgid "Rate"
+msgstr "Rente"
+
+#: ../src/rep_stats.c:130
+msgid "Toggle rate"
+msgstr ""
+
+#: ../src/rep_stats.c:132
+msgid "Filter"
+msgstr "Filter"
+
+#: ../src/rep_stats.c:132
+msgid "Edit the filter"
+msgstr "Gjør om filter"
+
+#: ../src/rep_stats.c:193
+msgid "Exp. & Inc."
+msgstr ""
+
+#: ../src/rep_stats.c:197
+msgid "All date"
+msgstr "Alle datoer"
+
+#: ../src/rep_stats.c:198
+msgid "Current month"
+msgstr "Nåværende måned"
+
+#: ../src/rep_stats.c:199
+msgid "Current year"
+msgstr ""
+
+#: ../src/rep_stats.c:200
+msgid "Previous month"
+msgstr "Forrige måned"
+
+#: ../src/rep_stats.c:201
+msgid "Previous year"
+msgstr "Forrige år"
+
+#: ../src/rep_stats.c:202
+msgid "Last 30 days"
+msgstr "Siste 30 dager"
+
+#: ../src/rep_stats.c:203
+msgid "Last 2 months"
+msgstr "Siste 2 mnd"
+
+#: ../src/rep_stats.c:204
+msgid "Last 3 months"
+msgstr "Siste 3 mnd"
+
+#: ../src/rep_stats.c:205
+msgid "Last 4 months"
+msgstr "Siste 4 mnd"
+
+#: ../src/rep_stats.c:206
+msgid "Last 6 months"
+msgstr "Siste 6 mnd"
+
+#: ../src/rep_stats.c:207
+msgid "Last 12 months"
+msgstr "Siste 12 mnd"
+
+#: ../src/rep_stats.c:214
+msgid "All month"
+msgstr "Alle mnd"
+
+#: ../src/rep_stats.c:215 ../src/rep_stats.c:233
+msgid "January"
+msgstr "januar"
+
+#: ../src/rep_stats.c:216 ../src/rep_stats.c:234
+msgid "February"
+msgstr "februar"
+
+#: ../src/rep_stats.c:217 ../src/rep_stats.c:235
+msgid "March"
+msgstr "mars"
+
+#: ../src/rep_stats.c:218 ../src/rep_stats.c:236
+msgid "April"
+msgstr "april"
+
+#: ../src/rep_stats.c:219 ../src/rep_stats.c:237
+msgid "May"
+msgstr "mai"
+
+#: ../src/rep_stats.c:220 ../src/rep_stats.c:238
+msgid "June"
+msgstr "juni"
+
+#: ../src/rep_stats.c:221 ../src/rep_stats.c:239
+msgid "July"
+msgstr "juli"
+
+#: ../src/rep_stats.c:222 ../src/rep_stats.c:240
+msgid "August"
+msgstr "august"
+
+#: ../src/rep_stats.c:223 ../src/rep_stats.c:241
+msgid "September"
+msgstr "september"
+
+#: ../src/rep_stats.c:224 ../src/rep_stats.c:242
+msgid "October"
+msgstr "oktober"
+
+#: ../src/rep_stats.c:225 ../src/rep_stats.c:243
+msgid "November"
+msgstr "november"
+
+#: ../src/rep_stats.c:226 ../src/rep_stats.c:244
+msgid "December"
+msgstr "desember"
+
+#: ../src/rep_stats.c:1239
+msgid "Statistics Report"
+msgstr "Statistikk Rapport"
+
+#: ../src/rep_stats.c:1269
+msgid "_For:"
+msgstr "_For:"
+
+#: ../src/rep_stats.c:1283
+msgid "By _amount"
+msgstr "Av_sum"
+
+#: ../src/rep_stats.c:1381
+msgid "Balance:"
+msgstr "Balanse:"
+
+#: ../src/rep_stats.c:1390
+msgid "Income:"
+msgstr "Inntekt"
+
+#: ../src/rep_stats.c:1399
+msgid "Expense:"
+msgstr "Utgift"
+
+#: ../src/rep_stats.c:1672
+msgid "Result"
+msgstr "Resultat"
+
+#: ../src/widgets.c:61
+msgid "Credit card"
+msgstr "Kreditkort"
+
+#: ../src/widgets.c:62
+msgid "Cheque"
+msgstr "Sjekk"
+
+#: ../src/widgets.c:63
+msgid "Cash"
+msgstr "Kontant"
+
+#: ../src/widgets.c:64
+msgid "Bank transfer"
+msgstr "Banktransaksjon"
+
+#: ../src/widgets.c:65
+msgid "Internal transfer"
+msgstr "Intern overføring"

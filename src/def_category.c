@@ -74,7 +74,7 @@ void defcategory_selection(GtkTreeSelection *treeselection, gpointer user_data);
 static void defcategory_load_csv( GtkWidget *widget, gpointer user_data)
 {
 struct defcategory_data *data;
-gchar *filename;
+gchar *filename = NULL;
 GIOChannel *io;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(widget), GTK_TYPE_WINDOW)), "inst_data");
@@ -206,11 +206,13 @@ GIOChannel *io;
 			{
 				homebank_message_dialog(GTK_WINDOW(data->window), GTK_MESSAGE_ERROR,
 					_("File format error"),
-					_("The csv file must contains the exact numbers of column,\nseparated by a semi-colon, read the help for more details.")
+					_("The csv file must contains the exact numbers of column,\nseparated by a semi-colon, please see the help for more details.")
 					);
 			}
 
 		}
+
+		g_free( filename );
 
 	}
 }
@@ -221,7 +223,7 @@ GIOChannel *io;
 static void defcategory_save_csv( GtkWidget *widget, gpointer user_data)
 {
 struct defcategory_data *data;
-gchar *filename;
+gchar *filename = NULL;
 GtkTreeModel *model;
 GtkTreeIter	iter, child;
 gboolean valid;
@@ -283,6 +285,8 @@ GIOChannel *io;
 
 			g_io_channel_unref (io);
 		}
+
+		g_free( filename );
 
 	}
 
