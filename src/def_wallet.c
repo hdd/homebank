@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -161,7 +161,7 @@ GtkWidget *label, *entry, *combo, *spinner;
 GtkWidget *alignment;
 gint row;
 
-      window = gtk_dialog_new_with_buttons (_("Wallet properties"),
+	window = gtk_dialog_new_with_buttons (_("Wallet properties"),
 				GTK_WINDOW(GLOBALS->mainwindow),
 				0,
 				GTK_STOCK_CANCEL,
@@ -175,6 +175,8 @@ gint row;
 	DB( g_printf("(defaccount) window=%08lx, inst_data=%08lx\n", window, &data) );
 
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
+
+	gtk_window_set_icon_name(GTK_WINDOW (window), GTK_STOCK_PROPERTIES);
 
 	mainvbox = gtk_vbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), mainvbox, TRUE, TRUE, 0);
@@ -221,6 +223,7 @@ gint row;
 	spinner = make_numeric(label, 0, 100);
 	data.NU_arc = spinner;
     gtk_box_pack_start (GTK_BOX (hbox), spinner, FALSE, FALSE, 0);
+	//TRANSLATORS: there is a spinner on the left of this label, and so you have 0....x days into the future
 	label = make_label(_("days into the future"), 1, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 	gtk_table_attach (GTK_TABLE (table), hbox, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);

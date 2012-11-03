@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -35,7 +35,6 @@
 #define HELPDRAW 0
 
 #define MARGIN 12
-#define BARW 24
 
 #define OVER_ALPHA .25
 #define OVER_COLOR (MASKCOL * OVER_ALPHA)
@@ -208,7 +207,8 @@ GtkWidget *widget, *vbox, *frame, *scrollwin, *treeview;
  	chart->datas1 = NULL;
  	chart->datas2 = NULL;
 	chart->dual = FALSE; 
- 	
+	chart->barw = GTK_CHART_BARW;
+	
 	chart->tooltipwin = NULL;
 	chart->active = -1;
 	chart->lastactive = -1;
@@ -226,7 +226,7 @@ GtkWidget *widget, *vbox, *frame, *scrollwin, *treeview;
 	/* drawing area */
 	frame = gtk_frame_new(NULL);
     gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
-    gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
+    gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN);
 
 	chart->drawarea = gtk_drawing_area_new();
 	gtk_container_add( GTK_CONTAINER(frame), chart->drawarea );
@@ -629,7 +629,6 @@ guint i;
 	chart->range = 0;
 	chart->min = 0;
 	chart->max = 0;
-	chart->barw = BARW;
 	chart->decy_xval = 7;
 
 }
@@ -796,7 +795,7 @@ gint div;
 
 	chart->range = chart->max - chart->min;
 
-	//DB(g_print(" min=%.2f, max=%.2f, range=%.2f\n", chart->min, chart->max, chart->range) );
+	DB(g_print(" initial: min=%.2f, max=%.2f, range=%.2f\n", chart->min, chart->max, chart->range) );
 
 	chart->unit  = GetUnit(chart->range);
 
@@ -818,8 +817,8 @@ gint div;
 	chart->range = chart->unit*chart->div;
 	*/
 
-	//DB(g_print(" unit=%.2f, div=%d => %d\n", chart->unit, chart->div, (gint)chart->unit*chart->div) );
-	//DB(g_print(" min=%.2f, max=%.2f, range=%.2f\n", chart->min, chart->max, chart->range) );
+	DB(g_print(" unit=%.2f, div=%d => %d\n", chart->unit, chart->div, (gint)chart->unit*chart->div) );
+	DB(g_print(" min=%.2f, max=%.2f, range=%.2f\n", chart->min, chart->max, chart->range) );
 
 
 }
@@ -859,7 +858,7 @@ gint blkw;
 	DB( g_print(" + text w=%f h=%f\n", extents.width, extents.height) );
 
 	chart->font_h = extents.height;
-	chart->graph_width  = chart->w - chart->legend_w;
+	chart->graph_width  = chart->w; // - chart->legend_w;
 	chart->graph_height = chart->h - extents.height - 4;
 
 	//if expand : we compute available space
@@ -875,7 +874,7 @@ gint blkw;
 	chart->visible = MIN(chart->visible, chart->entries);
 
 	chart->ox = chart->l;
-	chart->oy = chart->t + (chart->max/chart->range) * chart->graph_height;
+	chart->oy = floor(chart->t + (chart->max/chart->range) * chart->graph_height);
 
 	DB( g_print(" + ox=%f oy=%f\n", chart->ox, chart->oy) );
 
@@ -897,22 +896,24 @@ gint first;
 	DB( g_print("----------------------\n(gtkline) draw scale\n") );
 
 cairo_t *cr;
-static const double dashed3[] = {1.0};
+static const double dashed3[] = {2.0};
 
 	cr = gdk_cairo_create (widget->window);
 
-	/* for drawing 1px line get rid off antialias */
-	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
 	cairo_set_line_width(cr, 1);
 
 	/* clip */
 	cairo_rectangle(cr, MARGIN, 0, chart->w, chart->h + MARGIN);
 	cairo_clip(cr);
 
-
 	/* draw vertical lines + legend */
 	if(chart->show_xval)
 	{
+	gint blkw = chart->barw;
+
+		if( chart->dual )
+			blkw = blkw * 2;
+
 		x = chart->ox + 1 + (chart->barw/2);
 		y = chart->oy;
 		first = (gint)gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
@@ -930,7 +931,7 @@ static const double dashed3[] = {1.0};
 
 			}
 
-			x += chart->barw;
+			x += blkw;
 		}
 	}
 
@@ -960,7 +961,7 @@ static const double dashed3[] = {1.0};
 		}
 
 
-		y = chart->t + ((i * chart->unit) / chart->range) * chart->graph_height;
+		y = 0.5 + floor(chart->t + ((i * chart->unit) / chart->range) * chart->graph_height);
 
 		DB( g_print(" + i=%d :: y=%f (%f / %f) * %f\n", i, y, i*chart->unit, chart->range, chart->graph_height) );
 
@@ -993,17 +994,23 @@ cairo_text_extents_t extents;
 
 	cr = gdk_cairo_create (widget->window);
 
-	/* for drawing 1px line get rid off antialias */
-	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
 	cairo_set_line_width(cr, 1);
 
 	/* clip */
 	cairo_rectangle(cr, MARGIN, 0, chart->w, chart->h + MARGIN);
 	cairo_clip(cr);
 
+	//cairo_set_operator(cr, CAIRO_OPERATOR_SATURATE);
+	
 	/* draw y-legend (amount) */
 	if(chart->show_xval)
 	{
+	gint blkw = chart->barw;
+
+		if( chart->dual )
+			blkw = blkw * 2;
+
+
 		x = chart->ox + 1 + (chart->barw/2);
 		y = chart->oy;
 		first = (gint)gtk_adjustment_get_value(GTK_ADJUSTMENT(chart->adjustment));
@@ -1027,7 +1034,7 @@ cairo_text_extents_t extents;
 				cairo_stroke(cr);
 			}
 
-			x += chart->barw;
+			x += blkw;
 		}
 	}
 
@@ -1036,7 +1043,7 @@ cairo_text_extents_t extents;
 	curxval = chart->max;
 	for(i=0;i<=chart->div;i++)
 	{
-		y = chart->t + ((i * chart->unit) / chart->range) * chart->graph_height;
+		y = 0.5 + floor(chart->t + ((i * chart->unit) / chart->range) * chart->graph_height);
 
 		DB( g_print(" + i=%d :: y=%f (%f / %f) * %f\n", i, y, i*chart->unit, chart->range, chart->graph_height) );
 
@@ -1046,10 +1053,13 @@ cairo_text_extents_t extents;
 			valstr = chart_print_int(chart, (gint)curxval);
 			cairo_text_extents(cr, valstr, &extents);
 
+			//DB( g_print("'%s', %f %f %f %f %f %f\n", valstr, extents.x_bearing, extents.y_bearing, extents.width, extents.height, extents.x_advance, extents.y_advance) );
+
 			cairo_set_source_rgb(cr, COLTOCAIRO(102), COLTOCAIRO(102), COLTOCAIRO(102)); 
 			cairo_move_to(cr, chart->l, y + 2 + extents.height);	
 			cairo_show_text(cr, valstr); 
-			cairo_move_to(cr, chart->l + chart->w - extents.width - 1, y + 2 + extents.height);	
+			
+			cairo_move_to(cr, chart->r - extents.x_advance, y + 2 + extents.height);	
 			cairo_show_text(cr, valstr);
 		}
 
@@ -1084,7 +1094,6 @@ gint i;
 
 	#if HELPDRAW == 1
 	x2 = x;
-	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
 	cairo_set_line_width(cr, 1.0);
 	cairo_set_source_rgba(cr, .0, 1.0, .0, .5);
 	for(i=first; i<=(first+chart->visible) ;i++)
@@ -1118,8 +1127,13 @@ gint i;
 		if(chart->datas1[i])
 		{
 			x2 = x + 2;
-			h = (chart->datas1[i] / chart->range) * chart->graph_height;
+			h = floor((chart->datas1[i] / chart->range) * chart->graph_height);
 			y2 = chart->oy - h;
+			if(chart->datas1[i] < 0.0)
+				y2 += 1;
+
+			//DB( g_print(" + i=%d :: y2=%f h=%f (%f / %f) * %f\n", i, y2, h, chart->datas1[i], chart->range, chart->graph_height ) );
+
 			
 			cairo_rectangle(cr, x2, y2, barw-3, h);
 			cairo_fill(cr);
@@ -1130,7 +1144,7 @@ gint i;
 		{
 
 			x2 = x + barw + 1;
-			h = (chart->datas2[i] / chart->range) * chart->graph_height;
+			h = floor((chart->datas2[i] / chart->range) * chart->graph_height);
 			y2 = chart->oy - h;
 			
 			cairo_rectangle(cr, x2, y2, barw-3, h);
@@ -1242,16 +1256,14 @@ gint first;
 */
 static void draw_plot(cairo_t *cr, double x, double y, double r)
 {
-	cairo_set_line_width(cr, r == 4 ? 2 : 4);
+	cairo_set_line_width(cr, r / 2);
 
 	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 	cairo_arc(cr, x, y, r, 0, 2*M_PI);
 	cairo_stroke_preserve(cr);
 
-
 	cairo_set_source_rgb(cr, COLTOCAIRO(0), COLTOCAIRO(119), COLTOCAIRO(204)); 
 	cairo_fill(cr);
-
 
 }
 
@@ -1259,7 +1271,7 @@ static void linechart_draw_lines(GtkWidget *widget, GdkGC *gc, gpointer user_dat
 {
 GtkChart *chart = GTK_CHART(user_data);
 cairo_t *cr;
-double x, y, x2, y2, firstx, lastx;
+double x, y, x2, y2, firstx, lastx, linew;
 gint first;
 gint i;
 
@@ -1278,7 +1290,6 @@ gint i;
 
 	#if HELPDRAW == 1
 	x2 = x;
-	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
 	cairo_set_line_width(cr, 1.0);
 	cairo_set_source_rgba(cr, .0, 1.0, .0, .5);
 	for(i=first; i<=(first+chart->visible) ;i++)
@@ -1294,10 +1305,14 @@ gint i;
 	//todo: it should be possible to draw line & plot together using surface and composite fill, or sub path ??
 	lastx = x;
 	firstx = x;
+	linew = 4.0;
+	if(chart->barw < 24)
+	{
+		linew = 1 + (chart->barw / 8.0);
+	}
 
-	cairo_set_antialias (cr, CAIRO_ANTIALIAS_DEFAULT);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_BEVEL); 
-	cairo_set_line_width(cr, 4.0);
+	cairo_set_line_width(cr, linew);
 
 	for(i=first; i<=(first+chart->visible) ;i++)
 	{
@@ -1342,7 +1357,7 @@ gint i;
 	{
 		x2 = x + (chart->barw)/2;
 		y2 = chart->oy - (chart->datas1[i] / chart->range) * chart->graph_height;
-		draw_plot(cr,  x2, y2, i == chart->active ? 5 : 4);
+		draw_plot(cr,  x2, y2, i == chart->active ? linew+1 : linew);
 		x += chart->barw;
 	}
 
@@ -1681,8 +1696,12 @@ cairo_t *cr;
 	/*debug help draws */
 #if HELPDRAW == 1
 		cairo_set_source_rgba(cr, 1.0, .0, .0, .5);
-		cairo_rectangle(cr, MARGIN, MARGIN, chart->w, chart->h);
-		cairo_stroke(cr);
+		cairo_rectangle(cr, chart->l, chart->t, chart->w, chart->h);
+		cairo_fill(cr);
+
+		cairo_set_source_rgba(cr, 1.0, .0, 1.0, .5);
+		cairo_rectangle(cr, chart->l, chart->t, chart->graph_width, chart->graph_height);
+		cairo_fill(cr);
 #endif
 
 	cairo_destroy(cr);

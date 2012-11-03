@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -38,7 +38,7 @@ enum
 	FILTER_ACCOUNT,
 	FILTER_CATEGORY,
 	FILTER_PAYEE,
-	//FILTER_TEXT,
+	FILTER_TEXT,
 	FILTER_MAX
 };
 
@@ -62,11 +62,18 @@ enum
 enum
 {
 	PAYMODE_NONE,
-	PAYMODE_CARD,
-	PAYMODE_CHEQUE,
+	PAYMODE_CCARD,
+	PAYMODE_CHECK,
 	PAYMODE_CASH,
-	PAYMODE_BANKTRANSFERT,
-	PAYMODE_PERSTRANSFERT,
+	PAYMODE_XFER,
+	PAYMODE_INTXFER,
+	/* 4.1 new payments here */
+	PAYMODE_DCARD,
+	PAYMODE_REPEATPMT,
+	PAYMODE_EPAYMENT,
+	PAYMODE_DEPOSIT,
+	PAYMODE_FEE,
+//	PAYMODE_,
 	NUM_PAYMODE_MAX
 };
 
@@ -103,17 +110,6 @@ enum
 	AUTO_UNIT_YEAR
 };
 
-/* list display account (wallet) */
-enum
-{
-	LST_DSPACC_DATAS,
-	LST_DSPACC_STATE,	/* fake column */
-	LST_DSPACC_NAME,	/* fake column */
-	LST_DSPACC_BANK,
-	LST_DSPACC_TODAY,
-	LST_DSPACC_FUTURE,
-	NUM_LST_DSPACC
-};
 
 /* list display operation (dsp_account) */
 enum
@@ -129,23 +125,11 @@ enum
 	LST_DSPOPE_INCOME,	/* fake column */
 	LST_DSPOPE_CATEGORY,	/* fake column */
 	LST_DSPOPE_TAGS,	/* fake column */
+	/* here we insert accoutn column, only used for detail */
+	LST_DSPOPE_ACCOUNT,
 	NUM_LST_DSPOPE
 };
 
-enum
-{
-	COL_OPE_STATUS,
-	COL_OPE_DATE,
-	COL_OPE_INFO,
-	COL_OPE_PAYEE,
-	COL_OPE_WORDING,
-	COL_OPE_AMOUNT,
-	COL_OPE_EXPENSE,
-	COL_OPE_INCOME,
-	COL_OPE_CATEGORY,
-	COL_OPE_TAGS,
-	NUM_COL_OPE
-};
 
 /* list define archive (defarchive) */
 enum

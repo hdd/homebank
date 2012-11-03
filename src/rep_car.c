@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -230,14 +230,22 @@ GDate *date;
 	}
 }
 
+static gint repcar_transaction_compare_func(CarCost *a, CarCost *b)
+{
+gint retval;
+
+	//retval = (gint)(a->ope->date - b->ope->date);
+	//if( retval == 0 )
+		retval = a->meter - b->meter;
+
+	return retval;
+}
 
 static void repcar_compute(GtkWidget *widget, gpointer user_data)
 {
 struct repcar_data *data;
 GList *list;
 guint32 catkey;
-gint nb_refuel;
-guint lastmeter = 0;
 
 	DB( g_print("(repcar) compute\n") );
 
@@ -251,81 +259,52 @@ guint lastmeter = 0;
 
 	DB( g_print(" -> active cat is %d\n", catkey) );
 
+	if(catkey == -1) return;
+	
 	// clear the glist
 	da_carcost_destroy(data->car_list);
 	data->car_list = NULL;
 
-	nb_refuel = 0;
-	data->total_misccost = 0;
-
+	// collect transactions
+	// the purpose here is to collect all cat transaction
+	// and precompute some datas
 	list = g_list_first(GLOBALS->ope_list);
 	while (list != NULL)
 	{
 	Operation *ope = list->data;
+	Category *cat;
     CarCost *item;
-    //CarCost *previtem;
-	gchar *d, *v;
-	gint len;
 
-		if( (ope->category == catkey) && !(ope->flags & OF_REMIND) )
+		cat = da_cat_get(ope->category);
+
+		if( cat && (cat->key == catkey || cat->parent == catkey) && !(ope->flags & OF_REMIND) )
 		{
+			item = da_carcost_malloc();
+
+			item->ope	= ope;
+
 			if( ope->wording != NULL)
 			{
+			gchar *d, *v;
+			gint len;
+
 				len = strlen(ope->wording);
 				d = g_strstr_len(ope->wording, len, "d=");
 				v = g_strstr_len(ope->wording, len, "v=");
-
 				if(d && v)
 				{
-					item = da_carcost_malloc();
-
-					if(item)
-					{
-						DB( g_print("**%d**\n", nb_refuel) );
-						
-						item->ope	= ope;
-						item->meter	= atol(d+2);
-						item->fuel	= g_strtod(v+2, NULL);
-						item->dist	= 0;
-
-						data->car_list = g_list_append(data->car_list, item);
-						/*
-						if(d[-1] == '(') d--;
-						if(d[-1] == ' ') d--;
-						len = (UWORD)d - (UWORD)&ope->ope_Word;
-						strncpy(ac.ac_Word, ope->ope_Word, len);
-						ac.ac_Word[len] = 0;
-						*/
-
-
-						if(nb_refuel > 0 )
-						{
-							//previtem = g_list_nth_data(data->car_list, nb_refuel-1);
-							//if(previtem != NULL) previtem->dist = item->meter - previtem->meter;
-							//DB( g_print(" + previous item dist = %d\n", item->meter - previtem->meter) );
-							item->dist = item->meter - lastmeter;
-
-						
-
-							DB( g_print(" + last meter = %d\n", lastmeter) );
-
-						}
-
-						lastmeter = item->meter;
-
-						DB( g_print(" store refuel d=%d v=%4.2f $%8.2f dist=%d\n", item->meter, item->fuel, item->ope->amount, item->dist) );
-
-						nb_refuel++;
-					}
+					item->meter	= atol(d+2);
+					item->fuel	= g_strtod(v+2, NULL);
 				}
 			}
-			else
-			{
-				data->total_misccost += ope->amount;
-			}
+				
+			data->car_list = g_list_append(data->car_list, item);
 		}
 		list = g_list_next(list);
 	}
+
+	// sort by meter #399170
+	data->car_list = g_list_sort(data->car_list, (GCompareFunc)repcar_transaction_compare_func);
 
 	repcar_update(widget, NULL);
 }
@@ -337,6 +316,8 @@ GtkTreeModel *model;
 GtkTreeIter  iter;
 GList *list;
 gchar *buf;
+gint nb_refuel = 0;
+guint lastmeter = 0;
 
 	DB( g_print("(repcar) update\n") );
 
@@ -348,6 +329,7 @@ gchar *buf;
 	g_object_ref(model);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(data->LV_report), NULL);
 
+	data->total_misccost = 0;
 	data->total_fuelcost = 0;
 	data->total_fuel	 = 0;
 	data->total_dist	 = 0;
@@ -361,35 +343,56 @@ gchar *buf;
 
 		if( (item->ope->date >= data->mindate) && (item->ope->date <= data->maxdate) )
 		{
-	    	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-
-	    	dist = item->dist;
-	    	centkm = item->dist != 0 ? item->fuel * 100 / item->dist : 0;
-
-	    	gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-				LST_CAR_DATE    , item->ope->date,
-				LST_CAR_WORDING , item->ope->wording,
-				LST_CAR_METER   , item->meter,
-				LST_CAR_FUEL    , item->fuel,
-				LST_CAR_PRICE   , ABS(item->ope->amount) / item->fuel,
-				LST_CAR_AMOUNT  , item->ope->amount,
-				LST_CAR_DIST    , dist,
-				LST_CAR_100KM   , centkm,
-				-1);
-
-			DB( g_print("insert d=%d v=%4.2f $%8.2f %d %5.2f\n", item->meter, item->fuel, item->ope->amount, dist, centkm) );
-
-			if(item->dist)
+			if( item->meter == 0 )
 			{
-				data->total_fuelcost += item->ope->amount;
-				data->total_fuel     += item->fuel;
-				data->total_dist     += item->dist;
+				data->total_misccost += item->ope->amount;
 			}
+			else
+			{
+				if(nb_refuel > 0 )
+				{
+					//previtem = g_list_nth_data(data->car_list, nb_refuel-1);
+					//if(previtem != NULL) previtem->dist = item->meter - previtem->meter;
+					//DB( g_print(" + previous item dist = %d\n", item->meter - previtem->meter) );
+					item->dist = item->meter - lastmeter;
 
-			//todo
-			//data->othercost :: problem not filtered;
+					DB( g_print(" + last meter = %d\n", lastmeter) );
+
+				}
+
+				lastmeter = item->meter;
+				nb_refuel++;	
+
+				//DB( g_print(" store refuel d=%d v=%4.2f $%8.2f dist=%d\n", item->meter, item->fuel, item->ope->amount, item->dist) );
 
 
+				dist = item->dist;
+				centkm = item->dist != 0 ? item->fuel * 100 / item->dist : 0;
+
+		    	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
+
+				gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+					LST_CAR_DATE    , item->ope->date,
+					LST_CAR_WORDING , item->ope->wording,
+					LST_CAR_METER   , item->meter,
+					LST_CAR_FUEL    , item->fuel,
+					LST_CAR_PRICE   , ABS(item->ope->amount) / item->fuel,
+					LST_CAR_AMOUNT  , item->ope->amount,
+					LST_CAR_DIST    , dist,
+					LST_CAR_100KM   , centkm,
+					-1);
+
+				DB( g_print("insert d=%d v=%4.2f $%8.2f %d %5.2f\n", item->meter, item->fuel, item->ope->amount, dist, centkm) );
+
+				if(item->dist)
+				{
+					data->total_fuelcost += item->ope->amount;
+					data->total_fuel     += item->fuel;
+					data->total_dist     += item->dist;
+				}
+
+
+			}
 		}
 		list = g_list_next(list);
 	}
@@ -399,7 +402,8 @@ gchar *buf;
 
 
 	gdouble coef = data->total_dist ? 100 / (gdouble)data->total_dist : 0;
-	gboolean minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
+
+	GLOBALS->minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
 
 
 		DB( g_print(" coef = 100 / %.2f = %.2f\n", (gdouble)data->total_dist, coef) );
@@ -413,18 +417,18 @@ gchar *buf;
 		*/
 
 		// 100km fuel
-		buf = g_strdup_printf("%.2f L", data->total_fuel * coef);
+		buf = g_strdup_printf(PREFS->car_unit_vol, data->total_fuel * coef);
 		gtk_label_set_text(GTK_LABEL(data->LA_avera[CAR_RES_FUEL]), buf);
 		g_free(buf);
 
 		// 100km fuelcost
-		hb_label_set_colvalue(GTK_LABEL(data->LA_avera[CAR_RES_FUELCOST]), data->total_fuelcost * coef, minor);
+		hb_label_set_colvalue(GTK_LABEL(data->LA_avera[CAR_RES_FUELCOST]), data->total_fuelcost * coef, GLOBALS->minor);
 
 		// 100km other cost
-		hb_label_set_colvalue(GTK_LABEL(data->LA_avera[CAR_RES_OTHERCOST]), data->total_misccost * coef, minor);
+		hb_label_set_colvalue(GTK_LABEL(data->LA_avera[CAR_RES_OTHERCOST]), data->total_misccost * coef, GLOBALS->minor);
 
 		// 100km cost
-		hb_label_set_colvalue(GTK_LABEL(data->LA_avera[CAR_RES_TOTALCOST]), (data->total_fuelcost + data->total_misccost) * coef, minor);
+		hb_label_set_colvalue(GTK_LABEL(data->LA_avera[CAR_RES_TOTALCOST]), (data->total_fuelcost + data->total_misccost) * coef, GLOBALS->minor);
 
 
 		// row 2 is for total
@@ -436,23 +440,23 @@ gchar *buf;
 		*/
 
 		// total distance
-		buf = g_strdup_printf("%d Km", data->total_dist);
+		buf = g_strdup_printf(PREFS->car_unit_dist, data->total_dist);
 		gtk_label_set_text(GTK_LABEL(data->LA_total[CAR_RES_METER]), buf);
 		g_free(buf);
 
 		// total fuel
-		buf = g_strdup_printf("%.2f L", data->total_fuel);
+		buf = g_strdup_printf(PREFS->car_unit_vol, data->total_fuel);
 		gtk_label_set_text(GTK_LABEL(data->LA_total[CAR_RES_FUEL]), buf);
 		g_free(buf);
 
 		// total fuelcost
-		hb_label_set_colvalue(GTK_LABEL(data->LA_total[CAR_RES_FUELCOST]), data->total_fuelcost, minor);
+		hb_label_set_colvalue(GTK_LABEL(data->LA_total[CAR_RES_FUELCOST]), data->total_fuelcost, GLOBALS->minor);
 
 		// total other cost
-		hb_label_set_colvalue(GTK_LABEL(data->LA_total[CAR_RES_OTHERCOST]), data->total_misccost, minor);
+		hb_label_set_colvalue(GTK_LABEL(data->LA_total[CAR_RES_OTHERCOST]), data->total_misccost, GLOBALS->minor);
 
 		// total cost
-		hb_label_set_colvalue(GTK_LABEL(data->LA_total[CAR_RES_TOTALCOST]), data->total_fuelcost + data->total_misccost, minor);
+		hb_label_set_colvalue(GTK_LABEL(data->LA_total[CAR_RES_TOTALCOST]), data->total_fuelcost + data->total_misccost, GLOBALS->minor);
 
 
 }
@@ -497,7 +501,7 @@ static void repcar_setup(struct repcar_data *data)
 	GList *list;
 
 		//get our min max date
-		da_operation_sort(GLOBALS->ope_list);
+		GLOBALS->ope_list = da_operation_sort(GLOBALS->ope_list);
 		list = g_list_first(GLOBALS->ope_list);
 		data->mindate = ((Operation *)list->data)->date;
 		list = g_list_last(GLOBALS->ope_list);
@@ -596,7 +600,8 @@ gint row, col;
 	gtk_window_set_title (GTK_WINDOW (window), _("Car report"));
 
 	//set the window icon
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_car.svg");
+//	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_car.svg");	
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_REP_CAR);
 
 
 
@@ -709,7 +714,7 @@ gint row, col;
 	gtk_table_set_col_spacings (GTK_TABLE (table), HB_TABCOL_SPACING);
 
 	row = 0; col = 0;
-	label = make_label(_("100 Km"), 1.0, 0.5);
+	label = make_label(PREFS->car_unit_100, 1.0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
 	label = make_label(_("Total"), 1.0, 0.5);
@@ -754,7 +759,7 @@ gint row, col;
 	//detail
 	widget = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	treeview = create_list_repcar();
 	data->LV_report = treeview;
@@ -852,7 +857,7 @@ gchar *text;
 
 	if(distance != 0)
 	{
-		text = g_strdup_printf("%d Km", distance);
+		text = g_strdup_printf(PREFS->car_unit_dist, distance);
 		g_object_set(renderer, "text", text, NULL);
 		g_free(text);
 	}
@@ -869,7 +874,7 @@ gchar *text;
 
 	if(volume != 0)
 	{
-		text = g_strdup_printf("%.2f L", volume);
+		text = g_strdup_printf(PREFS->car_unit_vol, volume);
 		g_object_set(renderer, "text", text, NULL);
 		g_free(text);
 	}
@@ -883,34 +888,28 @@ static void repcar_amount_cell_data_function (GtkTreeViewColumn *col,
                            GtkTreeIter       *iter,
                            gpointer           user_data)
 {
-GtkWidget *widget;
 gdouble  value;
-gchar   buf[128];
-gboolean minor;
-gchar *markuptxt;
-guint32 color;
+gchar *color;
+gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
 
-	//get datas
 	gtk_tree_model_get(model, iter,
 		user_data, &value,
 		-1);
 
-	widget = g_object_get_data(G_OBJECT(model), "minor");
-	if(GTK_IS_TOGGLE_BUTTON(widget))
+	if( value )
 	{
-		minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	}
+		mystrfmon(buf, G_ASCII_DTOSTR_BUF_SIZE-1, value, GLOBALS->minor);
+		
+		color = get_normal_color_amount(value);
+
+		g_object_set(renderer, 
+			"foreground",  color,
+			"text", buf,
+			NULL);	}
 	else
-		minor = 0;
-
-	mystrfmon(buf, 127, value, minor);
-
-	color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
-
-	markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
-	g_object_set(renderer, "markup", markuptxt, NULL);
-	g_free(markuptxt);
-
+	{
+		g_object_set(renderer, "text", "", NULL);
+	}
 }
 
 static GtkTreeViewColumn *volume_list_repcar_column(gchar *name, gint id)
@@ -989,7 +988,7 @@ GtkTreeViewColumn  *column;
 	view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), PREFS->rules_hint);
 
 	/* column date */
 	column = gtk_tree_view_column_new();
@@ -1045,7 +1044,7 @@ GtkTreeViewColumn  *column;
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
 	/* column: consumption for 100Km */
-	column = volume_list_repcar_column(_("100 Km"), LST_CAR_100KM);
+	column = volume_list_repcar_column(PREFS->car_unit_100, LST_CAR_100KM);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
   /* column last: empty */

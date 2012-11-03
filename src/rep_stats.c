@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -65,6 +65,7 @@ struct statistic_data
 	GtkWidget	*CM_minor;
 	GtkWidget	*CY_for;
 	GtkWidget	*CY_view;
+	GtkWidget	*RG_zoomx;
 	GtkWidget	*LV_report;
 	GtkWidget	*CM_byamount;
 
@@ -118,21 +119,24 @@ static void statistic_action_legend(GtkAction *action, gpointer user_data);
 static void statistic_action_rate(GtkAction *action, gpointer user_data);
 static void statistic_action_filter(GtkAction *action, gpointer user_data);
 static void statistic_action_refresh(GtkAction *action, gpointer user_data);
+static void statistic_action_export(GtkAction *action, gpointer user_data);
 
 static void statistic_busy(GtkWidget *widget, gboolean state);
 
 
 static GtkActionEntry entries[] = {
-  { "List"    , "hb-stock-view-list" , N_("List")   , NULL,    N_("View results as list"), G_CALLBACK (statistic_action_viewlist) },
-  { "Bar"     , "hb-stock-view-bar"  , N_("Bar")    , NULL,    N_("View results as bars"), G_CALLBACK (statistic_action_viewbar) },
-  { "Pie"     , "hb-stock-view-pie"  , N_("Pie")    , NULL,    N_("View results as pies"), G_CALLBACK (statistic_action_viewpie) },
+  { "List"    , "hb-view-list" , N_("List")   , NULL,    N_("View results as list"), G_CALLBACK (statistic_action_viewlist) },
+  { "Bar"     , "hb-view-bar"  , N_("Bar")    , NULL,    N_("View results as bars"), G_CALLBACK (statistic_action_viewbar) },
+  { "Pie"     , "hb-view-pie"  , N_("Pie")    , NULL,    N_("View results as pies"), G_CALLBACK (statistic_action_viewpie) },
 
-  { "Detail"  , "hb-stock-ope-show"  , N_("Detail") , NULL,    N_("Toggle detail"), G_CALLBACK (statistic_action_detail) },
-  { "Legend"  , "hb-stock-legend"    , N_("Legend") , NULL,    N_("Toggle legend"), G_CALLBACK (statistic_action_legend) },
-  { "Rate"    , "hb-stock-rate"      , N_("Rate")   , NULL,    N_("Toggle rate")  , G_CALLBACK (statistic_action_rate) },
+  { "Detail"  , "hb-ope-show"  , N_("Detail") , NULL,    N_("Toggle detail"), G_CALLBACK (statistic_action_detail) },
+  { "Legend"  , "hb-legend"    , N_("Legend") , NULL,    N_("Toggle legend"), G_CALLBACK (statistic_action_legend) },
+  { "Rate"    , "hb-rate"      , N_("Rate")   , NULL,    N_("Toggle rate")  , G_CALLBACK (statistic_action_rate) },
 
-  { "Filter"  , "hb-stock-filter"    , N_("Filter") , NULL,   N_("Edit the filter"), G_CALLBACK (statistic_action_filter) },
-  { "Refresh" , "hb-stock-refresh"   , N_("Refresh"), NULL,   N_("Refresh results"), G_CALLBACK (statistic_action_refresh) },
+  { "Filter"  , "hb-filter"    , N_("Filter") , NULL,   N_("Edit the filter"), G_CALLBACK (statistic_action_filter) },
+  { "Refresh" , GTK_STOCK_REFRESH   , N_("Refresh"), NULL,   N_("Refresh results"), G_CALLBACK (statistic_action_refresh) },
+
+  { "Export" , "hb-file-export", N_("Export")  , NULL,   N_("Export as CSV"), G_CALLBACK (statistic_action_export) },
 };
 
 static guint n_entries = G_N_ELEMENTS (entries);
@@ -150,6 +154,8 @@ static const gchar *ui_info =
 "      <separator/>"
 "    <toolitem action='Filter'/>"
 "    <toolitem action='Refresh'/>"
+"      <separator/>"
+"    <toolitem action='Export'/>"
 "  </toolbar>"
 "</ui>";
 
@@ -175,6 +181,7 @@ static void statistic_range_change(GtkWidget *widget, gpointer user_data);
 static void statistic_detail(GtkWidget *widget, gpointer user_data);
 static void statistic_update(GtkWidget *widget, gpointer user_data);
 static void statistic_update_total(GtkWidget *widget, gpointer user_data);
+static void statistic_export_csv(GtkWidget *widget, gpointer user_data);
 static void statistic_compute(GtkWidget *widget, gpointer user_data);
 static void statistic_sensitive(GtkWidget *widget, gpointer user_data);
 static void statistic_toggle_detail(GtkWidget *widget, gpointer user_data);
@@ -319,7 +326,7 @@ struct statistic_data *data = user_data;
 	//debug
 	//create_deffilter_window(data->filter, TRUE);
 
-	if(create_deffilter_window(data->filter, TRUE) == GTK_RESPONSE_ACCEPT)
+	if(create_deffilter_window(data->filter, TRUE) != GTK_RESPONSE_REJECT)
 		statistic_compute(data->window, NULL);
 }
 
@@ -328,6 +335,13 @@ static void statistic_action_refresh(GtkAction *action, gpointer user_data)
 struct statistic_data *data = user_data;
 
 	statistic_compute(data->window, NULL);
+}
+
+static void statistic_action_export(GtkAction *action, gpointer user_data)
+{
+struct statistic_data *data = user_data;
+
+	statistic_export_csv(data->window, NULL);
 }
 
 
@@ -544,82 +558,89 @@ GtkTreeIter  iter;
 			//DB( g_print(" get %s\n", ope->ope_Word) );
 
 			//filter here
-			if(filter_test(data->filter, ope) == 1)
+			if( !(ope->flags & OF_REMIND) )
 			{
-			gint pos = 0;
-
-				if( tmpfor != STAT_TAG )
+				if(filter_test(data->filter, ope) == 1)
 				{
+				gint pos = 0;
 
-					switch(tmpfor)
-					{
-						case STAT_CATEGORY:
-							pos = ope->category;
-							break;
-						case STAT_SUBCATEGORY:
-							pos = ope->category;
-							break;
-						case STAT_PAYEE:
-							pos = ope->payee;
-							break;
-
-						case STAT_MONTH:
-							pos = DateInPer(data->filter->mindate, ope->date);
-							break;
-						case STAT_YEAR:
-							pos = DateInYear(data->filter->mindate, ope->date);
-							break;
-					}
-
-					//insert
-					if( pos == active )
+					if( tmpfor != STAT_TAG )
 					{
 
-				    	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-			     		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-							LST_DSPOPE_DATAS, ope,
-							-1);
-
-					/*
-					if(ApplyFilter(&data->flt, ope))
-					{
-						DoMethod(data->LV_detail, MUIM_NList_InsertSingle, ope, MUIV_NList_Insert_Bottom);
-					}
-					*/
-					}
-
-
-				}
-				else
-				/* the TAG process is particular */
-				{
-					if(ope->tags != NULL)
-					{
-					guint32 *tptr = ope->tags;
-					
-						while(*tptr)
+						switch(tmpfor)
 						{
-							pos = *tptr - 1;
-	
-							DB( g_print(" -> storing tag %d %.2f\n", pos, ope->amount) ); 
+							case STAT_CATEGORY:
+								{
+								Category *catentry = da_cat_get(ope->category);
+									if(catentry)
+										pos = (catentry->flags & GF_SUB) ? catentry->parent : catentry->key;
+								}
+								break;
+							case STAT_SUBCATEGORY:
+								pos = ope->category;
+								break;
+							case STAT_PAYEE:
+								pos = ope->payee;
+								break;
 
-							if( pos == active )
-							{
-						    	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-					     		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-									LST_DSPOPE_DATAS, ope,
-									-1);
+							case STAT_MONTH:
+								pos = DateInPer(data->filter->mindate, ope->date);
+								break;
+							case STAT_YEAR:
+								pos = DateInYear(data->filter->mindate, ope->date);
+								break;
+						}
 
-							}
-	
-							tptr++;
-						} 	
+						//insert
+						if( pos == active )
+						{
+
+							gtk_list_store_append (GTK_LIST_STORE(model), &iter);
+					 		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+								LST_DSPOPE_DATAS, ope,
+								-1);
+
+						/*
+						if(ApplyFilter(&data->flt, ope))
+						{
+							DoMethod(data->LV_detail, MUIM_NList_InsertSingle, ope, MUIV_NList_Insert_Bottom);
+						}
+						*/
+						}
+
 
 					}
+					else
+					/* the TAG process is particular */
+					{
+						if(ope->tags != NULL)
+						{
+						guint32 *tptr = ope->tags;
+					
+							while(*tptr)
+							{
+								pos = *tptr - 1;
+	
+								DB( g_print(" -> storing tag %d %.2f\n", pos, ope->amount) ); 
+
+								if( pos == active )
+								{
+									gtk_list_store_append (GTK_LIST_STORE(model), &iter);
+							 		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+										LST_DSPOPE_DATAS, ope,
+										-1);
+
+								}
+	
+								tptr++;
+							} 	
+
+						}
+					}
+
+
+
 				}
-
-
-
 			}
 			list = g_list_next(list);
 		}
@@ -735,6 +756,73 @@ gboolean minor;
 
 }
 
+static void statistic_export_csv(GtkWidget *widget, gpointer user_data)
+{
+struct statistic_data *data;
+GtkTreeModel *model;
+GtkTreeIter	iter;
+gboolean valid;
+gchar *filename = NULL;
+GIOChannel *io;
+gchar *outstr, *name;
+gint tmpfor;
+
+	DB( g_print("(statistic) export csv\n") );
+
+	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	tmpfor  = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_for));
+
+	name = g_strdup_printf("hb_stat_%s.csv", CYA_STATSELECT[tmpfor]);
+
+	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_SAVE, &filename, name) == TRUE )
+	{
+		DB( g_print(" + filename is %s\n", filename) );
+
+		io = g_io_channel_new_file(filename, "w", NULL);
+		if(io != NULL)
+		{
+			// header
+			outstr = g_strdup_printf("%s;%s;%s;%s\n", _("Result"), _("expense"), _("Income"), _("Balance"));
+			g_io_channel_write_chars(io, outstr, -1, NULL, NULL);
+			
+			model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_report));
+			valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
+			while (valid)
+			{
+			gchar *name;
+			gdouble exp, inc, bal;
+
+				gtk_tree_model_get (model, &iter,
+					//LST_STAT_KEY, i,
+					LST_STAT_NAME   , &name,
+					LST_STAT_EXPENSE, &exp,
+					LST_STAT_INCOME , &inc,
+					LST_STAT_BALANCE, &bal,
+					-1);
+
+				outstr = g_strdup_printf("%s;%.2f;%.2f;%.2f\n", name, exp, inc, bal);
+				g_io_channel_write_chars(io, outstr, -1, NULL, NULL);
+
+				DB( g_print("%s", outstr) );
+
+				g_free(outstr);
+
+				valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
+			}
+			
+			g_io_channel_unref (io);
+		}
+
+		g_free( filename );
+	}
+
+	g_free(name);
+
+
+}
+
+
 static void statistic_compute(GtkWidget *widget, gpointer user_data)
 {
 struct statistic_data *data;
@@ -824,88 +912,91 @@ gdouble exprate, incrate, balrate;
 			//debug
 			DB( g_print("** testing '%s', cat=%d==> %d\n", ope->wording, ope->category, filter_test(data->filter, ope)) );
 
-
-			if(filter_test(data->filter, ope) == 1)
+			if( !(ope->flags & OF_REMIND) )
 			{
-			guint32 pos = 0;
 
-				if( tmpfor != STAT_TAG )
+				if( (filter_test(data->filter, ope) == 1) )
 				{
-					switch(tmpfor)
-					{
-						case STAT_CATEGORY:
-							{
-							Category *catentry = da_cat_get(ope->category);
-								if(catentry)
-									pos = (catentry->flags & GF_SUB) ? catentry->parent : catentry->key;
-							}
-							break;
-						case STAT_SUBCATEGORY:
-							pos = ope->category;
-							break;
-						case STAT_PAYEE:
-							pos = ope->payee;
-							break;
-						case STAT_MONTH:
-							pos = DateInPer(from, ope->date);
-							break;
-						case STAT_YEAR:
-							pos = DateInYear(from, ope->date);
-							break;
-					}
+				guint32 pos = 0;
 
-					if(pos >= 0)
-					{// add the amount
-						if(ope->amount > 0)
-						{
-							tmp_income[pos] += ope->amount;
-							data->total_income  += ope->amount;
-						}
-						else
-						{
-							tmp_expense[pos] += ope->amount;
-							//data->total_expense += ABS(ope->amount);
-							data->total_expense += ope->amount;
-						}
-					}
-				}
-				else
-				/* the TAG process is particular */
-				{
-					if(ope->tags != NULL)
+					if( tmpfor != STAT_TAG )
 					{
-					guint32 *tptr = ope->tags;
-					
-						while(*tptr)
+						switch(tmpfor)
 						{
-							pos = *tptr - 1;
-	
-							DB( g_print(" -> storing tag %d %.2f\n", pos, ope->amount) ); 
-	
+							case STAT_CATEGORY:
+								{
+								Category *catentry = da_cat_get(ope->category);
+									if(catentry)
+										pos = (catentry->flags & GF_SUB) ? catentry->parent : catentry->key;
+								}
+								break;
+							case STAT_SUBCATEGORY:
+								pos = ope->category;
+								break;
+							case STAT_PAYEE:
+								pos = ope->payee;
+								break;
+							case STAT_MONTH:
+								pos = DateInPer(from, ope->date);
+								break;
+							case STAT_YEAR:
+								pos = DateInYear(from, ope->date);
+								break;
+						}
+
+						if(pos >= 0)
+						{// add the amount
 							if(ope->amount > 0)
 							{
 								tmp_income[pos] += ope->amount;
+								data->total_income  += ope->amount;
 							}
 							else
 							{
 								tmp_expense[pos] += ope->amount;
-							}							
-							tptr++;
-						} 	
-
-						data->total_income  += ope->amount;
-						data->total_expense += ope->amount;
-
+								//data->total_expense += ABS(ope->amount);
+								data->total_expense += ope->amount;
+							}
+						}
 					}
+					else
+					/* the TAG process is particular */
+					{
+						if(ope->tags != NULL)
+						{
+						guint32 *tptr = ope->tags;
+					
+							while(*tptr)
+							{
+								pos = *tptr - 1;
+	
+								DB( g_print(" -> storing tag %d %.2f\n", pos, ope->amount) ); 
+	
+								if(ope->amount > 0)
+								{
+									tmp_income[pos] += ope->amount;
+								}
+								else
+								{
+									tmp_expense[pos] += ope->amount;
+								}							
+								tptr++;
+							} 	
+
+							data->total_income  += ope->amount;
+							data->total_expense += ope->amount;
+
+						}
+					}
+
+
+
+					// fix total according to selection
+					//if(tmpkind==0 && !tmp_expense[pos]) { data->total_income  -= ope->amount; }
+					//if(tmpkind==1 && !tmp_income[pos] ) { data->total_expense -= ope->amount; }
+
+
 				}
-
-
-
-				// fix total according to selection
-				//if(tmpkind==0 && !tmp_expense[pos]) { data->total_income  -= ope->amount; }
-				//if(tmpkind==1 && !tmp_income[pos] ) { data->total_expense -= ope->amount; }
-
-
 			}
 			list = g_list_next(list);
 		}
@@ -1041,28 +1132,7 @@ gdouble exprate, incrate, balrate;
 	g_free(tmp_expense);
 	g_free(tmp_income);
 
-  /* update info range text */
-/*
-	{
-	gchar buffer1[128];
-	gchar buffer2[128];
-	GDate *date;
-	gchar *info;
 
-		date = g_date_new_julian(data->filter->mindate);
-		g_date_strftime (buffer1, 128-1, "%x", date);
-		g_date_set_julian(date, data->filter->maxdate);
-		g_date_strftime (buffer2, 128-1, "%x", date);
-		g_date_free(date);
-
-		info = g_strdup_printf("%s -> %s", buffer1, buffer2);
-
-		gtk_label_set_text(GTK_LABEL(data->TX_info), info);
-
-
-		g_free(info);
-	}
-*/
 	statistic_update_total(widget,NULL);
 
 	statistic_update(widget, user_data);
@@ -1081,7 +1151,7 @@ static void statistic_sensitive(GtkWidget *widget, gpointer user_data)
 struct statistic_data *data;
 gboolean active;
 gboolean sensitive;
-gint page, view;
+gint page;
 
 	DB( g_print("(statistic) sensitive\n") );
 
@@ -1095,12 +1165,17 @@ gint page, view;
 //	gtk_widget_set_sensitive(data->TB_buttons[ACTION_REPBUDGET_DETAIL], sensitive);
 	gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/ToolBar/Detail"), sensitive);
 
-	view = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_view));
+	//view = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_view));
 
+
+	
 	sensitive = page == 0 ? FALSE : TRUE;
 	//gtk_widget_set_sensitive(data->CY_view, sensitive);
 //	gtk_widget_set_sensitive(data->TB_buttons[ACTION_REPBUDGET_LEGEND], sensitive);
 	gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/ToolBar/Legend"), sensitive);
+
+	sensitive = page == 0 ? TRUE : FALSE;
+	gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/ToolBar/Rate"), sensitive);
 
 
 }
@@ -1175,6 +1250,24 @@ struct statistic_data *data;
 
 }
 
+static void statistic_zoomx_callback(GtkWidget *widget, gpointer user_data)
+{
+struct statistic_data *data;
+gdouble value;
+
+	DB( g_print("(statistic) zoomx\n") );
+
+	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	value = gtk_range_get_value(GTK_RANGE(data->RG_zoomx));
+
+	DB( g_print(" + scale is %d\n", value) );
+
+	gtk_chart_set_barw(GTK_CHART(data->RE_bar), value);
+
+}
+
+
 /*
 ** change the chart rate columns visibility
 */
@@ -1204,21 +1297,19 @@ GtkTreeViewColumn *column;
 static void statistic_toggle_minor(GtkWidget *widget, gpointer user_data)
 {
 struct statistic_data *data;
-gboolean minor;
 
 	DB( g_print("(statistic) toggle\n") );
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
+	GLOBALS->minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
+	
 	statistic_update_total(widget,NULL);
 
 	//wallet_update(data->LV_acc, (gpointer)4);
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW(data->LV_report));
-
-	minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
-	gtk_chart_show_minor(GTK_CHART(data->RE_bar), minor);
-	gtk_chart_show_minor(GTK_CHART(data->RE_pie), minor);
-
+	gtk_chart_show_minor(GTK_CHART(data->RE_bar), GLOBALS->minor);
+	gtk_chart_show_minor(GTK_CHART(data->RE_pie), GLOBALS->minor);
 }
 
 
@@ -1279,9 +1370,9 @@ static void statistic_setup(struct statistic_data *data)
 
 	filter_reset(data->filter);
 	
-	/* 3.4 : make int transfert out of stats */
+	/* 3.4 : make int transfer out of stats */
 	data->filter->option[FILTER_PAYMODE] = 1;
-	data->filter->paymode[PAYMODE_PERSTRANSFERT] = FALSE;
+	data->filter->paymode[PAYMODE_INTXFER] = FALSE;
 
 	/* if ope get date bounds */
 	if(g_list_length(GLOBALS->ope_list) > 0)
@@ -1289,7 +1380,7 @@ static void statistic_setup(struct statistic_data *data)
 	GList *list;
 
 		//get our min max date
-		da_operation_sort(GLOBALS->ope_list);
+		GLOBALS->ope_list = da_operation_sort(GLOBALS->ope_list);
 		list = g_list_first(GLOBALS->ope_list);
 		data->filter->mindate = ((Operation *)list->data)->date;
 		list = g_list_last(GLOBALS->ope_list);
@@ -1410,7 +1501,8 @@ GError *error = NULL;
 	gtk_window_set_title (GTK_WINDOW (window), _("Statistics Report"));
 
 	//set the window icon
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_stats.svg");
+	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_stats.svg");
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_REP_STATS);
 
 
 	//window contents
@@ -1450,6 +1542,13 @@ GError *error = NULL;
 	data->CY_view = widget;
 	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 2, row, row+1);
 
+	row++;
+	label = make_label(_("_Zoom X:"), 0, 0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+	widget = make_scale(label);
+	data->RG_zoomx = widget;
+	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 2, row, row+1);
+	
 	row++;
 	widget = gtk_check_button_new_with_mnemonic (_("By _amount"));
 	data->CM_byamount = widget;
@@ -1608,7 +1707,7 @@ GError *error = NULL;
 	widget = gtk_scrolled_window_new (NULL, NULL);
 	//gtk_scrolled_window_set_placement(GTK_SCROLLED_WINDOW (widget), GTK_CORNER_TOP_RIGHT);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	treeview = create_list_statistic();
 	data->LV_report = treeview;
 	gtk_container_add (GTK_CONTAINER(widget), treeview);
@@ -1619,8 +1718,8 @@ GError *error = NULL;
 	data->GR_detail = widget;
 	//gtk_scrolled_window_set_placement(GTK_SCROLLED_WINDOW (widget), GTK_CORNER_TOP_RIGHT);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	treeview = create_list_operation(PREFS->lst_ope_columns);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	treeview = create_list_operation(TRN_LIST_TYPE_DETAIL, PREFS->lst_ope_columns);
 	data->LV_detail = treeview;
 	gtk_container_add (GTK_CONTAINER(widget), treeview);
 
@@ -1666,6 +1765,9 @@ GError *error = NULL;
     g_signal_connect (data->CY_for, "changed", G_CALLBACK (statistic_compute), (gpointer)data);
     data->handler_id[HID_VIEW] = g_signal_connect (data->CY_view, "changed", G_CALLBACK (statistic_compute), (gpointer)data);
 
+	g_signal_connect (data->RG_zoomx, "value-changed", G_CALLBACK (statistic_zoomx_callback), NULL);
+
+	
 	g_signal_connect (data->CM_byamount, "toggled", G_CALLBACK (statistic_update), NULL);
 
 	g_signal_connect (gtk_tree_view_get_selection(GTK_TREE_VIEW(data->LV_report)), "changed", G_CALLBACK (statistic_selection), NULL);
@@ -1757,39 +1859,26 @@ static void statistic_amount_cell_data_function (GtkTreeViewColumn *col,
                            GtkTreeIter       *iter,
                            gpointer           user_data)
 {
-GtkWidget *widget;
 gdouble  value;
-gchar   buf[128];
-gboolean minor;
-gchar *markuptxt;
-guint32 color;
+gchar *color;
+gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
 
-	//get datas
 	gtk_tree_model_get(model, iter, GPOINTER_TO_INT(user_data), &value, -1);
 
 	if( value )
 	{
-		widget = g_object_get_data(G_OBJECT(model), "minor");
-		if(GTK_IS_TOGGLE_BUTTON(widget))
-		{
-			minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		}
-		else
-			minor = 0;
+		mystrfmon(buf, G_ASCII_DTOSTR_BUF_SIZE-1, value, GLOBALS->minor);
+		
+		color = get_normal_color_amount(value);
 
-		mystrfmon(buf, 127, value, minor);
-
-		color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
-
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
-		g_object_set(renderer, "markup", markuptxt, NULL);
-		g_free(markuptxt);
-	}
+		g_object_set(renderer, 
+			"foreground",  color,
+			"text", buf,
+			NULL);	}
 	else
 	{
 		g_object_set(renderer, "text", "", NULL);
 	}
-
 }
 
 
@@ -1857,7 +1946,7 @@ GtkTreeViewColumn  *column;
 	view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), PREFS->rules_hint);
 
 	/* column: Name */
 	column = gtk_tree_view_column_new();

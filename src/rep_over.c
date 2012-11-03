@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -62,6 +62,7 @@ struct repover_data
 	GtkWidget	*CM_minor;
 	GtkWidget	*LV_report;
 	GtkWidget	*PO_acc;
+	GtkWidget	*RG_zoomx;
 
 	GtkWidget	*PO_mindate, *PO_maxdate;
 
@@ -90,10 +91,10 @@ static void repover_action_refresh(GtkAction *action, gpointer user_data);
 //next
 
 static GtkActionEntry entries[] = {
-  { "List"    , "hb-stock-view-list" , N_("List")   , NULL,   N_("View results as list"), G_CALLBACK (repover_action_viewlist) },
-  { "Line"    , "hb-stock-view-line" , N_("Line")   , NULL,   N_("View results as lines"), G_CALLBACK (repover_action_viewline) },
+  { "List"    , "hb-view-list" , N_("List")   , NULL,   N_("View results as list"), G_CALLBACK (repover_action_viewlist) },
+  { "Line"    , "hb-view-line" , N_("Line")   , NULL,   N_("View results as lines"), G_CALLBACK (repover_action_viewline) },
 
-  { "Refresh" , "hb-stock-refresh"   , N_("Refresh"), NULL,   N_("Refresh results"), G_CALLBACK (repover_action_refresh) },
+  { "Refresh" , GTK_STOCK_REFRESH   , N_("Refresh"), NULL,   N_("Refresh results"), G_CALLBACK (repover_action_refresh) },
 };
 
 static guint n_entries = G_N_ELEMENTS (entries);
@@ -299,6 +300,7 @@ gchar   buf[128];
 
 	mystrfmon(buf, 127, data->minimum, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor)) );
 
+	////TRANSLATORS: count of transaction in overdrawn / count of total transaction under aoverdrawn amount threshold
 	info = g_strdup_printf(_("%d/%d under %s"), data->nbover, data->nbope, buf);
 	gtk_label_set_text(GTK_LABEL(data->TX_info), info);
 	g_free(info);
@@ -306,22 +308,39 @@ gchar   buf[128];
 
 
 
+static void repover_zoomx_callback(GtkWidget *widget, gpointer user_data)
+{
+struct repover_data *data;
+gdouble value;
+
+	DB( g_print("(statistic) zoomx\n") );
+
+	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	value = gtk_range_get_value(GTK_RANGE(data->RG_zoomx));
+
+	DB( g_print(" + scale is %d\n", value) );
+
+	gtk_chart_set_barw(GTK_CHART(data->RE_line), value);
+
+}
+
 
 static void repover_toggle_minor(GtkWidget *widget, gpointer user_data)
 {
 struct repover_data *data;
-gboolean minor;
 
 	DB( g_print("(repover) toggle\n") );
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
+	GLOBALS->minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
+	
 	repover_update_info(widget,NULL);
 
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW(data->LV_report));
 
-	minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
-	gtk_chart_show_minor(GTK_CHART(data->RE_line), minor);
+	gtk_chart_show_minor(GTK_CHART(data->RE_line), GLOBALS->minor);
 }
 
 
@@ -529,7 +548,7 @@ static void repover_setup(struct repover_data *data)
 	GList *list;
 
 		//get our min max date
-		da_operation_sort(GLOBALS->ope_list);
+		GLOBALS->ope_list = da_operation_sort(GLOBALS->ope_list);
 		list = g_list_first(GLOBALS->ope_list);
 		data->mindate = ((Operation *)list->data)->date;
 		list = g_list_last(GLOBALS->ope_list);
@@ -625,10 +644,8 @@ GError *error = NULL;
 	gtk_window_set_title (GTK_WINDOW (window), _("Overdrawn report"));
 
 	//set the window icon
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_overdrawn.svg");
-
-
-
+	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_overdrawn.svg");
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_REP_OVER);
 
 	//window contents
 	mainvbox = gtk_vbox_new (FALSE, 0);
@@ -660,6 +677,13 @@ GError *error = NULL;
 	widget = ui_acc_comboboxentry_new(label);
 	data->PO_acc = widget;
 	gtk_widget_set_size_request (widget, 10, -1);
+	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 2, row, row+1);
+
+	row++;
+	label = make_label(_("_Zoom X:"), 0, 0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+	widget = make_scale(label);
+	data->RG_zoomx = widget;
 	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 2, row, row+1);
 
 	row++;
@@ -771,7 +795,7 @@ GError *error = NULL;
 	//page: list
 	widget = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	treeview = create_list_repover();
 	data->LV_report = treeview;
@@ -821,6 +845,8 @@ GError *error = NULL;
 	//let this here or the setup trigger a compute...
 	g_signal_connect (data->PO_acc, "changed", G_CALLBACK (repover_compute), NULL);
 
+	g_signal_connect (data->RG_zoomx, "value-changed", G_CALLBACK (repover_zoomx_callback), NULL);
+
 
 	/* toolbar */
 	if(PREFS->toolbar_style == 0)
@@ -864,44 +890,61 @@ GError *error = NULL;
 static void repover_date_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
 gchar *datestr;
-gchar *markuptxt;
 gboolean is_over;
+gchar *color;
+gint weight;
 
 	gtk_tree_model_get(model, iter,
 		LST_OVER_DATESTR, &datestr,
 		LST_OVER_OVER, &is_over,
 		-1);
 
+	color = NULL;
+	weight = PANGO_WEIGHT_NORMAL;
+
 	if(is_over==TRUE)
 	{
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", PREFS->color_warn, datestr);
-		g_object_set(renderer, "markup", markuptxt, NULL);
-		g_free(markuptxt);
+		if(PREFS->custom_colors == TRUE)
+			color = PREFS->color_warn;
+		
+		weight = PANGO_WEIGHT_BOLD;
 	}
-	else
-	g_object_set(renderer, "text", datestr, NULL);
-
+	
+	g_object_set(renderer, 
+		"weight", weight,
+		"foreground",  color,
+		"text", datestr,
+		NULL);
 }
 
 static void repover_text_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
 gchar *buf;
-gchar *markuptxt;
 gboolean is_over;
+gchar *color;
+gint weight;
 
 	gtk_tree_model_get(model, iter,
 		LST_OVER_WORDING, &buf,
 		LST_OVER_OVER, &is_over,
 		-1);
 
+	color = NULL;
+	weight = PANGO_WEIGHT_NORMAL;
+
 	if(is_over==TRUE)
 	{
-		markuptxt = g_markup_printf_escaped("<span color='#%06x'>%s</span>", PREFS->color_warn, buf);
-		g_object_set(renderer, "markup", markuptxt, NULL);
-		g_free(markuptxt);
+		if(PREFS->custom_colors == TRUE)
+			color = PREFS->color_warn;
+		
+		weight = PANGO_WEIGHT_BOLD;
 	}
-	else
-		g_object_set(renderer, "text", buf, NULL);
+	
+	g_object_set(renderer, 
+		"weight", weight,
+		"foreground",  color,
+		"text", buf,
+		NULL);
 
 }
 
@@ -911,49 +954,47 @@ static void repover_amount_cell_data_function (GtkTreeViewColumn *col,
                            GtkTreeIter       *iter,
                            gpointer           user_data)
 {
-GtkWidget *widget;
 gdouble  value;
-gchar   buf[128];
-gboolean minor;
-gchar *markuptxt;
-guint32 color;
+gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
 gboolean is_over;
-
+gchar *color;
+gint weight;
 	//get datas
 	gtk_tree_model_get(model, iter,
 		LST_OVER_OVER, &is_over,
 		GPOINTER_TO_INT(user_data), &value,
 		-1);
 
-	if( value )
-	{
+	//fix: 400483
+	//value = arrondi(value, PREFS->base_cur.frac_digits);
 
-		widget = g_object_get_data(G_OBJECT(model), "minor");
-		if(GTK_IS_TOGGLE_BUTTON(widget))
-		{
-			minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		}
-		else
-			minor = 0;
-
-		mystrfmon(buf, 127, value, minor);
-
-		color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
-		if(is_over==TRUE) color = PREFS->color_warn;
-
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
-
-		//debug
-		/*gboolean toto = g_utf8_validate(buf, -1, NULL);
-		gboolean toto2 = g_utf8_validate(markuptxt, -1, NULL);
-		g_print("DEBUG: '%s' (isutf8=%d) :: '%s' (isutf8=%d)\n", buf, toto, markuptxt, toto2);
-		*/
-		g_object_set(renderer, "markup", markuptxt, NULL);
-		g_free(markuptxt);
-	}
+	if( value == 0.0 )
+		g_object_set(renderer, "text", NULL, NULL);
 	else
 	{
-		g_object_set(renderer, "text", "", NULL);
+
+		mystrfmon(buf, G_ASCII_DTOSTR_BUF_SIZE-1, value, GLOBALS->minor);
+
+		color = NULL;
+		weight = PANGO_WEIGHT_NORMAL;
+
+
+		if(value != 0.0 && PREFS->custom_colors == TRUE)
+			color = (value > 0.0) ? PREFS->color_inc : PREFS->color_exp;
+
+		if(is_over==TRUE)
+		{
+			if(PREFS->custom_colors == TRUE)
+				color = PREFS->color_warn;
+		
+			weight = PANGO_WEIGHT_BOLD;
+		}
+
+		g_object_set(renderer, 
+			"weight", weight,
+			"foreground",  color,
+			"text", buf,
+			NULL);
 	}
 
 }
@@ -1001,7 +1042,7 @@ GtkTreeViewColumn  *column;
 	view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), PREFS->rules_hint);
 
 	/* column debug over */
 /*

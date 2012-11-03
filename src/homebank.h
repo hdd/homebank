@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -37,12 +37,14 @@
 
 #include "enums.h"
 #include "preferences.h"
+#include "da_encoding.h"
 #include "da_other.h"
 #include "da_account.h"
 #include "da_category.h"
 #include "da_payee.h"
 #include "da_transaction.h"
 #include "da_tag.h"
+#include "da_assign.h"
 #include "gtkdateentry.h"
 #include "misc.h"
 #include "widgets.h"
@@ -57,15 +59,16 @@
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
 #define HB_UNSTABLE			0
+#define HB_VERSION			"4.3"
 
-#define FILE_VERSION		0.3
+#define FILE_VERSION		0.5
 
 #if HB_UNSTABLE != 1
 	#define	PROGNAME		"HomeBank"
-	#define HB_DATA_PATH	".homebank"
+	#define HB_DATA_PATH	"homebank"
 #else
-	#define	PROGNAME		"HomeBank (unstable)"
-	#define HB_DATA_PATH	".homebank_unstable"
+	#define	PROGNAME		"HomeBank " HB_VERSION " (unstable)"
+	#define HB_DATA_PATH	"homebank_unstable"
 #endif
 
 #ifdef G_OS_WIN32
@@ -73,17 +76,13 @@
 #define LOCALE_DIR      "locale"
 #define PIXMAPS_DIR     "images"
 #define HELP_DIR        "help"
-#define PACKAGE_VERSION "4.0.1"
+#define PACKAGE_VERSION HB_VERSION
 #define PACKAGE         "homebank"
-#define VERSION         "4.0.1"
+#define VERSION         HB_VERSION
 //#define NOOFX
 
 #define ENABLE_NLS 1
 #endif
-
-
-/* for operation dialog */
-#define GTK_RESPONSE_ADD	 1
 
 /* container spacing */
 #define HB_MAINBOX_SPACING	12
@@ -92,24 +91,71 @@
 #define HB_TABROW_SPACING	6
 #define HB_TABCOL_SPACING	6
 
+/* for operation dialog */
+#define GTK_RESPONSE_ADD	 1
+
+/* default zoomx for charts */
+#define GTK_CHART_MINBARW 	8
+#define GTK_CHART_BARW 		24
+#define GTK_CHART_MAXBARW 	64
+
+enum
+{
+	FILETYPE_UNKNOW,
+	FILETYPE_HOMEBANK,
+	FILETYPE_OFX,
+	FILETYPE_QIF,
+	FILETYPE_CSV_HB,
+	FILETYPE_AMIGA_HB,
+	NUM_FILETYPE
+};
+
+/*
+** stock icons
+*/
+
+/* Custom HomeBank named icons */
+#define HB_STOCK_ACCOUNT         "hb-account"
+#define HB_STOCK_ARCHIVE         "hb-archive"
+#define HB_STOCK_ASSIGN          "hb-assign"
+#define HB_STOCK_BUDGET          "hb-budget"
+#define HB_STOCK_CATEGORY        "hb-category"
+#define HB_STOCK_PAYEE           "hb-payee"
+#define HB_STOCK_FILTER          "hb-filter"
+#define HB_STOCK_OPE_ADD         "hb-ope-add"
+#define HB_STOCK_OPE_HERIT       "hb-ope-herit"
+#define HB_STOCK_OPE_EDIT        "hb-ope-edit"
+#define HB_STOCK_OPE_SHOW        "hb-ope-show"
+#define HB_STOCK_OPE_DELETE      "hb-ope-delete"
+#define HB_STOCK_OPE_VALID       "hb-ope-valid"
+#define HB_STOCK_OPE_REMIND      "hb-ope-remind"
+#define HB_STOCK_OPE_AUTO        "hb-ope-auto"
+#define HB_STOCK_REP_STATS       "hb-rep-stats"
+#define HB_STOCK_REP_TIME        "hb-rep-time"
+#define HB_STOCK_REP_OVER        "hb-rep-over"
+#define HB_STOCK_REP_BUDGET      "hb-rep-budget"
+#define HB_STOCK_REP_CAR         "hb-rep-car"
+
+
 /*
 ** Global application datas
 */
 struct HomeBank
 {
 	// data storage
-	//GList		*acc_list;		//accounts
 	GHashTable	*h_acc;			//accounts
-	//GList		*pay_list;		//payees
 	GHashTable	*h_pay;			//payees
-	//GList		*cat_list;		//categories
 	GHashTable	*h_cat;			//categories
 	GHashTable	*h_tag;			//tags
+	GHashTable	*h_rul;			//assign rules
+
+	GHashTable	*h_memo;		//memo/description
 
 	GList		*arc_list;		//archives
 	GList		*ope_list;		//operations
-	GHashTable	*h_memo;		//memo/description
 
+	gboolean	first_run;
+	
 	// wallet properties
 	gchar		*title;
 	guint		car_category;
@@ -135,10 +181,11 @@ struct HomeBank
 gint homebank_question_dialog(GtkWindow *parent, gchar *title, gchar *message_format, ...);
 void homebank_message_dialog(GtkWindow *parent, GtkMessageType type, gchar *title, gchar *message_format, ...);
 gboolean homebank_chooser_open_qif(GtkWindow *parent, gchar **storage_ptr);
-gboolean homebank_csv_file_chooser(GtkWindow *parent, GtkFileChooserAction action, gchar **storage_ptr);
+gboolean homebank_csv_file_chooser(GtkWindow *parent, GtkFileChooserAction action, gchar **storage_ptr, gchar *name);
 gboolean homebank_file_chooser(GtkFileChooserAction action);
 gboolean homebank_folder_chooser(GtkWindow *parent, gchar *title, gchar **storage_ptr);
 gboolean homebank_alienfile_chooser(gchar *title);
+gint homebank_alienfile_recognize(gchar *filename);
 gchar *homebank_get_filename_with_extension(gchar *path, gchar *extension);
 gchar *homebank_get_filename_without_extension(gchar *path);
 void homebank_file_ensure_xhb(void);
@@ -149,12 +196,12 @@ gboolean homebank_lastopenedfiles_save(void);
 
 
 void homebank_window_set_icon_from_file(GtkWindow *window, gchar *filename);
-gboolean homebank_folder_chooser(GtkWindow *parent, gchar *title, gchar **storage_ptr);
 
-gchar *homebank_get_filename_with_extension(gchar *path, gchar *extension);
-
+const gchar *homebank_app_get_config_dir (void);
+const gchar *homebank_app_get_images_dir (void);
 const gchar *homebank_app_get_pixmaps_dir (void);
 const gchar *homebank_app_get_locale_dir (void);
 const gchar *homebank_app_get_help_dir (void);
+const gchar *homebank_app_get_datas_dir (void);
 
 #endif /* __HOMEBANK_H__ */

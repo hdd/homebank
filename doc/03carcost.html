@@ -2,62 +2,71 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Accounts</TITLE>
+	<TITLE>Carcost</TITLE>
 	<link rel="stylesheet" href="help.css">
 </HEAD>
 <BODY >
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
 	<TR>
 		<TD WIDTH=27>
-			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="main.html"><IMG SRC="images/go-home.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 		<TD WIDTH=27>
-			<P><A HREF="03validate.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="02balance.html"><IMG SRC="images/go-previous.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 		<TD WIDTH=27>
-			<P><A HREF="06csvformat.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="06csvformat.html"><IMG SRC="images/go-next.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 	</TR>
 </TABLE>
-<HR SIZE=1 COLOR="#000000">
-<H2>Using the car-cost</H2>
-<P>The car-cost is an optional feature that focus on your cars spend
-and consumption of fuel.
-</P>
-<P>In order to be able to see something in the car-cost report
-window, the following step must be done:
-</P>
-<H3>1. Create some car categories</H3>
-<P>Let's say you have 2 cars:<BR>- you create a category called 'Car'
-- you then create 2 subcategories that will be your cars: Peugeot 106
-Sport, Peugeot 206, or whatever
-</P>
+<div class="head"></div>
+<h1>Carcost</h1>
+<p>
+This feature allows you to monitor the expenses of one or more vehicles: fuel consumption and other costs.
+</p>
+
+<ul class="toc">
+	<li><a href="#category">Create the vehicles categories</a></li>
+	
+	<li><a href="#transactions">Fill some transaction with carcost data's</a></li>
+	<li><a href="#result">View the results in the car cost report</a></li>
+</ul>
+
+<h2><A NAME="category"></A>:: Create the vehicles categories</h2>
+<P>Let's imagine you have 2 cars:
+<ul>
+	<li> open the <a href="04cate.html">category dialog</a>	
+	<li> create a category named 'Car'
+	<li> create a subcategory named 'Dacia Sandero'
+	<li> create a subcategory named 'Renault Twingo'
+</ul>
+
 <P>Optionally you can set the default car to be initialized into the
 car-cost report window from the <A HREF="04wall.html">wallet dialog</A>.
 </P>
-<H3>2. Fill in the transactions with necessary data's</H3>
-<P>First, set the corresponding category field for every of your
-spent for a car (refuel, repair,...)
-</P>
-<P>Fill in additional data's in the description at every of your
-refuel:</P>
-<UL>
-	<LI> [d=] meter: is the distance the
-	meter indicate at the refuel time
 
-	<LI>[v=] fuel: is the volume of fuel you filling into the car
-	tank
+<h2><A NAME="transactions"></A>:: Fill some transaction with carcost data's</h2>
+<p>
+A carcost transaction for refuel must include in its description:
+</p>
+<ul>
+	<LI>d=xxxxxx the odometer at refuel time
+	<LI>v=xx.xx  the volume of fuel
+</ul>
 
-</UL>
- Example:
+<P>
+Affect the category to all of your transactions for a vehicle, this includes refuel, maintenance, repair, insurance, or others.
 </P>
-<P STYLE="margin-left: 0.17in; border: 1px solid #dddddd; padding: 0.08in">
-<SPAN STYLE="background: #efefef">
-- '(d=92458 v=15.41)' <br>
-- 'd=92458, v=15.41' <br>
-- 'd=92458 v=15.41' <br></SPAN>
+<p>
+Example refuel description data's:
 </P>
-<H3>3. watch the results in the car-cost report</H3>
+<ul>
+	<li>'(d=92458 v=15.41)'
+	<li>'d=92458, v=15.41'
+	<li>'d=92458 v=15.41'
+</ul>
+
+<h2><A NAME="result"></A>:: View the results into the car cost report</h2>
 <P>Please see the <A HREF="05cost.html">car cost report</A> for the
 details.
 </P>

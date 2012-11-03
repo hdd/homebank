@@ -1,5 +1,5 @@
 /*	HomeBank -- Free, easy, personal accounting for everyone.
- *	Copyright (C) 1995-2008 Maxime DOYEN
+ *	Copyright (C) 1995-2010 Maxime DOYEN
  *
  *	This file is part of HomeBank.
  *
@@ -52,6 +52,8 @@ da_qif_tran_free(QIF_Tran *item)
 	{
 		if(item->date != NULL)
 			g_free(item->date);
+		if(item->info != NULL)
+			g_free(item->info);
 		if(item->payee != NULL)
 			g_free(item->payee);
 		if(item->memo != NULL)
@@ -112,41 +114,62 @@ da_qif_tran_append(QifContext *ctx, QIF_Tran *item)
 
 /* = = = = = = = = = = = = = = = = */
 
-static gdouble
+gdouble
 hb_qif_parser_get_amount(gchar *string)
 {
 gdouble amount;
 gint l, i;
 char *new_str, *p;
+gint  ndcount = 0;
+char gc, dc;
 
 	amount = 0.0;
+	gc = dc = '?';
 
-	// is there a non digit char at length-3 pos, it should be a decimal separator
 	l = strlen(string);
-	
-	if( !g_ascii_isdigit( string[l-3] && string[l-3] != '-' ))
-	{
-		//DB( g_print(" -> %s it seems a decimal char is %c (%d)\n", string, string[l-3],l ));	
 
-		new_str = g_malloc (l+1);
-		p = new_str;
-		for(i=0;i<l;i++)
+	// the first non-digit is a grouping, or a decimal separator
+	// if the non-digit is after a 3 digit serie, it might be a grouping
+	
+	for(i=l;i>=0;i--)
+	{
+		if( string[i] == '-') continue;
+
+		if( g_ascii_isdigit( string[i] ))
 		{
-			if( g_ascii_isdigit( string[i] ) || string[i] == '-' )
-			{
-				*p++ = string[i];
-			}
-			else
-			if( string[i] == string[l-3] )
-				*p++ = '.';
-				
+			ndcount++;
 		}
-		*p++ = '\0';
-		amount = g_ascii_strtod(new_str, NULL);
-		g_free(new_str);
+		else
+		{
+			if(ndcount == 3)
+				gc = string[i];
+			else
+				dc = string[i];
+			ndcount = 0;
+		}
 	}
 
-	//DB( g_print(" -> amount is '%s'  %.2f\n", string, amount ));	
+	 DB( g_print(" %s :: gc='%c', ds='%c'\n", string, gc, dc) );
+
+
+	new_str = g_malloc (l+1);
+	p = new_str;
+	for(i=0;i<l;i++)
+	{
+		if( g_ascii_isdigit( string[i] ) || string[i] == '-' )
+		{
+			*p++ = string[i];
+		}
+		else
+			if( string[i] == dc )
+				*p++ = '.';
+	}
+	*p++ = '\0';
+	amount = g_ascii_strtod(new_str, NULL);
+
+	DB( g_print(" -> amount is '%s' => '%s' %f\n", string, new_str, amount) );
+
+	g_free(new_str);
 
 	return amount;
 }
@@ -160,12 +183,21 @@ hb_qif_parser_get_dmy(gchar *string, gint *d, gint *m, gint *y)
 gboolean retval;
 gchar **str_array;
 
+	DB( g_print("hb_qif_parser_get_dmy for '%s'\n", string) );
+
 	retval = FALSE;
 	str_array = g_strsplit (string, "/", 3);
 	if( g_strv_length( str_array ) != 3 )
 	{
 		g_strfreev (str_array);
 		str_array = g_strsplit (string, ".", 3);
+		// fix 371381
+		//todo test
+		if( g_strv_length( str_array ) != 3 )
+		{
+			g_strfreev (str_array);
+			str_array = g_strsplit (string, "-", 3);
+		}
 	}
 
 	if( g_strv_length( str_array ) == 3 )
@@ -266,7 +298,7 @@ gint type = QIF_NONE;
 	//DB( g_print(" -> str: %s type: %d\n", tmpstr, type) );
 
 
-	if(g_str_has_prefix(tmpstr, "!Account"))
+	if(g_str_has_prefix(tmpstr, "!Account") || g_str_has_prefix(tmpstr, "!account"))
 	{
 		type = QIF_ACCOUNT;
 	}
@@ -276,48 +308,51 @@ gint type = QIF_NONE;
 
 		if( g_strv_length(typestr) == 2 )
 		{
-
+			gchar *tmpstr = g_utf8_casefold(typestr[1], -1);
+			
 			//DB( g_print(" -> str[1]: %s\n", typestr[1]) );
 
-			if( g_str_has_prefix(typestr[1], "Bank") )
+			if( g_str_has_prefix(tmpstr, "bank") )
 			{
 				type = QIF_TRANSACTION;
 			}
 			else
-			if( g_str_has_prefix(typestr[1], "Cash") )
+			if( g_str_has_prefix(tmpstr, "cash") )
 			{
 				type = QIF_TRANSACTION;
 			}
 			else
-			if( g_str_has_prefix(typestr[1], "CCard") )
+			if( g_str_has_prefix(tmpstr, "ccard") )
 			{
 				type = QIF_TRANSACTION;
 			}
 			else
-			if( g_str_has_prefix(typestr[1], "Invst") )
+			if( g_str_has_prefix(tmpstr, "invst") )
 			{
 				type = QIF_TRANSACTION;
 			}
 			else
-			if( g_str_has_prefix(typestr[1], "Oth A") )
+			if( g_str_has_prefix(tmpstr, "oth a") )
 			{
 				type = QIF_TRANSACTION;
 			}
 			else
-			if( g_str_has_prefix(typestr[1], "Oth L") )
+			if( g_str_has_prefix(tmpstr, "oth l") )
 			{
 				type = QIF_TRANSACTION;
 			}
 			else
-			if( g_str_has_prefix(typestr[1], "Security") )
+			if( g_str_has_prefix(tmpstr, "security") )
 			{
 				type = QIF_SECURITY;
 			}
 			else
-			if( g_str_has_prefix(typestr[1], "Prices") )
+			if( g_str_has_prefix(tmpstr, "prices") )
 			{		
 				type = QIF_PRICES;
 			}
+
+			g_free(tmpstr);
 		}		
 		g_strfreev(typestr);							
 	}
@@ -329,7 +364,7 @@ gint type = QIF_NONE;
 }
 
 static void
-hb_qif_parser_parse(QifContext *ctx, gchar *filename)
+hb_qif_parser_parse(QifContext *ctx, gchar *filename, const gchar *encoding)
 {
 GIOChannel *io;
 QIF_Tran tran = { 0 };
@@ -345,11 +380,17 @@ QIF_Tran tran = { 0 };
 	gint type = QIF_NONE;
 	gchar *value = NULL;
 	gchar *cur_acc;
-		
+
+		DB( g_print(" -> encoding should be %s\n", encoding) );
+		if( encoding != NULL )
+		{
+			g_io_channel_set_encoding(io, encoding, NULL);
+		}
+
 		
 		DB( g_print(" -> encoding is %s\n", g_io_channel_get_encoding(io)) );
 		
-		g_io_channel_set_encoding(io, NULL, NULL);
+		//g_io_channel_set_encoding(io, NULL, NULL);
 		
 		cur_acc = g_strdup(QIF_UNKNOW_ACCOUNT_NAME);
 
@@ -357,8 +398,7 @@ QIF_Tran tran = { 0 };
 		{
 			io_stat = g_io_channel_read_line(io, &tmpstr, NULL, NULL, &err);
 			
-			DB (g_print(" line read %s\n", tmpstr));
-			
+		
 			if( io_stat == G_IO_STATUS_EOF )
 				break;
 			if( io_stat == G_IO_STATUS_ERROR )
@@ -369,16 +409,16 @@ QIF_Tran tran = { 0 };
 			if( io_stat == G_IO_STATUS_NORMAL )
 			{
 				
-				
-				
 				hb_string_strip_crlf(tmpstr);
+
+				DB (g_print("** new QIF line: '%s' **\n", tmpstr));
+
 
 				//start qif parsing
 				if(g_str_has_prefix(tmpstr, "!")) /* !Type: or !Option: or !Account otherwise ignore */
 				{
 					type = hb_qif_parser_get_block_type(tmpstr);
-					DB ( g_print(" ----------------\n") );
-					DB ( g_print("* QIF block: '%s' (type = %d)\n", tmpstr, type) );
+					DB ( g_print("---- QIF block: '%s' (type = %d) ----\n", tmpstr, type) );
 				}
 
 				value = &tmpstr[1];
@@ -426,6 +466,9 @@ QIF_Tran tran = { 0 };
 					// end 
 					if(g_str_has_prefix(tmpstr, "^"))
 					{
+						DB ( g_print("should create account '%s' here\n", cur_acc) );
+						
+						
 						DB ( g_print(" ----------------\n") );
 					}
 					
@@ -457,6 +500,30 @@ QIF_Tran tran = { 0 };
 					if(g_str_has_prefix(tmpstr, "T"))
 					{
 						tran.amount = hb_qif_parser_get_amount(value);
+					}
+					else
+
+				// cleared status
+					if(g_str_has_prefix(tmpstr, "C"))
+					{
+						if(g_str_has_prefix(value, "X") || g_str_has_prefix(value, "R") )
+						{
+							tran.validated = TRUE;
+						}
+						else
+							tran.validated = FALSE;
+					}
+					else
+
+				// check num or reference number
+					if(g_str_has_prefix(tmpstr, "N"))
+					{
+						if(*value != '\0')
+						{
+							g_free(tran.info);
+							g_strstrip(value);
+							tran.info = g_strdup(value);
+						}
 					}
 					else
 
@@ -492,9 +559,9 @@ QIF_Tran tran = { 0 };
 						// L[Transfer account]/Class of transaction
 
 						/*		
-						if(g_str_has_prefix(&tmpstr[1], "["))	// this is a transfert account name
+						if(g_str_has_prefix(&tmpstr[1], "["))	// this is a transfer account name
 						{
-							DB ( g_print(" transfert to: '%s'\n", value) );
+							DB ( g_print(" transfer to: '%s'\n", value) );
 						}
 						else
 						{
@@ -516,13 +583,21 @@ QIF_Tran tran = { 0 };
 					{
 					QIF_Tran *newitem;
 
-						tran.account = g_strdup(cur_acc);
+						//fix: 380550
+						if( tran.date )
+						{
+							tran.account = g_strdup(cur_acc);
 
-						DB ( g_print(" storing qif transaction: dat:'%s' amt:%.2f pay:'%s' mem:'%s' cat:'%s' acc:'%s'\n", tran.date, tran.amount, tran.payee, tran.memo, tran.category, tran.account) );
+							DB ( g_print(" storing qif transaction: dat:'%s' amt:%.2f pay:'%s' mem:'%s' cat:'%s' acc:'%s'\n", tran.date, tran.amount, tran.payee, tran.memo, tran.category, tran.account) );
 
-						newitem = da_qif_tran_malloc();
-						da_qif_tran_move(&tran, newitem);
-						da_qif_tran_append(ctx, newitem);
+							newitem = da_qif_tran_malloc();
+							da_qif_tran_move(&tran, newitem);
+							da_qif_tran_append(ctx, newitem);
+						}
+
+						//unvalid tran
+						tran.date = 0;
+
 					}
 				}
 				// end QIF_TRANSACTION
@@ -542,27 +617,27 @@ QIF_Tran tran = { 0 };
 
 
 
-Operation *
-account_qif_get_child_transfert(Operation *src, GList *list)
+static Operation *
+account_qif_get_child_transfer(Operation *src, GList *list)
 {
 Operation *item;
 
-	DB( g_print("(operation) operation_get_child_transfert\n") );
+	//DB( g_print("(operation) operation_get_child_transfer\n") );
 
-	DB( g_print(" search: %d %s %f %d=>%d\n", src->date, src->wording, src->amount, src->account, src->dst_account) );
+	//DB( g_print(" search: %d %s %f %d=>%d\n", src->date, src->wording, src->amount, src->account, src->dst_account) );
 
 	list = g_list_first(list);
 	while (list != NULL)
 	{
 		item = list->data;
-		if( item->paymode == PAYMODE_PERSTRANSFERT)
+		if( item->paymode == PAYMODE_INTXFER)
 		{
 			if( src->date == item->date &&
 			    src->account == item->dst_account &&
 			    src->dst_account == item->account &&
 			    ABS(src->amount) == ABS(item->amount) )
 			{
-				DB( g_print(" found : %d %s %f %d=>%d\n", item->date, item->wording, item->amount, item->account, item->dst_account) );
+				//DB( g_print(" found : %d %s %f %d=>%d\n", item->date, item->wording, item->amount, item->account, item->dst_account) );
 
 				return item;			
 			}
@@ -570,7 +645,7 @@ Operation *item;
 		list = g_list_next(list);
 	}		
 
-	DB( g_print(" not found...\n") );
+	//DB( g_print(" not found...\n") );
 
 	return NULL;
 }
@@ -594,7 +669,7 @@ GList *list = NULL;
 	da_qif_tran_new(&ctx);
 
 	// parse !!
-	hb_qif_parser_parse(&ctx, filename);
+	hb_qif_parser_parse(&ctx, filename, ictx->encoding);
 
 	// check iso date format in file
 	isodate = hb_qif_parser_check_iso_date(&ctx);
@@ -602,17 +677,16 @@ GList *list = NULL;
 
 	DB( g_print(" 2) transform to HomeBank\n") );
 
-	ictx->has_unknow_account = FALSE;
-
 	// transform our qif transactions to homebank ones
 	qiflist = g_list_first(ctx.q_tra);
 	while (qiflist != NULL)
 	{
 	QIF_Tran *item = qiflist->data;
 	Operation *newope, *child;
-	Account *accitem;
+	Account *accitem, *existitem;
 	Payee *payitem;
 	Category *catitem;
+	gchar *name;
 
 		newope = da_operation_malloc();
 
@@ -626,7 +700,7 @@ GList *list = NULL;
 			payitem = da_pay_get_by_name(item->payee);
 			if(payitem == NULL)
 			{
-				DB( g_print(" -> append pay: '%s'\n", item->payee ) );
+				//DB( g_print(" -> append pay: '%s'\n", item->payee ) );
 
 				payitem = da_pay_malloc();
 				payitem->name = g_strdup(item->payee);
@@ -639,6 +713,7 @@ GList *list = NULL;
 		}
 
 		newope->wording		 = g_strdup(item->memo);
+		newope->info		 = g_strdup(item->info);
 		newope->amount		 = item->amount;
 		
 		
@@ -649,11 +724,11 @@ GList *list = NULL;
 		if( item->category != NULL )
 		{
 							
-			if(g_str_has_prefix(item->category, "["))	// this is a transfert account name
+			if(g_str_has_prefix(item->category, "["))	// this is a transfer account name
 			{
 			gchar *accname;
 			
-				DB ( g_print(" -> transfert to: '%s'\n", item->category) );
+				//DB ( g_print(" -> transfer to: '%s'\n", item->category) );
 
 				//remove brackets
 				accname = hb_strdup_nobrackets(item->category);
@@ -664,23 +739,24 @@ GList *list = NULL;
 				accitem = da_acc_get_by_name(accname);
 				if(accitem == NULL)
 				{
-					DB( g_print(" -> append acc: '%s'\n", accname ) );
+					DB( g_print(" -> append dest acc: '%s'\n", accname ) );
 
 					accitem = da_acc_malloc();
 					accitem->name = g_strdup(accname);
 					accitem->imported = TRUE;
+					accitem->imp_name = g_strdup(accname);
 					da_acc_append(accitem);
 				}
 				
 				newope->dst_account = accitem->key;
-				newope->paymode = PAYMODE_PERSTRANSFERT;
+				newope->paymode = PAYMODE_INTXFER;
 				
 				
 				g_free(accname);
 			}
 			else
 			{
-				DB ( g_print(" -> append cat: '%s'\n", item->category) );
+				//DB ( g_print(" -> append cat: '%s'\n", item->category) );
 			
 				catitem = da_cat_append_ifnew_by_fullname(item->category, TRUE);
 				if( catitem != NULL)
@@ -692,43 +768,52 @@ GList *list = NULL;
 		}
 
 		// account + append
-		if(!strcmp(QIF_UNKNOW_ACCOUNT_NAME, item->account))
-		{
-			ictx->has_unknow_account = TRUE;
-			newope->account = 0;
-		}
-		else
-		{
-			accitem = da_acc_get_by_name(item->account);
-			if(accitem == NULL)
-			{
-				DB( g_print(" -> append acc: '%s'\n", item->account ) );
+		name = strcmp(QIF_UNKNOW_ACCOUNT_NAME, item->account) == 0 ? QIF_UNKNOW_ACCOUNT_NAME : item->account;
 
-				accitem = da_acc_malloc();
-				accitem->name = g_strdup(item->account);
-				accitem->imported = TRUE;
-				da_acc_append(accitem);
+		DB( g_print(" -> account name is '%s'\n", name ) );
+
+		accitem = da_acc_get_by_imp_name(name);
+		if( accitem == NULL )
+		{
+			// check for an existing account before creating it
+			existitem = da_acc_get_by_name(name);
+
+			accitem = import_create_account(name, NULL);
+			DB( g_print(" -> creating account '%s'\n", name ) );
+
+			if( existitem != NULL )
+			{
+				accitem->imp_key = existitem->key;
+				DB( g_print(" -> existitem is '%d' %s\n", existitem->key, existitem->name ) );
 			}
-			newope->account = accitem->key;
+
+
 		}
+
+		
+		newope->account = accitem->key;
 
 
 		newope->flags |= OF_ADDED;
 		if( newope->amount > 0)
 			newope->flags |= OF_INCOME;
 
+		if( item->validated )
+			newope->flags |= OF_VALID;
+
+
 		child = NULL;
 		
-		child = account_qif_get_child_transfert(newope, list);
+		child = account_qif_get_child_transfer(newope, list);
 		if( child != NULL)
 		{
-			DB( g_print(" -> already exist\n" ) );
+			//DB( g_print(" -> transaction already exist\n" ) );
 		
 			da_operation_free(newope);
 		}
 		else
 		{
-			DB( g_print(" -> append trans. acc:'%s', memo:'%s', val:%.2f\n", item->account, item->memo, item->amount ) );
+			//DB( g_print(" -> append trans. acc:'%s', memo:'%s', val:%.2f\n", item->account, item->memo, item->amount ) );
 
 			list = g_list_append(list, newope);
 		}
@@ -767,7 +852,7 @@ size_t rc;
 		buffer = g_string_new (NULL);	
 		
 		//todo: save accounts in order
-		//todo: save transfert transaction once
+		//todo: save transfer transaction once
 
 		list = g_hash_table_get_values(GLOBALS->h_acc);
 		while (list != NULL)
@@ -804,7 +889,9 @@ size_t rc;
 					
 					g_string_append_printf (buffer, "T%s\n", amountbuf);
 				
-					if( trans->paymode == PAYMODE_CHEQUE)
+					g_string_append_printf (buffer, "C%s\n", trans->flags & OF_VALID ? "R" : "");
+				
+					if( trans->paymode == PAYMODE_CHECK)
 						g_string_append_printf (buffer, "N%s\n", trans->info);
 
 					payee = da_pay_get(trans->payee);
@@ -812,16 +899,19 @@ size_t rc;
 
 					g_string_append_printf (buffer, "M%s\n", trans->wording);
 
-					// category/transfert
+					// category/transfer
 
 						// LCategory of transaction
 						// L[Transfer account name]
 						// LCategory of transaction/Class of transaction
 						// L[Transfer account]/Class of transaction
 
-					if( trans->paymode == PAYMODE_PERSTRANSFERT && trans->account == item->key)
+					if( trans->paymode == PAYMODE_INTXFER && trans->account == item->key)
 					{
-						g_string_append_printf (buffer, "L[%s]\n", item->name);
+					//#579260
+						Account *dstacc = da_acc_get(trans->dst_account);
+						if(dstacc)
+							g_string_append_printf (buffer, "L[%s]\n", dstacc->name);
 					}
 					else
 					{

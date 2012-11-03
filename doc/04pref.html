@@ -2,25 +2,25 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Settings</TITLE>
+	<TITLE>Preferences dialog</TITLE>
 	<link rel="stylesheet" href="help.css">
 </HEAD>
 <BODY ><A NAME="top"></A>
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
 	<TR>
 		<TD WIDTH=27>
-			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="main.html"><IMG SRC="images/go-home.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 		<TD WIDTH=27>
-			<P><A HREF="99filt.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="99filt.html"><IMG SRC="images/go-previous.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 		<TD WIDTH=27>
-			<P><A HREF="05stat.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="05stat.html"><IMG SRC="images/go-next.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 	</TR>
 </TABLE>
-<HR SIZE=1>
-<H2>Preferences dialog</H2>
+<div class="head"></div>
+<h1>Preferences dialog</h1>
 <P>The preferences dialog can be accessed from the main window menu,
 as Edit-&gt;Preferences. It lets you customize many aspects of the
 way HomeBank works. The following sections detail the settings that
@@ -31,13 +31,14 @@ you can customize, and what they affect.
 <A HREF="#tab2">Interface</A>,
 <A HREF="#tab3">Columns</A>,
 <A HREF="#tab4">Display format</A>, 
-<A HREF="#tab5">Euro options</A>, 
-<A HREF="#tab6">Report options</A>
+<A HREF="#tab5">Import options</A>, 
+<A HREF="#tab6">Euro options</A>, 
+<A HREF="#tab7">Report options</A>
 </P>
 
 <!-- separator -->
 <div class="clear"></div>
-<H3><A NAME="tab1"></A>:: General tab</H3> 
+<h2><A NAME="tab1"></A>:: General tab</h2> 
 
  
 
@@ -46,7 +47,7 @@ you can customize, and what they affect.
 	<IMG SRC="images/04prefs1.png">
 </div>
 
-<H4>Folders</H4>
+<h3>Folders</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">Wallet</TD>
@@ -62,7 +63,7 @@ you can customize, and what they affect.
 	</TR>
 </TABLE>
 
-<H4>Initial date filter</H4>
+<h3>Initial date filter</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">Range</TD>
@@ -70,7 +71,7 @@ you can customize, and what they affect.
 	</TR>
 </TABLE>
 
-<H4>Start behaviour</H4>
+<h3>Start behaviour</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">Load last opened file</TD>
@@ -81,13 +82,13 @@ you can customize, and what they affect.
 <!-- separator -->
 <div class="clear"></div>
 
-<H3><A NAME="tab2"></A>:: Interface tab</H3>
+<h2><A NAME="tab2"></A>:: Interface tab</h2>
  
 </P>
 <div class="gtkshot">
 	<IMG SRC="images/04prefs2.png">
 </div>
-<H4>General</H4>
+<h3>General</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">
@@ -99,7 +100,7 @@ you can customize, and what they affect.
 		</TD>
 	</TR>
 </TABLE>
-<H4>Amount colors</H4>
+<h3>Amount colors</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">
@@ -132,13 +133,13 @@ you can customize, and what they affect.
 
 <!-- separator -->
 <div class="clear"></div>
-<H3><A NAME="tab3"></A>:: Columns tab</H3>
+<h2><A NAME="tab3"></A>:: Columns tab</h2>
  
 </P>
 <div class="gtkshot">
 	<IMG SRC="images/04prefs3.png">
 </div>
-<H4>Transaction list</H4>
+<h3>Transaction list</h3>
 <P>
 Here you can show/hide columns to be displayed in transaction list.
 
@@ -148,13 +149,13 @@ Here you can show/hide columns to be displayed in transaction list.
 <div class="clear"></div>
 
 
-<H3><A NAME="tab4"></A>:: Display format tab</H3>
+<h2><A NAME="tab4"></A>:: Display format tab</h2>
  
 </P>
 <div class="gtkshot">
 	<IMG SRC="images/04prefs4.png">
 </div>
-<H4>Date options</H4>
+<h3>Date options</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">
@@ -171,7 +172,7 @@ Here you can show/hide columns to be displayed in transaction list.
 	</TR>
 </TABLE>
 
-<H4>Numbers options</H4>
+<h3>Numbers options</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">Prefix symbol</TD>
@@ -199,14 +200,14 @@ Here you can show/hide columns to be displayed in transaction list.
 	</TR>
 </TABLE>
 
-<H4>Measurement units</H4>
+<h3>Measurement units</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">
 			<P>Use Imperial units</P>
 		</TD>
 		<td class="winfo">
-			<P>future: amiga not implemented yet.
+			<P>Display carcost result with imperial units (no converison, just label).
 			</P>
 		</TD>
 	</TR>
@@ -214,14 +215,33 @@ Here you can show/hide columns to be displayed in transaction list.
 
 <!-- separator -->
 <div class="clear"></div>
+<h2><A NAME="tab5"></A>:: Import options tab</h2>
 
-<H3><A NAME="tab5"></A>:: Euro options tab</H3>
+<h3>OFX/QFX options</h3>
+<table class="widgetinfo">
+	<TR>
+		<td class="wname">
+			Import memo field
+		</TD>
+		<td class="winfo">
+			define what to do for memo field during import:<br>
+			ignore, add to description, add to info.
+			
+		</TD>
+	</TR>
+</TABLE>
+
+<!-- separator -->
+<div class="clear"></div>
+
+
+<h2><A NAME="tab6"></A>:: Euro options tab</h2>
  
 </P>
 <div class="gtkshot">
 	<IMG SRC="images/04prefs5.png" >
 </div>
-<H4>General</H4>
+<h3>General</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">
@@ -260,7 +280,7 @@ Here you can show/hide columns to be displayed in transaction list.
 		</TD>
 	</TR>
 </TABLE>
-<H4>Numbers format</H4>
+<h3>Numbers format</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">
@@ -294,13 +314,13 @@ Here you can show/hide columns to be displayed in transaction list.
 <!-- separator -->
 <div class="clear"></div>
 
-<H3><A NAME="tab6"></A>:: Report options tab</H3>
+<h2><A NAME="tab7"></A>:: Report options tab</h2>
  
 
 <div class="gtkshot">
 	<IMG SRC="images/04prefs6.png" N>
 </div>
-<H4>Statistics options</H4>
+<h3>Statistics options</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">
@@ -323,7 +343,7 @@ Here you can show/hide columns to be displayed in transaction list.
 		</TD>
 	</TR>
 </TABLE>
-<H4>Budget options</H4>
+<h3>Budget options</h3>
 <table class="widgetinfo">
 	<TR>
 		<td class="wname">Show details</TD>

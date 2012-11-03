@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -80,6 +80,19 @@ GList *tmplist = g_list_first(list);
 	g_list_free(list);
 }
 
+static gint da_archive_glist_compare_func(Archive *a, Archive *b)
+{
+	return (g_utf8_collate(a->wording, b->wording));
+}
+
+
+GList *da_archive_sort(GList *list)
+{
+	return g_list_sort(list, (GCompareFunc)da_archive_glist_compare_func);
+}
+	
+
+
 
 /* = = = = = = = = = = = = = = = = = = = = */
 /* Operation */
@@ -97,6 +110,9 @@ void da_filter_free(Filter *flt)
 {
 	if(flt != NULL)
 	{
+		g_free(flt->wording);
+		g_free(flt->info);
+		g_free(flt->tag);
 		g_free(flt);
 	}
 }

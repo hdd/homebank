@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -58,6 +58,7 @@ da_acc_free(Account *item)
 	{
 		DB( g_print(" => %d, %s\n", item->key, item->name) );
 
+		g_free(item->imp_name);
 		g_free(item->name);
 		g_free(item->number);
 		g_free(item->bankname);
@@ -101,6 +102,16 @@ static gboolean da_acc_name_grfunc(gpointer key, Account *item, gchar *name)
 	if( name && item->name )
 	{
 		if(!strcasecmp(name, item->name))
+			return TRUE;
+	}
+	return FALSE;
+}
+
+static gboolean da_acc_imp_name_grfunc(gpointer key, Account *item, gchar *name)
+{
+	if( name && item->imp_name )
+	{
+		if(!strcasecmp(name, item->imp_name))
 			return TRUE;
 	}
 	return FALSE;
@@ -233,6 +244,13 @@ da_acc_get_by_name(gchar *name)
 	return g_hash_table_find(GLOBALS->h_acc, (GHRFunc)da_acc_name_grfunc, name);
 }
 
+Account *
+da_acc_get_by_imp_name(gchar *name)
+{
+	DB( g_print("da_acc_get_by_imp_name\n") );
+
+	return g_hash_table_find(GLOBALS->h_acc, (GHRFunc)da_acc_imp_name_grfunc, name);
+}
 
 
 /**

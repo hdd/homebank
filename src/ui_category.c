@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -71,7 +71,7 @@ gchar *name = NULL;
  *
  */
 guint32
-ui_cat_comboboxentry_get_key(GtkComboBoxEntry *entry_box)
+ui_cat_comboboxentry_get_key_add_new(GtkComboBoxEntry *entry_box)
 {
 Category *item;
 gchar *name;
@@ -96,6 +96,33 @@ gchar *name;
 	return item->key;
 }
 
+
+/**
+ * ui_cat_comboboxentry_get_key:
+ * 
+ * get the key of the active category or -1
+ * 
+ * Return value: the key or -1
+ *
+ */
+guint32
+ui_cat_comboboxentry_get_key(GtkComboBoxEntry *entry_box)
+{
+Category *item;
+gchar *name;
+
+	DB( g_print ("ui_cat_comboboxentry_get_key()\n") );
+
+	name = (gchar *)gtk_entry_get_text(GTK_ENTRY (GTK_BIN (entry_box)->child));
+	if( name == NULL)
+		return -1;
+
+	item = da_cat_get_by_fullname(name);
+	if(item != NULL)
+		return item->key;
+
+	return -1;
+}
 
 gboolean
 ui_cat_comboboxentry_set_active(GtkComboBoxEntry *entry_box, guint32 key)
@@ -172,30 +199,34 @@ gchar *fullname, *name;
 
 
 static void
-ui_cat_comboboxentry_populate_ghfunc(gpointer key, gpointer value, GtkTreeModel *model)
+ui_cat_comboboxentry_populate_ghfunc(gpointer key, gpointer value, struct catPopContext *ctx)
 {
 GtkTreeIter  iter;
 Category *item = value;
 gchar *fullname, *name;
 
+	if( ( item->key != ctx->except_key ) )
+	{
 
-	fullname = da_cat_get_fullname(item);
 
-	//DB( g_print ("cat combo populate [%d:%d] %s\n", item->parent, item->key, fullname) );
+		fullname = da_cat_get_fullname(item);
 
-	if( item->parent == 0 )
-		name = g_strdup(item->name);
-	else
-		name = g_strdup_printf(" - %s", item->name);
+		//DB( g_print ("cat combo populate [%d:%d] %s\n", item->parent, item->key, fullname) );
 
-	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-	gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-		0, fullname,
-		1, name,
-		-1);
+		if( item->parent == 0 )
+			name = g_strdup(item->name);
+		else
+			name = g_strdup_printf(" - %s", item->name);
 
-	g_free(fullname);
-	g_free(name);
+		gtk_list_store_append (GTK_LIST_STORE(ctx->model), &iter);
+		gtk_list_store_set (GTK_LIST_STORE(ctx->model), &iter,
+			0, fullname,
+			1, name,
+			-1);
+
+		g_free(fullname);
+		g_free(name);
+	}
 
 }
 
@@ -210,8 +241,15 @@ gchar *fullname, *name;
 void
 ui_cat_comboboxentry_populate(GtkComboBoxEntry *entry_box, GHashTable *hash)
 {
+	ui_cat_comboboxentry_populate_except(entry_box, hash, -1);
+}
+
+void
+ui_cat_comboboxentry_populate_except(GtkComboBoxEntry *entry_box, GHashTable *hash, guint except_key)
+{
 GtkTreeModel *model;
 GtkEntryCompletion *completion;
+struct catPopContext ctx;
 
     DB( g_print ("ui_cat_comboboxentry_populate()\n") );
 
@@ -224,8 +262,11 @@ GtkEntryCompletion *completion;
 	gtk_entry_completion_set_model (completion, NULL);
 
 	/* clear and populate */
+	ctx.model = model;
+	ctx.except_key = except_key;
+
 	gtk_list_store_clear (GTK_LIST_STORE(model));
-	g_hash_table_foreach(hash, (GHFunc)ui_cat_comboboxentry_populate_ghfunc, model);
+	g_hash_table_foreach(hash, (GHFunc)ui_cat_comboboxentry_populate_ghfunc, &ctx);
 
 	/* reatach our model */
 	gtk_combo_box_set_model(GTK_COMBO_BOX(entry_box), model);
@@ -445,10 +486,10 @@ gchar *string;
 	type = (entry->flags & GF_INCOME) ? '+' : '-';
 
 	#if MYDEBUG
-	string = g_strdup_printf ("%d > [%d] %s [%c]", entry->key, entry->parent, name, type );
+	string = g_markup_printf_escaped ("%d > [%d] %s [%c]", entry->key, entry->parent, name, type );
 	#else
 	if( entry->parent == 0 )
-		string = g_strdup(name);
+		string = g_markup_printf_escaped("%s", name);
 	else
 		string = g_markup_printf_escaped("<i>%s</i>", name);
 		//string = g_strdup_printf(" - %s", name);
@@ -669,9 +710,8 @@ Category *item;
 
 static void ui_cat_listview_populate_cat_ghfunc(gpointer key, gpointer value, GtkTreeModel *model)
 {
-GtkTreeIter  toplevel, child;
+GtkTreeIter  toplevel;
 Category *item = value;
-gboolean ret;
 
 	//DB( g_print("cat listview populate: %d %s\n", (guint32 *)key, item->name) );
 
@@ -809,7 +849,7 @@ GtkTreeViewColumn	*column;
 /**
  * ui_cat_manage_filter_text_handler
  *
- *	filter to entry to avoid saise of ':' char
+ *	filter to entry to avoid seizure of ':' char
  *
  */
 static void ui_cat_manage_filter_text_handler (GtkEntry    *entry,
@@ -862,7 +902,7 @@ gchar *error;
 
 	DB( g_printf("(ui_cat_manage_dialog) load csv - data %x\n", data) );
 
-	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_OPEN, &filename) == TRUE )
+	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_OPEN, &filename, NULL) == TRUE )
 	{
 		DB( g_print(" + filename is %s\n", filename) );
 
@@ -895,7 +935,7 @@ gchar *error;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
-	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_SAVE, &filename) == TRUE )
+	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_SAVE, &filename, NULL) == TRUE )
 	{
 		DB( g_print(" + filename is %s\n", filename) );
 
@@ -1134,8 +1174,7 @@ GtkTreeIter			 iter, child_iter;
 /*
 **
 */
-/*
-void ui_cat_manage_dialog_move(GtkWidget *widget, gpointer user_data)
+static void ui_cat_manage_dialog_move(GtkWidget *widget, gpointer user_data)
 {
 struct ui_cat_manage_dialog_data *data;
 GtkWidget *window, *mainvbox, *getwidget;
@@ -1154,9 +1193,8 @@ GtkTreeIter			 iter;
 
 		gtk_tree_model_get(model, &iter, LST_DEFCAT_DATAS, &item, -1);
 
-		window = gtk_dialog_new_with_buttons ("Move...",
-						    //GTK_WINDOW (do_widget),
-						    NULL,
+		window = gtk_dialog_new_with_buttons (_("Move to..."),
+						    GTK_WINDOW (data->window),
 						    0,
 						    GTK_STOCK_CANCEL,
 						    GTK_RESPONSE_REJECT,
@@ -1166,32 +1204,53 @@ GtkTreeIter			 iter;
 
 		mainvbox = gtk_vbox_new (FALSE, 0);
 		gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), mainvbox, TRUE, TRUE, 0);
-		gtk_container_set_border_width (GTK_CONTAINER (mainvbox), SP_BORDER);
+		gtk_container_set_border_width (GTK_CONTAINER (mainvbox), HB_BOX_SPACING);
 
-		getwidget = make_popcategory(NULL);
+		getwidget = ui_cat_comboboxentry_new(NULL);
 		gtk_box_pack_start (GTK_BOX (mainvbox), getwidget, TRUE, TRUE, 0);
-
-		// populate popcateory
-		Category **array;
-		gint count, i;
 
 		gtk_widget_show_all(mainvbox);
 
-		//gtk_widget_grab_focus (getwidget);
+		ui_cat_comboboxentry_populate_except(GTK_COMBO_BOX_ENTRY(getwidget), GLOBALS->h_cat, item->key);
+		gtk_widget_grab_focus (getwidget);
 
 		//wait for the user
 		gint result = gtk_dialog_run (GTK_DIALOG (window));
 
 		if(result == GTK_RESPONSE_ACCEPT)
 		{
-		gint active;
+		gboolean result;
+		gchar *npn;
 
-			active = gtk_combo_box_get_active(getwidget);
+			npn = ui_cat_comboboxentry_get_name(GTK_COMBO_BOX_ENTRY(getwidget)),
 
-			DB( g_print(" moving to %d\n", active) );
+			result = homebank_question_dialog(
+				GTK_WINDOW(window),
+				_("Move this category to another one ?"),
+				_("This will replace '%s' by '%s',\n"
+				  "and then remove '%s'"),
+				item->name,
+				npn,
+				item->name,
+				NULL
+				);
 
+			if( result == GTK_RESPONSE_YES )
+			{
+			guint dstkey;
 
+				dstkey = ui_cat_comboboxentry_get_key_add_new(GTK_COMBO_BOX_ENTRY(getwidget));
 
+				DB( g_print(" moving to %d\n", dstkey) );
+
+				category_move(item->key, dstkey);
+
+				// remove the old payee
+				da_cat_remove(item->key);
+				ui_cat_listview_remove_selected(GTK_TREE_VIEW(data->LV_cat));
+				data->change++;
+
+			}
 	    }
 
 		// cleanup and destroy
@@ -1199,7 +1258,7 @@ GtkTreeIter			 iter;
 	}
 
 }
-*/
+
 
 /*
 ** remove the selected payee to our treeview and temp GList
@@ -1347,7 +1406,7 @@ gboolean haschild = FALSE;
 	sensitive = (selected == TRUE) ? TRUE : FALSE;
 	gtk_widget_set_sensitive(data->ST_name2, sensitive);
 	gtk_widget_set_sensitive(data->BT_add2, sensitive);
-	//gtk_widget_set_sensitive(data->BT_mov, sensitive);
+	gtk_widget_set_sensitive(data->BT_mov, sensitive);
 	gtk_widget_set_sensitive(data->BT_mod, sensitive);
 	
 	//avoid removing top categories
@@ -1451,8 +1510,9 @@ gint row;
 
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 	
-
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "category.svg");
+	//set the window icon
+	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "category.svg");
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_CATEGORY);
 
 	//store our window private data
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);
@@ -1528,8 +1588,8 @@ gint row;
 	//data.BT_mod = gtk_button_new_with_mnemonic(_("_Modify"));
 	gtk_box_pack_start (GTK_BOX (vbox), data.BT_mod, FALSE, FALSE, 0);
 
-	//data.BT_mov = gtk_button_new_with_label("Move");
-	//gtk_box_pack_start (GTK_BOX (vbox), data.BT_mov, FALSE, FALSE, 0);
+	data.BT_mov = gtk_button_new_with_label("Move");
+	gtk_box_pack_start (GTK_BOX (vbox), data.BT_mov, FALSE, FALSE, 0);
 
 	separator = gtk_hseparator_new();
 	gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, HB_BOX_SPACING);
@@ -1557,7 +1617,7 @@ gint row;
 	g_signal_connect (G_OBJECT (data.BT_add1), "clicked", G_CALLBACK (ui_cat_manage_dialog_add), GINT_TO_POINTER(FALSE));
 	g_signal_connect (G_OBJECT (data.BT_add2), "clicked", G_CALLBACK (ui_cat_manage_dialog_add), GINT_TO_POINTER(TRUE));
 	g_signal_connect (G_OBJECT (data.BT_mod), "clicked", G_CALLBACK (ui_cat_manage_dialog_modify), NULL);
-	//g_signal_connect (G_OBJECT (data.BT_mov), "clicked", G_CALLBACK (ui_cat_manage_dialog_move), NULL);
+	g_signal_connect (G_OBJECT (data.BT_mov), "clicked", G_CALLBACK (ui_cat_manage_dialog_move), NULL);
 	g_signal_connect (G_OBJECT (data.BT_rem), "clicked", G_CALLBACK (ui_cat_manage_dialog_remove), NULL);
 
 	g_signal_connect (G_OBJECT (data.BT_import), "clicked", G_CALLBACK (ui_cat_manage_dialog_load_csv), NULL);

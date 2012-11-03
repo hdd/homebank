@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Automatic addition</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY >
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=27>
+			<A HREF="main.html"><IMG SRC="images/go-home.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<A HREF="03trans_add.html"><IMG SRC="images/go-previous.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<A HREF="03auto_assign.html"><IMG SRC="images/go-next.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+	</TR>
+</TABLE>
+<div class="head"></div>
+<h1>Automatic addition</h1>
+<P>
+This feature lets you program the addition of transaction automatically to their due date or in advance.
+</p>
+
+<ul class="toc">
+	<li><a href="#create">Create automatic transactions</a></li>
+	<li><a href="#occurs">When the automatic addition occurs ?</a></li>
+	<li><a href="#advance">Control the add in advance</a></li>
+	<li><a href="#upcoming">List of upcoming automatic transactions</a></li>
+</ul>
+
+<h2><A NAME="manage"></A>:: Create automatic transactions</h2>
+<p>
+The management can be done in the <A HREF="04arch.html">archive dialog</A> (more about archive <A HREF="02concepts.html">here</A>).
+</p>
+
+<div class="gtkshot"><IMG SRC="images/03transauto1.png"></div>
+<P>To create an automated transaction:
+</P>
+
+<UL>
+	<LI> select an existing archive (or create a new one)
+	<LI> check the 'Activate' check-box in the 'Automated' frame
+	<LI> adjust the needed parameters:
+	<UL>
+		<LI> frequency: every x day, week, month, year
+		<LI> next occurrence date
+		<LI> optional limitation to X occurrence
+
+	</UL>
+</UL>
+
+<h2><A NAME="occurs"></A>:: When automatic transactions occurs ?</h2>
+<UL>
+	<LI>Everytime you open your HomeBank file
+	<LI>You can trigger it manually from the Main window menu
+</UL>
+
+<h2><A NAME="advance"></A>:: Control the add in advance</h2>
+<p>
+By default, the transaction will be automatically added to accounts at their due date.
+</p>
+<p>
+You can change this behavior and configure HomeBank for the transaction that be added a few days before their due date.
+This way you will know the future balance in advance for your accounts.
+</p>
+<p>From the main window:</p>
+<ul>
+	<li>Select the file menu</li>
+	<li>Select the properties submenu</li>
+	<li>Adjust the 'Insert' xx 'days into the future</li>
+</ul>
+
+
+<h2><A NAME="upcoming"></A>:: List of upcoming automatic transactions</h2>
+<P>The <A HREF="03main.html">main window</A> display a list of
+'Upcoming automated transactions'.<BR>This list displays every
+scheduled (automated) transaction and their state, especially:
+</P>
+	<IMG SRC="images/03transauto2.png">
+<UL>
+	<LI> next occurrence date
+
+	<LI> remaining days
+
+</UL>
+<P>This remaining day count is negative if the transaction insertion
+is overdue.
+</P>
+
+
+
+</BODY>
+</HTML>

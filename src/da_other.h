@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -23,12 +23,13 @@
 #include "da_transaction.h"
 
 typedef struct _archive		Archive;
-typedef struct _budget		Budget;
+//typedef struct _budget		Budget;
 
 typedef struct _filter	Filter;
 typedef struct _carcost	CarCost;
 
 
+/*
 struct _budget
 {
 	guint	key;
@@ -37,6 +38,7 @@ struct _budget
 	guint	year;
 	gdouble	value[13];
 };
+*/
 
 #define BF_CUSTOM	(1<<2)
 
@@ -58,7 +60,7 @@ struct _archive
 	gushort	limit;
 };
 
-
+/*
 struct _investment
 {
 	guint	date;
@@ -71,6 +73,7 @@ struct _investment
 	gchar	*symbol;
 	gchar	*note;
 };
+*/
 
 
 /* secondary structures */
@@ -80,13 +83,15 @@ struct _filter
 	guint		option[FILTER_MAX];
 	guint		mindate, maxdate;
 	gushort		range, month, year;
+	gboolean	validated;
+	gboolean	reminded;
 	gboolean	forceadd;
 	gboolean	forcechg;
 	gboolean	paymode[NUM_PAYMODE_MAX];
 	gdouble		minamount, maxamount;
-	//gboolean	*acc;
-	//gboolean	*pay;
-	//gboolean	*cat;
+	gchar		*info;
+	gchar		*wording;
+	gchar		*tag;
 	guint		last_tab;
 };
 
@@ -112,6 +117,7 @@ Archive *da_archive_malloc(void);
 Archive *da_archive_clone(Archive *src_item);
 void da_archive_free(Archive *item);
 void da_archive_destroy(GList *list);
+GList *da_archive_sort(GList *list);
 
 
 Filter *da_filter_malloc(void);

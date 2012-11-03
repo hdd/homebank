@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -45,53 +45,13 @@ struct Preferences *PREFS;
 
 
 /* installation paths */
+static gchar *config_dir   = NULL;
+static gchar *images_dir   = NULL;
 static gchar *pixmaps_dir  = NULL;
 static gchar *locale_dir   = NULL;
 static gchar *help_dir     = NULL;
+static gchar *datas_dir    = NULL;
 
-
-static struct { 
-  gchar *filename;
-  gchar *stock_id;
-} stock_icons[] = {
-  { "homebank.svg"            , "hb-stock-homebank" },
-
-  { "account.svg"             , "hb-stock-account" },
-  { "payee.svg"               , "hb-stock-payee" },
-  { "category.svg"            , "hb-stock-category" },
-  { "archive.svg"             , "hb-stock-archive" },
-  { "budget.svg"              , "hb-stock-budget" },
-
-  { "filter.svg"              , "hb-stock-filter" },
-
-  { "ope_show.svg"            , "hb-stock-ope-show" },
-  { "ope_add.svg"             , "hb-stock-ope-add" },
-  { "ope_herit.svg"           , "hb-stock-ope-herit" },
-  { "ope_edit.svg"            , "hb-stock-ope-edit" },
-  { "ope_delete.svg"          , "hb-stock-ope-delete" },
-  { "ope_valid.svg"           , "hb-stock-ope-valid" },
-
-  { "report_stats.svg"        , "hb-stock-rep-stats" },
-  { "report_budget.svg"       , "hb-stock-rep-budget" },
-  { "report_overdrawn.svg"    , "hb-stock-rep-over" },
-  { "report_car.svg"          , "hb-stock-rep-car" },
-
-  { "view_list.svg"           , "hb-stock-view-list" },
-  { "view_bar.svg"            , "hb-stock-view-bar" },
-  { "view_pie.svg"            , "hb-stock-view-pie" },
-  { "view_line.svg"           , "hb-stock-view-line" },
-
-  { "legend.svg"             , "hb-stock-legend" },
-  { "rate.svg"               , "hb-stock-rate" },
-  { "refresh.svg"            , "hb-stock-refresh" },
-
-  { "lpi-help.png"           , "hb-lpi-help" },
-  { "lpi-translate.svg"      , "hb-lpi-translate" },
-  { "lpi-bug.svg"            , "hb-lpi-bug" },
-
-};
- 
-static gint n_stock_icons = G_N_ELEMENTS (stock_icons);
 
 #define MARKUP_STRING "<span size='small'>%s</span>"
 
@@ -205,7 +165,7 @@ gboolean retval;
 
 	filter = gtk_file_filter_new ();
 	gtk_file_filter_set_name (filter, _("QIF files"));
-	gtk_file_filter_add_pattern (filter, "*.qif");
+	gtk_file_filter_add_pattern (filter, "*.[Qq][Ii][Ff]");
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(chooser), filter);
 
 	filter = gtk_file_filter_new ();
@@ -235,7 +195,7 @@ gboolean retval;
 /*
 ** open a file chooser dialog and store filename to GLOBALS if OK
 */
-gboolean homebank_csv_file_chooser(GtkWindow *parent, GtkFileChooserAction action, gchar **storage_ptr)
+gboolean homebank_csv_file_chooser(GtkWindow *parent, GtkFileChooserAction action, gchar **storage_ptr, gchar *name)
 {
 GtkWidget *chooser;
 GtkFileFilter *filter;
@@ -268,9 +228,12 @@ gchar *path;
 
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(chooser), path);
 
+	if(name != NULL)
+		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(chooser), name);
+
 	filter = gtk_file_filter_new ();
 	gtk_file_filter_set_name (filter, _("CSV files"));
-	gtk_file_filter_add_pattern (filter, "*.csv");
+	gtk_file_filter_add_pattern (filter, "*.[Cc][Ss][Vv]");
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(chooser), filter);
 
 	filter = gtk_file_filter_new ();
@@ -335,7 +298,7 @@ gboolean retval;
 
 	filter = gtk_file_filter_new ();
 	gtk_file_filter_set_name (filter, _("HomeBank files"));
-	gtk_file_filter_add_pattern (filter, "*.xhb");
+	gtk_file_filter_add_pattern (filter, "*.[Xx][Hh][Bb]");
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(chooser), filter);
 
 	filter = gtk_file_filter_new ();
@@ -456,7 +419,7 @@ gboolean retval;
 
 	filter = gtk_file_filter_new ();
 	gtk_file_filter_set_name (filter, _("Amiga files"));
-	gtk_file_filter_add_pattern (filter, "*.hb");
+	gtk_file_filter_add_pattern (filter, "*.[Hh][Bb]");
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(chooser), filter);
 
 	filter = gtk_file_filter_new ();
@@ -486,6 +449,115 @@ gboolean retval;
 
 	return retval;
 }
+
+/*
+** try to determine the file type (if supported for import by homebank)
+**
+**
+*/
+gint homebank_alienfile_recognize(gchar *filename)
+{
+GIOChannel *io;
+gint i, retval = FILETYPE_UNKNOW;
+gchar *tmpstr;
+gint io_stat;
+GError *err = NULL; 
+static gint csvtype[7] = {
+					CSV_DATE,
+					CSV_INT,
+					CSV_STRING,
+					CSV_STRING,
+					CSV_STRING,
+					CSV_DOUBLE,
+					CSV_STRING,
+					};
+
+
+	DB( g_print("(import) alien file recognise\n") );
+
+					
+	io = g_io_channel_new_file(filename, "r", NULL);
+	if(io != NULL)
+	{
+		g_io_channel_set_encoding(io, NULL, NULL);	/* set to binary mode */
+		
+		for(i=0;i<4;i++)
+		{
+			if( retval != FILETYPE_UNKNOW )
+				break;
+		
+			io_stat = g_io_channel_read_line(io, &tmpstr, NULL, NULL, &err);
+			if( io_stat == G_IO_STATUS_EOF)
+				break;
+			if( io_stat == G_IO_STATUS_ERROR )
+			{
+				DB (g_print(" + ERROR %s\n",err->message));
+				break;
+			}
+			if( io_stat == G_IO_STATUS_NORMAL)
+			{
+				if( *tmpstr != '\0' )
+				{
+					DB( g_print(" line %4d: %s\n", i, tmpstr) );
+
+					/* native homebank file */
+					if( g_str_has_prefix(tmpstr, "<homebank v="))
+					{
+						DB( g_print(" type is HomeBank\n") );
+						retval = FILETYPE_HOMEBANK;
+					}
+					else
+					
+					// QIF file ?
+					if( g_str_has_prefix(tmpstr, "!Type:") || 
+					    g_str_has_prefix(tmpstr, "!type:") || 
+					    g_str_has_prefix(tmpstr, "!Option:") ||
+					    g_str_has_prefix(tmpstr, "!option:") || 
+					    g_str_has_prefix(tmpstr, "!Account") ||
+					    g_str_has_prefix(tmpstr, "!account") 
+					    )
+					{
+						DB( g_print(" type is QIF\n") );
+						retval = FILETYPE_QIF;
+					}
+					else
+					
+					/* is it OFX ? */
+					if( g_strstr_len(tmpstr, 10, "OFX") != NULL)
+					{
+						DB( g_print(" type is OFX\n") );
+						retval = FILETYPE_OFX;
+					}
+					
+					/* is it csv homebank ? */
+					else
+					{
+					gboolean hbcsv;
+					
+						hbcsv = hb_string_csv_valid(tmpstr, 7, csvtype);
+						
+						DB( g_print(" hbcsv %d\n", hbcsv) );
+						
+						if( hbcsv == TRUE )
+						{
+							DB( g_print(" type is CSV homebank\n") );
+							retval = FILETYPE_CSV_HB;
+						}
+						
+
+					}
+	
+					g_free(tmpstr);
+				}
+			}
+
+		}
+		g_io_channel_unref (io);
+	}
+
+	return retval;
+}
+
 
 /* = = = = = = = = = = = = = = = = = = = = */
 /* file backup */
@@ -570,6 +642,23 @@ gchar *dirname;
 }
 
 
+static gboolean homebank_copy_file(gchar *srcfile, gchar *dstfile)
+{
+gchar *buffer;
+gsize length;
+GError *error = NULL;
+gboolean retval = FALSE;
+	
+	if (g_file_get_contents (srcfile, &buffer, &length, &error))
+	{
+		if(g_file_set_contents(dstfile, buffer, length, NULL))
+		{
+			retval = TRUE;
+		}
+	}
+	return retval;
+}
+
 
 
 void homebank_backup_current_file(gchar *pathname)
@@ -597,9 +686,11 @@ int retval;
 			g_remove(newname);
 		}
 
-		DB( g_print("rename %s => %s\n", pathname, newname) );
+		DB( g_print("copy %s => %s\n", pathname, newname) );
 
-		retval = g_rename(pathname, newname);
+		retval = homebank_copy_file (pathname, newname);
+		//#512046 
+		//retval = g_rename(pathname, newname);
 		
 		DB( g_print("retval %d\n", retval) );
 		
@@ -633,107 +724,23 @@ gint retval;
 
 #else
 
-/* pilfered from Beast - birnetutils.cc */
 static gboolean
 homebank_util_url_show_unix (const gchar *url)
 {
+gboolean retval;
 
-	static struct {
-	const gchar   *prg, *arg1, *prefix, *postfix;
-	gboolean       asyncronous; /* start asyncronously and check exit code to catch launch errors */
-	volatile gboolean disabled;
-	} browsers[] = {
+	retval = gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (GLOBALS->mainwindow)), url, GDK_CURRENT_TIME, NULL);
 
-	/* configurable, working browser launchers */
-	{ "gnome-open",             NULL,           "", "", 0 }, /* opens in background, correct exit_code */
-	{ "exo-open",               NULL,           "", "", 0 }, /* opens in background, correct exit_code */
-
-	/* non-configurable working browser launchers */
-	{ "kfmclient",              "openURL",      "", "", 0 }, /* opens in background, correct exit_code */
-	{ "gnome-moz-remote",       "--newwin",     "", "", 0 }, /* opens in background, correct exit_code */
-
-#if 0   /* broken/unpredictable browser launchers */
-	{ "browser-config",         NULL,            "", "", 0 }, /* opens in background (+ sleep 5), broken exit_code (always 0) */
-	{ "xdg-open",               NULL,            "", "", 0 }, /* opens in foreground (first browser) or background, correct exit_code */
-	{ "sensible-browser",       NULL,            "", "", 0 }, /* opens in foreground (first browser) or background, correct exit_code */
-	{ "htmlview",               NULL,            "", "", 0 }, /* opens in foreground (first browser) or background, correct exit_code */
-#endif
-
-	/* direct browser invocation */
-	{ "x-www-browser",          NULL,           "", "", 1 }, /* opens in foreground, browser alias */
-	{ "firefox",                NULL,           "", "", 1 }, /* opens in foreground, correct exit_code */
-	{ "mozilla-firefox",        NULL,           "", "", 1 }, /* opens in foreground, correct exit_code */
-	{ "mozilla",                NULL,           "", "", 1 }, /* opens in foreground, correct exit_code */
-	{ "konqueror",              NULL,           "", "", 1 }, /* opens in foreground, correct exit_code */
-	{ "opera",                  "-newwindow",   "", "", 1 }, /* opens in foreground, correct exit_code */
-	{ "epiphany",               NULL,           "", "", 1 }, /* opens in foreground, correct exit_code */	
-	{ "galeon",                 NULL,           "", "", 1 }, /* opens in foreground, correct exit_code */
-	{ "amaya",                  NULL,           "", "", 1 }, /* opens in foreground, correct exit_code */
-	{ "dillo",                  NULL,           "", "", 1 }, /* opens in foreground, correct exit_code */
-
-	};
-  
-	guint i;
-	for (i = 0; i < G_N_ELEMENTS (browsers); i++)
-
-		if (!browsers[i].disabled)
-		{
-		        gchar *args[128] = { 0, };
-		        guint n = 0;
-		        gchar *string;
-		        gchar fallback_error[64] = "Ok";
-		        gboolean success;
-
-		        args[n++] = (gchar*) browsers[i].prg;
-		        
-		        if (browsers[i].arg1)
-		        	args[n++] = (gchar*) browsers[i].arg1;
-		        
-		        string = g_strconcat (browsers[i].prefix, url, browsers[i].postfix, NULL);
-		        args[n] = string;
-        
-		        if (!browsers[i].asyncronous) /* start syncronously and check exit code */
-			{
-				gint exit_status = -1;
-				success = g_spawn_sync (NULL, /* cwd */
-		                                        args,
-		                                        NULL, /* envp */
-		                                        G_SPAWN_SEARCH_PATH,
-		                                        NULL, /* child_setup() */
-		                                        NULL, /* user_data */
-		                                        NULL, /* standard_output */
-		                                        NULL, /* standard_error */
-		                                        &exit_status,
-		                                        NULL);
-		                success = success && !exit_status;
-		            
-				if (exit_status)
-					g_snprintf (fallback_error, sizeof (fallback_error), "exitcode: %u", exit_status);
-
-			}
-		        else
-			{
-				success = g_spawn_async (NULL, /* cwd */
-							 args,
-							 NULL, /* envp */
-							 G_SPAWN_SEARCH_PATH,
-							 NULL, /* child_setup() */
-							 NULL, /* user_data */
-							 NULL, /* child_pid */
-							 NULL);
-			}
-			
-			g_free (string);
-			if (success)
-				return TRUE;
-			browsers[i].disabled = TRUE;
+	if (!retval)
+	{
+		homebank_message_dialog(GTK_WINDOW(GLOBALS->mainwindow), GTK_MESSAGE_INFO,
+			_("No suitable web browser executable could be found."),
+			_("Could not display the URL '%s'"),
+			url
+			);
 	}
-	
-	/* reset all disabled states if no browser could be found */
-	for (i = 0; i < G_N_ELEMENTS (browsers); i++)
-		browsers[i].disabled = FALSE;
-		     
-	return FALSE;	
+
+	return retval;
 }
 
 #endif
@@ -771,8 +778,8 @@ gchar *group, *filename;
 	keyfile = g_key_file_new();
 	if(keyfile)
 	{
-		filename = g_build_filename(g_get_home_dir (), HB_DATA_PATH, "lastopenedfiles", NULL );
-		//filename = g_strdup_printf("%s/.homebank/lastopenedfiles", g_get_home_dir ());
+
+		filename = g_build_filename(homebank_app_get_config_dir(), "lastopenedfiles", NULL );
 
 		DB( g_print(" -> filename: %s\n", filename) );
 
@@ -828,8 +835,7 @@ guint length;
 
 			//DB( g_print(" keyfile:\n%s\nlen=%d\n", contents, length) );
 
-			//filename = g_strdup_printf("%s/" HB_DATA_PATH "/lastopenedfiles", g_get_home_dir ());
-			filename = g_build_filename(g_get_home_dir (), HB_DATA_PATH, "lastopenedfiles", NULL );
+			filename = g_build_filename(homebank_app_get_config_dir(), "lastopenedfiles", NULL );
 			g_file_set_contents(filename, contents, length, NULL);
 			g_free(filename);
 
@@ -861,59 +867,47 @@ guint i;
 
 static void load_list_pixbuf(void)
 {
-gchar *filename;
+GdkPixbuf *pixbuf;
 guint i;
-
+GtkWidget *cellview;
+	
 	DB( g_print("\n(homebank) load_list_pixbuf\n") );
 
-    //GLOBALS->lst_pixbuf[LST_PIXBUF_ADD]    = gdk_pixbuf_new_from_file(PIXMAPS_DIR "/lst_new.svg", NULL);
-    //GLOBALS->lst_pixbuf[LST_PIXBUF_EDIT]   = gdk_pixbuf_new_from_file(PIXMAPS_DIR "/lst_edit.png", NULL);;
-    //GLOBALS->lst_pixbuf[LST_PIXBUF_REMIND] = gdk_pixbuf_new_from_file(PIXMAPS_DIR "/lst_remind.png", NULL);
-    //GLOBALS->lst_pixbuf[LST_PIXBUF_VALID]  = gdk_pixbuf_new_from_file(PIXMAPS_DIR "/lst_vali.png", NULL);
-	//GLOBALS->lst_pixbuf[LST_PIXBUF_AUTO]   = gdk_pixbuf_new_from_file(PIXMAPS_DIR "/lst_auto.svg", NULL);
+	cellview = gtk_cell_view_new ();
+	
+	/* list added (account/transaction list) */
+	pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_NEW, GTK_ICON_SIZE_MENU, NULL);
+	g_object_unref(pixbuf);	
+	GLOBALS->lst_pixbuf[LST_PIXBUF_ADD] = pixbuf;
 
-	//todo: rework that
-	filename = g_build_filename(homebank_app_get_pixmaps_dir(), "/lst_new.svg", NULL);
-    GLOBALS->lst_pixbuf[LST_PIXBUF_ADD]     = gdk_pixbuf_new_from_file_at_size(filename, 16, 16, NULL);
-	g_free(filename);
+	/* list automated (archive list) */
+	pixbuf = gtk_widget_render_icon (cellview, HB_STOCK_OPE_AUTO, GTK_ICON_SIZE_MENU, NULL);
+	g_object_unref(pixbuf);	
+	GLOBALS->lst_pixbuf[LST_PIXBUF_AUTO] = pixbuf;
 
-	filename = g_build_filename(homebank_app_get_pixmaps_dir(), "/lst_auto.svg", NULL);
-	GLOBALS->lst_pixbuf[LST_PIXBUF_AUTO]    = gdk_pixbuf_new_from_file_at_size(filename, 16, 16, NULL);
-	g_free(filename);
+	/* list edited (account/transaction list) */
+	pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU, NULL);
+	g_object_unref(pixbuf);	
+	GLOBALS->lst_pixbuf[LST_PIXBUF_EDIT] = pixbuf;
 
+	/* list remind (transaction list) */
+	pixbuf = gtk_widget_render_icon (cellview, HB_STOCK_OPE_REMIND, GTK_ICON_SIZE_MENU, NULL);
+	g_object_unref(pixbuf);	
+	GLOBALS->lst_pixbuf[LST_PIXBUF_REMIND] = pixbuf;
 
-	filename = g_build_filename(homebank_app_get_pixmaps_dir(), "/lst_edit.svg", NULL);
-    GLOBALS->lst_pixbuf[LST_PIXBUF_EDIT]    = gdk_pixbuf_new_from_file_at_size(filename, 16, 16, NULL);
-	g_free(filename);
+	/* list validated (transaction list) */
+	pixbuf = gtk_widget_render_icon (cellview, HB_STOCK_OPE_VALID, GTK_ICON_SIZE_MENU, NULL);
+	g_object_unref(pixbuf);	
+	GLOBALS->lst_pixbuf[LST_PIXBUF_VALID] = pixbuf;
 
-
-	filename = g_build_filename(homebank_app_get_pixmaps_dir(), "/lst_remind.svg", NULL);
-    GLOBALS->lst_pixbuf[LST_PIXBUF_REMIND]  = gdk_pixbuf_new_from_file_at_size(filename, 16, 16, NULL);
-	g_free(filename);
-
-
-	filename = g_build_filename(homebank_app_get_pixmaps_dir(), "/lst_vali.svg", NULL);
-	GLOBALS->lst_pixbuf[LST_PIXBUF_VALID]   = gdk_pixbuf_new_from_file_at_size(filename, 16, 16, NULL);
-	g_free(filename);
-
-
-	filename = g_build_filename(homebank_app_get_pixmaps_dir(), "/lst_warning.svg", NULL);
-	GLOBALS->lst_pixbuf[LST_PIXBUF_WARNING] = gdk_pixbuf_new_from_file_at_size(filename, 16, 16, NULL);
-	g_free(filename);
-
+	/* list warning (import transaction list) */
+	pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU, NULL);
+	g_object_unref(pixbuf);	
+	GLOBALS->lst_pixbuf[LST_PIXBUF_WARNING] = pixbuf;
 
 	GLOBALS->lst_pixbuf_maxwidth = 0;
 	for(i=0;i<NUM_LST_PIXBUF;i++)
 	{
-		/*
-		if( GLOBALS->lst_pixbuf[i] == NULL )
-		{
-
-
-
-		}
-		*/
-
 		if( GLOBALS->lst_pixbuf[i] != NULL )
 			GLOBALS->lst_pixbuf_maxwidth = MAX(GLOBALS->lst_pixbuf_maxwidth, gdk_pixbuf_get_width(GLOBALS->lst_pixbuf[i]) );
 
@@ -921,40 +915,77 @@ guint i;
 
 	DB( g_print(" -> pixbuf list maxwidth: %d\n", GLOBALS->lst_pixbuf_maxwidth) );
 
+  gtk_widget_destroy (cellview);
+	
 }
 
-static void homebank_register_stock_icons()
+
+static void 
+homebank_register_stock_icons()
 {
-   GtkIconFactory *icon_factory;
-   GtkIconSet *icon_set;
-   GtkIconSource *icon_source;
-   gchar *filename;
-   gint i;
 
-   icon_factory = gtk_icon_factory_new ();
 
-   for (i = 0; i < n_stock_icons; i++)
-    {
-      icon_set = gtk_icon_set_new ();
-      icon_source = gtk_icon_source_new ();
+	GtkIconFactory *factory;
+	GtkIconSet *icon_set;
+	GtkIconSource *icon_source;
+	int i;
 
-      //todo: win32
-      filename = g_build_filename(homebank_app_get_pixmaps_dir(), stock_icons[i].filename, NULL);
+	const char *icon_theme_items[] =
+	{
+		"hb-file-import",
+		"hb-file-export"
+		"pm-none",
+		"pm-ccard",
+		"pm-check",
+		"pm-cash" ,
+		"pm-transfer",
+		"pm-intransfer",
+		"pm-dcard",
+		"pm-standingorder",
+		"pm-epayment",
+		"pm-deposit",
+		"pm-fifee",
+		"flt-inactive",
+		"flt-include",
+		"flt-exclude",
+		HB_STOCK_OPE_VALID,
+		HB_STOCK_OPE_REMIND,
+		HB_STOCK_OPE_AUTO,
+		"prf-general",
+		"prf-interface",
+		"prf-columns",
+		"prf-display",
+		"prf-euro",
+		"prf-report",
+		"prf-import"
+	};
 
-      gtk_icon_source_set_filename (icon_source, filename);
-      gtk_icon_set_add_source (icon_set, icon_source);
-      gtk_icon_source_free (icon_source);
-      gtk_icon_factory_add (icon_factory, stock_icons[i].stock_id, icon_set);
-      gtk_icon_set_unref (icon_set);
-       g_free(filename);
-   }
+	factory = gtk_icon_factory_new ();
+	
+	for (i = 0; i < (int) G_N_ELEMENTS (icon_theme_items); i++)
+	{
+		icon_source = gtk_icon_source_new ();
+		gtk_icon_source_set_icon_name (icon_source, icon_theme_items[i]);
 
-   gtk_icon_factory_add_default (icon_factory);
+		icon_set = gtk_icon_set_new ();
+		gtk_icon_set_add_source (icon_set, icon_source);
+		gtk_icon_source_free (icon_source);
 
-   g_object_unref (icon_factory);
+		gtk_icon_factory_add (factory, icon_theme_items[i], icon_set);
+		gtk_icon_set_unref (icon_set);
+	}
 
+	//gtk_stock_add_static (icon_theme_items, G_N_ELEMENTS (icon_theme_items));
+
+	gtk_icon_factory_add_default (factory);
+	g_object_unref (factory);
+	
+	
+	DB( g_print(" -> adding theme search path: %s\n", homebank_app_get_pixmaps_dir()) );
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (), homebank_app_get_pixmaps_dir());
 }
 
+/*
 void homebank_window_set_icon_from_file(GtkWindow *window, gchar *filename)
 {
 gchar *pathfilename;
@@ -963,9 +994,19 @@ gchar *pathfilename;
 	gtk_window_set_icon_from_file(GTK_WINDOW (window), pathfilename, NULL);
 	g_free(pathfilename);
 }
+*/
 
+const gchar *
+homebank_app_get_config_dir (void)
+{
+	return config_dir;
+}
 
-
+const gchar *
+homebank_app_get_images_dir (void)
+{
+	return images_dir;
+}
 
 const gchar *
 homebank_app_get_pixmaps_dir (void)
@@ -985,6 +1026,13 @@ homebank_app_get_help_dir (void)
 	return help_dir;
 }
 
+const gchar *
+homebank_app_get_datas_dir (void)
+{
+	return datas_dir;
+}
+
+
 /* build package paths at runtime */
 static void
 build_package_paths (void)
@@ -993,19 +1041,28 @@ build_package_paths (void)
 	gchar *prefix;
 	
 	prefix = g_win32_get_package_installation_directory (NULL, NULL);
-	pixmaps_dir  = g_build_filename (prefix, "share", PACKAGE, "pixmaps", NULL);
 	locale_dir   = g_build_filename (prefix, "share", "locale", NULL);
+	images_dir   = g_build_filename (prefix, "share", PACKAGE, "images", NULL);
+	pixmaps_dir  = g_build_filename (prefix, "share", PACKAGE, "icons", NULL);
 	help_dir     = g_build_filename (prefix, "share", PACKAGE, "help", NULL);
+	datas_dir     = g_build_filename (prefix, "share", PACKAGE, "datas", NULL);
 	g_free (prefix);
 #else
-	pixmaps_dir  = g_strdup (HOMEBANK_PIXMAPSDIR);
-	locale_dir   = g_strdup (HOMEBANK_LOCALEDIR);
-	help_dir     = g_strdup (HOMEBANK_HELPDIR);
+	locale_dir   = g_build_filename (DATA_DIR, "locale", NULL);
+	images_dir   = g_build_filename (SHARE_DIR, "images", NULL);
+	pixmaps_dir  = g_build_filename (DATA_DIR, PACKAGE, "icons", NULL);
+	help_dir     = g_build_filename (DATA_DIR, PACKAGE, "help", NULL);
+	datas_dir     = g_build_filename (DATA_DIR, PACKAGE, "datas", NULL);
 #endif
 
+	config_dir   = g_build_filename(g_get_user_config_dir(), HB_DATA_PATH, NULL);
+	
+	DB( g_print("config_dir : %s\n", config_dir) );
+	DB( g_print("images_dir : %s\n", images_dir) );
 	DB( g_print("pixmaps_dir: %s\n", pixmaps_dir) );
 	DB( g_print("locale_dir : %s\n", locale_dir) );
 	DB( g_print("help_dir   : %s\n", help_dir) );
+	DB( g_print("datas_dir  : %s\n", datas_dir) );
 
 }
 
@@ -1013,13 +1070,33 @@ build_package_paths (void)
 
 
 
+static gboolean homebank_check_app_dir_migrate_file(gchar *srcdir, gchar *dstdir, gchar *filename)
+{
+gchar *srcpath;
+gchar *dstpath;
+gchar *buffer;
+gsize length;
+GError *error = NULL;
+gboolean retval = FALSE;
 
+	srcpath = g_build_filename(srcdir, filename, NULL );
+	dstpath = g_build_filename(dstdir, filename, NULL );
+	
+	if (g_file_get_contents (srcpath, &buffer, &length, &error))
+	{
+		if(g_file_set_contents(dstpath, buffer, length, NULL))
+		{
+			//g_print("sould remove %s\n", srcpath);
+			g_remove(srcpath);
+			retval = TRUE;
+		}
+	}
 
+	g_free(dstpath);
+	g_free(srcpath);
 
-
-
-
-
+	return retval;
+}
 
 /*
  * check/create user home directory for .homebank (HB_DATA_PATH) directory
@@ -1027,19 +1104,45 @@ build_package_paths (void)
 static void homebank_check_app_dir()
 {
 gchar *homedir;
+const gchar *configdir;
 gboolean exists;
 
 	DB( g_print("homebank_check_app_dir()\n") );
 
-	//homedir = g_strdup_printf("%s/" HB_DATA_PATH, g_get_home_dir ());
-	homedir = g_build_filename(g_get_home_dir (), HB_DATA_PATH, NULL );
-	exists = g_file_test(homedir, G_FILE_TEST_IS_DIR);
-	if(!exists)
-		g_mkdir(homedir, 0755);
+	/* check for XDG .config/homebank */
+	configdir = homebank_app_get_config_dir();
+	exists = g_file_test(configdir, G_FILE_TEST_IS_DIR);
+	if(exists)
+	{
+		/* just update folder security */
+		g_chmod(configdir, 0700);
+		GLOBALS->first_run = FALSE;
+	}
+	else
+	{
+		/* create the config dir */
+		g_mkdir(configdir, 0755);
+		g_chmod(configdir, 0700);
 
-	/* security */
-	g_chmod(homedir, 0700);
-	g_free(homedir);
+		/* any old homedir configuration out there ? */
+		homedir = g_build_filename(g_get_home_dir (), ".homebank", NULL );
+		exists = g_file_test(homedir, G_FILE_TEST_IS_DIR);
+		if(exists)
+		{
+		gboolean f1, f2;
+			/* we must do the migration properly */
+			f1 = homebank_check_app_dir_migrate_file(homedir, config_dir, "preferences");
+			f2 = homebank_check_app_dir_migrate_file(homedir, config_dir, "lastopenedfiles");
+			if(f1 && f2)
+			{
+				//g_print("sould remove %s\n", homedir);
+				g_rmdir(homedir);
+			}
+		}
+		g_free(homedir);
+		GLOBALS->first_run = TRUE;
+	}
+	
 }
 
 
@@ -1056,6 +1159,7 @@ static void homebank_cleanup()
 
 	free_list_pixbuf();
 	free_paymode_icons();
+	free_nainex_icons();
 	free_pref_icons();
 
 
@@ -1065,6 +1169,7 @@ static void homebank_cleanup()
 
 	g_hash_table_destroy(GLOBALS->h_memo);
 
+	da_asg_destroy();
 	da_tag_destroy();
 	da_cat_destroy();
 	da_pay_destroy();	
@@ -1084,6 +1189,8 @@ static void homebank_cleanup()
 		g_free(GLOBALS);
 	}
 
+	g_free (config_dir);
+	g_free (images_dir);
 	g_free (pixmaps_dir);	
 	g_free (locale_dir);
 	g_free (help_dir);
@@ -1112,6 +1219,7 @@ GDate *date;
 	da_pay_new();
 	da_cat_new();
 	da_tag_new();
+	da_asg_new();
 
 	GLOBALS->h_memo = g_hash_table_new_full(g_str_hash, g_str_equal, (GDestroyNotify)g_free, NULL);
 
@@ -1119,6 +1227,7 @@ GDate *date;
 
 	load_list_pixbuf();
 	load_paymode_icons();
+	load_nainex_icons();
 	load_pref_icons();
 
 
@@ -1130,6 +1239,7 @@ GDate *date;
 	homebank_pref_setdefault();
 	homebank_pref_load();
 	homebank_pref_createformat();
+	homebank_pref_init_measurement_units();
 
 	/* today's date */
 	date = g_date_new();
@@ -1146,7 +1256,7 @@ GDate *date;
 
 	//debug
 	#if MYDEBUG == 1
-	/*
+
 	g_print("user_name: %s\n", g_get_user_name ());
 	g_print("real_name: %s\n", g_get_real_name ());
 	g_print("user_cache_dir: %s\n", g_get_user_cache_dir());
@@ -1158,7 +1268,6 @@ GDate *date;
 	g_print("home_dir: %s\n", g_get_home_dir ());
 	g_print("tmp_dir: %s\n", g_get_tmp_dir ());
 	g_print("current_dir: %s\n", g_get_current_dir ());
-	*/
 
 	#endif
 
@@ -1184,7 +1293,7 @@ gchar *pathfilename;
 	gtk_window_set_title (GTK_WINDOW (window), "HomeBank");
 	gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_CENTER);
 
-	pathfilename = g_build_filename(homebank_app_get_pixmaps_dir(), "splash.png", NULL);
+	pathfilename = g_build_filename(homebank_app_get_images_dir(), "splash.png", NULL);
 	image = gtk_image_new_from_file((const gchar *)pathfilename);
 	g_free(pathfilename);
 
@@ -1222,8 +1331,7 @@ GOptionContext *option_context;
 GOptionGroup *option_group;
 GError *error = NULL;
 GtkWidget *mainwin;
-GtkWidget *splash;
-gchar *pathfilename;
+GtkWidget *splash = NULL;
 gboolean openlast;
 
 	DB( g_print("\n--------------------------------\nhomebank starting...\n" ) );
@@ -1243,7 +1351,6 @@ gboolean openlast;
      textdomain (GETTEXT_PACKAGE);
 
 #endif
-
 
 	/* Set up option groups */
 	option_context = g_option_context_new (NULL);
@@ -1292,30 +1399,36 @@ gboolean openlast;
 	 */
 	gtk_init (NULL, NULL);
 
-	//todo: check gtk version here ?
+	//todo: sanity check gtk version here ?
 
 	g_set_application_name (APPLICATION_NAME);
 
 
 
-	splash = homebank_construct_splash();
-
-  gtk_window_set_auto_startup_notification (FALSE);
-  gtk_widget_show_all (splash);
-  gtk_window_set_auto_startup_notification (TRUE);
-
-  /* make sure splash is up */
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
-    
 
 	if( homebank_setup() )
 	{
 
+		if( PREFS->showsplash == TRUE )
+		{
+			splash = homebank_construct_splash();
+			gtk_window_set_auto_startup_notification (FALSE);
+			gtk_widget_show_all (splash);
+			gtk_window_set_auto_startup_notification (TRUE);
+
+			// make sure splash is up
+			while (gtk_events_pending ())
+				gtk_main_iteration ();
+		}    
+
+		/*
 		pathfilename = g_build_filename(homebank_app_get_pixmaps_dir(), "homebank.svg", NULL);
 		gtk_window_set_default_icon_from_file(pathfilename, NULL);
 		g_free(pathfilename);
-
+		*/
+		 
+		gtk_window_set_default_icon_name ("homebank");
+		
 		DB( g_print(" -> creating window\n" ) );
 
 
@@ -1331,24 +1444,45 @@ gboolean openlast;
 			gtk_window_resize(GTK_WINDOW(mainwin), wg->w, wg->h);
 
 			//todo: pause on splash
-			//g_usleep( G_USEC_PER_SEC * 1 );
-			gtk_widget_hide(splash);
-
+			if( PREFS->showsplash == TRUE )
+			{	
+				//g_usleep( G_USEC_PER_SEC * 1 );
+				gtk_widget_hide(splash);
+				gtk_widget_destroy(splash);
+			}
+			
 		    gtk_widget_show_all (mainwin);
 
 #if HB_UNSTABLE == 1
-			homebank_message_dialog(GTK_WINDOW(GLOBALS->mainwindow), GTK_MESSAGE_WARNING,
-				"This is an alpha/beta release of HomeBank",
-				"DO NOT USE it with some important files.\n"
-				"This kind of release is for TESTING ONLY.\n"
-				"It may be buggy, crash, or loose your datas.\n\n"
-				"Please report bugs/questions/suggestions\n"
-				"directly by email to: homebank@free.fr\n\n"
-				"PLEASE DO NOT USE LaunchPad for alpha/beta.\n",
-				NULL
-				);
+			GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(mainwin),
+                      GTK_DIALOG_DESTROY_WITH_PARENT,
+                      GTK_MESSAGE_WARNING,
+                      GTK_BUTTONS_CLOSE,
+                      "This is an UNSTABLE version of HomeBank"
+                      );
+
+			gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), 
+						"DO NOT USE it with some important files.\n"
+						"This kind of release is for <b>TESTING ONLY</b>.\n"
+						"<u>It may be buggy, crash, or loose your datas</u>.\n\n"
+
+						"For unstable bugs report, questions, suggestions:\n"
+			            " - <b>DO NOT USE LaunchPad</b>\n"
+			            " - direct email to: &lt;homebank@free.fr&gt;\n\n"
+
+			            "<i>Thanks !</i>"
+			            );
+
+			gtk_dialog_run (GTK_DIALOG (dialog));
+			gtk_widget_destroy (dialog);
 #endif
 
+			if(GLOBALS->first_run)
+			{
+				wallet_action_help_welcome();
+			}
+
+			
 			while (gtk_events_pending ()) /* make sure splash is gone */
 				gtk_main_iteration ();
 
@@ -1386,7 +1520,7 @@ gboolean openlast;
 			}
 
 			/* update the mainwin display */
-			wallet_update(mainwin, GINT_TO_POINTER(UF_TITLE+UF_SENSITIVE+UF_BALANCE));
+			wallet_update(mainwin, GINT_TO_POINTER(UF_TITLE+UF_SENSITIVE+UF_BALANCE+UF_VISUAL));
 
 		DB( g_print(" -> gtk_main()\n" ) );
 
@@ -1395,7 +1529,6 @@ gboolean openlast;
 
 	}
 
-	gtk_widget_destroy(splash);
 
     homebank_cleanup();
 

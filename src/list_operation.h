@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -20,7 +20,15 @@
 #ifndef __LIST_OPERATION__H__
 #define __LIST_OPERATION__H__
 
-GtkWidget *create_list_operation(gboolean *columns);
+enum {
+	TRN_LIST_TYPE_BOOK,
+	TRN_LIST_TYPE_DETAIL,
+	TRN_LIST_TYPE_IMPORT,
+};
+
+
+
+GtkWidget *create_list_operation(gint type, gboolean *pref_columns);
 GtkWidget *create_list_import_operation(void);
 
 #endif /* __LIST_OPERATION__H__ */

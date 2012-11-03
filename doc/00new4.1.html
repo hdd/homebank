@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>What's new in v4.1</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY >
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=27>
+			<A HREF="main.html"><IMG SRC="images/go-home.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+		<TD WIDTH=27>
+			<A HREF="00new4.2.html"><IMG SRC="images/go-previous.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+		<TD WIDTH=27>
+			<A HREF="00new4.0.html"><IMG SRC="images/go-next.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A></P>
+		</TD>
+	</TR>
+</TABLE>
+
+<div class="head"></div>
+
+<h1>New features in v4.1</h1>
+<UL class="toc">
+	<LI> <A HREF="#assign">Automatic assignment of payee/category</A></LI>
+	<LI> <A HREF="#paymode">New payment mode</A></LI>
+	<LI> <A HREF="#move">Move for payee and category</A></LI>
+	<LI> <A HREF="#import">Import process is more simple</A></LI>
+	<LI> <A HREF="#filter">Filter on plain text for info/description/tag field</A></LI>
+	<LI> <A HREF="#preferences">Some new preference options</A></LI>
+	<LI> <A HREF="#uichanges">Some changes to the user interface</A></LI>
+</UL>
+
+<!-- = = = = separator = = = = -->
+<h2><A NAME="assign"></A>:: Automatic assignment of payee/category</h2>
+<P>
+This feature allows you to assign a payee and / or category from a word found in the Description field.
+</p>
+<p>
+Note, however, HomeBank will affect if and only if the payee and the category are both empty.
+</p>
+<p>
+There is a new dialog box called Assignments in which you create rules that will be used to automatically assign.<br>
+This automatic assignment comes at a time you import a file, or you can trigger it manually from the Accounts window.
+</p>
+
+<!-- = = = = separator = = = = -->
+
+<h2><A NAME="paymode"></A>:: New payment mode</h2>
+<P>
+HomeBank 4.1 introduce some more payment mode:
+<ul>
+	<li>Debit card</li>
+	<li>Standing order</li>
+	<li>Electronic payment</li>
+	<li>Deposit</li>
+	<li>Financial institution fee</li>
+</ul>
+</P>
+
+<!-- = = = = separator = = = = -->
+<h2><A NAME="move"></A>:: Move for payee and category</h2>
+<P>
+This feature allows to replace a payee/category by another. This will allow you to simply rearrange the payees and the categories.
+</p>
+<p>
+For example, you have a payee "My old payee" and you want to change it to a new payee called "My new payee":<br>
+When you use the move feature, HomeBank replace the old with the new value in all transactions, then delete the old value.
+</P>
+
+<!-- = = = = separator = = = = -->
+<h2><A NAME="import"></A>:: Import process is more simple</h2>
+<P>
+HomeBank import Assistant now consist of only 3 steps instead of 6.
+</p>
+<ol>
+	<li>The introduction page</li>
+		<p>This page must be kept to follow the rules of the Gnome HIG</p>
+	<li>The file selection page</li>
+		<p>no changes on this page</p>
+	<li>The import control page</li>
+		<p>3 steps were merged into this single page and you can now:
+		<ul>
+			<li>view the file information</li>		
+			<li>control the account to import</li>		
+			<li>control the transactions to import</li>	
+		</ul>
+		But you can also trust HomeBank and go directly to the confirmation page.
+		</p>
+	<li>The confirmation page</li>
+		<p>This page is now more readable, and gives details on what will be chnaged in your account, following the import.</p>
+</ol>
+
+</P>
+
+<!-- = = = = separator = = = = -->
+<h2><A NAME="filter"></A>:: Filter on plain text for info/description/tag field</h2>
+<P>Now you can filter the transactions on a criterion of plain text for the following fields: 
+<ul>
+<li>description</li>
+<li>info</li>
+<li>tag</li>
+</ul>
+
+<P>
+This was a so long missing feature since the Linux port from the Amiga version.
+</P>
+
+
+<!-- = = = = separator = = = = -->
+<h2><A NAME="preferences"></A>:: Some new preference options</h2>
+<P>
+Here are the new preference options available in 4.1:
+<ul>
+	<li>column order for transaction list</li>
+	<li>amount color preset (Tango)</li>
+	<li>show/hide the rule hint in every treeview</li>
+	<li>show/hide splash window when the program start</li>
+	<li>enable/disable colored amount</li>
+</ul>
+</P>
+
+<!-- = = = = separator = = = = -->
+<h2><A NAME="uichanges"></A>:: Some changes to the user interface</h2>
+
+<ul>
+	<li>A new 'View' menu to enable/disable toolbar, statusbar and upcoming list</li>
+	<li>The size repartition between account and upcoming list in the main window is saved</li>
+	<li>The sort order in account window is saved</li>
+	<li>The recent menu is now in the toolbar</li>
+	<li>Menu were a little bit reworked</li>
+	<li>The selected item in tree view are more visible because of video inverted vs colored</li>
+</ul>	
+	
+
+</BODY>
+</HTML>

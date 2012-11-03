@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -23,6 +23,9 @@
 gint real_mystrfmon(gchar *outstr, gint outlen, gchar *buf1, struct Currency *cur);
 gint mystrfmon_int(gchar *outstr, gint outlen, gdouble value, gboolean minor);
 gint mystrfmon(gchar *outstr, gint outlen, gdouble value, gboolean minor);
+
+gchar *get_normal_color_amount(gdouble value);
+gchar *get_minimum_color_amount(gdouble value, gdouble minvalue);
 
 void hb_label_set_colvalue(GtkLabel *label, gdouble value, gboolean minor);
 

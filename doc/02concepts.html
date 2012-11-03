@@ -2,41 +2,54 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Accounts</TITLE>
+	<TITLE>Terminology</TITLE>
 	<link rel="stylesheet" href="help.css">
 </HEAD>
 <BODY >
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
 	<TR>
 		<TD WIDTH=27>
-			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="main.html"><IMG SRC="images/go-home.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 		<TD WIDTH=27>
-			<P><A HREF="02intro.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="02intro.html"><IMG SRC="images/go-previous.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 		<TD WIDTH=27>
-			<P><A HREF="02balance.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="03import.html"><IMG SRC="images/go-next.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 	</TR>
 </TABLE>
-<HR SIZE=1 COLOR="#000000">
-<H2>Basic concepts</H2>
+<div class="head"></div>
+<h1>Terminology</h1>
 <P>This section is intended to give you a brief introduction to the
 basic concepts and terminology you will need to understand in order
 to make sense to the rest of the documentation.
 </P>
-<H3><A NAME="wallet"></A>Wallet</H3>
+
+<ul class="toc">
+	<li><a href="#wallet">Wallet</a></li>
+	<li><a href="#accounts">Accounts</a></li>
+	<li><a href="#transactions">Transactions</a></li>
+	<li><a href="#archives">Archives</a></li>
+	<li><a href="#payees">Payees</a></li>
+	<li><a href="#categories">Categories</a></li>
+	<li><a href="#tags">Tags</a></li>
+	<li><a href="#budget">Budget</a></li>
+</ul>
+
+
+<h2><A NAME="wallet"></A>:: Wallet</h2>
 <P>HomeBank wallet is the 1st level of the data hierarchy. A wallet
 is equivalent to a HomeBank file (.xhb).<BR>Managing the few wallet
 properties is done in the <A HREF="04wall.html">Wallet dialog</A>.
 </P>
-<H3><A NAME="accounts"></A>Accounts</H3>
+<h2><A NAME="accounts"></A>:: Accounts</h2>
 <P>HomeBank accounts is the 2nd level of the data's. A account is a
 division of the wallet, which will each contain your financial
 transactions.<BR>Managing the accounts is done in the <A HREF="04acco.html">Accounts
 dialog</A>.
 </P>
-<H3><A NAME="transactions"></A>Transactions</H3>
+<h2><A NAME="transactions"></A>:: Transactions</h2>
 <P>HomeBank transactions is the terminal level of data's. A
 transaction is a financial transaction, attached to its own account.
 </P>
@@ -63,7 +76,7 @@ application, HomeBank offers the following:
 <P>Managing transactions is done in the <A HREF="03main.html">main
 window</A> or the <A HREF="03account.html">account window</A>.
 </P>
-<H3><A NAME="archives"></A>Archives</H3>
+<h2><A NAME="archives"></A>:: Archives</h2>
 <P>Archives is a kind of transaction bookmark, with an optional
 automated insertion.<BR>Typically such transactions are the one's
 occurring very often, for example: <I>Wage, Rent, Phone, Taxes,
@@ -72,21 +85,21 @@ etc</I>...
 <P>Managing archives is done in the <A HREF="04arch.html">Archive
 dialog</A>. If automated insertion is enable, transactions
 occurrences will be created when you open the wallet, or by manually
-selecting the mainwindow-menu: Transaction / Check automated.
+selecting the main window-menu: Transaction / Check automated.
 </P>
 <P>Archives can also be created from existing transactions from the
 <A HREF="03account.html">Account window</A>.<BR>Every archive is
 available as a bookmark for fill purpose in the <A HREF="04tran.html">Transaction
 dialog</A>.
 </P>
-<H3><A NAME="payees"></A>Payees</H3>
+<h2><A NAME="payees"></A>:: Payees</h2>
 <P>A payee can optionally be set for each transaction to later
 perform sorting, filtering and analysis. The payee identify people
 you give money to, as like as those you receive money from.<BR>Managing
 payees is done on the <A HREF="04paye.html">Payee dialog</A>. Payees
 are global to the wallet and are shared between all the accounts.
 </P>
-<H3><A NAME="categories"></A>Categories</H3>
+<h2><A NAME="categories"></A>:: Categories</h2>
 <P>A category can optionally set for each transaction to later
 perform sorting, filtering and analysis. The categories is another
 classification model of your financial transactions.<BR>Managing
@@ -99,12 +112,12 @@ same from a HomeBank point of view, the subcategories are only to
 create a hierarchy in category tree. This is especially important for
 the <A HREF="04bud1.html">budget dialog</A>
 </P>
-<H3><A NAME="tags"></A>Tags</H3>
+<h2><A NAME="tags"></A>:: Tags</h2>
 <P>Some tags can optionally be set for each transaction to later
 perform sorting, and analysis. The tags are most common to those yo
 can find in the web, so it is words separated by space.
 </P>
-<H3><A NAME="budget"></A>Budget</H3>
+<h2><A NAME="budget"></A>:: Budget</h2>
 <P>The budget is axed toward a report point of view. You will set up
 some limits to each categories for later compare the decay between
 these limits and the reality of the expense/income of each

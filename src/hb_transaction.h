@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -20,13 +20,16 @@
 #ifndef __HB_TRANSACTION_H__
 #define __HB_TRANSACTION_H__
 
-guint
-transaction_count_tags(Operation *ope);
+void operation_add_treeview(Operation *ope, GtkWidget *treeview, gint accnum);
+void operation_add(Operation *ope, GtkWidget *treeview, gint accnum);
+Operation *operation_get_child_transfer(Operation *src);
+void operation_warn_transfer(Operation *src, gchar *msg2);
+void operation_add_transfer(Operation *ope, GtkWidget *treeview);
+void operation_delete_child_transfer(Operation *src);
 
-guint
-transaction_set_tags(Operation *ope, const gchar *tagstring);
-
-gchar *
-transaction_get_tagstring(Operation *ope);
+guint transaction_count_tags(Operation *ope);
+guint transaction_set_tags(Operation *ope, const gchar *tagstring);
+gchar *transaction_get_tagstring(Operation *ope);
+gint transaction_auto_assign(GList *ope_list, guint key);
 
 #endif

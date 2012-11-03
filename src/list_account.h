@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -19,6 +19,31 @@
 
 #ifndef __LIST_ACCOUNT__H__
 #define __LIST_ACCOUNT__H__
+
+/* lst acc datatype */
+enum
+{
+	DSPACC_TYPE_NORMAL,
+	DSPACC_TYPE_HEADER,
+	DSPACC_TYPE_SUBTOTAL,
+	DSPACC_TYPE_TOTAL
+};
+
+
+/* list display account (wallet) */
+enum
+{
+	LST_DSPACC_DATAS,
+	LST_DSPACC_DATATYPE,
+	LST_DSPACC_STATE,	/* fake column */
+	LST_DSPACC_NAME,	/* fake column */
+	LST_DSPACC_TYPE,	/* fake column */
+	LST_DSPACC_BANK,
+	LST_DSPACC_TODAY,
+	LST_DSPACC_FUTURE,
+	NUM_LST_DSPACC
+};
+
 
 GtkWidget *create_list_account(void);
 

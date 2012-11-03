@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -31,6 +31,19 @@
 
 /* our global datas */
 extern struct HomeBank *GLOBALS;
+
+
+gchar *CYA_ACC_TYPE[] = 
+{
+	N_("(none)"),
+	N_("Bank"),
+	N_("Cash"),
+	N_("Asset"),
+	N_("Credit card"),
+	N_("Liability"),
+	NULL
+};
+
 
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
@@ -143,11 +156,6 @@ ui_acc_comboboxentry_add(GtkComboBoxEntry *entry_box, Account *acc)
 	}
 }
 
-struct accPopContext
-{
-	GtkTreeModel *model;
-	guint	except_key;
-};
 
 static void
 ui_acc_comboboxentry_populate_ghfunc(gpointer key, gpointer value, struct accPopContext *ctx)
@@ -155,7 +163,7 @@ ui_acc_comboboxentry_populate_ghfunc(gpointer key, gpointer value, struct accPop
 GtkTreeIter  iter;
 Account *acc = value;
 
-	if( acc->key != ctx->except_key )
+	if( ( acc->key != ctx->except_key ) && ( acc->imported == FALSE) )
 	{
 		gtk_list_store_append (GTK_LIST_STORE(ctx->model), &iter);
 		gtk_list_store_set (GTK_LIST_STORE(ctx->model), &iter, 0, acc->name, -1);
@@ -183,7 +191,7 @@ GtkTreeModel *model;
 GtkEntryCompletion *completion;
 struct accPopContext ctx;
 
-    DB( g_print ("populate comboboxentry occured\n") );
+    DB( g_print ("ui_acc_comboboxentry_populate\n") );
 
     DB( g_print (" -> except is %d\n", except_key) );
 
@@ -206,12 +214,11 @@ struct accPopContext ctx;
 	gtk_entry_completion_set_model (completion, model);
 	g_object_unref(model);
 
-	//gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(model), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(model), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
 	
 }
 
 
-/*
 static gint
 ui_acc_comboboxentry_compare_func (GtkTreeModel *model, GtkTreeIter  *a, GtkTreeIter  *b, gpointer      userdata)
 {
@@ -239,7 +246,7 @@ gchar *name1, *name2;
   end:
   	return ret;
   }
-*/
+
 
 /**
  * ui_acc_comboboxentry_new:
@@ -257,7 +264,7 @@ GtkWidget *comboboxentry;
 GtkEntryCompletion *completion;
 
 	store = gtk_list_store_new (1, G_TYPE_STRING);
-	//gtk_tree_sortable_set_default_sort_func(GTK_TREE_SORTABLE(store), ui_acc_comboboxentry_compare_func, NULL, NULL);
+	gtk_tree_sortable_set_default_sort_func(GTK_TREE_SORTABLE(store), ui_acc_comboboxentry_compare_func, NULL, NULL);
 
     completion = gtk_entry_completion_new ();
     gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(store));
@@ -656,6 +663,9 @@ Account *item;
 					}
 				}
 
+			item->type = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_type));
+
+
 			g_free(item->bankname);
 			item->bankname = g_strdup(gtk_entry_get_text(GTK_ENTRY(data->ST_bank)));
 
@@ -716,8 +726,7 @@ Account *item;
 
 		gtk_entry_set_text(GTK_ENTRY(data->ST_name), item->name);
 		
-		//todo: for stock account
-		//gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_type), item->type );
+		gtk_combo_box_set_active(GTK_COMBO_BOX(data->CY_type), item->type );
 		
 		if(item->bankname != NULL)
 			gtk_entry_set_text(GTK_ENTRY(data->ST_bank), item->bankname);
@@ -818,6 +827,7 @@ guint32 key;
 
 	sensitive = (selected == TRUE) ? TRUE : FALSE;
 	gtk_widget_set_sensitive(data->ST_name, sensitive);
+	gtk_widget_set_sensitive(data->CY_type, sensitive);
 	gtk_widget_set_sensitive(data->ST_number, sensitive);
 	gtk_widget_set_sensitive(data->ST_bank, sensitive);
 	gtk_widget_set_sensitive(data->CM_budget, sensitive);
@@ -1032,7 +1042,7 @@ struct ui_acc_manage_data data;
 GtkWidget *window, *mainbox;
 GtkWidget *vbox, *table, *label, *entry1, *entry2, *entry3;
 GtkWidget *spinner, *cheque1, *cheque2, *scrollwin;
-GtkWidget *bbox, *check_button;
+GtkWidget *bbox, *widget, *check_button;
 GtkWidget *alignment;
 gint row;
 
@@ -1048,7 +1058,8 @@ gint row;
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 
 	//set the window icon
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "account.svg");
+	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "account.svg");	
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_ACCOUNT);
 
 	//store our window private data
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);
@@ -1072,6 +1083,9 @@ gint row;
 
 	data.LV_acc = ui_acc_listview_new(FALSE);
 	gtk_container_add(GTK_CONTAINER(scrollwin), data.LV_acc);
+
+	gtk_widget_set_tooltip_text(data.LV_acc, _("Drag & drop to change the order"));
+
 
 	// tools buttons
 	bbox = gtk_hbox_new (TRUE, HB_BOX_SPACING);
@@ -1117,24 +1131,21 @@ gint row;
 	gtk_misc_set_padding (GTK_MISC (label), HB_BOX_SPACING, 0);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
-	label = make_label(_("_Heading:"), 0.0, 0.5);
+	label = make_label(_("_Name:"), 0.0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 	entry1 = make_string(label);
 	data.ST_name = entry1;
 	gtk_table_attach (GTK_TABLE (table), entry1, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
-	//todo: for stock account
-	/*	
 	row++;
 	label = make_label(_("_Type:"), 0.0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-	widget = make_cycle(label, CYA_ACCOUNT_TYPE);
+	widget = make_cycle(label, CYA_ACC_TYPE);
 	data.CY_type = widget;
 	gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-	*/
 
 	row++;
-	label = make_label(_("_Number:"), 0.0, 0.5);
+	label = make_label(_("N_umber:"), 0.0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 	entry3 = make_string(label);
 	data.ST_number = entry3;

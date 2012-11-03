@@ -2,44 +2,67 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Importing transactions</TITLE>
+	<TITLE>Import bank files</TITLE>
 	<link rel="stylesheet" href="help.css">
 </HEAD>
 <BODY >
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
 	<TR>
 		<TD WIDTH=27>
-			<P><A HREF="main.html"><IMG SRC="images/home.gif" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="main.html"><IMG SRC="images/go-home.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 		<TD WIDTH=27>
-			<P><A HREF="03trans_add.html"><IMG SRC="images/prev.gif" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="02concepts.html"><IMG SRC="images/go-previous.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 		<TD WIDTH=27>
-			<P><A HREF="03trans_auto.html"><IMG SRC="images/next.gif" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+			<A HREF="03trans_add.html"><IMG SRC="images/go-next.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
 		</TD>
 	</TR>
 </TABLE>
-<HR SIZE=1 COLOR="#000000">
-<H2>Importing transactions</H2>
-<P>The import wizard will guide you through the 5 steps for importing
-a file.</P>
-<H3>Supported format</H3>
-<P>At the present time the following file format can be imported into
-HomeBank:
-</P>
+<div class="head"></div>
+<h1>Import files</h1>
+
+<p>
+This function allow to import bank file or other personal accounting software file.
+</p>
+
+<ul class="toc">
+	<li><a href="#format">File format you can uses</a></li>
+	<li><a href="#howto">How to import a file ?</a></li>
+	<li><a href="#assistant">The import assistant</a></li>
+</ul>
+
+
+<h2><A NAME="format"></A>:: File format you can uses</h2>
 <UL>
-	<LI> QIF (Quicken Interchange Format)
-
-	<LI> OFX (Open Financial Exchange)
-
-	<LI> CSV, but column must have a specific order and contents, <A HREF="06csvformat.html">see
-	details here</A>
-
+	<LI> QIF - Quicken Interchange Format
+	<LI> QFX - Quicken Financial Exchange
+	<LI> OFX - Open Financial Exchange
+	<LI> CSV - Comma-Separated Value
 </UL>
-<H3>Step 1: Introduction</H3>
-<P>This step is a simple introduction
+<p>
+Notice: the CSV file you can uses into HomeBank must follow some rules <A HREF="06csvformat.html">detailed here</a>
+</p>
+
+<h2><A NAME="howto"></A>:: How to import a file ?</h2>
+<p>
+From the <em>main window</em>:
+<ul>
+	<li>Select the File menu</li>
+	<li>Select the Import QIF/OFX/CSV submenu</li>
+	<li>The import assistant will open</li>
+</ul>
+
+<h2><A NAME="assistant"></A>:: The import assistant</h2>
+The import assistant will then guide you through the different steps for importing a file:
 </P>
-<H3>Step 2: File selection</H3>
+
+<h3>Step 1: Introduction</h3>
+<P>
+This step is a simple introduction page
+</P>
+
+<h3>Step 2: Select a file</h3>
 <P>You must select a file here, HomeBank will tell you if you can
 import that file or not:
 </P>
@@ -47,34 +70,60 @@ import that file or not:
 </P>
 <P>If the file is not supported:<BR><IMG SRC="images/00import2.png">
 </P>
-<H3>Step 3: File content</H3>
-<H4>File analysis summary</H4>
-<P><IMG SRC="images/03import3a.png"></P>
-<P>HomeBank will inform here about the file contents: number of
-accounts, transactions, payees and categories.
-</P>
-<H4>Unnamed account selection</H4>
-<P><IMG SRC="images/03import3b.png"></P>
-<P>There is some case (CSV, QIF) when the file does not specify the
-name of the account the transactions should be attached to. In that
-case, HomeBank will detect it and let you choose to create a new
-account, or to attach the transaction to an existing account, if any.
-</P>
-<H3>Step 4: Transaction selection</H3>
-<P><IMG SRC="images/03import4.png"></P>
-<P>That step is the most important one. HomeBank will detect for
-duplicate transaction here, and you are able to modify in realtime
-the date tolerance.<BR><BR>The match is done in order: by account,
-amount and date.<BR>If you want that HomeBank match really equal
-date, then let that parameter to 0.<BR>A little warning symbol will
-inform you when a transaction has some duplicate, and you can see the
-duplicate at the bottom part of the dialog: 'Possible
-duplicate...'.<BR>At last the duplicate transaction are not selected
-and will not be imported, except if you select it manually.
-</P>
-<H3>Step 5: Update your accounts</H3>
-<P>The last summary, according to the transaction you selected or
-not, then you can 'Apply' it !
-</P>
+
+
+<h3>Step 3: Control the import</h3>
+<h4>File information</h4>
+	<P>
+	In this section, you have information about the file you just selected for import. 
+	</p>
+	<p>
+	The name of the file is recalled, and you'll also have a count of items contained 
+	in that file, such as the number of accounts, transactions, payees and categories.
+	</P>
+<h4>Account to import</h4>
+	<div class="gtkshot"><IMG SRC="images/03import3b.png"></div>
+	<P>
+	In this section, you control the accounts to be imported.
+	</p>
+	<p>
+	Generally, with the 
+	files in QIF and OFX format, HomeBank merge the new transactions to already existing accounts. 
+	However, some QIF or all CSV files have no information that will identify the account to import to, 
+	and you will manage it manually.
+	</P>
+	<p>
+	HomeBank is based on the account number to identify accounts of import files and compares them 
+	to those already existing, as well you should update this information carefully in existing accounts.	
+	</p>
+	<div class="clear"></div>
+<h4>Transactions to import</h4>	
+	<div class="gtkshot"><IMG SRC="images/03import4.png"></div>
+	<P>
+	In this section, you control the transactions to be imported.
+	</p>
+	
+
+	<P>
+	HomeBank is to detect the duplicate of each import transaction. A dual operation is visually 
+	indicated by a symbol in the list and is in disabled state, which means it will not be imported.
+	The transactions or duplicated are listed in the "Duplicate transaction found".
+	</p>
+	<p>
+	You can change the parameters to find those duplicates in real time.
+	The detection is done in the following order: account, amount, and date according to the defined tolerance (default is 0 days).
+	</P>
+	
+		<div class="clear"></div>
+<h3>Step 4: Update your accounts</h3>
+<p>
+This last step will show the synthesis of which will be imported.
+</p>
+<p>
+The number of accounts to be imported and / or updated.<br>
+The number of transaction to be imported, rejected and the one for which automatic assignment was done for payee and/or category.
+</p>
+
+
 </BODY>
 </HTML>

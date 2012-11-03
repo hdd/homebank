@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -21,12 +21,7 @@
 #define __HOMEBANK_DSPACCOUNT_H__
 
 GtkWidget *create_account_window(gint accnum, Account *acc);
-void operation_add_treeview(Operation *ope, GtkWidget *treeview, gint accnum);
-void operation_add(Operation *ope, GtkWidget *treeview, gint accnum);
 
-Operation *operation_get_child_transfert(Operation *src);
-void operation_warn_transfert(Operation *src, gchar *msg2);
-void operation_delete_child_transfert(Operation *src);
 
 void account_init_window(GtkWidget *widget, gpointer user_data);
 void account_busy(GtkWidget *widget, gboolean state);

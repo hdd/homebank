@@ -1,5 +1,5 @@
-#SUBDIRS = images src
-SUBDIRS = data doc images mime po src
+#SUBDIRS = src data images
+SUBDIRS = src data images doc mime po
 
 
 #pot: Makefile

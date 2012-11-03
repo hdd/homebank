@@ -7,9 +7,6 @@ images_DATA = \
 00import4.png \
 00import5.png \
 00import6.png \
-1.png \
-2.png \
-3.png \
 03account1.png \
 03import1.png \
 03import3a.png \
@@ -23,9 +20,9 @@ images_DATA = \
 03transauto1.png \
 03transauto2.png \
 03transmult1.png \
-4.png \
 04account1.png \
 04archive1.png \
+04assign1.png \
 04budget1.png \
 04category1.png \
 04filter1.png \
@@ -38,30 +35,38 @@ images_DATA = \
 04prefs6.png \
 04transaction1.png \
 04wallet1.png \
-5.png \
 05budget1.png \
 05carcost1.png \
 05overdrawn1.png \
 05statistics1.png \
-6.png \
-7.png \
-8.png \
-9.png \
+05trendtime1.png \
 10.png \
 11.png \
 12.png \
 13.png \
 14.png \
 15.png \
+1.png \
+2.png \
+3.png \
+4.png \
+5.png \
+6.png \
+7.png \
+8.png \
+9.png \
+bg_page.gif \
+doc_balance.png \
 doc_title.png \
-web_title.png \
-bg_page.gif \ 
-home.gif \ 
-homedsbl.gif \ 
-next.gif \ 
-nextdsbl.gif \ 
-prev.gif \ 
-prevdsbl.gif 
+go-home.png \
+go-next.png \
+go-previous.png \
+no-home.png \
+no-next.png \
+no-previous.png \
+shotback.png \
+top-gradient.png \
+web_title.png
 
 
 EXTRA_DIST   = $(images_DATA)

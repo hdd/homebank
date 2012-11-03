@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -20,9 +20,6 @@
 #ifndef __HOMEBANK_WIDGETS_H__
 #define __HOMEBANK_WIDGETS_H__
 
-void load_paymode_icons(void);
-void free_paymode_icons(void);
-
 GtkWidget *make_label(char *str, gfloat xalign, gfloat yalign);
 GtkWidget *make_text(gfloat xalign);
 GtkWidget *make_string(GtkWidget *label);
@@ -31,6 +28,7 @@ GtkWidget *make_string_maxlength(GtkWidget *label, guint max_length);
 GtkWidget *make_amount(GtkWidget *label);
 GtkWidget *make_euro(GtkWidget *label);
 GtkWidget *make_numeric(GtkWidget *label, gdouble min, gdouble max);
+GtkWidget *make_scale(GtkWidget *label);
 GtkWidget *make_long(GtkWidget *label);
 GtkWidget *make_year(GtkWidget *label);
 GtkWidget *make_cycle(GtkWidget *label, gchar **items);
@@ -52,6 +50,12 @@ GtkWidget *make_poparchive(GtkWidget *label);
 guint make_popcategory_populate(GtkComboBox *combobox, GList *srclist);
 GtkWidget *make_popcategory(GtkWidget *label);
 
+void load_paymode_icons(void);
+void free_paymode_icons(void);
+void load_nainex_icons(void);
+void free_nainex_icons(void);
+
 GtkWidget *make_paymode(GtkWidget *label);
+GtkWidget *make_nainex(GtkWidget *label);
 
 #endif /* __HOMEBANK_WIDGETS_H__ */

@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -60,7 +60,9 @@ struct repbudget_data
 	GtkWidget	*TX_info;
 	GtkWidget	*CM_minor;
 	GtkWidget	*CY_for;
+	GtkWidget	*CY_kind;
 	GtkWidget	*CY_view;
+	GtkWidget	*RG_zoomx;
 	GtkWidget	*LV_report;
 
 	GtkWidget	*PO_mindate, *PO_maxdate;
@@ -95,22 +97,30 @@ static void repbudget_action_detail(GtkAction *action, gpointer user_data);
 static void repbudget_action_legend(GtkAction *action, gpointer user_data);
 static void repbudget_action_refresh(GtkAction *action, gpointer user_data);
 
+enum
+{
+	BUDG_CATEGORY,
+	BUDG_SUBCATEGORY,
+};
+
+gchar *CYA_BUDGSELECT[] = { N_("Category"), N_("Subcategory"), NULL };
+
+gchar *CYA_KIND[] = { N_("Exp. & Inc."), N_("Expense"), N_("Income"), NULL };
 
 gchar *CYA_BUDGETSELECT[] = { N_("Spent & Budget"), N_("Spent"), N_("Budget"), N_("Decay"), NULL };
 
-gchar *CYA_KIND[] = { N_("Expense"), N_("Income"), NULL };
 
 extern gchar *CYA_RANGE[];
 extern gchar *CYA_SELECT[];
 
 static GtkActionEntry entries[] = {
-  { "List"    , "hb-stock-view-list" , N_("List")  , NULL,    N_("View results as list"), G_CALLBACK (repbudget_action_viewlist) },
-  { "Bar"     , "hb-stock-view-bar"  , N_("Bar")   , NULL,    N_("View results as bars"), G_CALLBACK (repbudget_action_viewbar) },
+  { "List"    , "hb-view-list" , N_("List")  , NULL,    N_("View results as list"), G_CALLBACK (repbudget_action_viewlist) },
+  { "Bar"     , "hb-view-bar"  , N_("Bar")   , NULL,    N_("View results as bars"), G_CALLBACK (repbudget_action_viewbar) },
 
-  { "Detail"  , "hb-stock-ope-show"  , N_("Detail"), NULL,    N_("Toggle detail"), G_CALLBACK (repbudget_action_detail) },
-  { "Legend"  , "hb-stock-legend"    , N_("Legend"), NULL,    N_("Toggle legend"), G_CALLBACK (repbudget_action_legend) },
+  { "Detail"  , "hb-ope-show"  , N_("Detail"), NULL,    N_("Toggle detail"), G_CALLBACK (repbudget_action_detail) },
+  { "Legend"  , "hb-legend"    , N_("Legend"), NULL,    N_("Toggle legend"), G_CALLBACK (repbudget_action_legend) },
 
-  { "Refresh" , "hb-stock-refresh"   , N_("Refresh"), NULL,   N_("Refresh results"), G_CALLBACK (repbudget_action_refresh) },
+  { "Refresh" , GTK_STOCK_REFRESH, N_("Refresh"), NULL,   N_("Refresh results"), G_CALLBACK (repbudget_action_refresh) },
 };
 
 static guint n_entries = G_N_ELEMENTS (entries);
@@ -240,6 +250,21 @@ gint nbmonth;
 
 	return(nbmonth);
 }
+
+static gdouble budget_compute_decay(gdouble budget, gdouble spent)
+{
+gdouble decay;
+
+	//original formula
+	//decay = ABS(budget) - ABS(spent);
+
+	decay = spent - budget;
+	 
+	return decay;
+}
+
+
+
 
 
 static void repbudget_date_change(GtkWidget *widget, gpointer user_data)
@@ -400,12 +425,12 @@ struct repbudget_data *data;
 		gtk_widget_hide(data->GR_detail);
 }
 
-
 static void repbudget_detail(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 guint active = GPOINTER_TO_INT(user_data);
 GList *list;
+guint tmpfor;
 GtkTreeModel *model;
 GtkTreeIter  iter;
 
@@ -421,21 +446,42 @@ GtkTreeIter  iter;
 		g_object_ref(model); /* Make sure the model stays with us after the tree view unrefs it */
 		gtk_tree_view_set_model(GTK_TREE_VIEW(data->LV_detail), NULL); /* Detach model from view */
 
+		tmpfor  = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_for));
+		
 		/* fill in the model */
 		list = g_list_first(GLOBALS->ope_list);
 		while (list != NULL)
 		{
+		Account *acc;
 		Operation *ope = list->data;
 
 			//DB( g_print(" get %s\n", ope->ope_Word) );
 
+			acc = da_acc_get(ope->account);
+			if(acc != NULL)
+			{
+				if((acc->flags & AF_CLOSED)) goto next1;
+				if(!(acc->flags & AF_BUDGET)) goto next1;
+			}
 
 			//filter here
-			if( !(ope->flags & OF_REMIND) && ope->date >= data->mindate && ope->date <= data->maxdate)
+			if( !(ope->flags & OF_REMIND) && (ope->date >= data->mindate) && (ope->date <= data->maxdate))
 			{
 			gint pos = 0;
 
-				pos = ope->category;
+				switch(tmpfor)
+				{
+					case BUDG_CATEGORY:
+						{
+						Category *catentry = da_cat_get(ope->category);
+							if(catentry)
+								pos = (catentry->flags & GF_SUB) ? catentry->parent : catentry->key;
+						}
+						break;
+					case BUDG_SUBCATEGORY:
+						pos = ope->category;
+						break;
+				}
 
 				//insert
 				if( pos == active )
@@ -448,6 +494,7 @@ GtkTreeIter  iter;
 				}
 
 			}
+next1:
 			list = g_list_next(list);
 		}
 
@@ -466,14 +513,14 @@ static void repbudget_compute(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
 
-gint tmpfor, tmpview;
+gint tmpfor, tmpkind, tmpview;
 gint mindate, maxdate;
 
 GtkTreeModel *model;
 GtkTreeIter  iter;
 GList *list;
 gint n_result, id, column;
-gdouble *tmp_spent, *tmp_budget;
+gdouble *tmp_spent, *tmp_budget, *tmp_hasbudget;
 gint nbmonth = 1;
 
 	DB( g_print("(repbudget) compute\n") );
@@ -481,12 +528,13 @@ gint nbmonth = 1;
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
 	tmpfor   = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_for));
+	tmpkind  = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_kind));
 	tmpview  = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_view));
 
 	mindate = data->mindate;
 	maxdate = data->maxdate;
 
-	DB( g_print(" kind=%d,view=%d\n", tmpfor, tmpview) );
+	DB( g_print(" kind=%d,view=%d\n", tmpkind, tmpview) );
 
 
 	/* do nothing if no operation */
@@ -501,42 +549,158 @@ gint nbmonth = 1;
 	/* allocate some memory */
 	tmp_spent  = g_malloc0((n_result+1) * sizeof(gdouble));
 	tmp_budget = g_malloc0((n_result+1) * sizeof(gdouble));
+	tmp_hasbudget = g_malloc0((n_result+1) * sizeof(gdouble));
 
-	if(tmp_spent && tmp_budget)
+	if(tmp_spent && tmp_budget && tmp_hasbudget)
 	{
 	guint i = 0;
 		/* compute the results */
 		data->total_spent = 0.0;
 		data->total_budget = 0.0;
 
+
+		/* compute budget for each category */
+		//fixed #328034: here <=n_result
+		for(i=0, id=0; i<=n_result; i++)
+		{
+		Category *entry;
+		//gchar buffer[128];
+		gint pos;
+
+			entry = da_cat_get(i);
+			if( entry == NULL)
+				continue;
+
+			//debug
+			#if MYDEBUG == 1
+			
+			gint k;
+
+			g_print("--------\n");
+
+			g_print("+ %s", entry->name);
+			for(k=0;k<13;k++)
+				g_print( "%d[%.2f] ", k, entry->budget[k]);
+			g_print("\n");
+				
+			#endif
+
+			pos = 0;
+			switch(tmpfor)
+			{
+				case BUDG_CATEGORY:
+					{
+					Category *catentry = da_cat_get(i);
+						if(catentry)
+							pos = (catentry->flags & GF_SUB) ? catentry->parent : catentry->key;
+					}
+					break;
+				case BUDG_SUBCATEGORY:
+					pos = i;
+					break;
+			}
+			
+			DB( g_print(" ** budget for %d '%s'\n", entry->key, entry->name) );
+			
+			// same value each month ?
+			if(!(entry->flags & GF_CUSTOM))
+			{
+				//DB( g_print(" cat %s -> monthly %.2f\n", entry->name, entry->budget[0]) );
+				tmp_budget[pos] += entry->budget[0]*nbmonth;
+				tmp_hasbudget[i] += entry->budget[0]*nbmonth;
+			}
+			//otherwise	sum each month from mindate month		
+			else
+			{
+			gint month = getmonth(mindate);
+			gint j;
+
+				for(j=0;j<nbmonth;j++)
+				{
+					DB( g_print(" %d, cat %s -> custom j=%ld month=%ld budg=%.2f\n", j, entry->name, month, entry->budget[month]) );
+
+					tmp_budget[pos] += entry->budget[month];
+					tmp_hasbudget[i] += entry->budget[month];
+					month++;
+					if(month > 12) month = 1;
+				}
+			}
+
+			//debug
+			#if MYDEBUG == 1
+			if( tmp_budget[pos] )
+			{
+				g_print(" -> cat %d %s, budg[%d]=%.2f hasbudg[%d]\n", entry->key, entry->name, pos, tmp_budget[pos], i, tmp_hasbudget[i]);
+			}
+
+			#endif
+
+
+
+		}
+
+
+		// compute spent for each */
+		DB( g_print(" ** compute spent for each  categories\n") );
+
+		
 		list = g_list_first(GLOBALS->ope_list);
 		while (list != NULL)
 		{
 		Operation *ope = list->data;
 		Account *acc;
 
-			DB( g_print("%d, get ope: %s :: acc=%d\n", i, ope->wording, ope->account) );
+			//DB( g_print("%d, get ope: %s :: acc=%d, cat=%d, mnt=%.2f\n", i, ope->wording, ope->account, ope->category, ope->amount) );
 
 			acc = da_acc_get(ope->account);
 			if(acc != NULL)
 			{
-				if((acc->flags & AF_CLOSED)) goto next;
-				if(!(acc->flags & AF_BUDGET)) goto next;
-
+				if((acc->flags & AF_CLOSED)) goto next1;
+				if(!(acc->flags & AF_BUDGET)) goto next1;
+/*
+				//fix: #530290 
+				if( tmp_hasbudget[ope->category] == 0 )
+				{
+					DB( g_print(" -> no budget for cat %d\n", ope->category) );
+					goto next1;
+				}
+*/
 				if( !(ope->flags & OF_REMIND) && ope->date >= mindate && ope->date <= maxdate)
 				{
-				gint pos;
+				gint pos = 0;
 
-					pos = ope->category;
+
+					switch(tmpfor)
+					{
+						case BUDG_CATEGORY:
+							{
+							Category *catentry = da_cat_get(ope->category);
+								if(catentry)
+									pos = (catentry->flags & GF_SUB) ? catentry->parent : catentry->key;
+							}
+							break;
+						case BUDG_SUBCATEGORY:
+							pos = ope->category;
+							break;
+					}
+
+					DB( g_print(" -> affecting %.2f to cat %d\n", ope->amount, pos) );					
+
 					if( pos >= 0)
+					{
 						tmp_spent[pos] += ope->amount;
+					}
 				}
 			}	
 
-		next:
+next1:
 			list = g_list_next(list);
 			i++;
 		}
+
+
+
+
 
 		DB( g_print("clear and detach model\n") );
 
@@ -546,31 +710,19 @@ gint nbmonth = 1;
 		g_object_ref(model); /* Make sure the model stays with us after the tree view unrefs it */
 		gtk_tree_view_set_model(GTK_TREE_VIEW(data->LV_report), NULL); /* Detach model from view */
 
+
 		/* insert into the treeview */
-		for(i=0, id=0; i<n_result; i++)
+		for(i=0, id=0; i<=n_result; i++)
 		{
 		gchar *name, *fullcatname;
 		Category *entry;
-		//gchar buffer[128];
 
 			fullcatname = NULL;
+
 
 			entry = da_cat_get(i);
 			if( entry == NULL)
 				continue;
-
-			//debug
-			#if MYDEBUG == 1
-			gint k;
-
-			g_print("--------\n");
-
-			g_print("+ %s", entry->name);
-			for(k=0;k<13;k++)
-				g_print( "%d[%.2f] ", k, entry->budget[k]);
-			g_print("\n");
-	
-			#endif
 
 			if(entry->flags & GF_SUB)
 			{
@@ -582,60 +734,66 @@ gint nbmonth = 1;
 			else
 				name = entry->name;
 
-			// display expense or income
-			if( tmpfor !=  ((entry->flags & GF_INCOME) ? 1 : 0)) continue;
-
 			if(name == NULL) name  = "(None)";
 
-			// same value each month ?
-			if(!(entry->flags & GF_CUSTOM))
+			if( (tmpfor == BUDG_CATEGORY && !(entry->flags & GF_SUB)) || (tmpfor == BUDG_SUBCATEGORY) )
 			{
-				DB( g_print(" cat %s -> monthly %.2f\n", name, entry->budget[0]) );
-				tmp_budget[i] = entry->budget[0]*nbmonth;
-			}
-			//otherwise	sum each month from mindate month		
-			else
-			{
-			gint month = getmonth(mindate);
-			gint j;
+			guint pos;
 
-				DB( g_print(" cat '%s' -> custom month=%ld nbmonth=%ld\n", name, month, nbmonth) );
 
-				for(j=0;j<nbmonth;j++)
+
+				pos = 0;
+				switch(tmpfor)
 				{
-					DB( g_print(" %d, cat %s -> custom j=%ld month=%ld budg=%.2f\n", j, name, month, tmp_budget[i]) );
-
-					tmp_budget[i] += entry->budget[month];
-					month++;
-					if(month > 12) month = 1;
+					case BUDG_CATEGORY:
+						{
+						Category *catentry = da_cat_get(i);
+							if(catentry)
+								pos = (catentry->flags & GF_SUB) ? catentry->parent : catentry->key;
+						}
+						break;
+					case BUDG_SUBCATEGORY:
+						pos = i;
+						break;
 				}
 
+				// display expense or income (filter on amount and not category hupothetical flag
+				//if( tmpkind !=  (entry->flags & GF_INCOME)) continue;
+				if( tmpkind == 1 && tmp_budget[pos] > 0)
+					continue;
 				
-			}
+				if( tmpkind == 2 && tmp_budget[pos] < 0)
+					continue;
 
 
-			//g_print(" inserting %i, %s\n", i, name);
+				if(tmp_budget[pos] || tmp_spent[pos])
+				{
+				gdouble decay;
+				
+					decay = budget_compute_decay(tmp_budget[pos], tmp_spent[pos]);
+				
+					DB( g_print(" inserting %i, %s, %.2f %.2f %.2f\n", i, name, tmp_spent[pos], tmp_budget[pos], decay) );
 
-			DB( g_print(" inserting %i, %s, %.2f %.2f %.2f\n", i, name, tmp_spent[i], tmp_budget[i], tmp_spent[i] - tmp_budget[i]) );
+					gtk_list_store_append (GTK_LIST_STORE(model), &iter);
+			 		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+						LST_BUDGET_POS, id++,
+						LST_BUDGET_KEY, pos,
+						LST_BUDGET_NAME, name,
+						LST_BUDGET_SPENT, tmp_spent[pos],
+						LST_BUDGET_BUDGET, tmp_budget[pos],
+						LST_BUDGET_DECAY, decay,
+						-1);
 
-			if(tmp_budget[i])
-			{
-		    	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-	     		gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-					LST_BUDGET_POS, id++,
-					LST_BUDGET_KEY, i,
-					LST_BUDGET_NAME, name,
-					LST_BUDGET_SPENT, tmp_spent[i],
-					LST_BUDGET_BUDGET, tmp_budget[i],
-					LST_BUDGET_DECAY, ABS(tmp_budget[i]) - ABS(tmp_spent[i]),
-					-1);
-
-				data->total_spent  += tmp_spent[i];
-				data->total_budget += tmp_budget[i];
+					data->total_spent  += tmp_spent[pos];
+					data->total_budget += tmp_budget[pos];
+				}
 			}
 
 			g_free(fullcatname);
+
+
 		}
+
 
 		/* Re-attach model to view */
   		gtk_tree_view_set_model(GTK_TREE_VIEW(data->LV_report), model);
@@ -655,7 +813,7 @@ gint nbmonth = 1;
 		else
 			gtk_chart_set_datas(GTK_CHART(data->RE_bar), model, column);
 
-		gtk_chart_set_title(GTK_CHART(data->RE_bar), _(CYA_BUDGETSELECT[tmpfor]));
+		gtk_chart_set_title(GTK_CHART(data->RE_bar), _(CYA_BUDGETSELECT[tmpview]));
 
 		
 		
@@ -667,29 +825,7 @@ gint nbmonth = 1;
 	/* free our memory */
 	g_free(tmp_spent);
 	g_free(tmp_budget);
-
-  /* update info range text */
-/*
-	{
-	gchar buffer1[128];
-	gchar buffer2[128];
-	GDate *date;
-	gchar *info;
-
-		date = g_date_new_julian(data->mindate);
-		g_date_strftime (buffer1, 128-1, "%x", date);
-		g_date_set_julian(date, data->maxdate);
-		g_date_strftime (buffer2, 128-1, "%x", date);
-		g_date_free(date);
-
-		info = g_strdup_printf("%s -> %s", buffer1, buffer2);
-
-		gtk_label_set_text(GTK_LABEL(data->TX_info), info);
-
-
-		g_free(info);
-	}
-*/
+	g_free(tmp_hasbudget);
 
 
 }
@@ -698,17 +834,16 @@ gint nbmonth = 1;
 static void repbudget_update_total(GtkWidget *widget, gpointer user_data)
 {
 struct repbudget_data *data;
-gboolean minor;
 
 	DB( g_print("(repbudget) update total\n") );
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
-	minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
+	GLOBALS->minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_minor));
 
-	hb_label_set_colvalue(GTK_LABEL(data->TX_total[0]), data->total_spent, minor);
-	hb_label_set_colvalue(GTK_LABEL(data->TX_total[1]), data->total_budget, minor);
-	hb_label_set_colvalue(GTK_LABEL(data->TX_total[2]), ABS(data->total_budget) - ABS(data->total_spent), minor);
+	hb_label_set_colvalue(GTK_LABEL(data->TX_total[0]), data->total_spent, GLOBALS->minor);
+	hb_label_set_colvalue(GTK_LABEL(data->TX_total[1]), data->total_budget, GLOBALS->minor);
+	hb_label_set_colvalue(GTK_LABEL(data->TX_total[2]), budget_compute_decay(data->total_budget, data->total_spent), GLOBALS->minor);
 
 }
 
@@ -759,6 +894,23 @@ struct repbudget_data *data;
 	data->legend ^= 1;
 
 	gtk_chart_show_legend(GTK_CHART(data->RE_bar), data->legend);
+
+}
+
+static void repbudget_zoomx_callback(GtkWidget *widget, gpointer user_data)
+{
+struct repbudget_data *data;
+gdouble value;
+
+	DB( g_print("(repbudget) zoomx\n") );
+
+	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
+
+	value = gtk_range_get_value(GTK_RANGE(data->RG_zoomx));
+
+	DB( g_print(" + scale is %d\n", value) );
+
+	gtk_chart_set_barw(GTK_CHART(data->RE_bar), value);
 
 }
 
@@ -863,7 +1015,8 @@ GError *error = NULL;
 	gtk_window_set_title (GTK_WINDOW (window), _("Budget report"));
 
 	//set the window icon
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_budget.svg");
+	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "report_budget.svg");
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_REP_BUDGET);
 
 
 	//window contents
@@ -890,11 +1043,19 @@ GError *error = NULL;
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 2, row, row+1);
 
 	row++;
+	label = make_label(_("_For:"), 0, 0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+	widget = make_cycle(label, CYA_BUDGSELECT);
+	data->CY_for = widget;
+	gtk_table_attach_defaults (GTK_TABLE (table), data->CY_for, 1, 2, row, row+1);
+
+
+	row++;
 	label = make_label(_("_Kind:"), 0, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 	widget = make_cycle(label, CYA_KIND);
-	data->CY_for = widget;
-	gtk_table_attach_defaults (GTK_TABLE (table), data->CY_for, 1, 2, row, row+1);
+	data->CY_kind = widget;
+	gtk_table_attach_defaults (GTK_TABLE (table), data->CY_kind, 1, 2, row, row+1);
 
 	row++;
 	label = make_label(_("_View:"), 0, 0.5);
@@ -903,6 +1064,13 @@ GError *error = NULL;
 	data->CY_view = widget;
 	gtk_table_attach_defaults (GTK_TABLE (table), data->CY_view, 1, 2, row, row+1);
 
+	row++;
+	label = make_label(_("_Zoom X:"), 0, 0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+	widget = make_scale(label);
+	data->RG_zoomx = widget;
+	gtk_table_attach_defaults (GTK_TABLE (table), widget, 1, 2, row, row+1);
+	
 	row++;
 	widget = gtk_check_button_new_with_mnemonic (_("_Minor currency"));
 	data->CM_minor = widget;
@@ -1047,7 +1215,7 @@ GError *error = NULL;
 
 	widget = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	treeview = create_list_budget();
 	data->LV_report = treeview;
 	gtk_container_add (GTK_CONTAINER(widget), treeview);
@@ -1057,8 +1225,8 @@ GError *error = NULL;
 	widget = gtk_scrolled_window_new (NULL, NULL);
 	data->GR_detail = widget;
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	treeview = create_list_operation(PREFS->lst_ope_columns);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	treeview = create_list_operation(TRN_LIST_TYPE_DETAIL, PREFS->lst_ope_columns);
 	data->LV_detail = treeview;
 	gtk_container_add (GTK_CONTAINER(widget), treeview);
 
@@ -1087,8 +1255,11 @@ GError *error = NULL;
 
 	data->handler_id[HID_RANGE] = g_signal_connect (data->CY_range, "changed", G_CALLBACK (repbudget_range_change), NULL);
 
+    g_signal_connect (data->CY_for , "changed", G_CALLBACK (repbudget_compute), (gpointer)data);
+    g_signal_connect (data->CY_kind, "changed", G_CALLBACK (repbudget_compute), (gpointer)data);
     g_signal_connect (data->CY_view, "changed", G_CALLBACK (repbudget_compute), (gpointer)data);
-    g_signal_connect (data->CY_for, "changed", G_CALLBACK (repbudget_compute), (gpointer)data);
+
+	g_signal_connect (data->RG_zoomx, "value-changed", G_CALLBACK (repbudget_zoomx_callback), NULL);
 
     data->handler_id[HID_MINDATE] = g_signal_connect (data->PO_mindate, "changed", G_CALLBACK (repbudget_date_change), (gpointer)data);
     data->handler_id[HID_MAXDATE] = g_signal_connect (data->PO_maxdate, "changed", G_CALLBACK (repbudget_date_change), (gpointer)data);
@@ -1123,7 +1294,7 @@ GError *error = NULL;
 	GDate *date;
 	guint year;
 
-		da_operation_sort(GLOBALS->ope_list);
+		GLOBALS->ope_list = da_operation_sort(GLOBALS->ope_list);
 		list = g_list_first(GLOBALS->ope_list);
 		data->mindate = ((Operation *)list->data)->date;
 		list = g_list_last(GLOBALS->ope_list);
@@ -1179,40 +1350,33 @@ static void budget_amount_cell_data_function (GtkTreeViewColumn *col,
                            GtkTreeIter       *iter,
                            gpointer           user_data)
    {
-GtkWidget *widget;
 gdouble  value;
-gchar   buf[128];
-gboolean minor;
-gchar *markuptxt;
-guint32 color;
-
-	//get datas
-	gtk_tree_model_get(model, iter, GPOINTER_TO_INT(user_data), &value, -1);
+gchar *color;
+gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
+gint column_id = GPOINTER_TO_INT(user_data);
+	   
+	gtk_tree_model_get(model, iter, column_id, &value, -1);
 
 	if( value )
 	{
-		widget = g_object_get_data(G_OBJECT(model), "minor");
-		if(GTK_IS_TOGGLE_BUTTON(widget))
-		{
-			minor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		}
+		mystrfmon(buf, G_ASCII_DTOSTR_BUF_SIZE-1, value, GLOBALS->minor);
+
+		if( column_id == LST_BUDGET_DECAY)
+			color = get_minimum_color_amount (value, 0.0);
 		else
-			minor = 0;
+			color = get_normal_color_amount(value);
 
-		mystrfmon(buf, 127, value, minor);
-
-		color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
-		g_object_set(renderer, "markup", markuptxt, NULL);
-		g_free(markuptxt);
-
+		g_object_set(renderer, 
+			"foreground",  color,
+			"text", buf,
+			NULL);
 	}
 	else
 	{
 		g_object_set(renderer, "text", "", NULL);
 	}
-
 }
+
 
 static GtkTreeViewColumn *amount_list_budget_column(gchar *name, gint id)
 {
@@ -1255,7 +1419,7 @@ GtkTreeViewColumn  *column;
 	view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), PREFS->rules_hint);
 
 	/* column: Name */
 	column = gtk_tree_view_column_new();

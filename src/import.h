@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -22,23 +22,14 @@
 
 #define QIF_UNKNOW_ACCOUNT_NAME "(unknown)"
 
-enum
-{
-	FILETYPE_UNKNOW,
-	FILETYPE_AMIGA_HB,
-	FILETYPE_CSV_HB,
-	FILETYPE_OFX,
-	FILETYPE_QIF,
-	NUM_FILETYPE
-};
+
 
 
 enum
 {
 	PAGE_INTRO,
 	PAGE_FILE,
-	PAGE_ANALYSIS,
-	PAGE_TRANSACTION,
+	PAGE_OPTIONS,
 	PAGE_CONFIRM,
 	NUM_PAGE
 };
@@ -47,13 +38,13 @@ enum
 typedef struct _ImportContext ImportContext;
 struct _ImportContext
 {
-	GList		*trans_list;
-	gboolean	has_unknow_account;
-	gint 		cnt_initial_acc;
-	gint		cnt_new_acc;
+	GList		*trans_list;		// trn storage
+	gint 		cnt_initial_acc;	//max key account when start
+	gint		cnt_new_acc;		//
 	gint		cnt_new_ope;
 	gint		cnt_new_pay;
-	gint		cnt_new_cat;	
+	gint		cnt_new_cat;
+	const gchar		*encoding;
 };
 
 
@@ -72,30 +63,41 @@ struct import_data
 	GtkWidget	*assistant;
 	GtkWidget	*pages[NUM_PAGE];
 
+	GdkPixbuf	*head_pixbuf;
+	GdkPixbuf	*side_pixbuf;
+	
 	GtkWidget	*filechooser;
 	GtkWidget	*user_info;
 	GtkWidget	*ok_image;
 	GtkWidget	*ko_image;
 
 	GtkWidget	*TX_filename;
-	GtkWidget	*TX_details;
+	GtkWidget	*TX_filedetails;
 
-	GtkWidget	*CM_type[2];
-	GtkWidget	*LA_acc;
-	GtkWidget	*PO_acc;
-	GtkWidget	*ST_acc;
+//	GtkWidget	*LA_acc;
 	GtkWidget	*NB_decay;
+
+
+	GtkWidget	*LV_acc;
+	GtkWidget	*BT_edit;
 	
 	GtkWidget	*imported_ope;
 	GtkWidget	*duplicat_ope;
 	
-	GtkWidget	*last_info;
+	GtkWidget	*TX_acc_upd;
+	GtkWidget	*TX_acc_new;
+	GtkWidget	*TX_trn_imp;
+	GtkWidget	*TX_trn_nop;
+	GtkWidget	*TX_trn_asg;
+
 	
 	gchar		*filename;
 	guint		filetype;
 
-	guint		imported;
-	guint		total;
+	/* count imported items */
+	guint		imp_cnt_acc;
+	guint		imp_cnt_trn;
+	guint		imp_cnt_asg;
 
 	gboolean	valid;
 
@@ -108,8 +110,18 @@ struct import_data
 	
 };
 
+struct import_target_data
+{
+	GtkWidget	*getwidget1;
+	GtkWidget	*getwidget2;
+	GtkWidget	*radio[2];
+};
+
 
 GtkWidget *create_import_window (void);
+Account *import_create_account(gchar *name, gchar *number);
+const gchar *homebank_file_getencoding(gchar *filename);
+gchar *homebank_utf8_ensure(gchar *buffer);
 
 #endif
 

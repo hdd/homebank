@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -28,9 +28,7 @@ struct _account
 {
 	guint	key;
 	gushort	flags;
-	
-	//todo: for stock account
-	//gushort	type;
+	gushort	type;		//future use
 	gchar	*name;
 	gchar	*number;
 	gchar	*bankname;
@@ -40,17 +38,38 @@ struct _account
 	guint	cheque2;
 	//currency ?
 	//note ?
-	// non persitent datas
+	
+// non persitent datas
 	GtkWindow	*window;	//dsp_account opened
 	guint	pos;			//position in list
 	gboolean	filter;
+	
+	// import datas
 	gboolean	imported;
+	guint		imp_key;
+	gchar		*imp_name;
 };
 
 #define AF_BUDGET	(1<<0)
 #define AF_CLOSED	(1<<1)
 #define AF_ADDED	(1<<2)
 #define AF_CHANGED	(1<<3)
+
+enum
+{
+	ACC_TYPE_NONE       = 0,
+	ACC_TYPE_BANK       = 1,	//Banque
+	ACC_TYPE_CASH       = 2,	//Espèce
+	ACC_TYPE_ASSET      = 3,	//Actif (avoir)
+	ACC_TYPE_CREDITCARD = 4,	//Carte crédit
+	ACC_TYPE_LIABILITY  = 5,	//Passif (dettes)
+//	ACC_TYPE_STOCK      = 6,	//Actions
+//	ACC_TYPE_MUTUALFUND = 7,	//Fond de placement
+//	ACC_TYPE_INCOME     = 8,	//Revenus
+//	ACC_TYPE_EXPENSE    = 9,	//Dépenses
+//	ACC_TYPE_EQUITY     = 10,	//Capitaux propres
+//	ACC_TYPE_,
+};
 
 
 
@@ -69,6 +88,7 @@ gboolean	da_acc_insert(Account *acc);
 gboolean	da_acc_append(Account *item);
 guint32		da_acc_get_max_key(void);
 Account		*da_acc_get_by_name(gchar *name);
+Account		*da_acc_get_by_imp_name(gchar *name);
 Account		*da_acc_get(guint32 key);
 
 #endif

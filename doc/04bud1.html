@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Budget</title>
+  <title>Budget dialog</title>
   
   <meta http-equiv="Content-Type" content="text/html">
   <link rel="stylesheet" href="help.css">
@@ -8,14 +8,14 @@
 <body bgcolor="#ffffff">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td width="27"><a href="main.html"><img src="images/home.gif" width="27" height="27" border="0"></a></td>
-    <td width="27"><a href="04cate.html"><img src="images/prev.gif" width="27" height="27" border="0"></a></td>
-    <td width="27"><a href="99filt.html"><img src="images/next.gif" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="main.html"><img src="images/go-home.png" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="04tran.html"><img src="images/go-previous.png" width="27" height="27" border="0"></a></td>
+    <td width="27"><a href="99filt.html"><img src="images/go-next.png" width="27" height="27" border="0"></a></td>
   </tr>
 </table>
-<hr size="1" color="#000000">
+<div class="head"></div>
 
-<h2>Budget dialog</h2>
+<h1>Budget dialog</h1>
 
 <div class="gtkshot">
 <img src="images/04budget1.png">
@@ -27,23 +27,23 @@ for more explanations on budgets in HomeBank.
 </p>
 
 
-<h3>Dialog call</h3>
+<h2>Dialog call</h2>
 This dialog can be called in the following way:
 <ul>
-<li>from the mainwindow-menu: Edit / Budget
+<li>from the mainwindow-menu: Manage / Budget
 <li>from the mainwindow-toolbar.
 </ul>
 
 
-<h3>Using budget dialog</h3>
+<h2>Using budget dialog</h2>
 
-<h4><img src="images/1.png"> Categories list</h4>
+<h3><img src="images/1.png"> Categories list</h3>
 <div class="gtkgroup">
-display the list af categories and subcategories of the current wallet.<br>
+display the list of categories and subcategories of the current wallet.<br>
 bold categories signals a budgeted category.
 </div>
 
-<h4><img src="images/2.png"> Budget for each month</h4>
+<h3><img src="images/2.png"> Budget for each month</h3>
 <div class="gtkgroup">
   <table class="widgetinfo">
     <tr>
@@ -60,10 +60,19 @@ bold categories signals a budgeted category.
       you can then fill the amount of each needed months
       </td>
     </tr>
+	<TR>
+		<td class="wname">
+			<P>Zoom X</P>
+		</TD>
+		<td class="winfo">
+			<P>select the X zoom factor.
+			</P>
+		</TD>
+	</TR>
   </table>
 </div>
 
-<h4><img src="images/3.png"> Buttons</h4>
+<h3><img src="images/3.png"> Buttons</h3>
 <div class="gtkgroup">
   <table class="widgetinfo">
     <tr>
@@ -76,14 +85,14 @@ bold categories signals a budgeted category.
       <td class="wname">Import</td>
       <td class="winfo">
       import the budget from a csv file.<br>
-      See <a href="06csvformat.html#bud">csv fileformat</a> for details.
+      See <a href="06csvformat.html#bud">csv file format</a> for details.
       </td>
     </tr>
     <tr>
       <td class="wname">Export</td>
       <td class="winfo">
       export the budget to a csv file.<br>
-      See <a href="06csvformat.html#bud">csv fileformat</a> for details.
+      See <a href="06csvformat.html#bud">csv file format</a> for details.
       </td>
     </tr>
   </table>

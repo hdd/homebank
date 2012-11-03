@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.52)
-AC_INIT([homebank], [4.0.2])
+AC_INIT([homebank], [4.3])
 
 
 AM_CONFIG_HEADER(config.h)
@@ -22,17 +22,18 @@ AC_PROG_INSTALL
 AC_PROG_INTLTOOL
 
 # Checks for libraries.
-PKG_CHECK_MODULES(DEPS, gtk+-2.0 >= 2.12 glib-2.0 >= 2.14)
+PKG_CHECK_MODULES(DEPS, gtk+-2.0 >= 2.14 glib-2.0 >= 2.17)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
-
+AC_CHECK_LIB(m, pow)
 
 # Pre-release strict cflags
-#CFLAGS="${CFLAGS} -Wall -Werror -Wmissing-prototypes "
-#CFLAGS="${CFLAGS} -Wall -Wmissing-prototypes "
+#CFLAGS="${CFLAGS} -Werror -Wmissing-prototypes "
+CFLAGS="${CFLAGS} -Wmissing-prototypes "
 
-# Usual cflags
-CFLAGS="${CFLAGS} -Wall -DG_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DGDK_PIXBUF_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1"
+
+# Usual c & gtk cflags
+CFLAGS="${CFLAGS} -Wall -DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
 
 
 # Check for libofx
@@ -46,7 +47,7 @@ if test x$build_ofx != xno
 then
     if test x$noofx != xtrue
     then
-        AC_CHECK_LIB(ofx, ofx_set_status_cb, OFX_0_7="-DOFX_0_7")
+        AC_CHECK_LIB(ofx, ofx_set_status_cb, OFX_0_7="-DOFX_ENABLE")
         DEPS_LIBS="-lofx ${DEPS_LIBS}"
         CFLAGS="${CFLAGS} $OFX_0_7"
     else
@@ -74,8 +75,8 @@ AC_C_VOLATILE
 AC_CHECK_FUNCS([floor localeconv memset modf pow setlocale sqrt strcasecmp strtoul])
 
 # International support
-ALL_LINGUAS="am ar bg ca cs da de el en_AU en_CA en_GB es et fa fi fr gl he hr hu id is it ja kn \
-			 ko lt lv mi ms nb nds nl oc pl pt_BR pt pt_PT ro ru sk sl sv ta tr uk ur vi zh_CN zh_HK zh_TW"
+ALL_LINGUAS="am ar ast be bg br bs ca cs da de el en_AU en_CA en_GB es et eu fa fi fr gl he hr ht hu id is it ja ka kk kn ko lt lv mi ml ms nb nds nl oc pl pt_BR pt pt_PT ro ru sk sl sn sr sv ta th tr uk ur uz vi zh_CN zh_HK zh_TW"
+
 AM_GLIB_GNU_GETTEXT
 
 GETTEXT_PACKAGE=$PACKAGE
@@ -87,17 +88,7 @@ Makefile
 data/homebank.desktop.in
 data/Makefile
 data/icons/Makefile
-data/icons/hicolor/Makefile
-data/icons/hicolor/16x16/Makefile
-data/icons/hicolor/16x16/apps/Makefile
-data/icons/hicolor/24x24/Makefile
-data/icons/hicolor/24x24/apps/Makefile
-data/icons/hicolor/32x32/Makefile
-data/icons/hicolor/32x32/apps/Makefile
-data/icons/hicolor/48x48/Makefile
-data/icons/hicolor/48x48/apps/Makefile
-data/icons/hicolor/scalable/Makefile
-data/icons/hicolor/scalable/apps/Makefile
+data/datas/Makefile
 doc/Makefile
 doc/images/Makefile
 images/Makefile
@@ -107,6 +98,9 @@ src/Makefile
 ])
 
 AC_OUTPUT
+
+# *************************************
+# *************************************
 
 echo
 echo $PACKAGE $VERSION

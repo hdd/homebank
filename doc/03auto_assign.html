@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Automatic assignment</TITLE>
+	<link rel="stylesheet" href="help.css">
+</HEAD>
+<BODY >
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD WIDTH=27>
+			<A HREF="main.html"><IMG SRC="images/go-home.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<A HREF="03auto_addition.html"><IMG SRC="images/go-previous.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+		<TD WIDTH=27>
+			<A HREF="03reconcile.html"><IMG SRC="images/go-next.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0></A>
+		</TD>
+	</TR>
+</TABLE>
+<div class="head"></div>
+<h1>Automatic assignment</h1>
+<p>
+This function allow the assignment of payees and categories automatically to transactions.
+</p>
+
+<ul class="toc">
+	<li><a href="#create">Create assignment rules</a></li>
+	<li><a href="#occurs">When the auto assignment occurs ?</a></li>
+	<li><a href="#notes">Notes</a></li>
+</ul>
+
+
+<h2><A NAME="create"></A>:: Create assignment rules</h2>
+<p>
+The managment can de done in the <a href="04assign.html">assignment dialog</a>
+</p>
+<p>
+You will create rules like:<br>
+if you find the word 'stuff' in the Description field of a transaction = assign payee A and / or category B to that transaction.
+</p>
+<P>To create an assignment rule:
+</P>
+
+<UL>
+	<LI> click the Add button
+	<LI> modify the search description text
+	<LI> optionaly check the case sensitive checkbox
+	<LI> select the payee and/or category to assign
+</UL>
+
+<h2><A NAME="occurs"></A>:: When the auto assignment occurs ?</h2>
+
+<ul>
+	<li>Everytime you import a file into HomeBank using the import assistant</li>
+	<li>You can trigger it manually from the Account window menu or toolbar</li>
+
+</ul>
+
+<h2><A NAME="notes"></A>:: Notes</h2>
+<p>
+HomeBank will assign the payee and the category to a transaction if, and only if, <span class="u">both are empty</span>.
+</p>
+
+
+</BODY>
+</HTML>

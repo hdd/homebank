@@ -2,7 +2,8 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="application/x-homebank">
     <sub-class-of type="text/plain"/>
-    <comment>HomeBank Wallet</comment>
+    <comment>HomeBank File</comment>
+    <comment xml:lang="fr">Fichier HomeBank</comment>
     <magic priority="50">
       <match value="&lt;homebank " type="string" offset="0:256" />
     </magic>

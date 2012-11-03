@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -22,6 +22,7 @@
 
 #include "da_transaction.h"
 #include "hb_transaction.h"
+#include "import.h"
 #include "xml.h"
 
 /****************************************************************************/
@@ -70,6 +71,11 @@ struct _ParseContext
 
 };
 
+static void homebank_ugrade_v01_to_v02(void);
+static void homebank_ugrade_v02_to_v03(void);
+static void homebank_ugrade_v04_to_v05(void);
+
+
 static void
 start_element_handler (GMarkupParseContext *context,
 		       const gchar         *element_name,
@@ -116,8 +122,7 @@ gint i, j;
 					     if(!strcmp (attribute_names[i], "key"     )) { entry->key   = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "flags"   )) { entry->flags = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "pos"     )) { entry->pos   = atoi(attribute_values[i]); }
-					//todo: for stock account
-					//else if(!strcmp (attribute_names[i], "type"    )) { entry->type = atoi(attribute_values[i]); }
+					else if(!strcmp (attribute_names[i], "type"    )) { entry->type = atoi(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "name"    )) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != NULL) entry->name = g_strdup(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "number"  )) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != NULL) entry->number = g_strdup(attribute_values[i]); }
 					else if(!strcmp (attribute_names[i], "bankname")) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != NULL) entry->bankname = g_strdup(attribute_values[i]); }
@@ -151,6 +156,29 @@ gint i, j;
 				//all attribute loaded: append
 				da_acc_insert(entry);
 			}
+			
+			//assign
+			if(!strcmp (element_name, "asg"))
+			{
+			Assign *entry = da_asg_malloc();
+
+				for (i = 0; attribute_names[i] != NULL; i++)
+				{
+					DB( g_print(" att=%s val=%s\n", attribute_names[i], attribute_values[i]) );
+
+					     if(!strcmp (attribute_names[i], "key"     )) { entry->key   = atoi(attribute_values[i]); }
+					else if(!strcmp (attribute_names[i], "name"    )) { if(strcmp(attribute_values[i],"(null)") && attribute_values[i] != NULL) entry->name = g_strdup(attribute_values[i]); }
+					else if(!strcmp (attribute_names[i], "exact" )) { entry->exact = g_ascii_strtod(attribute_values[i], NULL); }
+					else if(!strcmp (attribute_names[i], "payee"      )) { entry->payee = atoi(attribute_values[i]); }
+					else if(!strcmp (attribute_names[i], "category"   )) { entry->category = atoi(attribute_values[i]); }
+
+				}
+				
+				//all attribute loaded: append
+				da_asg_append(entry);
+
+			}
+			
 		}
 		break;
 
@@ -277,6 +305,12 @@ gint i, j;
 		}
 		break;
 
+		case 'r':
+		{
+		}
+		break;
+
+
 		case 'o':
 		{
 			if(!strcmp (element_name, "ope"))
@@ -391,7 +425,11 @@ gboolean rc;
 		else
 		{		
 			DB( g_print("ok file version is: %.1f\n", version) );
-		
+
+			/* 1st: validate the file is well in utf-8 */
+			buffer = homebank_utf8_ensure(buffer);
+			
+			/* then process the buffer */
 			context = g_markup_parse_context_new (&hb_parser, 0, &ctx, NULL);
 
 			error = NULL;
@@ -410,76 +448,29 @@ gboolean rc;
 			}
 
 			g_markup_parse_context_free (context);
-
-
 			g_free (buffer);
 
+
 			//upgrade to v0.2 file
-			// we must change account reference by making a +1 to its index references
 			if( version == 0.1 )
-			{
-			GList *list;
-
-				list = g_list_first(GLOBALS->ope_list);
-				while (list != NULL)
-				{
-				Operation *entry = list->data;
-					entry->account++;
-					entry->dst_account++;
-					list = g_list_next(list);
-				}
-
-				list = g_list_first(GLOBALS->arc_list);
-				while (list != NULL)
-				{
-				Archive *entry = list->data;
-					entry->account++;
-					entry->dst_account++;
-					list = g_list_next(list);
-				}
-
-			}
-
+				homebank_ugrade_v01_to_v02();
+			
 			//upgrade to v0.3 file
-			// we must assume categories exists : bugs 303886, 303738
 			if( version == 0.2 )
+				homebank_ugrade_v02_to_v03();
+
+			//upgrade to v0.5 file
+			if( version == 0.4 )
+				homebank_ugrade_v04_to_v05();
+
+			//upgrade to prior v0.4 file
+			// we must sort the archive list
+			if( version < 0.4 )
 			{
-			Category *cat;
-			GList *list;
-
-				list = g_list_first(GLOBALS->ope_list);
-				while (list != NULL)
-				{
-				Operation *entry = list->data;
-
-					cat = da_cat_get(entry->category);
-					if(cat == NULL)
-					{
-						DB( g_print(" !! fixing cat for ope: %d is unknow\n", entry->category) );
-						entry->category = 0;
-					}
-
-					list = g_list_next(list);
-				}
-
-				list = g_list_first(GLOBALS->arc_list);
-				while (list != NULL)
-				{
-				Archive *entry = list->data;
-
-					cat = da_cat_get(entry->category);
-					if(cat == NULL)
-					{
-						DB( g_print(" !! fixing cat for arc: %d is unknow\n", entry->category) );
-						entry->category = 0;
-					}
-
-					list = g_list_next(list);
-				}
-
+			   GLOBALS->arc_list = da_archive_sort(GLOBALS->arc_list);
 			}
 
-
+			// next ?
 
 		}
 	}
@@ -490,11 +481,100 @@ gboolean rc;
 
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
+// v0.1 to v0.2 : we must change account reference by making a +1 to its index references
+static void homebank_ugrade_v01_to_v02(void)
+{
+GList *list;
+	
+	list = g_list_first(GLOBALS->ope_list);
+	while (list != NULL)
+	{
+	Operation *entry = list->data;
+		entry->account++;
+		entry->dst_account++;
+		list = g_list_next(list);
+	}
+
+	list = g_list_first(GLOBALS->arc_list);
+	while (list != NULL)
+	{
+	Archive *entry = list->data;
+		entry->account++;
+		entry->dst_account++;
+		list = g_list_next(list);
+	}
+}
+
+// v0.2 to v0.3 : we must assume categories exists : bugs 303886, 303738
+static void homebank_ugrade_v02_to_v03(void)
+{
+Category *cat;
+GList *list;
+
+	list = g_list_first(GLOBALS->ope_list);
+	while (list != NULL)
+	{
+	Operation *entry = list->data;
+
+		cat = da_cat_get(entry->category);
+		if(cat == NULL)
+		{
+			DB( g_print(" !! fixing cat for ope: %d is unknow\n", entry->category) );
+			entry->category = 0;
+		}
+
+		list = g_list_next(list);
+	}
+
+	list = g_list_first(GLOBALS->arc_list);
+	while (list != NULL)
+	{
+	Archive *entry = list->data;
+
+		cat = da_cat_get(entry->category);
+		if(cat == NULL)
+		{
+			DB( g_print(" !! fixing cat for arc: %d is unknow\n", entry->category) );
+			entry->category = 0;
+		}
+
+		list = g_list_next(list);
+	}
+}
+
+
+// v0.4 to v0.5 : 
+// we must assume dst_account exists in archives for internal xfer : bug 528923
+// if not, remove automation from the archive
+static void homebank_ugrade_v04_to_v05(void)
+{
+Account *acc;
+GList *list;
+
+	list = g_list_first(GLOBALS->arc_list);
+	while (list != NULL)
+	{
+	Archive *entry = list->data;
+
+		if(entry->paymode == PAYMODE_INTXFER)
+		{
+			acc = da_acc_get(entry->dst_account);
+			if(acc == NULL)
+			{
+				entry->flags &= ~OF_AUTO;
+			}
+		}
+		list = g_list_next(list);
+	}
+}
+
+/* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */
+
 
 /*
 ** XML properties save
 */
-static void homebank_prop_save_xml(GIOChannel *io)
+static void homebank_save_xml_prop(GIOChannel *io)
 {
 gchar *tmpstr;
 gchar *title;
@@ -516,7 +596,7 @@ gchar *title;
 /*
 ** XML account save
 */
-static void homebank_acc_save_xml(GIOChannel *io)
+static void homebank_save_xml_acc(GIOChannel *io)
 {
 GList *list;
 char buf1[G_ASCII_DTOSTR_BUF_SIZE];
@@ -534,16 +614,13 @@ gchar *tmpstr;
 
 		item->flags &= (AF_BUDGET|AF_CLOSED);
 
-		//todo: for stock account
-		//tmpstr = g_markup_printf_escaped("<account key=\"%d\" flags=\"%d\" type=\"%d\" name=\"%s\"\n"
-		tmpstr = g_markup_printf_escaped("<account key=\"%d\" flags=\"%d\" pos=\"%d\" name=\"%s\""
+		tmpstr = g_markup_printf_escaped("<account key=\"%d\" flags=\"%d\" pos=\"%d\" type=\"%d\" name=\"%s\""
 			" number=\"%s\" bankname=\"%s\" initial=\"%s\" minimum=\"%s\""
 			" cheque1=\"%d\" cheque2=\"%d\"/>\n",
 			item->key,
 			item->flags,
 			item->pos,
-			//todo: for stock account
-			//item->type,
+			item->type,
 			item->name == NULL ? "" : item->name,
 			item->number == NULL ? "" : item->number,
 			item->bankname == NULL ? "" : item->bankname,
@@ -564,7 +641,7 @@ gchar *tmpstr;
 /*
 ** XML payee save
 */
-static void homebank_pay_save_xml(GIOChannel *io)
+static void homebank_save_xml_pay(GIOChannel *io)
 {
 GList *list;
 gchar *tmpstr;
@@ -593,7 +670,7 @@ gchar *tmpstr;
 /*
 ** XML category save
 */
-static void homebank_cat_save_xml(GIOChannel *io)
+static void homebank_save_xml_cat(GIOChannel *io)
 {
 GList *list;
 guint i;
@@ -637,7 +714,7 @@ gchar *tmpstr;
 /*
 ** XML tag save
 */
-static void homebank_tag_save_xml(GIOChannel *io)
+static void homebank_save_xml_tag(GIOChannel *io)
 {
 GList *list;
 gchar *tmpstr;
@@ -663,10 +740,40 @@ gchar *tmpstr;
 	g_list_free(list);
 }
 
+
+/*
+** XML assign save
+*/
+static void homebank_save_xml_asg(GIOChannel *io)
+{
+GList *list;
+gchar *tmpstr;
+
+	list = g_hash_table_get_values(GLOBALS->h_rul);
+	while (list != NULL)
+	{
+	Assign *item = list->data;
+
+		tmpstr = g_markup_printf_escaped("<asg key=\"%d\" name=\"%s\" exact=\"%d\" payee=\"%d\" category=\"%d\"/>\n",
+			item->key,
+			item->name,
+			item->exact,
+			item->payee,
+			item->category
+		);
+			
+		g_io_channel_write_chars(io, tmpstr, -1, NULL, NULL);
+		g_free(tmpstr);
+
+		list = g_list_next(list);
+	}
+	g_list_free(list);
+}
+
 /*
 ** XML archive save
 */
-static void homebank_arc_save_xml(GIOChannel *io)
+static void homebank_save_xml_arc(GIOChannel *io)
 {
 GList *list;
 char buf[G_ASCII_DTOSTR_BUF_SIZE];
@@ -714,7 +821,7 @@ gchar *tmpstr;
 /*
 ** XML operation save
 */
-static void homebank_ope_save_xml(GIOChannel *io)
+static void homebank_save_xml_ope(GIOChannel *io)
 {
 GList *list;
 char buf[G_ASCII_DTOSTR_BUF_SIZE];
@@ -777,13 +884,14 @@ gchar *outstr;
 		g_io_channel_write_chars(io, outstr, -1, NULL, NULL);
 		g_free(outstr);
 
-		homebank_prop_save_xml(io);
-		homebank_acc_save_xml(io);
-		homebank_pay_save_xml(io);
-		homebank_cat_save_xml(io);
-		homebank_tag_save_xml(io);
-		homebank_arc_save_xml(io);
-		homebank_ope_save_xml(io);
+		homebank_save_xml_prop(io);
+		homebank_save_xml_acc(io);
+		homebank_save_xml_pay(io);
+		homebank_save_xml_cat(io);
+		homebank_save_xml_tag(io);
+		homebank_save_xml_asg(io);
+		homebank_save_xml_arc(io);
+		homebank_save_xml_ope(io);
 
 		g_io_channel_write_chars(io, "</homebank>\n", -1, NULL, NULL);
 

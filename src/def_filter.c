@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -24,6 +24,7 @@
 #include "ui_payee.h"
 #include "ui_category.h"
 #include "def_filter.h"
+#include "hb_transaction.h"
 
 /****************************************************************************/
 /* Debug macros										 */
@@ -51,8 +52,6 @@ enum
 extern char *paymode_label_names[];
 extern GdkPixbuf *paymode_icons[];
 
-gchar *CYA_NAINOUT[] = { N_("Inactive"), N_("Include"), N_("Exclude"), NULL };
-
 struct deffilter_data
 {
 	Filter		*filter;
@@ -63,11 +62,15 @@ struct deffilter_data
 
 	GtkWidget	*PO_mindate, *PO_maxdate;
 
+	GtkWidget	*CM_validated, *CM_reminded;
+
 	GtkWidget	*CM_forceadd, *CM_forcechg;
 
 	GtkWidget	*CM_paymode[NUM_PAYMODE_MAX];
 
 	GtkWidget	*ST_minamount, *ST_maxamount;
+
+	GtkWidget	*ST_info, *ST_wording, *ST_tag;
 
 	GtkWidget	*LV_acc, *BT_acc[MAX_BUTTON];
 	GtkWidget	*LV_pay, *BT_pay[MAX_BUTTON];
@@ -127,18 +130,28 @@ gint i;
 
 */
 
+	flt->validated = TRUE;
+	flt->reminded = TRUE;
+
 	flt->forceadd = FALSE;
 	flt->forcechg = FALSE;
 
 	for(i=0;i<NUM_PAYMODE_MAX;i++)
 		flt->paymode[i] = TRUE;
 
+	g_free(flt->info);
+	g_free(flt->wording);
+	g_free(flt->tag);
+	flt->info = NULL;
+	flt->wording = NULL;
+	flt->tag = NULL;
+
 }
 
 
 gint filter_test(Filter *flt, Operation *ope)
 {
-gint insert, count;
+gint insert;
 Account *accitem;
 Payee *payitem;
 Category *catitem;
@@ -146,11 +159,8 @@ Category *catitem;
 	//DB( g_printf("(filter) test\n") );
 
 	insert = 1;
-	count = 0;
 
 /*** start filtering ***/
-	if( ope->flags & OF_REMIND )
-		goto end;
 
 	/* add/change force */
 	if(flt->forceadd == TRUE && (ope->flags & OF_ADDED))
@@ -162,7 +172,6 @@ Category *catitem;
 /* date */
 	if(flt->option[FILTER_DATE]) {
 		insert = ( (ope->date >= flt->mindate) && (ope->date <= flt->maxdate) ) ? 1 : 0;
-		count++;
 		if(flt->option[FILTER_DATE] == 2) insert ^= 1;
 	}
 	if(!insert) goto end;
@@ -173,7 +182,6 @@ Category *catitem;
 		if(accitem)
 		{	
 			insert = ( accitem->filter == TRUE ) ? 1 : 0;
-			count++;
 			if(flt->option[FILTER_ACCOUNT] == 2) insert ^= 1;
 		}
 	}
@@ -185,7 +193,6 @@ Category *catitem;
 		if(payitem)
 		{
 			insert = ( payitem->filter == TRUE ) ? 1 : 0;
-			count++;
 			if(flt->option[FILTER_PAYEE] == 2) insert ^= 1;
 		}
 	}
@@ -197,7 +204,6 @@ Category *catitem;
 		if(catitem)
 		{
 			insert = ( catitem->filter == TRUE ) ? 1 : 0;
-			count++;
 			if(flt->option[FILTER_CATEGORY] == 2) insert ^= 1;
 		}
 	}
@@ -205,8 +211,15 @@ Category *catitem;
 
 /* status */
 	if(flt->option[FILTER_STATUS]) {
-		insert = ( ope->flags & OF_VALID ) ? 1 : 0;
-		count++;
+	gint insert1 = 0, insert2 = 0;
+	
+		if(flt->validated)
+			insert1 = ( ope->flags & OF_VALID ) ? 1 : 0;
+		if(flt->reminded)
+			insert2 = ( ope->flags & OF_REMIND ) ? 1 : 0;
+		
+		insert = insert1 | insert2;
+
 		if(flt->option[FILTER_STATUS] == 2) insert ^= 1;
 	}
 	if(!insert) goto end;
@@ -214,7 +227,6 @@ Category *catitem;
 /* paymode */
 	if(flt->option[FILTER_PAYMODE]) {
 		insert = ( flt->paymode[ope->paymode] == TRUE) ? 1 : 0;
-		count++;
 		if(flt->option[FILTER_PAYMODE] == 2) insert ^= 1;
 	}
 	if(!insert) goto end;
@@ -222,12 +234,58 @@ Category *catitem;
 /* amount */
 	if(flt->option[FILTER_AMOUNT]) {
 		insert = ( (ope->amount >= flt->minamount) && (ope->amount <= flt->maxamount) ) ? 1 : 0;
-		count++;
+
 		if(flt->option[FILTER_AMOUNT] == 2) insert ^= 1;
 	}
 	if(!insert) goto end;
 
-/* info/wording */
+/* info/wording/tag */
+	if(flt->option[FILTER_TEXT])
+	{
+	gchar *tags;
+	gint insert1 = 0, insert2 = 0, insert3 = 0;
+
+		if(flt->info)
+		{
+			if(ope->info)
+			{
+				if( g_strrstr(ope->info, flt->info) != NULL )
+					insert1 = 1;
+			}
+		}
+		else
+			insert1 = 1;
+
+		if(flt->wording)
+		{
+			if(ope->wording)
+			{
+				if( g_strrstr(ope->wording, flt->wording) != NULL )
+					insert2 = 1;
+			}
+		}
+		else
+			insert2 = 1;
+			
+		if(flt->tag)
+		{
+			tags = transaction_get_tagstring(ope);
+			if(tags)
+			{			
+				if( g_strrstr(tags, flt->tag) != NULL )
+					insert3 = 1;
+				
+			}
+			g_free(tags);
+		}	
+		else
+			insert3 = 1;
+			
+		insert = insert1 && insert2 && insert3 ? 1 : 0;
+
+		if(flt->option[FILTER_TEXT] == 2) insert ^= 1;
+	}
+	if(!insert) goto end;
 
 end:
 //	DB( g_printf(" %d :: %d :: %d\n", flt->mindate, ope->date, flt->maxdate) );
@@ -408,6 +466,12 @@ gboolean sensitive;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
+	// status
+	active = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_option[FILTER_STATUS]));
+	sensitive = active == 0 ? FALSE : TRUE;
+	gtk_widget_set_sensitive(data->CM_validated, sensitive);
+	gtk_widget_set_sensitive(data->CM_reminded, sensitive);
+
 	// date
 	active = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_option[FILTER_DATE]));
 	sensitive = active == 0 ? FALSE : TRUE;
@@ -419,6 +483,13 @@ gboolean sensitive;
 	sensitive = active == 0 ? FALSE : TRUE;
 	gtk_widget_set_sensitive(data->ST_minamount, sensitive);
 	gtk_widget_set_sensitive(data->ST_maxamount, sensitive);
+
+	// text
+	active = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_option[FILTER_TEXT]));
+	sensitive = active == 0 ? FALSE : TRUE;
+	gtk_widget_set_sensitive(data->ST_wording, sensitive);
+	gtk_widget_set_sensitive(data->ST_info, sensitive);
+	gtk_widget_set_sensitive(data->ST_tag, sensitive);
 
 	//paymode
 	active = gtk_combo_box_get_active(GTK_COMBO_BOX(data->CY_option[FILTER_PAYMODE]));
@@ -471,6 +542,7 @@ gboolean sensitive;
 void deffilter_get(struct deffilter_data *data)
 {
 gint i;
+gchar *txt;
 
 	DB( g_printf("(deffilter) get\n") );
 
@@ -498,6 +570,9 @@ gint i;
 
 	//status
 		DB( g_printf(" status\n") );
+		data->filter->validated = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_validated));
+		data->filter->reminded  = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_reminded));
+
 		data->filter->forceadd = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_forceadd));
 		data->filter->forcechg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_forcechg));
 
@@ -507,11 +582,53 @@ gint i;
 			data->filter->paymode[i] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_paymode[i]));
 
 	//amount
-	data->filter->minamount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_minamount));
-	data->filter->maxamount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_maxamount));
+		data->filter->minamount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_minamount));
+		data->filter->maxamount = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->ST_maxamount));
 
+	//text:wording
+		//free any previous string
+		if(	data->filter->wording )
+		{
+			g_free(data->filter->wording);
+			data->filter->wording = NULL;
+		}
+		txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_wording));
+	
+		if (txt && *txt)	// ignore if entry is empty
+		{
+			data->filter->wording = g_strdup(txt);
+		}	
+	
+	//text:info
+		//free any previous string
+		if(	data->filter->info )
+		{
+			g_free(data->filter->info);
+			data->filter->info = NULL;
+		}
+		txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_info));
+		// ignore if entry is empty
+		if (txt && *txt)
+		{
+			data->filter->info = g_strdup(txt);
+		}
+
+	//text:tag
+		//free any previous string
+		if(	data->filter->tag )
+		{
+			g_free(data->filter->tag);
+			data->filter->tag = NULL;
+		}
+		txt = (gchar *)gtk_entry_get_text(GTK_ENTRY(data->ST_tag));
+		// ignore if entry is empty
+		if (txt && *txt)
+		{
+			data->filter->tag = g_strdup(txt);
+		}
+
+	
 	// account
-
 		if(data->show_account == TRUE)
 		{
 			DB( g_printf(" account\n") );
@@ -644,6 +761,9 @@ void deffilter_set(struct deffilter_data *data)
 
 	//status
 		DB( g_printf(" status\n") );
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_validated), data->filter->validated);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_reminded), data->filter->reminded);
+
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_forceadd), data->filter->forceadd);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->CM_forcechg), data->filter->forcechg);
 
@@ -656,7 +776,12 @@ void deffilter_set(struct deffilter_data *data)
 	//amount
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->ST_minamount), data->filter->minamount);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->ST_maxamount), data->filter->maxamount);
-	
+
+	//text
+	gtk_entry_set_text(GTK_ENTRY(data->ST_info), (data->filter->info != NULL) ? data->filter->info : "");
+	gtk_entry_set_text(GTK_ENTRY(data->ST_wording), (data->filter->wording != NULL) ? data->filter->wording : "");
+	gtk_entry_set_text(GTK_ENTRY(data->ST_tag), (data->filter->tag != NULL) ? data->filter->tag : "");
+
 	//account
 		if(data->show_account == TRUE)
 		{
@@ -800,7 +925,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 
 	label = make_label(_("_Option:"), 1.0, 0.5);
 	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-	data->CY_option[FILTER_CATEGORY] = make_cycle(label, CYA_NAINOUT);
+	data->CY_option[FILTER_CATEGORY] = make_nainex(label);
 	gtk_box_pack_start (GTK_BOX (hbox), data->CY_option[FILTER_CATEGORY], TRUE, TRUE, 0);
 
 	hbox = gtk_hbox_new(FALSE, HB_BOX_SPACING);
@@ -849,7 +974,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 
 	label = make_label(_("_Option:"), 1.0, 0.5);
 	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-	data->CY_option[FILTER_PAYEE] = make_cycle(label, CYA_NAINOUT);
+	data->CY_option[FILTER_PAYEE] = make_nainex(label);
 	gtk_box_pack_start (GTK_BOX (hbox), data->CY_option[FILTER_PAYEE], TRUE, TRUE, 0);
 
 	hbox = gtk_hbox_new(FALSE, HB_BOX_SPACING);
@@ -898,7 +1023,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 
 	label = make_label(_("_Option:"), 1.0, 0.5);
 	gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-	data->CY_option[FILTER_ACCOUNT] = make_cycle(label, CYA_NAINOUT);
+	data->CY_option[FILTER_ACCOUNT] = make_nainex(label);
 	gtk_box_pack_start (GTK_BOX (hbox), data->CY_option[FILTER_ACCOUNT], TRUE, TRUE, 0);
 
 	hbox = gtk_hbox_new(FALSE, HB_BOX_SPACING);
@@ -939,19 +1064,19 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
 GtkWidget *deffilter_page_general (struct deffilter_data *data)
 {
 GtkWidget *container, *table, *table1, *label, *widget, *image;
-GtkWidget *alignment;
+GtkWidget *alignment, *vbox;
 gint row, i;
 
 	//container = gtk_hbox_new(FALSE, HB_BOX_SPACING);
 	//			gtk_alignment_new(xalign, yalign, xscale, yscale)
 	//gtk_container_set_border_width(GTK_CONTAINER(container), HB_BOX_SPACING);
 
-	container = gtk_table_new (2, 2, FALSE);
-	gtk_table_set_row_spacings (GTK_TABLE (container), HB_TABROW_SPACING);
-	gtk_table_set_col_spacings (GTK_TABLE (container), HB_TABCOL_SPACING);
+	container = gtk_table_new (2, 3, FALSE);
+	gtk_table_set_row_spacings (GTK_TABLE (container), HB_TABROW_SPACING*2);
+	gtk_table_set_col_spacings (GTK_TABLE (container), HB_TABCOL_SPACING*2);
 	gtk_container_set_border_width(GTK_CONTAINER(container), HB_BOX_SPACING);
 
-	// filter date & state
+	// filter date
 	table = gtk_table_new (3, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), HB_TABROW_SPACING);
 	gtk_table_set_col_spacings (GTK_TABLE (table), HB_TABCOL_SPACING);
@@ -961,6 +1086,7 @@ gint row, i;
 	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 	
+	// date: r=1, c=1
 	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 0, 1, 0, 1);
 
 	row = 0;
@@ -977,7 +1103,7 @@ gint row, i;
 		label = make_label(_("_Option:"), 0, 0.5);
 		//----------------------------------------- l, r, t, b
 		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-		data->CY_option[FILTER_DATE] = make_cycle(label, CYA_NAINOUT);
+		data->CY_option[FILTER_DATE] = make_nainex(label);
 		//gtk_table_attach_defaults (GTK_TABLE (table), data->CY_option[FILTER_DATE], 1, 2, row, row+1);
 		gtk_table_attach (GTK_TABLE (table), data->CY_option[FILTER_DATE], 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
@@ -997,8 +1123,7 @@ gint row, i;
 		//gtk_table_attach_defaults (GTK_TABLE (table), data->PO_maxdate, 1, 2, row, row+1);
 		gtk_table_attach (GTK_TABLE (table), data->PO_maxdate, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
-
-	// filter date & state
+	// Text section
 	table = gtk_table_new (3, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), HB_TABROW_SPACING);
 	gtk_table_set_col_spacings (GTK_TABLE (table), HB_TABCOL_SPACING);
@@ -1008,11 +1133,12 @@ gint row, i;
 	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 
+	// date: r=2, c=1
 	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 0, 1, 1, 2);
 
 	row = 0;
 	label = make_label(NULL, 0.0, 1.0);
-	gtk_label_set_markup (GTK_LABEL(label), _("<b>Filter State</b>"));
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Filter Text</b>"));
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
 
 		row++;
@@ -1020,33 +1146,38 @@ gint row, i;
 		gtk_misc_set_padding (GTK_MISC (label), HB_BOX_SPACING, 0);
 		gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
-		label = make_label(_("Validated:"), 0, 0.5);
+		label = make_label(_("_Option:"), 0, 0.5);
 		//----------------------------------------- l, r, t, b
 		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
 		//gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-		data->CY_option[FILTER_STATUS] = make_cycle(label, CYA_NAINOUT);
-		gtk_table_attach (GTK_TABLE (table), data->CY_option[FILTER_STATUS], 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+		data->CY_option[FILTER_TEXT] = make_nainex(label);
+		gtk_table_attach (GTK_TABLE (table), data->CY_option[FILTER_TEXT], 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
 		row++;
-		label = make_label(_("Force:"), 0, 0.5);
+		label = make_label(_("_Description:"), 0, 0.5);
+		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+		data->ST_wording = make_string(label);
+		gtk_table_attach (GTK_TABLE (table), data->ST_wording, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+
+		row++;
+		label = make_label(_("_Info:"), 0, 0.5);
 		//----------------------------------------- l, r, t, b
 		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-		//label = gtk_label_new(NULL);
-		//----------------------------------------- l, r, t, b
-		//gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
-		widget = gtk_check_button_new_with_mnemonic (_("display 'Added'"));
-		gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
-		data->CM_forceadd = widget;
+		data->ST_info = make_string(label);
+		gtk_table_attach (GTK_TABLE (table), data->ST_info, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
 		row++;
-		//label = gtk_label_new(NULL);
-		//gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
-		widget = gtk_check_button_new_with_mnemonic (_("display 'Edited'"));
-		gtk_table_attach (GTK_TABLE (table), widget, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
-		data->CM_forcechg = widget;
+		label = make_label(_("_Tag:"), 0, 0.5);
+		//----------------------------------------- l, r, t, b
+		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+		data->ST_tag = make_string(label);
+		gtk_table_attach (GTK_TABLE (table), data->ST_tag, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
-	// filter date & state
+
+
+	// filter amount
+/*
 	table = gtk_table_new (3, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), HB_TABROW_SPACING);
 	gtk_table_set_col_spacings (GTK_TABLE (table), HB_TABCOL_SPACING);
@@ -1056,10 +1187,12 @@ gint row, i;
 	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(alignment), table);
 
-	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 1, 2, 0, 1);
-
+	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 0, 1, 2, 3);
+*/
 	// Amount section
-	row = 0;
+//	row = 0;
+	row++;
+	row++;
 	label = make_label(NULL, 0.0, 1.0);
 	gtk_label_set_markup (GTK_LABEL(label), _("<b>Filter Amount</b>"));
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
@@ -1074,7 +1207,7 @@ gint row, i;
 		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 
 		//gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-		data->CY_option[FILTER_AMOUNT] = make_cycle(label, CYA_NAINOUT);
+		data->CY_option[FILTER_AMOUNT] = make_nainex(label);
 		gtk_table_attach (GTK_TABLE (table), data->CY_option[FILTER_AMOUNT], 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
 		row++;
@@ -1089,6 +1222,66 @@ gint row, i;
 		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
 		data->ST_maxamount = make_amount(label);
 		gtk_table_attach (GTK_TABLE (table), data->ST_maxamount, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+
+	// column 2
+
+	// filter state
+	table = gtk_table_new (3, 3, FALSE);
+	gtk_table_set_row_spacings (GTK_TABLE (table), HB_TABROW_SPACING);
+	gtk_table_set_col_spacings (GTK_TABLE (table), HB_TABCOL_SPACING);
+
+	//gtk_box_pack_start (GTK_BOX (container), table, TRUE, TRUE, 0);
+	//			gtk_alignment_new(xalign, yalign, xscale, yscale)
+	alignment = gtk_alignment_new(0.5, 0, 1.0, 0.0);
+	gtk_container_add(GTK_CONTAINER(alignment), table);
+
+	// date: r=2, c=1
+	gtk_table_attach_defaults (GTK_TABLE (container), alignment, 1, 2, 0, 1);
+
+	row = 0;
+	label = make_label(NULL, 0.0, 1.0);
+	gtk_label_set_markup (GTK_LABEL(label), _("<b>Filter State</b>"));
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 3, row, row+1);
+
+		row++;
+		label = make_label("", 0.0, 0.5);
+		gtk_misc_set_padding (GTK_MISC (label), HB_BOX_SPACING, 0);
+		gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+
+		label = make_label(_("_Option:"), 0, 0.5);
+		//----------------------------------------- l, r, t, b
+		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+
+		data->CY_option[FILTER_STATUS] = make_nainex(label);
+		gtk_table_attach (GTK_TABLE (table), data->CY_option[FILTER_STATUS], 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+
+		row++;
+		vbox = gtk_vbox_new (FALSE, 0);
+		gtk_table_attach (GTK_TABLE (table), vbox, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+		
+		widget = gtk_check_button_new_with_mnemonic (_("validated"));		
+		data->CM_validated = widget;
+		gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
+
+		widget = gtk_check_button_new_with_mnemonic (_("remind"));
+		data->CM_reminded = widget;
+		gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
+
+		row++;
+		label = make_label(_("Force:"), 0, 0.5);
+		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+
+		vbox = gtk_vbox_new (FALSE, 0);
+		gtk_table_attach (GTK_TABLE (table), vbox, 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
+
+		widget = gtk_check_button_new_with_mnemonic (_("display 'Added'"));
+		data->CM_forceadd = widget;
+		gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
+
+		widget = gtk_check_button_new_with_mnemonic (_("display 'Edited'"));
+		data->CM_forcechg = widget;
+		gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
+
 
 	// Filter Payment
 	table = gtk_table_new (3, 3, FALSE);
@@ -1116,7 +1309,7 @@ gint row, i;
 		label = make_label(_("_Option:"), 1.0, 0.5);
 		//----------------------------------------- l, r, t, b
 		gtk_table_attach (GTK_TABLE (table), label, 1, 2, row, row+1, (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-		data->CY_option[FILTER_PAYMODE] = make_cycle(label, CYA_NAINOUT);
+		data->CY_option[FILTER_PAYMODE] = make_nainex(label);
 		gtk_table_attach (GTK_TABLE (table), data->CY_option[FILTER_PAYMODE], 2, 3, row, row+1, (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), (GtkAttachOptions) (0), 0, 0);
 
 		table1 = gtk_table_new (1, 1, FALSE);
@@ -1178,8 +1371,8 @@ GtkWidget *window, *mainbox, *notebook, *label, *page;
 
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 
-	
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "filter.svg");
+	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "filter.svg");
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_FILTER);
 
 	//store our window private data
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);
@@ -1226,12 +1419,14 @@ GtkWidget *window, *mainbox, *notebook, *label, *page;
 	//maybe later
 
 	/* signal connect */
+    g_signal_connect (data.CY_option[FILTER_STATUS]  , "changed", G_CALLBACK (deffilter_option_update), NULL);
     g_signal_connect (data.CY_option[FILTER_DATE]    , "changed", G_CALLBACK (deffilter_option_update), NULL);
     g_signal_connect (data.CY_option[FILTER_AMOUNT]  , "changed", G_CALLBACK (deffilter_option_update), NULL);
     g_signal_connect (data.CY_option[FILTER_PAYMODE] , "changed", G_CALLBACK (deffilter_option_update), NULL);
 
     g_signal_connect (data.CY_option[FILTER_PAYEE]   , "changed", G_CALLBACK (deffilter_option_update), NULL);
     g_signal_connect (data.CY_option[FILTER_CATEGORY], "changed", G_CALLBACK (deffilter_option_update), NULL);
+    g_signal_connect (data.CY_option[FILTER_TEXT]    , "changed", G_CALLBACK (deffilter_option_update), NULL);
 
 	if(show_account == TRUE)
 	{
@@ -1256,6 +1451,8 @@ GtkWidget *window, *mainbox, *notebook, *label, *page;
 	gtk_widget_show_all (window);
 
 	deffilter_set(&data);
+	
+	deffilter_option_update(window, NULL);
 
 	//wait for the user
 	gint result = 55;

@@ -1,8 +1,7 @@
 
 common_defines = \
-	-DHOMEBANK_PIXMAPSDIR=\""$(datadir)/homebank/images"\" \
-	-DHOMEBANK_LOCALEDIR=\""$(datadir)/locale"\" \
-	-DHOMEBANK_HELPDIR=\""$(datadir)/homebank/help"\"
+	-DSHARE_DIR=\""$(pkgdatadir)"\" \
+	-DDATA_DIR=\""$(datadir)"\"
 
 
 bin_PROGRAMS = homebank
@@ -10,6 +9,10 @@ bin_PROGRAMS = homebank
 DATA_ACCESS = \
 	da_account.c  \
 	da_account.h \
+	da_assign.c \
+	da_assign.h \
+	da_encoding.c \
+	da_encoding.h \
 	da_payee.c  \
 	da_payee.h \
 	da_category.c \
@@ -34,10 +37,14 @@ BUSINESS_CORE = \
 USER_INTERFACE = \
 	ui_account.c \
 	ui_account.h \
+	ui_assign.c \
+	ui_assign.h \
 	ui_payee.c \
 	ui_payee.h \
 	ui_category.c \
-	ui_category.h
+	ui_category.h \
+	ui-assist-start.c \
+	ui-assist-start.h
 
 homebank_SOURCES = \
 	$(DATA_ACCESS) \
@@ -66,6 +73,7 @@ homebank_SOURCES = \
 	rep_car.c \
 	rep_over.c \
 	rep_stats.c \
+	rep_time.c \
 	widgets.c \
 	xml.c \
 	def_archive.h \
@@ -92,8 +100,9 @@ homebank_SOURCES = \
 	rep_car.h \
 	rep_over.h \
 	rep_stats.h \
+	rep_time.h \
 	widgets.h \
-	xml.h
+	xml.h 
 
 homebank_LDADD = $(DEPS_LIBS)
 

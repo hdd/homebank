@@ -2,130 +2,62 @@
 ** homebank documentation css
 */
 
-body {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-}
+body { font-family: Arial, sans-serif; font-size:0.85em; }
 
-a {
-	color: #4686c0;
-}
+a { color: #ad7fa8; }
+a:hover { color: #75507b; text-decoration:none; }
 
-a:hover {
-	color: #ff9213;
-}
+h1,h2,h3,h4,h5,h6 { font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; }
+
+h1 { color: #f57900; margin-top:0; }
+h2 { color: #3465a4; }
+h3 { color: #c17d11; }
+h4 { color: #75507b; }
+h5 { color: #73d216; }
 
 /*
-a:visited {
-	color: #4687C1;
-}
+h2 { color: #fe9500; }
+h3 { color: #4686c0; }
+h4 { color: #3c3c3c; }
+h4 img { vertical-align: baseline; /*	padding: 4px; */ }
+*/
 
-a:active {
-	color: #FF9214;
-}*/
+table { font-family: Arial, Helvetica, Verdana, sans-serif; font-size:0.85em; color: #444444; }
 
+p { margin-left:1.5em; }
 
-table {
-	font-family: Arial, Helvetica, Verdana, sans-serif;
-	font-size: 11px;
-	color: #444444;
-}
+ol li { margin-top:.5em; }
 
-p {
-	font-family: Helvetica, Arial, Verdana, sans-serif;
-	font-size: 12px;
-}
+.toc li { list-style:none; }
 
+.csvexample { font-family:monospace; border: 1px solid #dddddd; background: #efefef; white-space: pre; margin-left: 16px; width: 50%; padding: 8px;}
 
-h1,h2,h3,h4,h5,h6 {
-	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-}
+/* navigation link */
+body.navig { background: #ffffff url(images/bg_page.gif) repeat-y top right; }
+.navig a { color: #4686c0; }
+.navig a:hover { color: #ff9213; }
+.navig p { margin:1em;}
 
-h2 {
-	color: #fe9500;
-	border-bottom: solid #dbdad9 1px;
-	width: 80%;
-}
-
-h3 {
-	color: #4686c0;
-	border-bottom: solid #efefef 1px;
-	width: 40%;
-}
-
-
-h4 {
-	/* color: #4686c0; */
-	color: #444444;
-	margin-bottom: 0px;
-}
-
-h4 img {
-	vertical-align: text-bottom;
-	padding: 4px;
-}
-
-
-/* obsolete */
-.heading1 {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 20px;
-	/* font-weight: bold ; */
-	line-height: 22px;
-	color: #fe9500;
-	border-bottom: solid #dbbad9 1px;
-	color: red;
-}
-
-.heading1a {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	font-weight: bold ;
-	line-height: 18px;
-	color: #F686c0;
-	margin-top: 16px;
-	margin-bottom: 8px;
-	width: 80%;
-	color: red;
-}
-
-.subhead2 {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	font-weight: bold;
-	line-height: 16px;
-	margin-top: 16px;
-	color: #4686c0;
-	margin-bottom: 8px;
-	color: red;
-}
-
-code {  font-family: "Courier New", Courier, mono; font-size: 11px; 	color: red;}
-th { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; 	color: red;}
-sup {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; 	color: red;}
-
-.csvexample { border: 1px solid #dddddd; background: #efefef; white-space: pre; margin-left: 16px; width: 50%; padding: 8px;}
-
-body.navig {
-	background: #ffffff;
-	background-image:url(images/bg_page.gif);
-	background-repeat:repeat-y;
-	background-position:top right;
-
+div.head {
+	border-top: 1px solid #babdb6;
+	background-image:url(images/top-gradient.png);
+	background-repeat:repeat-x;
+	background-position:top;
+	height:30px;
+	margin-top:4px;	
 }
 
 
 
 div.gtkshot {
 	float: right;
-	margin-left: 8px;
-	/*padding: 8px;*/
+	padding: 2em 1em 1em 1em;
 	text-align: center;
-	/*border: solid #e2edf8 1px;
-	margin-left: 16px;
-	background-image:url(images/shotback.png);
+	border: 1px solid #d9c3d6;
+	margin: 0 4em 1em 1em;
+	background-image:url(images/top-gradient.png);
 	background-repeat:repeat-x;
-	background-position:bottom; */
+	background-position:top;
 }
 
 div.clear  { clear: both; }
@@ -147,6 +79,7 @@ table.widgetinfo {
 }
 
 table.widgetinfo td {
+	font-size:0.85em;
 	border: solid #ddd 1px;
 }
 
@@ -172,5 +105,4 @@ span.i {
 span.u {
 	text-decoration: underline;
 }
-
 

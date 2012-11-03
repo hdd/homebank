@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -50,6 +50,7 @@ enum
 	CHART_TYPE_MAX
 };
 
+#define GTK_CHART_BARW 		24
 
 #define CHART_BUFFER_LENGTH 128
 

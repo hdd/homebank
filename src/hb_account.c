@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -54,7 +54,7 @@ GList *list;
 	while (list != NULL)
 	{
 	Operation *entry = list->data;
-		if( key == entry->account )
+		if( key == entry->account || key == entry->dst_account)
 			return TRUE;
 		list = g_list_next(list);
 	}
@@ -63,7 +63,7 @@ GList *list;
 	while (list != NULL)
 	{
 	Archive *entry = list->data;
-		if( key == entry->account )
+		if( key == entry->account || key == entry->dst_account)
 			return TRUE;
 		list = g_list_next(list);
 	}
@@ -120,4 +120,6 @@ gchar *stripname;
 
 	return FALSE;
 }
+
+
 

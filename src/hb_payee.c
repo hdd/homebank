@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -20,6 +20,7 @@
 #include "homebank.h"
 
 #include "hb_payee.h"
+#include "import.h"
 
 /****************************************************************************/
 /* Debug macros										 */
@@ -93,6 +94,19 @@ GList *list;
 		}
 		list = g_list_next(list);
 	}
+	
+	list = g_hash_table_get_values(GLOBALS->h_rul);
+	while (list != NULL)
+	{
+	Assign *entry = list->data;
+
+		if(entry->payee == key1)
+		{	
+			entry->payee = key2;
+		}		
+		list = g_list_next(list);
+	}
+	g_list_free(list);
 }
 
 gboolean
@@ -165,10 +179,19 @@ payee_load_csv(gchar *filename)
 GIOChannel *io;
 gchar *tmpstr;
 gint io_stat;
+const gchar *encoding;
 
+	encoding = homebank_file_getencoding(filename);
+	
 	io = g_io_channel_new_file(filename, "r", NULL);
 	if(io != NULL)
 	{
+		DB( g_print(" -> encoding should be %s\n", encoding) );
+		if( encoding != NULL )
+		{
+			g_io_channel_set_encoding(io, encoding, NULL);
+		}
+
 		for(;;)
 		{
 			io_stat = g_io_channel_read_line(io, &tmpstr, NULL, NULL, NULL);

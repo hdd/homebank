@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -30,9 +30,11 @@ enum
 
 gchar *ui_cat_comboboxentry_get_name(GtkComboBoxEntry *entry_box);
 guint32 ui_cat_comboboxentry_get_key(GtkComboBoxEntry *entry_box);
+guint32 ui_cat_comboboxentry_get_key_add_new(GtkComboBoxEntry *entry_box);
 gboolean ui_cat_comboboxentry_set_active(GtkComboBoxEntry *entry_box, guint32 key);
 void ui_cat_comboboxentry_add(GtkComboBoxEntry *entry_box, Category *pay);
 void ui_cat_comboboxentry_populate(GtkComboBoxEntry *entry_box, GHashTable *hash);
+void ui_cat_comboboxentry_populate_except(GtkComboBoxEntry *entry_box, GHashTable *hash, guint except_key);
 GtkWidget *ui_cat_comboboxentry_new(GtkWidget *label);
 
 /* = = = = = = = = = = */
@@ -61,7 +63,7 @@ struct ui_cat_manage_dialog_data
 
 	GtkWidget	*CM_type;
 
-	//GtkWidget	*BT_mov;
+	GtkWidget	*BT_mov;
 	GtkWidget	*BT_mod;
 	GtkWidget	*BT_rem;
 
@@ -69,6 +71,12 @@ struct ui_cat_manage_dialog_data
 
 	GtkWidget	*LA_category;
 
+};
+
+struct catPopContext
+{
+	GtkTreeModel *model;
+	guint	except_key;
 };
 
 GtkWidget *ui_cat_manage_dialog (void);

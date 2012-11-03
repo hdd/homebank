@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -26,5 +26,6 @@ gboolean category_rename(Category *item, const gchar *newname);
 
 gboolean category_load_csv(gchar *filename, gchar **error);
 gboolean category_save_csv(gchar *filename, gchar **error);
+gchar *category_find_preset(gchar **lang);
 
 #endif

@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -20,7 +20,7 @@
 #ifndef __PREFERENCES_H__
 #define __PREFERENCES_H__
 
-#define PREF_VERSION	"0.2"
+#define PREF_VERSION	"0.3"
 
 //#define DEFAULT_PATH_WALLET			"/home/max/dev/gnomebank/accounts"
 //#define DEFAULT_PATH_NAVIGATOR		"mozilla"
@@ -28,24 +28,22 @@
 //#define DEFAULT_FORMAT_DECIMAL		"%.2f"
 #define DEFAULT_FORMAT_DATE			"%x"
 
-#define OLD_EXP_COLOR		0xE88C00
-#define OLD_INC_COLOR		0x00C800
-#define OLD_WARN_COLOR		0XC80000
+#define MAX_FRAC_DIGIT		6
 
 //Tango light
-#define LIGHT_EXP_COLOR		0xfcaf3e	//Orange
-#define LIGHT_INC_COLOR		0x8ae234	//Chameleon
-#define LIGHT_WARN_COLOR	0Xef2929	//Scarlett Red
+#define LIGHT_EXP_COLOR		"#fcaf3e"	//Orange
+#define LIGHT_INC_COLOR		"#8ae234"	//Chameleon
+#define LIGHT_WARN_COLOR	"#ef2929"	//Scarlett Red
 
 //Tango medium
-#define MEDIUM_EXP_COLOR	0xf57900	//Orange
-#define MEDIUM_INC_COLOR	0x73d216	//Chameleon
-#define MEDIUM_WARN_COLOR	0Xcc0000	//Scarlett Red
+#define MEDIUM_EXP_COLOR	"#f57900"	//Orange
+#define MEDIUM_INC_COLOR	"#73d216"	//Chameleon
+#define MEDIUM_WARN_COLOR	"#cc0000"	//Scarlett Red
 
 //Tango dark
-#define DEFAULT_EXP_COLOR		0xce5c00	//Orange
-#define DEFAULT_INC_COLOR		0x4e9a36	//Chameleon
-#define DEFAULT_WARN_COLOR		0Xa40000	//Scarlett Red
+#define DEFAULT_EXP_COLOR		"#ce5c00"	//Orange
+#define DEFAULT_INC_COLOR		"#4e9a36"	//Chameleon
+#define DEFAULT_WARN_COLOR		"#a40000"	//Scarlett Red
 
 /*
 ** Preference datas
@@ -75,15 +73,17 @@ struct Preferences
 	gchar		*path_export;
 
 	gboolean	loadlast;
-	gboolean	runwizard;
+	gboolean	showsplash;
+	gboolean	heritdate;
 	gint		filter_range;
 
 	//interface
 	gshort		toolbar_style;
-	//gint		image_size;
-	guint32		color_exp;
-	guint32		color_inc;
-	guint32		color_warn;
+	gboolean	custom_colors;
+	gchar		*color_exp;
+	gchar		*color_inc;
+	gchar		*color_warn;
+	gboolean	rules_hint;
 
 	//display format
 	gchar		*date_format;
@@ -117,26 +117,46 @@ struct Preferences
 	gboolean	stat_showdetail;
 	gboolean	budg_showdetail;
 
+	//import options
+	gint		dtex_ofxmemo;
+	
 	//chart options
 	gboolean	chart_legend;
 
-	/* internal */
-	//gint		last_page;
-	gboolean 	lst_ope_columns[NUM_COL_OPE+1];
+/* internal */
+
+	gint 	lst_ope_columns[NUM_LST_DSPOPE+1];
+	gint	lst_ope_sort_id;
+	gint	lst_ope_sort_order;
 
 	/* windows size an position */
 	struct WinGeometry	wal_wg;
 	struct WinGeometry	acc_wg;
 	struct WinGeometry	sta_wg;
+	struct WinGeometry	tme_wg;
 	struct WinGeometry	ove_wg;
 	struct WinGeometry	bud_wg;
 	struct WinGeometry	car_wg;
+	
+	gboolean	wal_toolbar;
+	gboolean	wal_statusbar;
+	gboolean	wal_upcoming;
+	
+	gint		wal_vpaned;
+	
+	//carcost units (mile/gal or km/liters
+	gchar	*car_unit_dist;
+	gchar	*car_unit_vol;
+	gchar	*car_unit_100;
+	
+	
 };
 
 
 void homebank_prefs_set_default(void);
 void homebank_pref_free(void);
 void homebank_pref_createformat(void);
+void homebank_pref_init_measurement_units(void);
 gboolean homebank_pref_load(void);
 gboolean homebank_pref_save(void);
 void homebank_pref_setdefault(void);

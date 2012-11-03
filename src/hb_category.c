@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -20,6 +20,7 @@
 #include "homebank.h"
 
 #include "hb_category.h"
+#include "import.h"
 
 /****************************************************************************/
 /* Debug macros										 */
@@ -94,6 +95,20 @@ GList *list;
 		}		
 		list = g_list_next(list);
 	}
+	
+	list = g_hash_table_get_values(GLOBALS->h_rul);
+	while (list != NULL)
+	{
+	Assign *entry = list->data;
+
+		if(entry->category == key1)
+		{	
+			entry->category = key2;
+		}		
+		list = g_list_next(list);
+	}
+	g_list_free(list);
+	
 }
 
 
@@ -156,12 +171,24 @@ gchar *fullcatname;
 GError *err = NULL; 
 Category *item;
 gint type = 0;
+const gchar *encoding;
 
+	encoding = homebank_file_getencoding(filename);
+
+			DB( g_print(" -> encoding should be %s\n", encoding) );
+
+	
 	retval = TRUE;
 	*error = NULL;
 	io = g_io_channel_new_file(filename, "r", NULL);
 	if(io != NULL)
 	{
+
+		if( encoding != NULL )
+		{
+			g_io_channel_set_encoding(io, encoding, NULL);
+		}
+
 		for(;;)
 		{
 			if( *error != NULL )
@@ -345,4 +372,50 @@ GList *list;
 
 	return retval;
 }
+
+
+/**
+ * category_find_preset:
+ * 
+ * find a user language compatible file for category preset
+ * 
+ * Return value: a pathname to the file or NULL
+ *
+ */
+gchar *category_find_preset(gchar **lang)
+{
+gchar **langs;
+gchar *filename;
+gboolean exists;
+gint i;
+
+	DB( g_printf("** category_find_preset **\n") );
+
+	langs = (gchar **)g_get_language_names ();
+
+	DB( g_print(" -> %d languages detected\n", g_strv_length(langs)) );
+	
+	for(i=0;i<g_strv_length(langs);i++)
+	{
+		DB( g_print(" -> %d '%s'\n", i, langs[i]) );
+		filename = g_strdup_printf("hb-categories-%s.csv", langs[i]);	
+		gchar *pathfilename = g_build_filename(homebank_app_get_datas_dir(), filename, NULL);
+		exists = g_file_test(pathfilename, G_FILE_TEST_EXISTS);
+		DB( g_printf(" -> '%s' exists=%d\n", pathfilename, exists) );
+		if(exists)
+		{
+			g_free(filename);
+			*lang = langs[i];
+			return pathfilename;
+		}
+		g_free(filename);
+		g_free(pathfilename);
+	}
+
+	DB( g_print("return NULL\n") );
+	
+	*lang = NULL;
+	return NULL;
+}
+
 

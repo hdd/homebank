@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -35,7 +35,7 @@ struct ui_pay_manage_dialog_data
 	GtkWidget	*ST_name;
 
 	GtkWidget	*BT_add;
-	//GtkWidget	*BT_mov;
+	GtkWidget	*BT_mov;
 	GtkWidget	*BT_mod;
 	GtkWidget	*BT_rem;
 	GtkWidget	*BT_import;
@@ -44,42 +44,29 @@ struct ui_pay_manage_dialog_data
 	gint	change;
 };
 
+struct payPopContext
+{
+	GtkTreeModel *model;
+	guint	except_key;
+};
 
 
-gchar *
-ui_pay_comboboxentry_get_name(GtkComboBoxEntry *entry_box);
-
-guint32
-ui_pay_comboboxentry_get_key(GtkComboBoxEntry *entry_box);
-
-gboolean
-ui_pay_comboboxentry_set_active(GtkComboBoxEntry *entry_box, guint32 key);
-
-void
-ui_pay_comboboxentry_add(GtkComboBoxEntry *entry_box, Payee *pay);
-
-void
-ui_pay_comboboxentry_populate(GtkComboBoxEntry *entry_box, GHashTable *hash);
-
-GtkWidget *
-ui_pay_comboboxentry_new(GtkWidget *label);
+gchar *ui_pay_comboboxentry_get_name(GtkComboBoxEntry *entry_box);
+guint32 ui_pay_comboboxentry_get_key(GtkComboBoxEntry *entry_box);
+guint32 ui_pay_comboboxentry_get_key_add_new(GtkComboBoxEntry *entry_box);
+gboolean ui_pay_comboboxentry_set_active(GtkComboBoxEntry *entry_box, guint32 key);
+void ui_pay_comboboxentry_add(GtkComboBoxEntry *entry_box, Payee *pay);
+void ui_pay_comboboxentry_populate(GtkComboBoxEntry *entry_box, GHashTable *hash);
+void ui_pay_comboboxentry_populate_except(GtkComboBoxEntry *entry_box, GHashTable *hash, guint except_key);
+GtkWidget *ui_pay_comboboxentry_new(GtkWidget *label);
 
 /* = = = = = = = = = = */
 
-void
-ui_pay_listview_add(GtkTreeView *treeview, Payee *item);
-
-guint32
-ui_pay_listview_get_selected_key(GtkTreeView *treeview);
-
-void
-ui_pay_listview_remove_selected(GtkTreeView *treeview);
-
+void ui_pay_listview_add(GtkTreeView *treeview, Payee *item);
+guint32 ui_pay_listview_get_selected_key(GtkTreeView *treeview);
+void ui_pay_listview_remove_selected(GtkTreeView *treeview);
 void ui_pay_listview_populate(GtkWidget *view);
-
-GtkWidget *
-ui_pay_listview_new(gboolean withtoggle);
-
+GtkWidget *ui_pay_listview_new(gboolean withtoggle);
 GtkWidget *ui_pay_manage_dialog (void);
 
 #endif

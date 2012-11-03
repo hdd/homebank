@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -30,21 +30,28 @@ extern struct Preferences *PREFS;
 */
 static void date_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
-Archive *item;
+Archive *arc;
 gchar buffer[256];
 GDate *date;
 
 	gtk_tree_model_get(model, iter,
-		LST_DSPUPC_DATAS, &item,
+		LST_DSPUPC_DATAS, &arc,
 		-1);
 
-	date = g_date_new_julian (item->nextdate);
-	g_date_strftime (buffer, 256-1, PREFS->date_format, date);
-	g_date_free(date);
+	if(arc)
+	{
+		date = g_date_new_julian (arc->nextdate);
+		g_date_strftime (buffer, 256-1, PREFS->date_format, date);
+		g_date_free(date);
 
-	//g_snprintf(buf, sizeof(buf), "%d", ope->ope_Date);
+		//g_snprintf(buf, sizeof(buf), "%d", ope->ope_Date);
 
-    g_object_set(renderer, "text", buffer, NULL);
+		g_object_set(renderer, "text", buffer, NULL);
+
+	}
+		else
+		g_object_set(renderer, "text", NULL, NULL);
+
 }
 
 /*
@@ -58,8 +65,18 @@ Payee *pay;
 	gtk_tree_model_get(model, iter,
 		LST_DSPUPC_DATAS, &arc,
 		-1);
-	pay = da_pay_get(arc->payee);
-    //g_object_set(renderer, "text", pay->name, NULL);
+
+	if(arc)
+	{
+
+		pay = da_pay_get(arc->payee);
+
+		if(pay != NULL)    
+			g_object_set(renderer, "text", pay->name, NULL);
+	}
+		else
+		g_object_set(renderer, "text", NULL, NULL);
+
 }
 
 /*
@@ -67,13 +84,13 @@ Payee *pay;
 */
 static void wording_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
-Archive *arc;
+gchar *txt;
 
 	gtk_tree_model_get(model, iter,
-		LST_DSPUPC_DATAS, &arc,
+		LST_DSPUPC_WORDING, &txt,
 		-1);
-    //if( arc != NULL && arc->wording != NULL)
-        g_object_set(renderer, "text", arc->wording, NULL);
+	g_object_set(renderer, "markup", txt, NULL);
+
 }
 
 
@@ -82,60 +99,76 @@ Archive *arc;
 */
 static void amount_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
-Archive *item;
-gint type;
+Archive *arc;
+gdouble amount;
+gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
+gchar *color;
+	gint weight;
 
-	// get the operation
+	gtk_tree_model_get(model, iter, LST_DSPUPC_AMOUNT, &amount, LST_DSPUPC_DATAS, &arc, -1);
+	color = get_normal_color_amount(amount);
+	weight = arc == NULL ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
+	
+	mystrfmon(buf, G_ASCII_DTOSTR_BUF_SIZE-1, amount, GLOBALS->minor);
+	g_object_set(renderer, 
+	    "weight", weight,
+		"foreground",  color,
+		"text", buf,
+		NULL);
+}
 
-	gtk_tree_model_get(model, iter,
-		LST_DSPUPC_DATAS, &item,
-		-1);
+/*
+** account cell function
+*/
+static void account_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+{
+Archive *arc;
+Account *acc;
 
-	type = (item->flags & OF_INCOME) ? 1 : -1;
-
-	if( !(item->amount) )
+	gtk_tree_model_get(model, iter, LST_DSPUPC_DATAS, &arc, -1);
+	if(arc)
 	{
-		g_object_set(renderer, "markup", NULL, NULL);
+
+	
+		acc = da_acc_get(arc->account);
+		if( acc )
+		{
+			g_object_set(renderer, "text", acc->name, NULL);
+		}
 	}
 	else
-	{
-	gchar   buf[128];
-	gchar *markuptxt;
-	guint32 color;
+		g_object_set(renderer, "text", NULL, NULL);
 
-		mystrfmon(buf, 127, item->amount, GLOBALS->minor);
-
-		color = (item->flags & OF_INCOME) ? PREFS->color_inc : PREFS->color_exp;
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
-		g_object_set(renderer, "markup", markuptxt, NULL);
-		g_free(markuptxt);
-
-	}
-	
 }
+
 
 /*
 ** remaining cell function
 */
 static void remaining_cell_data_function (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
 {
-Archive *item;
+Archive *arc;
 gchar *markuptxt;
 guint decay;
 
 	gtk_tree_model_get(model, iter,
-		LST_DSPUPC_DATAS, &item,
+		LST_DSPUPC_DATAS, &arc,
 		-1);
 
-	decay = item->nextdate - GLOBALS->today;
+	if(arc)
+	{
 
-	//markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, buf);
+		decay = arc->nextdate - GLOBALS->today;
 
-	markuptxt = g_strdup_printf("%d days", decay);
+		markuptxt = g_strdup_printf("%d days", decay);
 	
 
-    g_object_set(renderer, "markup", markuptxt, NULL);
-    g_free(markuptxt);
+		g_object_set(renderer, "markup", markuptxt, NULL);
+		g_free(markuptxt);
+	}
+	else
+		g_object_set(renderer, "text", NULL, NULL);
+
 }
 
 
@@ -148,20 +181,21 @@ GtkTreeViewColumn  *column;
 
 	/* create list store */
 	store = gtk_list_store_new(
-	  	NUM_LST_DSPACC,
+	  	NUM_LST_DSPUPC,
 		G_TYPE_POINTER,
-		G_TYPE_BOOLEAN,	/* fake column */
-		G_TYPE_BOOLEAN,	/* fake column */
-		G_TYPE_BOOLEAN,	/* fake column */
-		G_TYPE_BOOLEAN,	/* fake column */
-		G_TYPE_INT
+		G_TYPE_BOOLEAN,	/* payee */
+		G_TYPE_STRING,	/* wording */
+		G_TYPE_DOUBLE,	/* amount */
+		G_TYPE_BOOLEAN,	/* account */
+	    G_TYPE_BOOLEAN,	/* next on */	    
+		G_TYPE_INT		/* remianing */
 		);
 
 	//treeview
 	view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), PREFS->rules_hint);
 	//gtk_tree_view_set_search_column (GTK_TREE_VIEW (treeview),
 	//			       COLUMN_DESCRIPTION);
 
@@ -203,6 +237,16 @@ GtkTreeViewColumn  *column;
 	gtk_tree_view_column_set_alignment (column, 0.5);
 	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 
+	/* column: Account */
+	column = gtk_tree_view_column_new();
+	gtk_tree_view_column_set_title(column, _("Account"));
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_column_pack_start(column, renderer, TRUE);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, account_cell_data_function, NULL, NULL);
+	//gtk_tree_view_column_set_sort_column_id (column, LST_DSPOPE_DATE);
+	gtk_tree_view_column_set_resizable(column, TRUE);
+	gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+	
 	/* column: Next on */
 	column = gtk_tree_view_column_new();
 	gtk_tree_view_column_set_title(column, _("Next on"));

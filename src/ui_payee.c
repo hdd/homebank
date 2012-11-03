@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -63,7 +63,7 @@ gchar *name = NULL;
 
 
 /**
- * ui_pay_comboboxentry_get_key:
+ * ui_pay_comboboxentry_get_key_add_new:
  * 
  * get the key of the active payee
  * and create the payee if it do not exists
@@ -72,7 +72,7 @@ gchar *name = NULL;
  *
  */
 guint32
-ui_pay_comboboxentry_get_key(GtkComboBoxEntry *entry_box)
+ui_pay_comboboxentry_get_key_add_new(GtkComboBoxEntry *entry_box)
 {
 gchar *name;
 Payee *item;
@@ -93,6 +93,30 @@ Payee *item;
 	g_free(name);
 
 	return item->key;
+}
+
+/**
+ * ui_pay_comboboxentry_get_key:
+ * 
+ * get the key of the active payee
+ * 
+ * Return value: the key or 0
+ *
+ */
+guint32
+ui_pay_comboboxentry_get_key(GtkComboBoxEntry *entry_box)
+{
+gchar *name;
+Payee *item;
+
+	name = ui_pay_comboboxentry_get_name(entry_box);
+	item = da_pay_get_by_name(name);
+	g_free(name);
+
+	if( item != NULL )
+		return item->key;
+
+	return -1;
 }
 
 gboolean
@@ -140,14 +164,16 @@ ui_pay_comboboxentry_add(GtkComboBoxEntry *entry_box, Payee *pay)
 }
 
 static void
-ui_pay_comboboxentry_populate_ghfunc(gpointer key, gpointer value, GtkTreeModel *model)
+ui_pay_comboboxentry_populate_ghfunc(gpointer key, gpointer value, struct payPopContext *ctx)
 {
 GtkTreeIter  iter;
 Payee *pay = value;
 
-	gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-	//gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, pay->key == 0 ? _("(none)") : pay->name, -1);
-	gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, pay->name, -1);
+	if( ( pay->key != ctx->except_key ) )
+	{
+		gtk_list_store_append (GTK_LIST_STORE(ctx->model), &iter);
+		gtk_list_store_set (GTK_LIST_STORE(ctx->model), &iter, 0, pay->name, -1);
+	}
 }
 
 /**
@@ -161,10 +187,17 @@ Payee *pay = value;
 void
 ui_pay_comboboxentry_populate(GtkComboBoxEntry *entry_box, GHashTable *hash)
 {
+	ui_pay_comboboxentry_populate_except(entry_box, hash, -1);
+}
+
+void
+ui_pay_comboboxentry_populate_except(GtkComboBoxEntry *entry_box, GHashTable *hash, guint except_key)
+{
 GtkTreeModel *model;
 GtkEntryCompletion *completion;
+struct payPopContext ctx;
 
-    DB( g_print ("populate comboboxentry occured\n") );
+    DB( g_print ("ui_pay_comboboxentry_populate\n") );
 
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(entry_box));
 	completion = gtk_entry_get_completion(GTK_ENTRY (GTK_BIN (entry_box)->child));
@@ -175,8 +208,10 @@ GtkEntryCompletion *completion;
 	gtk_entry_completion_set_model (completion, NULL);
 
 	/* clear and populate */
+	ctx.model = model;
+	ctx.except_key = except_key;
 	gtk_list_store_clear (GTK_LIST_STORE(model));
-	g_hash_table_foreach(hash, (GHFunc)ui_pay_comboboxentry_populate_ghfunc, model);
+	g_hash_table_foreach(hash, (GHFunc)ui_pay_comboboxentry_populate_ghfunc, &ctx);
 
 	/* reatach our model */
 	gtk_combo_box_set_model(GTK_COMBO_BOX(entry_box), model);
@@ -546,7 +581,7 @@ gchar *filename = NULL;
 
 	DB( g_printf("(ui_pay_manage_dialog) load csv - data %x\n", data) );
 
-	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_OPEN, &filename) == TRUE )
+	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_OPEN, &filename, NULL) == TRUE )
 	{
 		DB( g_print(" + filename is %s\n", filename) );
 
@@ -572,7 +607,7 @@ gchar *filename = NULL;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
-	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_SAVE, &filename) == TRUE )
+	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_SAVE, &filename, NULL) == TRUE )
 	{
 		DB( g_print(" + filename is %s\n", filename) );
 
@@ -692,11 +727,11 @@ guint32 key;
 /*
 ** move
 */
-/*
-void ui_pay_manage_dialog_move(GtkWidget *widget, gpointer user_data)
+static void ui_pay_manage_dialog_move(GtkWidget *widget, gpointer user_data)
 {
 struct ui_pay_manage_dialog_data *data;
-GtkWidget *window, *mainvbox, *getwidget;
+GtkWidget *window, *mainvbox;
+GtkWidget *getwidget;
 GtkTreeSelection *selection;
 GtkTreeModel		 *model;
 GtkTreeIter			 iter;
@@ -709,15 +744,12 @@ GtkTreeIter			 iter;
 	//if true there is a selected node
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-	struct _Payee *entry;
-	gushort oldpos;
+	Payee *entry;
 
 		gtk_tree_model_get(model, &iter, LST_DEFPAY_DATAS, &entry, -1);
-		oldpos = entry->pay_Id;
 
-		window = gtk_dialog_new_with_buttons ("Move to...",
-						    //GTK_WINDOW (do_widget),
-						    NULL,
+		window = gtk_dialog_new_with_buttons (_("Move to..."),
+						    GTK_WINDOW (data->window),
 						    0,
 						    GTK_STOCK_CANCEL,
 						    GTK_RESPONSE_REJECT,
@@ -729,15 +761,15 @@ GtkTreeIter			 iter;
 		gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), mainvbox, TRUE, TRUE, 0);
 		gtk_container_set_border_width (GTK_CONTAINER (mainvbox), HB_BOX_SPACING);
 
-		getwidget = make_poppayee(NULL);
+		getwidget = ui_pay_comboboxentry_new(NULL);
 		gtk_box_pack_start (GTK_BOX (mainvbox), getwidget, TRUE, TRUE, 0);
 
-		gtk_combo_box_set_active(GTK_COMBO_BOX(getwidget), oldpos);
+		//gtk_combo_box_set_active(GTK_COMBO_BOX(getwidget), oldpos);
 
 		gtk_widget_show_all(mainvbox);
 
-		data->tmp_list = g_list_sort(data->tmp_list, (GCompareFunc)ui_pay_manage_dialog_list_sort);
-		make_poppayee_populate(getwidget, data->tmp_list);
+		//data->tmp_list = g_list_sort(data->tmp_list, (GCompareFunc)ui_pay_manage_dialog_list_sort);
+		ui_pay_comboboxentry_populate_except(GTK_COMBO_BOX_ENTRY(getwidget), GLOBALS->h_pay, entry->key);
 		gtk_widget_grab_focus (getwidget);
 
 		//wait for the user
@@ -745,19 +777,41 @@ GtkTreeIter			 iter;
 
 		if(result == GTK_RESPONSE_ACCEPT)
 		{
-		gint newpayee;
+		gboolean result;
+		gchar *npn;
 
-			newpayee = gtk_combo_box_get_active(GTK_COMBO_BOX(getwidget));
+			npn = ui_pay_comboboxentry_get_name(GTK_COMBO_BOX_ENTRY(getwidget)),
 
-			DB( g_printf(" -> should move to %d, %s\n", newpayee, gtk_combo_box_get_active_text(GTK_COMBO_BOX(getwidget) ) ) );
+			result = homebank_question_dialog(
+				GTK_WINDOW(window),
+				_("Move this payee to another one ?"),
+				_("This will replace '%s' by '%s',\n"
+				  "and then remove '%s'"),
+				entry->name,
+				npn,
+				entry->name,
+				NULL
+				);
 
-			data->pos_vector[oldpos] = newpayee;
+			if( result == GTK_RESPONSE_YES )
+			{
+			guint newpayee;
 
+				newpayee = ui_pay_comboboxentry_get_key_add_new(GTK_COMBO_BOX_ENTRY(getwidget));
+			
+				gtk_combo_box_get_active(GTK_COMBO_BOX(getwidget));
 
+				DB( g_printf(" -> should move %d - %s to %d - %s\n", entry->key, entry->name, newpayee, npn ) );
 
-			// remove the old payee
-			gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
-			data->tmp_list = g_list_remove(data->tmp_list, entry);
+				payee_move(entry->key, newpayee);
+
+				// remove the old payee
+				da_pay_remove(entry->key);
+				ui_pay_listview_remove_selected(GTK_TREE_VIEW(data->LV_pay));
+				data->change++;
+
+			}
+
 		}
 
 		// cleanup and destroy
@@ -766,7 +820,7 @@ GtkTreeIter			 iter;
 	}
 
 }
-*/
+
 
 /*
 ** remove the selected payee to our treeview and temp GList
@@ -836,7 +890,7 @@ guint32 key;
 	key = ui_pay_listview_get_selected_key(GTK_TREE_VIEW(data->LV_pay));
 
 	sensitive = (key > 0) ? TRUE : FALSE;
-	//gtk_widget_set_sensitive(data->BT_mov, sensitive);
+	gtk_widget_set_sensitive(data->BT_mov, sensitive);
 	gtk_widget_set_sensitive(data->BT_mod, sensitive);
 	gtk_widget_set_sensitive(data->BT_rem, sensitive);
 
@@ -889,7 +943,8 @@ gint row;
 
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 	
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "payee.svg");
+	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "payee.svg");
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_PAYEE);
 
 	//store our window private data
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);
@@ -939,8 +994,8 @@ gint row;
 	//data.BT_mod = gtk_button_new_with_mnemonic(_("_Modify"));
 	gtk_box_pack_start (GTK_BOX (vbox), data.BT_mod, FALSE, FALSE, 0);
 
-	//data.BT_mov = gtk_button_new_with_label("Move");
-	//gtk_box_pack_start (GTK_BOX (vbox), data.BT_mov, FALSE, FALSE, 0);
+	data.BT_mov = gtk_button_new_with_mnemonic(_("_Move"));
+	gtk_box_pack_start (GTK_BOX (vbox), data.BT_mov, FALSE, FALSE, 0);
 
 	separator = gtk_hseparator_new();
 	gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, HB_BOX_SPACING);
@@ -964,7 +1019,7 @@ gint row;
 
 	g_signal_connect (G_OBJECT (data.BT_add), "clicked", G_CALLBACK (ui_pay_manage_dialog_add), NULL);
 	g_signal_connect (G_OBJECT (data.BT_mod), "clicked", G_CALLBACK (ui_pay_manage_dialog_modify), NULL);
-	//g_signal_connect (G_OBJECT (data.BT_mov), "clicked", G_CALLBACK (ui_pay_manage_dialog_move), NULL);
+	g_signal_connect (G_OBJECT (data.BT_mov), "clicked", G_CALLBACK (ui_pay_manage_dialog_move), NULL);
 	g_signal_connect (G_OBJECT (data.BT_rem), "clicked", G_CALLBACK (ui_pay_manage_dialog_remove), NULL);
 
 	g_signal_connect (G_OBJECT (data.BT_import), "clicked", G_CALLBACK (ui_pay_manage_dialog_load_csv), NULL);

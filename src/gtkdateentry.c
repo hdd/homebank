@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -66,6 +66,7 @@ static void gtk_dateentry_entry_new(GtkWidget * calendar, gpointer user_data);
 static gint gtk_dateentry_entry_key (GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 static void gtk_dateentry_calendar_getfrom(GtkWidget * calendar, GtkDateEntry * dateentry);
 static void gtk_dateentry_calendar_select(GtkWidget * calendar, gpointer user_data);
+static void gtk_dateentry_calendar_year(GtkWidget * calendar, GtkDateEntry * dateentry);
 static void gtk_dateentry_hide_popdown_window(GtkDateEntry *dateentry);
 static gint gtk_dateentry_arrow_press (GtkWidget * widget, GtkDateEntry * dateentry);
 static gint key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer user_data);
@@ -92,7 +93,7 @@ static guint dateentry_signals[LAST_SIGNAL] = {0,};
 
 
 // todo:finish this
-// this is to be able to saise d or d/m or m/d in the gtkdateentry
+// this is to be able to seizure d or d/m or m/d in the gtkdateentry
 
 /* order of these in the current locale */
 static GDateDMY dmy_order[3] = 
@@ -311,6 +312,9 @@ GtkWidget *arrow;
 	/* today's date */
 	g_date_set_time_t(dateentry->date, time(NULL));
 
+	g_date_set_dmy(&dateentry->mindate, 1, 1, 1900);
+	g_date_set_dmy(&dateentry->maxdate, 31, 12, 2200);
+	
 	dateentry->entry = gtk_entry_new ();
 	gtk_widget_set_size_request(dateentry->entry, 90, -1);
 	gtk_box_pack_start (GTK_BOX (dateentry), dateentry->entry, TRUE, TRUE, 0);
@@ -358,6 +362,17 @@ GtkWidget *arrow;
 	g_signal_connect (GTK_OBJECT (dateentry->popwin), "button_press_event",
 				G_CALLBACK (gtk_dateentry_button_press), dateentry);
 
+	g_signal_connect (GTK_OBJECT (dateentry->calendar), "prev-year",
+				G_CALLBACK (gtk_dateentry_calendar_year), dateentry);
+	g_signal_connect (GTK_OBJECT (dateentry->calendar), "next-year",
+				G_CALLBACK (gtk_dateentry_calendar_year), dateentry);
+	g_signal_connect (GTK_OBJECT (dateentry->calendar), "prev-month",
+				G_CALLBACK (gtk_dateentry_calendar_year), dateentry);
+	g_signal_connect (GTK_OBJECT (dateentry->calendar), "next-month",
+				G_CALLBACK (gtk_dateentry_calendar_year), dateentry);
+
+
+	
 	g_signal_connect (GTK_OBJECT (dateentry->calendar), "day-selected",
 				G_CALLBACK (gtk_dateentry_calendar_getfrom), dateentry);
 
@@ -504,6 +519,9 @@ char buffer[256];
 
 	DB( g_print(" (dateentry) date2entry\n") );
 
+	g_date_clamp(dateentry->date, &dateentry->mindate, &dateentry->maxdate);
+
+	
 	if(g_date_valid(dateentry->date) == TRUE)
 	{
 		g_date_strftime (buffer, 256 - 1, "%x", dateentry->date);
@@ -551,11 +569,11 @@ GDateParseTokens pt;
 	switch( pt.num_ints )
 	{
 		case 1:
-			DB( g_print(" -> saised 1 number\n") );
+			DB( g_print(" -> seizured 1 number\n") );
 			g_date_set_day(dateentry->date, pt.n[0]);
 			break;
 		case 2:
-			DB( g_print(" -> saised 2 numbers\n") );
+			DB( g_print(" -> seizured 2 numbers\n") );
 			if( dmy_order[0] != G_DATE_YEAR )
 			{
 				if( dmy_order[0] == G_DATE_DAY )
@@ -573,8 +591,7 @@ GDateParseTokens pt;
 		default:
 			g_date_set_parse (dateentry->date, str);
 			break;			
-	}
-
+	}	
 	if(g_date_valid(dateentry->date) == FALSE)
 	{
 		/* today's date */
@@ -583,6 +600,21 @@ GDateParseTokens pt;
 
 	gtk_dateentry_datetoentry(dateentry);
 
+}
+
+static void gtk_dateentry_calendar_year(GtkWidget * calendar, GtkDateEntry * dateentry)
+{
+guint year, month, day;
+
+	DB( g_print(" (dateentry) year changed\n") );
+
+	gtk_calendar_get_date (GTK_CALENDAR (dateentry->calendar), &year, &month, &day);
+	if( year < 1900)
+		g_object_set(calendar, "year", 1900, NULL);
+
+	if( year > 2200)
+		g_object_set(calendar, "year", 2200, NULL);
+	
 }
 
 /*

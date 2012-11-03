@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -43,6 +43,22 @@ gdouble fi;
 
 	modf(amount, &fi);
 	return(fi);
+}
+
+static unsigned dix_puissance_n(unsigned n)
+{
+    unsigned i, res = 1;
+    
+    for(i = 0; i < n; i++)
+        res *= 10;
+    
+    return res;
+}
+
+static double arrondi(const double x, unsigned n)
+{
+    unsigned N = dix_puissance_n(n);
+    return floor(x * N + 0.5) / N;
 }
 
 /*
@@ -248,11 +264,13 @@ gint mystrfmon(gchar *outstr, gint outlen, gdouble value, gboolean minor)
 {
 struct Currency *cur;
 gchar formatd_buf[G_ASCII_DTOSTR_BUF_SIZE];
-gdouble monval = value;
+gdouble monval;
 gint size;
 
 	cur = minor ? &PREFS->minor_cur : &PREFS->base_cur;	
 
+	monval = arrondi(value, cur->frac_digits);
+	
 	if(minor == TRUE)
 	{
 		monval = (value * PREFS->euro_value);
@@ -310,6 +328,41 @@ gdouble monval = value;
 }
 */
 
+
+
+gchar *get_normal_color_amount(gdouble value)
+{
+gchar *color = NULL;
+gdouble amount;
+	
+	//fix: 400483
+	amount = arrondi(value, PREFS->base_cur.frac_digits);
+
+	if(amount != 0.0 && PREFS->custom_colors == TRUE)
+	{
+		color = (amount > 0.0) ? PREFS->color_inc : PREFS->color_exp;
+	}
+
+	return color;
+}
+
+
+gchar *get_minimum_color_amount(gdouble value, gdouble minvalue)
+{
+gchar *color = NULL;
+
+	//fix: 400483
+	value = arrondi(value, PREFS->base_cur.frac_digits);
+	if(value != 0.0 && PREFS->custom_colors == TRUE)
+	{
+		color = (value > 0.0) ? PREFS->color_inc : PREFS->color_exp;
+		if( value < minvalue) 
+			color = PREFS->color_warn;
+	}
+		
+	return color;
+}
+
 /*
 ** format/color and set a label text with a amount value
 */
@@ -317,23 +370,28 @@ void hb_label_set_colvalue(GtkLabel *label, gdouble value, gboolean minor)
 {
 gchar strbuffer[G_ASCII_DTOSTR_BUF_SIZE];
 gchar *markuptxt;
-guint32 color;
+gchar *color = NULL;
 
 	mystrfmon(strbuffer, G_ASCII_DTOSTR_BUF_SIZE-1, value, minor);
 
-	if(value != 0)
+	if(value != 0.0 && PREFS->custom_colors == TRUE)
 	{
-		color = (value > 0) ? PREFS->color_inc : PREFS->color_exp;
+		color = get_normal_color_amount(value);
 
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", color, strbuffer);
-		gtk_label_set_markup(GTK_LABEL(label), markuptxt);
-		g_free(markuptxt);
+		if(color)
+		{
+			markuptxt = g_strdup_printf("<span color='%s'>%s</span>", color, strbuffer);
+			gtk_label_set_markup(GTK_LABEL(label), markuptxt);
+			g_free(markuptxt);
+			return;
+		}
 	}
-	else
-	{
-		gtk_label_set_text(GTK_LABEL(label), strbuffer);
-	}
+		
+	gtk_label_set_text(GTK_LABEL(label), strbuffer);
+
 }
+
+
 
 
 void get_period_minmax(guint month, guint year, guint32 *mindate, guint32 *maxdate)
@@ -457,7 +515,8 @@ gchar *p = str;
 gchar*
 hb_strdup_nobrackets (const gchar *str)
 {
-  gchar *new_str, *s, *d;
+  const gchar *s;
+  gchar *new_str, *d;
   gsize length;
 
   if (str)
@@ -554,13 +613,14 @@ extern int errno;
 	
 	for(i=0;i<nbcolumns;i++)
 	{
+		lasttype = csvtype[i];
+
 		if(valid == FALSE)
 		{
 			DB( g_print(" -> fail on column %d, type: %s\n", i, type[lasttype]) );
 			break;
 		}
 		
-		lasttype = csvtype[i];
 		DB( g_print(" -> control column %d, type: %d, valid: %d '%s'\n", i, lasttype, valid, str_array[i]) );
 		
 		switch( csvtype[i] )

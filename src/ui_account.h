@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -80,8 +80,7 @@ struct ui_acc_manage_data
 
 	GtkWidget	*LV_acc;
 	GtkWidget	*ST_name;
-	//todo: for stock account	
-	//GtkWidget	*CY_type;
+	GtkWidget	*CY_type;
 	GtkWidget	*ST_bank;
 	GtkWidget	*ST_number;
 	GtkWidget	*CM_budget;
@@ -96,6 +95,14 @@ struct ui_acc_manage_data
 	//gulong		handler_id[MAX_ACC_FIELD];
 
 };
+
+struct accPopContext
+{
+	GtkTreeModel *model;
+	guint	except_key;
+};
+
+
 
 GtkWidget *ui_acc_manage_dialog (void);
 

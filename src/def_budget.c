@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -23,6 +23,7 @@
 #include "ui_category.h"
 #include "def_budget.h"
 #include "ui_category.h"
+#include "import.h"
 
 /****************************************************************************/
 /* Debug macros                                                             */
@@ -56,8 +57,10 @@ enum {
 
 struct defbudget_data
 {
-	GList	*tmp_list;
-	gint	change;
+	GList		*tmp_list;
+	gint		change;
+	Category	*lastcatitem;
+	
 
 	GtkWidget	*window;
 
@@ -69,8 +72,6 @@ struct defbudget_data
 	GtkWidget	*BT_import, *BT_export;
 
 	Category	*cat;
-
-	gulong		spinner_hid[13];
 
 	gulong		handler_id[MAX_HID];
 };
@@ -94,7 +95,7 @@ gchar *months[] = {
 static gchar *defbudget_getcsvbudgetstr(Category *item);
 static void defbudget_update(GtkWidget *treeview, gpointer user_data);
 static void defbudget_set(GtkWidget *widget, gpointer user_data);
-static void defbudget_get(GtkWidget *widget, gpointer user_data);
+static void defbudget_getlast(struct defbudget_data *data);
 static void defbudget_selection_change(GtkWidget *treeview, gpointer user_data);
 static void defbudget_toggle(GtkRadioButton *radiobutton, gpointer user_data);
 static void defbudget_selection(GtkTreeSelection *treeselection, gpointer user_data);
@@ -213,15 +214,19 @@ static void defbudget_load_csv( GtkWidget *widget, gpointer user_data)
 struct defbudget_data *data;
 gchar *filename = NULL;
 GIOChannel *io;
+const gchar *encoding;
+
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(widget), GTK_TYPE_WINDOW)), "inst_data");
 
 
 	DB( g_printf("(defbudget) load csv - data %x\n", data) );
 
-	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_OPEN, &filename) == TRUE )
+	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_OPEN, &filename, NULL) == TRUE )
 	{
 		DB( g_print(" + filename is %s\n", filename) );
+
+		encoding = homebank_file_getencoding(filename);
 
 		io = g_io_channel_new_file(filename, "r", NULL);
 		if(io != NULL)
@@ -232,6 +237,12 @@ GIOChannel *io;
 		gchar *tmpstr;
 		gint io_stat;
 
+			DB( g_print(" -> encoding should be %s\n", encoding) );
+			if( encoding != NULL )
+			{
+				g_io_channel_set_encoding(io, encoding, NULL);
+			}
+			
 			model = gtk_tree_view_get_model(GTK_TREE_VIEW(data->LV_cat));
 
 			for(;;)
@@ -347,7 +358,7 @@ GIOChannel *io;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(widget, GTK_TYPE_WINDOW)), "inst_data");
 
-	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_SAVE, &filename) == TRUE )
+	if( homebank_csv_file_chooser(GTK_WINDOW(data->window), GTK_FILE_CHOOSER_ACTION_SAVE, &filename, NULL) == TRUE )
 	{
 
 		DB( g_print(" + filename is %s\n", filename) );
@@ -486,12 +497,12 @@ gint i;
 
 	for(i=0;i<=12;i++)
 	{
-		g_signal_handler_block(data->spinner[i], data->spinner_hid[i]);
+		//g_signal_handler_block(data->spinner[i], data->spinner_hid[i]);
 
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->spinner[i]), 0);
 		data->cat->budget[i] = 0;
 
-		g_signal_handler_unblock(data->spinner[i], data->spinner_hid[i]);
+		//g_signal_handler_unblock(data->spinner[i], data->spinner_hid[i]);
 	}
 
 	data->cat->flags &= ~(GF_BUDGET);
@@ -523,12 +534,12 @@ gint i;
 
 	for(i=0;i<=12;i++)
 	{
-		g_signal_handler_block(data->spinner[i], data->spinner_hid[i]);
+		//g_signal_handler_block(data->spinner[i], data->spinner_hid[i]);
 
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(data->spinner[i]), data->cat->budget[i]);
 		//DB( g_print(" %.2f\n", data->cat->budget[i]) );
 
-		g_signal_handler_unblock(data->spinner[i], data->spinner_hid[i]);
+		//g_signal_handler_unblock(data->spinner[i], data->spinner_hid[i]);
 	}
 
 }
@@ -536,45 +547,57 @@ gint i;
 /*
 **
 */
-static void defbudget_get(GtkWidget *widget, gpointer user_data)
+static void defbudget_getlast(struct defbudget_data *data)
 {
-struct defbudget_data *data;
-gboolean budget;
+gboolean budget, change;
 gint i;
-gint field = GPOINTER_TO_INT(user_data);
+Category *item;
+gdouble oldvalue;
 
-	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(widget), GTK_TYPE_WINDOW)), "inst_data");
+	item = data->lastcatitem;
 
-	DB( g_print("(defbudget) get %d\n", field) );
+	DB( g_print("****\n(defbudget) getlast for '%s'\n", item->name ) );
 
-	data->change++;
-
-	if( field == FIELD_TYPE )
+	if( item != NULL )
 	{
-		data->cat->flags &= ~(GF_CUSTOM);
-		if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_type[0])) == FALSE) data->cat->flags |= GF_CUSTOM;
-		DB( g_print(" set custom to %d\n", gtk_toggle_button_get_active(data->CM_type[1])) );
-	}
-	else
-	{
-		data->cat->budget[field] = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->spinner[field]));
-	}
+	gushort old_flags = item->flags;
 
-	// if any value,set the flag to visual indicator
-	budget = FALSE;
-	data->cat->flags &= ~(GF_BUDGET);
-	for(i=0;i<=12;i++)
-	{
-		if(data->cat->budget[i])
+		item->flags &= ~(GF_CUSTOM);
+		if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->CM_type[0])) == FALSE)
+			item->flags |= GF_CUSTOM;
+		
+		DB( g_print(" custom flag=%d\n", gtk_toggle_button_get_active(data->CM_type[1])) );
+
+		// if any value,set the flag to visual indicator
+		budget = FALSE;
+		change = FALSE;
+		item->flags &= ~(GF_BUDGET);
+		for(i=0;i<=12;i++)
 		{
-			budget = TRUE;
-			break;
+			gtk_spin_button_update(GTK_SPIN_BUTTON(data->spinner[i]));
+			oldvalue = item->budget[i];
+			
+			item->budget[i] = gtk_spin_button_get_value(GTK_SPIN_BUTTON(data->spinner[i]));
+			
+			if( oldvalue != item->budget[i])
+				change = TRUE;
+			
+			DB( g_print(" set value %d to %.2f\n", i, item->budget[i]) );
+			if(item->budget[i])
+			{
+				budget = TRUE;
+			}
 		}
+
+		if(budget == TRUE)
+			item->flags |= GF_BUDGET;
+
+		// compute chnages
+		if( (old_flags != item->flags) || change )
+			data->change++;
+			
 	}
-
-	if(budget == TRUE)
-		data->cat->flags |= GF_BUDGET;
-
+	
 }
 
 
@@ -586,14 +609,12 @@ gint field = GPOINTER_TO_INT(user_data);
 static void defbudget_selection_change(GtkWidget *treeview, gpointer user_data)
 {
 struct defbudget_data *data;
+GtkTreeModel *model;
+GtkTreeIter iter;
 
 	data = g_object_get_data(G_OBJECT(gtk_widget_get_ancestor(GTK_WIDGET(treeview), GTK_TYPE_WINDOW)), "inst_data");
 
 	DB( g_print("(defbudget) changed\n") );
-
-	//list
-GtkTreeModel *model;
-GtkTreeIter iter;
 
 	data->cat = NULL;
 	
@@ -607,8 +628,21 @@ GtkTreeIter iter;
 
 		DB( g_print(" selected %s\n", item->name) );
 
+		if(data->lastcatitem != NULL && item != data->lastcatitem)
+		{
+			DB( g_print(" -> should do a get for last selected (%s)\n", data->lastcatitem->name) );
+			defbudget_getlast(data);
+		}
+
+
 		data->cat = item;
+		data->lastcatitem = item;
+		
 		defbudget_set(treeview, NULL);
+	}
+	else
+	{
+		data->lastcatitem = NULL;
 	}
 
 	defbudget_update(treeview, NULL);
@@ -624,7 +658,7 @@ struct defbudget_data *data;
 
 	DB( g_print("(defbudget) toggle\n") );
 
-	defbudget_get(GTK_WIDGET(radiobutton), GINT_TO_POINTER(FIELD_TYPE));
+	//defbudget_get(GTK_WIDGET(radiobutton), GINT_TO_POINTER(FIELD_TYPE));
 
 	//data->custom ^= 1;
 	defbudget_update(GTK_WIDGET(radiobutton), NULL);
@@ -646,6 +680,14 @@ static gboolean defbudget_cleanup(struct defbudget_data *data, gint result)
 gboolean doupdate = FALSE;
 
 	DB( g_print("(defbudget) cleanup\n") );
+
+
+		if(data->lastcatitem != NULL)
+		{
+			DB( g_print(" -> should do a get for last selected (%s)\n", data->lastcatitem->name) );
+			defbudget_getlast(data);
+		}
+
 
 		//do_application_specific_something ();
 		DB( g_print(" accept\n") );
@@ -669,7 +711,7 @@ static void defbudget_setup(struct defbudget_data *data)
 	data->tmp_list = NULL;
 	data->change = 0;
 	data->cat = NULL;
-
+	data->lastcatitem = NULL;
 
 	ui_cat_listview_populate(data->LV_cat);
 	gtk_tree_view_expand_all (GTK_TREE_VIEW(data->LV_cat));
@@ -699,7 +741,8 @@ guint i, row;
 
 	gtk_dialog_set_has_separator(GTK_DIALOG (window), FALSE);
 	
-	homebank_window_set_icon_from_file(GTK_WINDOW (window), "budget.svg");
+	//homebank_window_set_icon_from_file(GTK_WINDOW (window), "budget.svg");
+	gtk_window_set_icon_name(GTK_WINDOW (window), HB_STOCK_BUDGET);
 
 	//store our window private data
 	g_object_set_data(G_OBJECT(window), "inst_data", (gpointer)&data);
@@ -791,7 +834,6 @@ guint i, row;
 
 		spinner = make_amount(label);
 		data.spinner[i+1] = spinner;
-		data.spinner_hid[i+1] = g_signal_connect (spinner, "value-changed", G_CALLBACK (defbudget_get), GINT_TO_POINTER(i+1));
 		gtk_table_attach_defaults (GTK_TABLE (table), spinner, col+1, col+2, row, row+1);
 
 		DB( g_print("(defbudget) %s, col=%d, row=%d", months[i], col, row) );
@@ -827,13 +869,6 @@ guint i, row;
 
 	g_signal_connect (G_OBJECT (data.BT_import), "clicked", G_CALLBACK (defbudget_load_csv), NULL);
 	g_signal_connect (G_OBJECT (data.BT_export), "clicked", G_CALLBACK (defbudget_save_csv), NULL);
-
-	// modify events
-	//data.handler_id[FIELD_INITIAL]
-	for(i=0;i<13;i++)
-	{
-		data.spinner_hid[i] = g_signal_connect (data.spinner[i], "value-changed", G_CALLBACK (defbudget_get), GINT_TO_POINTER(i));
-	}
 
 	//data.custom = FALSE;
 	//gtk_widget_set_sensitive(data.table, FALSE);
@@ -925,7 +960,7 @@ gchar *string;
 	#if MYDEBUG
 		gchar type;
 		type = (entry->flags & GF_INCOME) ? '+' : '-';
-		string = g_strdup_printf("%s ::(f=%d, %c)", name, entry->flags, type );
+		string = g_markup_printf_escaped("%s ::(f=%d, %c)", name, entry->flags, type );
 	#else
 		if(entry->flags & GF_BUDGET)
 		{

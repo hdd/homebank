@@ -1,6 +1,6 @@
 homebank
 	command=homebank
-	name=Free easy personal accounting for all !
+	name=Free, easy, personal accounting for everyone !
 	can_open_multiple_files=false
 	expects_uris=false
 	requires_terminal=false

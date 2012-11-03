@@ -1,5 +1,5 @@
 /*  HomeBank -- Free, easy, personal accounting for everyone.
- *  Copyright (C) 1995-2008 Maxime DOYEN
+ *  Copyright (C) 1995-2010 Maxime DOYEN
  *
  *  This file is part of HomeBank.
  *
@@ -28,6 +28,7 @@ enum
 	LST_DSPUPC_PAYEE,
 	LST_DSPUPC_WORDING,
 	LST_DSPUPC_AMOUNT,
+	LST_DSPUPC_ACCOUNT,
 	LST_DSPUPC_NEXTON,
 	LST_DSPUPC_REMAINING,
 	NUM_LST_DSPUPC

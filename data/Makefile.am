@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = icons
+SUBDIRS = icons datas
 
 desktopdir = $(datadir)/applications
 desktop_in_files = homebank.desktop.in
