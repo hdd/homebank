@@ -338,6 +338,12 @@ Account *tmp_acc;
 		DB( g_print("  account_name: %s\n", data.account_name) );
 	}
 
+	//if(data.account_number_valid==true)
+	//{
+		DB( g_print("  account_number: %s\n", data.account_number) );
+	//}
+
+
 	if(data.account_type_valid==true)
 	{
 		DB( g_print("  account_type: %d\n", data.account_type) );
@@ -1467,6 +1473,8 @@ gboolean new_account;
 
 	DB( g_print("** (import) account type toggle\n") );
 
+	DB( g_print(" -> cnt_initial_acc = %d\n", data->ictx.cnt_initial_acc) );
+	DB( g_print(" -> has_unknow_account = %d\n",data->ictx.has_unknow_account) );
 
 	gtk_widget_set_sensitive(data->CM_type[1], data->ictx.cnt_initial_acc == 0 ? FALSE : TRUE);
 	gtk_widget_set_sensitive(data->PO_acc, data->ictx.cnt_initial_acc == 0 ? FALSE : TRUE);
@@ -1569,6 +1577,7 @@ static GtkWidget *
 create_page2 (GtkWidget *assistant, struct import_data *data)
 {
 GtkWidget *vbox, *hbox, *align, *widget, *label;
+GtkFileFilter *filter;
 
 	vbox = gtk_vbox_new (FALSE, HB_BOX_SPACING);
 	gtk_container_set_border_width (GTK_CONTAINER(vbox), HB_MAINBOX_SPACING);
@@ -1577,6 +1586,28 @@ GtkWidget *vbox, *hbox, *align, *widget, *label;
 	widget = gtk_file_chooser_widget_new(GTK_FILE_CHOOSER_ACTION_OPEN);
 		data->filechooser = widget;
 		gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
+
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, _("All files"));
+	gtk_file_filter_add_pattern (filter, "*");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(widget), filter);
+
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, _("OFX/QFX files"));
+	gtk_file_filter_add_pattern (filter, "*.?fx");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(widget), filter);
+
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, _("QIF files"));
+	gtk_file_filter_add_pattern (filter, "*.qif");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(widget), filter);
+
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, _("CSV files"));
+	gtk_file_filter_add_pattern (filter, "*.csv");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(widget), filter);
+
+
 
 /* our addon message */
 	align = gtk_alignment_new(0.65, 0, 0, 0);
@@ -1839,8 +1870,8 @@ GtkWidget *vbox, *hbox, *align, *label, *sw, *widget, *expander;
 	//list
 	sw = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
-	//gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+	//gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(align), sw);
 
 	widget = create_list_import_operation();
@@ -1858,7 +1889,7 @@ GtkWidget *vbox, *hbox, *align, *label, *sw, *widget, *expander;
 
 	sw = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
 	widget = create_list_operation(PREFS->lst_ope_columns);
 	data->duplicat_ope = widget;

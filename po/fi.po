@@ -6,125 +6,124 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: homebank\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2008-09-13 23:35+0200\n"
-"PO-Revision-Date: 2008-11-04 11:14+0000\n"
-"Last-Translator: Timo Jyrinki <timo.jyrinki@iki.fi>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-31 18:22+0100\n"
+"PO-Revision-Date: 2009-01-21 01:32+0000\n"
+"Last-Translator: Juhana Uuttu <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-11-22 13:12+0000\n"
+"X-Launchpad-Export-Date: 2009-01-31 15:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. "translator-credits"	, "trans",
-#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:720
+#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:730
 msgid "Free, easy, personal accounting for everyone."
-msgstr ""
-"Vapaasti ja helposti käytettävä henkilökohtainen kirjanpito-ohjelma kaikille."
+msgstr "Vapaata ja helppoa yksityiskirjanpitoa kaikille."
 
 #: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:29
 msgid "HomeBank"
 msgstr "Kotipankki"
 
-#: ../src/def_archive.c:114
+#: ../src/def_archive.c:97
 msgid "Day"
 msgstr "Päivä"
 
-#: ../src/def_archive.c:114
+#: ../src/def_archive.c:97
 msgid "Week"
 msgstr "Viikko"
 
-#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+#: ../src/def_archive.c:97 ../src/rep_stats.c:198
 msgid "Month"
 msgstr "Kuukausi"
 
-#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+#: ../src/def_archive.c:97 ../src/rep_stats.c:198
 msgid "Year"
 msgstr "Vuosi"
 
-#: ../src/def_archive.c:139 ../src/dsp_account.c:659
+#: ../src/def_archive.c:118 ../src/dsp_account.c:662
 msgid "(new archive)"
 msgstr "(uusi arkisto)"
 
-#: ../src/def_archive.c:603
+#: ../src/def_archive.c:583
 msgid "Manage Archives"
 msgstr "Hallitse arkistoja"
 
-#: ../src/def_archive.c:667
+#: ../src/def_archive.c:645
 msgid "<b>General infos</b>"
 msgstr "<b>Yleiset tiedot</b>"
 
-#: ../src/def_archive.c:675
+#: ../src/def_archive.c:653
 msgid "_Wording:"
-msgstr ""
+msgstr "Tunniste:"
 
-#: ../src/def_archive.c:683 ../src/def_operation.c:684
+#: ../src/def_archive.c:661 ../src/def_operation.c:684
 msgid "_Amount:"
 msgstr "Summ_a:"
 
-#: ../src/def_archive.c:699 ../src/def_operation.c:700 ../src/import.c:1725
-#: ../src/rep_over.c:621
+#: ../src/def_archive.c:677 ../src/def_operation.c:700 ../src/import.c:1760
+#: ../src/rep_over.c:658
 msgid "A_ccount:"
 msgstr "T_ili"
 
-#: ../src/def_archive.c:707 ../src/def_operation.c:708
+#: ../src/def_archive.c:685 ../src/def_operation.c:708
 msgid "_Validated"
 msgstr "_Vahvistettu"
 
-#: ../src/def_archive.c:715
+#: ../src/def_archive.c:693
 msgid "<b>Optional infos</b>"
 msgstr "<b>Valinnaisia tietoja</b>"
 
-#: ../src/def_archive.c:719 ../src/def_operation.c:740
+#: ../src/def_archive.c:697 ../src/def_operation.c:740
 msgid "Pay_ment:"
 msgstr "_Maksu:"
 
-#: ../src/def_archive.c:738 ../src/def_operation.c:759
+#: ../src/def_archive.c:716 ../src/def_operation.c:759
 msgid "Of notebook _2"
-msgstr ""
+msgstr "vihko_2"
 
-#: ../src/def_archive.c:744 ../src/def_operation.c:765
+#: ../src/def_archive.c:722 ../src/def_operation.c:765
 msgid "_To account:"
 msgstr "_Tilille:"
 
-#: ../src/def_archive.c:751 ../src/def_operation.c:781
+#: ../src/def_archive.c:729 ../src/def_operation.c:781
 msgid "_Payee:"
 msgstr "Mak_sun saaja:"
 
-#: ../src/def_archive.c:759 ../src/def_operation.c:791 ../src/def_wallet.c:235
+#: ../src/def_archive.c:737 ../src/def_operation.c:791 ../src/def_wallet.c:235
 msgid "_Category:"
 msgstr "_Luokka:"
 
-#: ../src/def_archive.c:771
+#: ../src/def_archive.c:749
 msgid "<b>Automated insertion</b>"
 msgstr "<b>Automaattinen pano</b>"
 
-#: ../src/def_archive.c:775
+#: ../src/def_archive.c:753
 msgid "_Activate"
 msgstr "Ot_a käyttöön"
 
-#: ../src/def_archive.c:782
+#: ../src/def_archive.c:760
 msgid "_Limit to:"
 msgstr "_Rajoita:"
 
-#: ../src/def_archive.c:790
+#: ../src/def_archive.c:768
 msgid "t_imes"
 msgstr "k_ertaa"
 
-#: ../src/def_archive.c:795
+#: ../src/def_archive.c:773
 msgid "Ever_y:"
 msgstr "_Joka:"
 
-#: ../src/def_archive.c:804
+#: ../src/def_archive.c:782
 msgid "_Unit:"
 msgstr "_Yksikkö:"
 
-#: ../src/def_archive.c:811
+#: ../src/def_archive.c:789
 msgid "_Next on:"
 msgstr "_Seuraava:"
 
-#: ../src/def_budget.c:322 ../src/ui_category.c:866
+#: ../src/def_budget.c:322 ../src/ui_category.c:872
 msgid "File format error"
 msgstr "Tiedostomuodon virhe"
 
@@ -133,6 +132,8 @@ msgid ""
 "The csv file must contains the exact numbers of column,\n"
 "separated by a semi-colon, read the help for more details."
 msgstr ""
+"Csv-tiedoston tulee sisältää tarkka lukumäärä sarakkeita puolipisteellä "
+"erotettuna. Lue lisätietoa ohjeesta."
 
 #: ../src/def_budget.c:691
 msgid "Manage Budget"
@@ -150,17 +151,17 @@ msgstr "on sama"
 msgid "is different"
 msgstr "on eri"
 
-#: ../src/def_budget.c:806 ../src/ui_category.c:1523 ../src/ui_payee.c:895
+#: ../src/def_budget.c:806 ../src/ui_category.c:1538 ../src/ui_payee.c:949
 msgid "_Import"
 msgstr "_Tuo"
 
-#: ../src/def_budget.c:810 ../src/ui_category.c:1527 ../src/ui_payee.c:899
+#: ../src/def_budget.c:810 ../src/ui_category.c:1542 ../src/ui_payee.c:953
 msgid "E_xport"
 msgstr "_Vie"
 
-#: ../src/def_budget.c:921 ../src/rep_stats.c:939 ../src/rep_stats.c:955
-#: ../src/rep_stats.c:962 ../src/ui_account.c:344 ../src/ui_category.c:187
-#: ../src/ui_category.c:441 ../src/ui_payee.c:147 ../src/ui_payee.c:319
+#: ../src/def_budget.c:921 ../src/rep_stats.c:948 ../src/rep_stats.c:965
+#: ../src/rep_stats.c:974 ../src/ui_account.c:348 ../src/ui_category.c:288
+#: ../src/ui_category.c:441 ../src/ui_payee.c:237 ../src/ui_payee.c:373
 #: ../src/widgets.c:64
 msgid "(none)"
 msgstr "(ei mitään)"
@@ -180,7 +181,7 @@ msgstr "Älä sisällytä"
 #: ../src/def_filter.c:801 ../src/def_filter.c:850 ../src/def_filter.c:899
 #: ../src/def_filter.c:977 ../src/def_filter.c:1072 ../src/def_filter.c:1116
 msgid "_Option:"
-msgstr ""
+msgstr "_Vaihtoehto"
 
 #: ../src/def_filter.c:822 ../src/def_filter.c:871 ../src/def_filter.c:920
 msgid "All"
@@ -196,21 +197,21 @@ msgstr "Käännä"
 
 #: ../src/def_filter.c:968
 msgid "<b>Filter Date</b>"
-msgstr ""
+msgstr "<b>Suodata päiväys</b>"
 
-#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:915
-#: ../src/rep_car.c:649 ../src/rep_over.c:642 ../src/rep_stats.c:1466
+#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:921
+#: ../src/rep_car.c:650 ../src/rep_over.c:680 ../src/rep_stats.c:1479
 msgid "_From:"
-msgstr "_Lähettäjä:"
+msgstr "_Alkaen:"
 
-#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:921
-#: ../src/rep_car.c:656 ../src/rep_over.c:648 ../src/rep_stats.c:1472
+#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:927
+#: ../src/rep_car.c:657 ../src/rep_over.c:686 ../src/rep_stats.c:1485
 msgid "_To:"
-msgstr "_Vastaanottaja:"
+msgstr "_Saakka:"
 
 #: ../src/def_filter.c:1015
 msgid "<b>Filter State</b>"
-msgstr ""
+msgstr "<b>Suodata maksutapa</b>"
 
 #: ../src/def_filter.c:1023
 msgid "Validated:"
@@ -218,28 +219,28 @@ msgstr "Vahvistettu:"
 
 #: ../src/def_filter.c:1032
 msgid "Force:"
-msgstr ""
+msgstr "Pakota"
 
 #. label = gtk_label_new(NULL);
 #. ----------------------------------------- l, r, t, b
 #. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
 #: ../src/def_filter.c:1038
 msgid "display 'Added'"
-msgstr ""
+msgstr "näytä 'Lisätty'"
 
 #. label = gtk_label_new(NULL);
 #. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
 #: ../src/def_filter.c:1045
 msgid "display 'Edited'"
-msgstr ""
+msgstr "näytä 'Muutettu'"
 
 #: ../src/def_filter.c:1064
 msgid "<b>Filter Amount</b>"
-msgstr ""
+msgstr "<b>Suodata maksutapa</b>"
 
 #: ../src/def_filter.c:1107
 msgid "<b>Filter Payment</b>"
-msgstr ""
+msgstr "<b>Suodata maksutyyppi</b>"
 
 #: ../src/def_filter.c:1167
 msgid "Edit Filter"
@@ -250,18 +251,20 @@ msgstr "Muokkaa suodatinta"
 msgid "General"
 msgstr "Yleiset"
 
-#: ../src/def_filter.c:1207 ../src/def_pref.c:1773 ../src/list_operation.c:378
-#: ../src/list_operation.c:762 ../src/rep_budget.c:1239 ../src/rep_stats.c:198
+#: ../src/def_filter.c:1207 ../src/def_pref.c:1791 ../src/dsp_wallet.c:2001
+#: ../src/list_operation.c:378 ../src/list_operation.c:771
+#: ../src/rep_budget.c:1262 ../src/rep_stats.c:198
 msgid "Category"
 msgstr "Luokka"
 
-#: ../src/def_filter.c:1212 ../src/def_pref.c:1768 ../src/list_operation.c:316
-#: ../src/list_operation.c:751 ../src/list_upcoming.c:172
-#: ../src/rep_stats.c:198
+#: ../src/def_filter.c:1212 ../src/def_pref.c:1786 ../src/dsp_wallet.c:1998
+#: ../src/list_operation.c:316 ../src/list_operation.c:760
+#: ../src/list_upcoming.c:172 ../src/rep_stats.c:198
 msgid "Payee"
 msgstr "Saaja"
 
-#: ../src/def_filter.c:1221 ../src/list_operation.c:691
+#: ../src/def_filter.c:1221 ../src/dsp_wallet.c:1995
+#: ../src/list_operation.c:700
 msgid "Account"
 msgstr "Tili"
 
@@ -305,6 +308,10 @@ msgid ""
 "day/month or month/day,\n"
 "and complete date into your locale"
 msgstr ""
+"Sallitut päiväykset ovat:\n"
+"päivä,\n"
+"päivä/kuukausi tai kuukausi/päivä,\n"
+"ja täydellinen paikallinen päiväys"
 
 #: ../src/def_operation.c:674
 msgid "_Description:"
@@ -403,13 +410,13 @@ msgstr "Näytä yksityiskoh_dat"
 msgid "<b>Budget options</b>"
 msgstr "<b>Talousarvion valinnat</b>"
 
-#: ../src/def_pref.c:819 ../src/def_pref.c:1181 ../src/def_wallet.c:195
+#: ../src/def_pref.c:819 ../src/def_pref.c:1199 ../src/def_wallet.c:195
 msgid "<b>General</b>"
 msgstr "<b>Yleiset</b>"
 
 #: ../src/def_pref.c:828
 msgid "Fill from:"
-msgstr ""
+msgstr "Täytä alkaen:"
 
 #: ../src/def_pref.c:837
 msgid "Country:"
@@ -423,25 +430,25 @@ msgstr "Arvo:"
 msgid "<b>Numbers format</b>"
 msgstr "<b>Numeromuoto</b>"
 
-#: ../src/def_pref.c:860 ../src/def_pref.c:1016
+#: ../src/def_pref.c:860 ../src/def_pref.c:1034
 msgid "Prefix symbol:"
 msgstr "Etuliite:"
 
-#: ../src/def_pref.c:867 ../src/def_pref.c:1023
+#: ../src/def_pref.c:867 ../src/def_pref.c:1041
 msgid "Suffix symbol:"
 msgstr "Jälkiliite:"
 
-#: ../src/def_pref.c:874 ../src/def_pref.c:1030
+#: ../src/def_pref.c:874 ../src/def_pref.c:1048
 msgid "Decimal char:"
 msgstr "Desimaalimerkki:"
 
-#: ../src/def_pref.c:881 ../src/def_pref.c:1037
+#: ../src/def_pref.c:881 ../src/def_pref.c:1055
 msgid "Grouping char:"
 msgstr "Ryhmittelymerkki:"
 
-#: ../src/def_pref.c:888 ../src/def_pref.c:1044
+#: ../src/def_pref.c:888 ../src/def_pref.c:1062
 msgid "_Frac digits:"
-msgstr ""
+msgstr "_Desimaalit"
 
 #: ../src/def_pref.c:987
 msgid "<b>Date options</b>"
@@ -451,124 +458,144 @@ msgstr "<b>Päiväysvalinnat</b>"
 msgid "_Date format:"
 msgstr "_Päiväyksen muoto:"
 
-#: ../src/def_pref.c:1012
+#: ../src/def_pref.c:1004
+msgid ""
+"%a locale's abbreviated weekday name.\n"
+"%A locale's full weekday name. \n"
+"%b locale's abbreviated month name. \n"
+"%B locale's full month name. \n"
+"%c locale's appropriate date and time representation. \n"
+"%C century number (the year divided by 100 and truncated to an integer) as a "
+"decimal number [00-99]. \n"
+"%d day of the month as a decimal number [01,31]. \n"
+"%D same as %m/%d/%y. \n"
+"%e day of the month as a decimal number [1,31]; a single digit is preceded "
+"by a space. \n"
+"%j day of the year as a decimal number [001,366]. \n"
+"%m month as a decimal number [01,12]. \n"
+"%x locale's appropriate date representation. \n"
+"%y year without century as a decimal number [00,99]. \n"
+"%Y year with century as a decimal number. \n"
+msgstr ""
+
+#: ../src/def_pref.c:1030
 msgid "<b>Numbers options</b>"
 msgstr "<b>Numeroiden valinnat</b>"
 
-#: ../src/def_pref.c:1075
+#: ../src/def_pref.c:1093
 msgid "<b>Measurement units</b>"
 msgstr "<b>Mittayksiköt</b>"
 
-#: ../src/def_pref.c:1079
+#: ../src/def_pref.c:1097
 msgid "Use _Imperial units"
 msgstr "Käytä br_ittiläisiä yksiköitä"
 
-#: ../src/def_pref.c:1105
+#: ../src/def_pref.c:1123
 msgid "<b>Transaction list</b>"
 msgstr "<b>Tapahtumaluettelo</b>"
 
-#: ../src/def_pref.c:1185
+#: ../src/def_pref.c:1203
 msgid "_Toolbar:"
 msgstr "_Työkalupalkki:"
 
-#: ../src/def_pref.c:1209
+#: ../src/def_pref.c:1227
 msgid "<b>Amount colors</b>"
 msgstr "<b>Summien värit</b>"
 
-#: ../src/def_pref.c:1213
+#: ../src/def_pref.c:1231
 msgid "_Expense:"
 msgstr "M_eno:"
 
-#: ../src/def_pref.c:1223
+#: ../src/def_pref.c:1241
 msgid "_Income:"
 msgstr "_Tulo:"
 
-#: ../src/def_pref.c:1233
+#: ../src/def_pref.c:1251
 msgid "_Warning:"
 msgstr "_Varoitus:"
 
-#: ../src/def_pref.c:1262
+#: ../src/def_pref.c:1280
 msgid "<b>Folders</b>"
 msgstr "<b>Kansiot</b>"
 
-#: ../src/def_pref.c:1270
+#: ../src/def_pref.c:1288
 msgid "_Wallet:"
 msgstr "_Lompakko:"
 
-#: ../src/def_pref.c:1286
+#: ../src/def_pref.c:1304
 msgid "_Import:"
 msgstr "_Tuo:"
 
-#: ../src/def_pref.c:1302
+#: ../src/def_pref.c:1320
 msgid "_Export:"
 msgstr "Vi_e:"
 
-#: ../src/def_pref.c:1320
+#: ../src/def_pref.c:1338
 msgid "_Run the wizard"
 msgstr "_Käynnistä avustaja"
 
-#: ../src/def_pref.c:1329
-msgid "<b>Initial date filter</b>"
-msgstr ""
-
-#: ../src/def_pref.c:1333 ../src/dsp_account.c:2034 ../src/rep_budget.c:927
-#: ../src/rep_car.c:662 ../src/rep_over.c:654 ../src/rep_stats.c:1478
-msgid "_Range:"
-msgstr ""
-
-#: ../src/def_pref.c:1343
-msgid "<b>Start behaviour</b>"
-msgstr ""
-
 #: ../src/def_pref.c:1347
-msgid "Load last opened file"
-msgstr ""
+msgid "<b>Initial date filter</b>"
+msgstr "<b>Alkup. päiväsuodin</b>"
 
-#: ../src/def_pref.c:1448
+#: ../src/def_pref.c:1351 ../src/dsp_account.c:2088 ../src/rep_budget.c:933
+#: ../src/rep_car.c:663 ../src/rep_over.c:692 ../src/rep_stats.c:1491
+msgid "_Range:"
+msgstr "_Rajaus:"
+
+#: ../src/def_pref.c:1361
+msgid "<b>Start behaviour</b>"
+msgstr "<b>Alkup. toiminta</b>"
+
+#: ../src/def_pref.c:1365
+msgid "Load last opened file"
+msgstr "Lataa viimeksi avattu tiedosto"
+
+#: ../src/def_pref.c:1466
 msgid "Preferences"
 msgstr "Asetukset"
 
 #. {	N_(""), COL_OPE_STATUS,		},
 #. {	N_(""), COL_OPE_DATE,		},
-#: ../src/def_pref.c:1767 ../src/list_operation.c:291
-#: ../src/list_operation.c:735
+#: ../src/def_pref.c:1785 ../src/list_operation.c:291
+#: ../src/list_operation.c:744
 msgid "Info"
 msgstr "Tietoja"
 
-#: ../src/def_pref.c:1769 ../src/list_operation.c:334
-#: ../src/list_operation.c:713 ../src/list_upcoming.c:184
-#: ../src/rep_over.c:979
+#: ../src/def_pref.c:1787 ../src/list_operation.c:334
+#: ../src/list_operation.c:722 ../src/list_upcoming.c:184
+#: ../src/rep_over.c:1029
 msgid "Description"
 msgstr "Kuvaus"
 
 #. column: Amount
-#: ../src/def_pref.c:1770 ../src/list_operation.c:509
-#: ../src/list_operation.c:723 ../src/list_upcoming.c:196
-#: ../src/rep_car.c:1039
+#: ../src/def_pref.c:1788 ../src/list_operation.c:518
+#: ../src/list_operation.c:732 ../src/list_upcoming.c:196
+#: ../src/rep_car.c:1040
 msgid "Amount"
 msgstr "Summa"
 
 #. column: Expense
-#: ../src/def_pref.c:1771 ../src/list_operation.c:512 ../src/rep_budget.c:101
-#: ../src/rep_over.c:989 ../src/rep_stats.c:202 ../src/rep_stats.c:1842
+#: ../src/def_pref.c:1789 ../src/list_operation.c:521 ../src/rep_budget.c:101
+#: ../src/rep_over.c:1039 ../src/rep_stats.c:202 ../src/rep_stats.c:1875
 msgid "Expense"
 msgstr "Meno"
 
 #. column: Income
-#: ../src/def_pref.c:1772 ../src/list_operation.c:515 ../src/rep_budget.c:101
-#: ../src/rep_over.c:993 ../src/rep_stats.c:202 ../src/rep_stats.c:1848
+#: ../src/def_pref.c:1790 ../src/list_operation.c:524 ../src/rep_budget.c:101
+#: ../src/rep_over.c:1043 ../src/rep_stats.c:202 ../src/rep_stats.c:1881
 msgid "Income"
 msgstr "Tulo"
 
-#: ../src/def_pref.c:1774 ../src/list_operation.c:396
+#: ../src/def_pref.c:1792 ../src/list_operation.c:396
 msgid "Tags"
 msgstr "Merkinnät"
 
-#: ../src/def_pref.c:1893 ../src/ui_account.c:495 ../src/ui_payee.c:449
+#: ../src/def_pref.c:1911 ../src/ui_account.c:499 ../src/ui_payee.c:503
 msgid "Visible"
 msgstr "Näkyvä"
 
-#: ../src/def_pref.c:1904
+#: ../src/def_pref.c:1922
 msgid "Column"
 msgstr "Sarake"
 
@@ -597,89 +624,90 @@ msgid "<b>Car cost</b>"
 msgstr "<b>Auton kustannukset</b>"
 
 #. name, stock id, label
-#: ../src/dsp_account.c:155
+#: ../src/dsp_account.c:156
 msgid "_Account"
 msgstr "_Tili"
 
-#: ../src/dsp_account.c:156
+#: ../src/dsp_account.c:157
 msgid "Transacti_on"
 msgstr "Tapaht_uma"
 
-#: ../src/dsp_account.c:157
+#: ../src/dsp_account.c:158
 msgid "_Tools"
 msgstr "_Työkalut"
 
-#: ../src/dsp_account.c:159 ../src/dsp_wallet.c:210
+#: ../src/dsp_account.c:160 ../src/dsp_wallet.c:210
 msgid "_Close"
 msgstr "_Sulje"
 
-#: ../src/dsp_account.c:159
+#: ../src/dsp_account.c:160
 msgid "Close the current account"
 msgstr "Sulje nykyinen tili"
 
 #. name, stock id, label, accelerator, tooltip
-#: ../src/dsp_account.c:162
+#: ../src/dsp_account.c:163
 msgid "_Filter..."
 msgstr "_Suodatin..."
 
-#: ../src/dsp_account.c:162
+#: ../src/dsp_account.c:163
 msgid "Open the list filter"
 msgstr "Avaa luettelosuodatin"
 
-#: ../src/dsp_account.c:164
+#: ../src/dsp_account.c:165
 msgid "_Add..."
 msgstr "_Lisää..."
 
-#: ../src/dsp_account.c:164
+#: ../src/dsp_account.c:165
 msgid "Add a new transaction"
 msgstr "Lisää uusi tapahtuma"
 
-#: ../src/dsp_account.c:165
+#: ../src/dsp_account.c:166
 msgid "_Inherit..."
 msgstr "Per_i..."
 
-#: ../src/dsp_account.c:165
+#: ../src/dsp_account.c:166
 msgid "Inherit from the active transaction"
 msgstr "Peri valitusta tapahtumasta"
 
-#: ../src/dsp_account.c:166
+#: ../src/dsp_account.c:167
 msgid "_Edit..."
 msgstr "_Muokkaa..."
 
-#: ../src/dsp_account.c:166
+#: ../src/dsp_account.c:167
 msgid "Edit the active transaction"
 msgstr "Muokkaa valittua tapahtumaa"
 
-#: ../src/dsp_account.c:167
-msgid "(In)_Validate..."
+#: ../src/dsp_account.c:168
+#, fuzzy
+msgid "(In)_Validate"
 msgstr "_Vahvistus..."
 
-#: ../src/dsp_account.c:167
+#: ../src/dsp_account.c:168
 msgid "Validate the active transactions"
 msgstr "Vahvista valitut tapahtumat"
 
-#: ../src/dsp_account.c:168
+#: ../src/dsp_account.c:169
 msgid "_Remove..."
 msgstr "_Poista..."
 
-#: ../src/dsp_account.c:168
+#: ../src/dsp_account.c:169
 msgid "Remove the active transactions"
 msgstr "Poista valitut tapahtumat"
 
-#: ../src/dsp_account.c:169
+#: ../src/dsp_account.c:170
 msgid "Make an archive..."
 msgstr "Luo arkisto..."
 
-#: ../src/dsp_account.c:171
+#: ../src/dsp_account.c:172
 msgid "Export CSV..."
 msgstr "Vie CSV-tiedostoon..."
 
-#: ../src/dsp_account.c:348
+#: ../src/dsp_account.c:349
 msgid "No corresponding transfert can be found."
 msgstr ""
 
 #. warn the useer we have notfound the child internal transfert
-#: ../src/dsp_account.c:368
+#: ../src/dsp_account.c:369
 #, c-format
 msgid ""
 "Could not delete child transfert:\n"
@@ -691,13 +719,13 @@ msgid ""
 "You should fix the problem manually."
 msgstr ""
 
-#: ../src/dsp_account.c:614
+#: ../src/dsp_account.c:617
 msgid ""
 "Do you want to create an Archive with\n"
 "each of the selected transaction ?"
 msgstr ""
 
-#: ../src/dsp_account.c:1212
+#: ../src/dsp_account.c:1215
 msgid ""
 "Do you want to delete\n"
 "each of the selected transaction ?"
@@ -705,63 +733,97 @@ msgstr ""
 "Haluatko poistaa jokaisen\n"
 "valitun tapahtuman?"
 
-#: ../src/dsp_account.c:1516
+#: ../src/dsp_account.c:1520
 #, c-format
 msgid "%d transactions selected, %d hidden"
 msgstr "%d tapahtumaa valittu, %d piilotettu"
 
-#: ../src/dsp_account.c:1518
+#: ../src/dsp_account.c:1522
 #, c-format
 msgid "%d transactions selected, %d hidden :: %s ( %s - %s)"
 msgstr "%d tapahtumaa valittu, %d piilotettu :: %s ( %s - %s)"
 
-#: ../src/dsp_account.c:1583
+#: ../src/dsp_account.c:1588
 msgid "Modify date..."
 msgstr "Muokkaa päiväystä..."
 
-#: ../src/dsp_account.c:1588
+#: ../src/dsp_account.c:1593
 msgid "Modify info..."
 msgstr "Muokkaa tietoja..."
 
-#: ../src/dsp_account.c:1595
+#: ../src/dsp_account.c:1600
 msgid "Modify payee..."
 msgstr "Muokkaa maksun saajaa..."
 
-#: ../src/dsp_account.c:1601
+#: ../src/dsp_account.c:1606
 msgid "Modify description..."
 msgstr "Muokkaa kuvausta..."
 
-#: ../src/dsp_account.c:1607
+#: ../src/dsp_account.c:1613
 msgid "Modify amount..."
 msgstr "Muokkaa summa..."
 
-#: ../src/dsp_account.c:1612
+#: ../src/dsp_account.c:1618
 msgid "Modify category..."
 msgstr "Muokkaa luokkaa.."
 
-#: ../src/dsp_account.c:2039 ../src/rep_budget.c:933 ../src/rep_car.c:668
-#: ../src/rep_over.c:660 ../src/rep_stats.c:1484
+#: ../src/dsp_account.c:1624
+#, fuzzy
+msgid "Modify tags..."
+msgstr "Muokkaa päiväystä..."
+
+#: ../src/dsp_account.c:2025 ../src/dsp_wallet.c:2013
+#, fuzzy
+msgid "Add"
+msgstr "Lisää..."
+
+#: ../src/dsp_account.c:2028
+#, fuzzy
+msgid "Inherit"
+msgstr "Per_i..."
+
+#: ../src/dsp_account.c:2031
+#, fuzzy
+msgid "Edit"
+msgstr "_Muokkaa"
+
+#: ../src/dsp_account.c:2034 ../src/rep_stats.c:134
+msgid "Filter"
+msgstr "Suodatin"
+
+#: ../src/dsp_account.c:2037
+#, fuzzy
+msgid "Validate"
+msgstr "_Vahvistettu"
+
+#: ../src/dsp_account.c:2040
+#, fuzzy
+msgid "Remove"
+msgstr "_Poista..."
+
+#: ../src/dsp_account.c:2093 ../src/rep_budget.c:939 ../src/rep_car.c:669
+#: ../src/rep_over.c:698 ../src/rep_stats.c:1497
 msgid "_Month:"
 msgstr "_Kuukausi:"
 
-#: ../src/dsp_account.c:2044 ../src/rep_budget.c:939 ../src/rep_car.c:674
-#: ../src/rep_over.c:666 ../src/rep_stats.c:1490
+#: ../src/dsp_account.c:2098 ../src/rep_budget.c:945 ../src/rep_car.c:675
+#: ../src/rep_over.c:704 ../src/rep_stats.c:1503
 msgid "_Year:"
 msgstr "_Vuosi:"
 
-#: ../src/dsp_account.c:2064
+#: ../src/dsp_account.c:2118
 msgid "Future:"
 msgstr "Tulevaisuudessa:"
 
-#: ../src/dsp_account.c:2073
+#: ../src/dsp_account.c:2127
 msgid "Today:"
 msgstr "Tänään:"
 
-#: ../src/dsp_account.c:2082
+#: ../src/dsp_account.c:2136
 msgid "Bank:"
 msgstr "Pankki:"
 
-#: ../src/dsp_account.c:2088
+#: ../src/dsp_account.c:2142
 msgid "Minor"
 msgstr "Pieni"
 
@@ -845,8 +907,9 @@ msgid "Revert to a saved version of this file"
 msgstr "Palauta tämän tiedoston tallennettuun versioon"
 
 #: ../src/dsp_wallet.c:207
-msgid "Import..."
-msgstr "Tuo..."
+#, fuzzy
+msgid "Import QIF/OFX/CSV..."
+msgstr "Vie CSV-tiedostoon..."
 
 #: ../src/dsp_wallet.c:207
 msgid "Open the import assistant"
@@ -1041,7 +1104,7 @@ msgstr "Pieni rahayksikkö"
 
 #: ../src/dsp_wallet.c:596 ../src/dsp_wallet.c:649 ../src/dsp_wallet.c:665
 msgid "No suitable web browser executable could be found."
-msgstr ""
+msgstr "Ohjelma ei löytänyt sopivaa selaintiedostoa."
 
 #: ../src/dsp_wallet.c:597 ../src/dsp_wallet.c:618 ../src/dsp_wallet.c:634
 #: ../src/dsp_wallet.c:650 ../src/dsp_wallet.c:666
@@ -1051,9 +1114,9 @@ msgstr "Verkko-osoitetta \"%s\" ei voitu näyttää"
 
 #: ../src/dsp_wallet.c:617 ../src/dsp_wallet.c:633
 msgid "No suitable web browser application could be found."
-msgstr ""
+msgstr "Ohjelma ei löytänyt sopivaa selainohjelmaa."
 
-#: ../src/dsp_wallet.c:754
+#: ../src/dsp_wallet.c:769
 msgid ""
 "Do you want to save the changes\n"
 "in the current file ?"
@@ -1061,7 +1124,7 @@ msgstr ""
 "Haluatko tallentaa muutokset\n"
 "nykyiseen tiedostoon?"
 
-#: ../src/dsp_wallet.c:758
+#: ../src/dsp_wallet.c:773
 #, c-format
 msgid ""
 "If you do not save, %d changes will be\n"
@@ -1070,57 +1133,96 @@ msgstr ""
 "Jos et tallenna, %d muutosta \n"
 "hävitetään pysyvästi."
 
-#: ../src/dsp_wallet.c:763
+#: ../src/dsp_wallet.c:778
 msgid "Do _not save"
 msgstr "Älä talle_nna"
 
 #. fix: v4.0
-#: ../src/dsp_wallet.c:835 ../src/homebank.c:1135
+#: ../src/dsp_wallet.c:850 ../src/homebank.c:1145
 msgid "(Nobody)"
 msgstr "(ei kukaan)"
 
-#: ../src/dsp_wallet.c:1139
+#: ../src/dsp_wallet.c:1156
 msgid "No transaction to insert"
 msgstr "Ei lisättävää tapahtumaa"
 
-#: ../src/dsp_wallet.c:1141
+#: ../src/dsp_wallet.c:1158
 #, c-format
 msgid "%d transactions inserted"
 msgstr "%d tapahtumaa lisätty"
 
-#: ../src/dsp_wallet.c:1144
+#: ../src/dsp_wallet.c:1161
 msgid "Check automated transactions result"
 msgstr "Tarkista automatisoitujen tapahtumien tulos"
 
-#: ../src/dsp_wallet.c:1169
+#: ../src/dsp_wallet.c:1186
 msgid "Import Amiga file"
 msgstr "Tuo Amiga-tiedosto"
 
-#: ../src/dsp_wallet.c:1211
+#: ../src/dsp_wallet.c:1228
 #, c-format
 msgid "Revert to the previously saved file of '%s'?"
-msgstr ""
+msgstr "Palauta aikaisemmin tallennettu tiedosto '%s'?"
 
-#: ../src/dsp_wallet.c:1217
+#: ../src/dsp_wallet.c:1234
+#, fuzzy
 msgid ""
 "- Changes made to the wallet will be permanently lost\n"
-"- Wallet will be restored to the last save (.old)"
+"- Wallet will be restored to the last save (.xhb~)"
 msgstr ""
+"- Lompakkoon tehdyt muutokset häviävät peruuttamattomasti\n"
+"- Lompakko tullaan palauttamaan edelliseen tallennukseen (.old)"
 
-#: ../src/dsp_wallet.c:1315
+#: ../src/dsp_wallet.c:1332
 msgid "File error"
 msgstr "Tiedostovirhe"
 
-#: ../src/dsp_wallet.c:1316
+#: ../src/dsp_wallet.c:1333
 #, c-format
 msgid "The file %s is not a valid HomeBank file."
-msgstr ""
+msgstr "Tiedosto %s ei ole toimiva HomeBank tiedosto."
 
-#: ../src/dsp_wallet.c:2297
+#: ../src/dsp_wallet.c:1989
+#, fuzzy
+msgid "Open"
+msgstr "_Avaa..."
+
+#: ../src/dsp_wallet.c:2004
+#, fuzzy
+msgid "Archive"
+msgstr "Ar_kistot..."
+
+#. column: Income
+#: ../src/dsp_wallet.c:2007 ../src/dsp_wallet.c:2019 ../src/rep_budget.c:99
+#: ../src/rep_budget.c:1277
+msgid "Budget"
+msgstr "Talousarvio"
+
+#: ../src/dsp_wallet.c:2010
+#, fuzzy
+msgid "Show"
+msgstr "Näytä..."
+
+#: ../src/dsp_wallet.c:2016
+#, fuzzy
+msgid "Statistics"
+msgstr "Tila_stot..."
+
+#: ../src/dsp_wallet.c:2022
+#, fuzzy
+msgid "Overdrawn"
+msgstr "Tilin_ylitys..."
+
+#: ../src/dsp_wallet.c:2025
+#, fuzzy
+msgid "Carcost"
+msgstr "_Auton kustannukset..."
+
+#: ../src/dsp_wallet.c:2360
 msgid "<b>Accounts summary</b>"
 msgstr "<b>Tilien yhteenveto</b>"
 
-#: ../src/dsp_wallet.c:2313
+#: ../src/dsp_wallet.c:2376
 msgid "<b>Upcoming automated transactions</b>"
 msgstr "<b>Tulevat automatisoidut tapahtumat</b>"
 
@@ -1136,12 +1238,12 @@ msgstr "[TIEDOSTO]"
 msgid "Export as QIF"
 msgstr "Vie QIF-tiedostoksi"
 
-#: ../src/homebank.c:207
+#: ../src/homebank.c:207 ../src/import.c:1601
 msgid "QIF files"
 msgstr "QIF-teidostot"
 
 #: ../src/homebank.c:212 ../src/homebank.c:277 ../src/homebank.c:342
-#: ../src/homebank.c:463
+#: ../src/homebank.c:463 ../src/import.c:1591
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
@@ -1153,7 +1255,7 @@ msgstr "Tuo CSV-tiedostosta"
 msgid "Export as CSV"
 msgstr "Vie CSV-tiedostoksi"
 
-#: ../src/homebank.c:272
+#: ../src/homebank.c:272 ../src/import.c:1606
 msgid "CSV files"
 msgstr "CSV-tiedostot"
 
@@ -1173,14 +1275,14 @@ msgstr "Kotipankki-tiedostot"
 msgid "Amiga files"
 msgstr "Amiga-tiedostot"
 
-#: ../src/homebank.c:1244 ../src/homebank.c:1245
+#: ../src/homebank.c:1254 ../src/homebank.c:1255
 msgid "HomeBank options"
 msgstr "Kotipankki-valinnat"
 
-#: ../src/homebank.c:1363
+#: ../src/homebank.c:1373
 #, c-format
 msgid "Unable to open '%s', the file does not exist.\n"
-msgstr ""
+msgstr "Tiedostoa \"%s\" ei voi avata, sitä ei ole olemassa.\n"
 
 #: ../src/imp_amiga.c:105
 msgid "Import HomeBank Amiga File"
@@ -1192,6 +1294,8 @@ msgid ""
 "Wrong Amiga file version %d.%d\n"
 "( must be > 3.0 )"
 msgstr ""
+"Virheellinen Amiga-tiedostoversio %d.%d\n"
+"( tulee olla > 3.0 )"
 
 #: ../src/import.c:58
 msgid "Import assistant"
@@ -1213,31 +1317,31 @@ msgstr "Tapahtuman valinta"
 msgid "Update your accounts"
 msgstr "Päivitä tilit"
 
-#: ../src/import.c:672
+#: ../src/import.c:682
 msgid "Please select a file..."
 msgstr "Valitse tiedosto..."
 
-#: ../src/import.c:683
+#: ../src/import.c:693
 msgid "Unknown/Invalid file..."
 msgstr "Tuntematon/viallinen tiedosto..."
 
-#: ../src/import.c:687
-msgid "QIF file recognised !"
-msgstr ""
-
-#: ../src/import.c:694
-msgid "OFX file recognised !"
-msgstr ""
-
 #: ../src/import.c:697
+msgid "QIF file recognised !"
+msgstr "QIF-tiedosto tunnistettu !"
+
+#: ../src/import.c:704
+msgid "OFX file recognised !"
+msgstr "OFX-tiedosto tunnistettu !"
+
+#: ../src/import.c:707
 msgid "** OFX support is disabled **"
-msgstr ""
+msgstr "** OFX tukea ei ole tarjolla **"
 
-#: ../src/import.c:702
+#: ../src/import.c:712
 msgid "CSV operation file recognised !"
-msgstr ""
+msgstr "CSV-tiedosto tunnistettu !"
 
-#: ../src/import.c:1239
+#: ../src/import.c:1249
 #, c-format
 msgid ""
 "%d accounts\n"
@@ -1250,7 +1354,7 @@ msgstr ""
 "%d maksun saajaa\n"
 "%d luokkaa\n"
 
-#: ../src/import.c:1362
+#: ../src/import.c:1372
 #, c-format
 msgid ""
 "%d accounts will be created.\n"
@@ -1263,12 +1367,12 @@ msgstr ""
 "%d tapahtumaa tuodaan.\n"
 "%d tapahtumaa hylätään."
 
-#: ../src/import.c:1379
+#: ../src/import.c:1389
 #, c-format
 msgid "Import assistant (%d of %d)"
 msgstr "Tuontiapulainen (%d / %d)"
 
-#: ../src/import.c:1518
+#: ../src/import.c:1530
 msgid ""
 "HomeBank can import transactions from several file formats:\n"
 "\n"
@@ -1296,74 +1400,83 @@ msgstr ""
 "\n"
 "Napsauta nyt \"eteenpäin\" aloittaaksesi tiedoston tuonnin."
 
-#: ../src/import.c:1658
+#: ../src/import.c:1596
+#, fuzzy
+msgid "OFX/QFX files"
+msgstr "QIF-teidostot"
+
+#: ../src/import.c:1693
 msgid "<b>File analysis summary</b>"
 msgstr "<b>Tiedoston analyysin yhteenveto</b>"
 
-#: ../src/import.c:1666
+#: ../src/import.c:1701
 msgid "Filename:"
 msgstr "Tiedostonimi:"
 
-#: ../src/import.c:1674
+#: ../src/import.c:1709
 msgid "Details:"
 msgstr "Yksityiskohdat:"
 
-#: ../src/import.c:1685
+#: ../src/import.c:1720
 msgid "<b>Unamed account selection</b>"
-msgstr ""
+msgstr "<b>Nimettömän tilin valinta</b>"
 
-#: ../src/import.c:1697
+#: ../src/import.c:1732
 msgid ""
 "The file that you just loaded appears to contain transactions for an account "
 "without specifying\n"
 "the name of that account. Please select the account to which these "
 "transactions can be attached."
 msgstr ""
+"Ladattu tiedosto sisältää tapahtumia nimeämättömille tileille.\n"
+"Valitse tili, johon kyseiset tapahtumat kuuluvat."
 
-#: ../src/import.c:1707
+#: ../src/import.c:1742
 msgid "new account"
 msgstr "uusi tili"
 
-#: ../src/import.c:1712
+#: ../src/import.c:1747
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: ../src/import.c:1720
+#: ../src/import.c:1755
 msgid "existing account"
 msgstr "olemassa oleva tili"
 
-#: ../src/import.c:1775
+#: ../src/import.c:1810
 msgid "<b>Duplicate match options</b>"
 msgstr "<b>Tuplaosumien valinnat</b>"
 
-#: ../src/import.c:1787
+#: ../src/import.c:1822
 msgid "Date _tolerance:"
-msgstr ""
+msgstr "Päivä_toleranssi"
 
-#: ../src/import.c:1797
+#: ../src/import.c:1832
 msgid "days"
 msgstr "päivää"
 
-#: ../src/import.c:1814
+#: ../src/import.c:1849
 msgid ""
 "The match is done in order: by account, amount and date.\n"
 "A date tolerance of 0 days means an exact match"
 msgstr ""
+"Tunnistus tehdään järjestyksessä: Tili, määrä ja päiväys.\n"
+"Päivätoleranssi 0 tarkoittaa täydellistä yhteneväisyyttä."
 
-#: ../src/import.c:1827
+#: ../src/import.c:1862
 msgid "<b>Transactions to import</b>"
 msgstr "<b>Tuotavat tapahtumat</b>"
 
-#: ../src/import.c:1847
+#: ../src/import.c:1882
 msgid "<b>Possible duplicate for the above selected transaction</b>"
 msgstr ""
 
 #. Create the expander
-#: ../src/import.c:1851
+#: ../src/import.c:1886
 msgid "Details"
 msgstr "Yksityiskohdat"
 
-#: ../src/import.c:1916
+#: ../src/import.c:1951
 msgid ""
 "Click \"Apply\" to update your accounts.\n"
 "\n"
@@ -1371,7 +1484,7 @@ msgstr ""
 "Napsauta \"Toteuta\" päivittääksesi tilisi.\n"
 "\n"
 
-#: ../src/list_account.c:253 ../src/list_operation.c:468
+#: ../src/list_account.c:253 ../src/list_operation.c:477
 msgid "State"
 msgstr "Tila"
 
@@ -1390,8 +1503,8 @@ msgstr "Tänään"
 msgid "Future"
 msgstr "Tulevaisuudessa"
 
-#: ../src/list_operation.c:491 ../src/list_operation.c:702
-#: ../src/rep_car.c:995 ../src/rep_over.c:968
+#: ../src/list_operation.c:500 ../src/list_operation.c:711
+#: ../src/rep_car.c:996 ../src/rep_over.c:1018
 msgid "Date"
 msgstr "Päiväys"
 
@@ -1408,19 +1521,14 @@ msgid "Spent & Budget"
 msgstr "Kulutus ja talousarvio"
 
 #. column: Expense
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1250
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1273
 msgid "Spent"
 msgstr "Kulutus"
 
-#. column: Income
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1254
-msgid "Budget"
-msgstr "Talousarvio"
-
 #. column: Balance
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1258
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1281
 msgid "Decay"
-msgstr ""
+msgstr "Vajaus"
 
 #: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
 msgid "List"
@@ -1462,42 +1570,42 @@ msgstr "Päivitä"
 msgid "Refresh results"
 msgstr "Päivitä tulokset"
 
-#: ../src/rep_budget.c:857
+#: ../src/rep_budget.c:863
 msgid "Budget report"
 msgstr "Talousarvioraportti"
 
-#: ../src/rep_budget.c:883 ../src/rep_car.c:623 ../src/rep_over.c:617
-#: ../src/rep_stats.c:1423
+#: ../src/rep_budget.c:889 ../src/rep_car.c:623 ../src/rep_over.c:654
+#: ../src/rep_stats.c:1436
 msgid "<b>Display</b>"
 msgstr "<b>Näyttö</b>"
 
-#: ../src/rep_budget.c:887
+#: ../src/rep_budget.c:893
 msgid "_Kind:"
 msgstr "_Laatu:"
 
-#: ../src/rep_budget.c:894 ../src/rep_stats.c:1434
+#: ../src/rep_budget.c:900 ../src/rep_stats.c:1447
 msgid "_View:"
 msgstr "_Näytä:"
 
-#: ../src/rep_budget.c:901 ../src/rep_car.c:635 ../src/rep_over.c:628
-#: ../src/rep_stats.c:1446
+#: ../src/rep_budget.c:907 ../src/rep_car.c:636 ../src/rep_over.c:666
+#: ../src/rep_stats.c:1459
 msgid "_Minor currency"
 msgstr "_Pieni rahayksikkö"
 
-#: ../src/rep_budget.c:911 ../src/rep_car.c:645 ../src/rep_over.c:638
-#: ../src/rep_stats.c:1462
+#: ../src/rep_budget.c:917 ../src/rep_car.c:646 ../src/rep_over.c:676
+#: ../src/rep_stats.c:1475
 msgid "<b>Date filter</b>"
 msgstr "<b>Päiväyssuodatin</b>"
 
-#: ../src/rep_budget.c:987
+#: ../src/rep_budget.c:1010
 msgid "Decay:"
-msgstr ""
+msgstr "Vajaus:"
 
-#: ../src/rep_budget.c:996
+#: ../src/rep_budget.c:1019
 msgid "Budget:"
 msgstr "Talousarvio:"
 
-#: ../src/rep_budget.c:1005
+#: ../src/rep_budget.c:1028
 msgid "Spent:"
 msgstr "Kulutus:"
 
@@ -1507,38 +1615,38 @@ msgstr "Autoraportti"
 
 #: ../src/rep_car.c:627
 msgid "_Car category:"
-msgstr ""
+msgstr "_Auto luokka:"
 
 #. column: consumption for 100Km
-#: ../src/rep_car.c:711 ../src/rep_car.c:1047
+#: ../src/rep_car.c:712 ../src/rep_car.c:1048
 msgid "100 Km"
 msgstr "100 km"
 
-#: ../src/rep_car.c:714
+#: ../src/rep_car.c:715
 msgid "Total"
 msgstr "Yhteensä"
 
-#: ../src/rep_car.c:718
+#: ../src/rep_car.c:719
 msgid "Meter:"
 msgstr "Mittari:"
 
-#: ../src/rep_car.c:722
+#: ../src/rep_car.c:723
 msgid "Consumption:"
 msgstr "Kulutus:"
 
-#: ../src/rep_car.c:726
+#: ../src/rep_car.c:727
 msgid "Fuel cost:"
 msgstr "Polttoainekulut:"
 
-#: ../src/rep_car.c:730
+#: ../src/rep_car.c:731
 msgid "Other cost:"
 msgstr "Muut kulut:"
 
-#: ../src/rep_car.c:734
+#: ../src/rep_car.c:735
 msgid "Total cost:"
 msgstr "Kulut yhteensä"
 
-#. 
+#.
 #. LST_CAR_DATE,
 #. LST_CAR_WORDING,
 #. LST_CAR_METER,
@@ -1547,10 +1655,10 @@ msgstr "Kulut yhteensä"
 #. LST_CAR_AMOUNT,
 #. LST_CAR_DIST,
 #. LST_CAR_100KM
-#. 
-#. 
+#.
+#.
 #. column: Wording
-#. 
+#.
 #. column = gtk_tree_view_column_new();
 #. gtk_tree_view_column_set_title(column, _("Wording"));
 #. gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
@@ -1558,24 +1666,24 @@ msgstr "Kulut yhteensä"
 #. gtk_tree_view_column_pack_start(column, renderer, TRUE);
 #. gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_WORDING);
 #. //gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_text_cell_data_function, NULL, NULL);
-#. 
+#.
 #. column: Meter
-#: ../src/rep_car.c:1027
+#: ../src/rep_car.c:1028
 msgid "Meter"
 msgstr "Mittari"
 
 #. column: Fuel load
-#: ../src/rep_car.c:1031
+#: ../src/rep_car.c:1032
 msgid "Fuel"
 msgstr "Polttoaine"
 
 #. column: Price by unit
-#: ../src/rep_car.c:1035
+#: ../src/rep_car.c:1036
 msgid "Price"
 msgstr "Hinta"
 
 #. column: Distance done
-#: ../src/rep_car.c:1043
+#: ../src/rep_car.c:1044
 msgid "Dist."
 msgstr "Matka"
 
@@ -1590,14 +1698,14 @@ msgstr "Näytä tulokset viivoina"
 #: ../src/rep_over.c:302
 #, c-format
 msgid "%d/%d under %s"
-msgstr ""
+msgstr "%d/%d alle %s"
 
-#: ../src/rep_over.c:588
+#: ../src/rep_over.c:625
 msgid "Overdrawn report"
 msgstr "Tilinylitysraportti"
 
 #. column: Balance
-#: ../src/rep_over.c:997 ../src/rep_stats.c:202 ../src/rep_stats.c:1854
+#: ../src/rep_over.c:1047 ../src/rep_stats.c:202 ../src/rep_stats.c:1887
 msgid "Balance"
 msgstr "Saldo"
 
@@ -1616,10 +1724,6 @@ msgstr ""
 #: ../src/rep_stats.c:132
 msgid "Toggle rate"
 msgstr ""
-
-#: ../src/rep_stats.c:134
-msgid "Filter"
-msgstr "Suodatin"
 
 #: ../src/rep_stats.c:134
 msgid "Edit the filter"
@@ -1733,118 +1837,118 @@ msgstr "Marraskuu"
 msgid "December"
 msgstr "Joulukuu"
 
-#: ../src/rep_stats.c:1397
+#: ../src/rep_stats.c:1410
 msgid "Statistics Report"
 msgstr "Tilastoraportti"
 
-#: ../src/rep_stats.c:1427
+#: ../src/rep_stats.c:1440
 msgid "_For:"
 msgstr ""
 
-#: ../src/rep_stats.c:1441
+#: ../src/rep_stats.c:1454
 msgid "By _amount"
 msgstr ""
 
-#: ../src/rep_stats.c:1539
+#: ../src/rep_stats.c:1572
 msgid "Balance:"
 msgstr "Saldo:"
 
-#: ../src/rep_stats.c:1548
+#: ../src/rep_stats.c:1581
 msgid "Income:"
 msgstr "Tulot:"
 
-#: ../src/rep_stats.c:1557
+#: ../src/rep_stats.c:1590
 msgid "Expense:"
 msgstr "Menot:"
 
-#: ../src/rep_stats.c:1831
+#: ../src/rep_stats.c:1864
 msgid "Result"
 msgstr "Tulos"
 
-#: ../src/ui_account.c:864
+#: ../src/ui_account.c:868
 #, c-format
 msgid "(account %d)"
 msgstr "(tili %d)"
 
-#: ../src/ui_account.c:896
+#: ../src/ui_account.c:898
 msgid "Remove not allowed"
 msgstr "Poistamista ei sallita"
 
-#: ../src/ui_account.c:897
+#: ../src/ui_account.c:899
 msgid "This account is used and cannot be removed."
 msgstr "Tämä tili on käytössä eikä sitä voi poistaa."
 
-#: ../src/ui_account.c:1004
+#: ../src/ui_account.c:1039
 msgid "Manage Accounts"
 msgstr "Hallitse tilejä"
 
-#: ../src/ui_account.c:1077
+#: ../src/ui_account.c:1112
 msgid "<b>Informations</b>"
 msgstr "<b>Tiedot</b>"
 
-#: ../src/ui_account.c:1085
+#: ../src/ui_account.c:1120
 msgid "_Heading:"
 msgstr "_Otsikko:"
 
-#: ../src/ui_account.c:1102
+#: ../src/ui_account.c:1137
 msgid "_Number:"
 msgstr "_Numero:"
 
-#: ../src/ui_account.c:1109
+#: ../src/ui_account.c:1144
 msgid "_Bank name:"
 msgstr "_Pankin nimi:"
 
-#: ../src/ui_account.c:1116
+#: ../src/ui_account.c:1151
 msgid "Include in the budget"
 msgstr "Sisällytä talousarvioon"
 
-#: ../src/ui_account.c:1121
+#: ../src/ui_account.c:1156
 msgid "This account was closed"
 msgstr "Tämä tili suljettiin"
 
-#: ../src/ui_account.c:1133
+#: ../src/ui_account.c:1168
 msgid "<b>Balances</b>"
 msgstr "<b>Saldot</b>"
 
-#: ../src/ui_account.c:1137
+#: ../src/ui_account.c:1172
 msgid "_Initial:"
 msgstr "Alk_upääoma:"
 
-#: ../src/ui_account.c:1148
+#: ../src/ui_account.c:1183
 msgid "_Overdrawn at:"
 msgstr "_Tilinylitys:"
 
-#: ../src/ui_account.c:1162
+#: ../src/ui_account.c:1197
 msgid "<b>Cheque number</b>"
 msgstr "<b>Šekin numero</b>"
 
-#: ../src/ui_account.c:1166
+#: ../src/ui_account.c:1201
 msgid "Notebook _1:"
-msgstr ""
+msgstr "Vihko_1"
 
-#: ../src/ui_account.c:1180
+#: ../src/ui_account.c:1215
 msgid "Notebook _2:"
-msgstr ""
+msgstr "Vihko_2"
 
-#: ../src/ui_category.c:867
+#: ../src/ui_category.c:873
 msgid ""
 "The csv file must contains the exact numbers of column,\n"
 "separated by a semi-colon, please see the help for more details."
 msgstr ""
 
-#: ../src/ui_category.c:996 ../src/ui_payee.c:579
+#: ../src/ui_category.c:1002 ../src/ui_payee.c:633
 msgid "Modify..."
 msgstr "Muokkaa..."
 
-#: ../src/ui_category.c:1018
+#: ../src/ui_category.c:1024
 msgid "_Income"
 msgstr "_Tulot"
 
-#: ../src/ui_category.c:1100 ../src/ui_payee.c:620
+#: ../src/ui_category.c:1106 ../src/ui_payee.c:674
 msgid "Error"
 msgstr "Virhe"
 
-#: ../src/ui_category.c:1101
+#: ../src/ui_category.c:1107
 #, c-format
 msgid ""
 "Cannot rename this Category,\n"
@@ -1852,26 +1956,26 @@ msgid ""
 "this name already exists."
 msgstr ""
 
-#: ../src/ui_category.c:1219
+#: ../src/ui_category.c:1225
 msgid "Remove a category ?"
 msgstr "Poista luokka?"
 
-#: ../src/ui_category.c:1220
+#: ../src/ui_category.c:1226
 #, c-format
 msgid ""
 "If you remove '%s', archive and operation referencing this category\n"
 "will set place to 'no category'"
 msgstr ""
 
-#: ../src/ui_category.c:1428
+#: ../src/ui_category.c:1443
 msgid "Manage Categories"
 msgstr "Hallitse luokkia"
 
-#: ../src/ui_category.c:1466
+#: ../src/ui_category.c:1481
 msgid "I_ncome"
 msgstr "Tu_lot"
 
-#: ../src/ui_payee.c:621
+#: ../src/ui_payee.c:675
 #, c-format
 msgid ""
 "Cannot rename this Payee,\n"
@@ -1879,18 +1983,18 @@ msgid ""
 "this name already exists."
 msgstr ""
 
-#: ../src/ui_payee.c:741
+#: ../src/ui_payee.c:795
 msgid "Remove a payee ?"
 msgstr "Poista saaja?"
 
-#: ../src/ui_payee.c:742
+#: ../src/ui_payee.c:796
 #, c-format
 msgid ""
 "If you remove '%s', archive and operation referencing this payee\n"
 "will set place to 'no payee'"
 msgstr ""
 
-#: ../src/ui_payee.c:826
+#: ../src/ui_payee.c:880
 msgid "Manage Payees"
 msgstr "Hallitse maksun saajia"
 
@@ -1913,3 +2017,6 @@ msgstr "Pankkisiirto"
 #: ../src/widgets.c:69
 msgid "Internal transfer"
 msgstr "Sisäinen siirto"
+
+#~ msgid "Import..."
+#~ msgstr "Tuo..."

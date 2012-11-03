@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.52)
-AC_INIT([homebank], [4.0.1])
+AC_INIT([homebank], [4.0.2])
 
 
 AM_CONFIG_HEADER(config.h)
@@ -22,7 +22,7 @@ AC_PROG_INSTALL
 AC_PROG_INTLTOOL
 
 # Checks for libraries.
-PKG_CHECK_MODULES(DEPS, gtk+-2.0 >= 2.10 glib-2.0 >= 2.12)
+PKG_CHECK_MODULES(DEPS, gtk+-2.0 >= 2.12 glib-2.0 >= 2.14)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
 

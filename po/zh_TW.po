@@ -7,123 +7,123 @@ msgid ""
 msgstr ""
 "Project-Id-Version: homebank\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-13 23:35+0200\n"
-"PO-Revision-Date: 2008-10-13 07:42+0000\n"
-"Last-Translator: Edward Lin <Unknown>\n"
+"POT-Creation-Date: 2009-01-31 18:22+0100\n"
+"PO-Revision-Date: 2008-12-27 14:13+0000\n"
+"Last-Translator: Liu, Shuyuan <Unknown>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-11-22 13:12+0000\n"
+"X-Launchpad-Export-Date: 2009-01-31 15:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. "translator-credits"	, "trans",
-#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:720
+#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:730
 msgid "Free, easy, personal accounting for everyone."
 msgstr "自由,簡易,每個人的個人帳戶"
 
 #: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:29
 msgid "HomeBank"
-msgstr "家用銀行 (HomeBank)"
+msgstr "HomeBank"
 
-#: ../src/def_archive.c:114
+#: ../src/def_archive.c:97
 msgid "Day"
 msgstr "日"
 
-#: ../src/def_archive.c:114
+#: ../src/def_archive.c:97
 msgid "Week"
 msgstr "週"
 
-#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+#: ../src/def_archive.c:97 ../src/rep_stats.c:198
 msgid "Month"
 msgstr "月"
 
-#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+#: ../src/def_archive.c:97 ../src/rep_stats.c:198
 msgid "Year"
 msgstr "年"
 
-#: ../src/def_archive.c:139 ../src/dsp_account.c:659
+#: ../src/def_archive.c:118 ../src/dsp_account.c:662
 msgid "(new archive)"
 msgstr "(新資料)"
 
-#: ../src/def_archive.c:603
+#: ../src/def_archive.c:583
 msgid "Manage Archives"
 msgstr ""
 
-#: ../src/def_archive.c:667
+#: ../src/def_archive.c:645
 msgid "<b>General infos</b>"
 msgstr "<b>一般資訊</b>"
 
-#: ../src/def_archive.c:675
+#: ../src/def_archive.c:653
 msgid "_Wording:"
 msgstr "用語(_W)"
 
-#: ../src/def_archive.c:683 ../src/def_operation.c:684
+#: ../src/def_archive.c:661 ../src/def_operation.c:684
 msgid "_Amount:"
 msgstr "總額(_A)"
 
-#: ../src/def_archive.c:699 ../src/def_operation.c:700 ../src/import.c:1725
-#: ../src/rep_over.c:621
+#: ../src/def_archive.c:677 ../src/def_operation.c:700 ../src/import.c:1760
+#: ../src/rep_over.c:658
 msgid "A_ccount:"
 msgstr "帳戶(_C)"
 
-#: ../src/def_archive.c:707 ../src/def_operation.c:708
+#: ../src/def_archive.c:685 ../src/def_operation.c:708
 msgid "_Validated"
 msgstr "有效(_V)"
 
-#: ../src/def_archive.c:715
+#: ../src/def_archive.c:693
 msgid "<b>Optional infos</b>"
 msgstr "<b>選擇資訊</b>"
 
-#: ../src/def_archive.c:719 ../src/def_operation.c:740
+#: ../src/def_archive.c:697 ../src/def_operation.c:740
 msgid "Pay_ment:"
 msgstr "付款(_M):"
 
-#: ../src/def_archive.c:738 ../src/def_operation.c:759
+#: ../src/def_archive.c:716 ../src/def_operation.c:759
 msgid "Of notebook _2"
 msgstr "支票簿_2"
 
-#: ../src/def_archive.c:744 ../src/def_operation.c:765
+#: ../src/def_archive.c:722 ../src/def_operation.c:765
 msgid "_To account:"
 msgstr "進入帳戶(_T):"
 
-#: ../src/def_archive.c:751 ../src/def_operation.c:781
+#: ../src/def_archive.c:729 ../src/def_operation.c:781
 msgid "_Payee:"
 msgstr "收款人(_P):"
 
-#: ../src/def_archive.c:759 ../src/def_operation.c:791 ../src/def_wallet.c:235
+#: ../src/def_archive.c:737 ../src/def_operation.c:791 ../src/def_wallet.c:235
 msgid "_Category:"
 msgstr "類別(_C)："
 
-#: ../src/def_archive.c:771
+#: ../src/def_archive.c:749
 msgid "<b>Automated insertion</b>"
 msgstr "<b>自動插入</b>"
 
-#: ../src/def_archive.c:775
+#: ../src/def_archive.c:753
 msgid "_Activate"
 msgstr "啟用(_A)"
 
-#: ../src/def_archive.c:782
+#: ../src/def_archive.c:760
 msgid "_Limit to:"
 msgstr "限制(L):"
 
-#: ../src/def_archive.c:790
+#: ../src/def_archive.c:768
 msgid "t_imes"
 msgstr "時間(_I)"
 
-#: ../src/def_archive.c:795
+#: ../src/def_archive.c:773
 msgid "Ever_y:"
 msgstr "每一個(_Y)"
 
-#: ../src/def_archive.c:804
+#: ../src/def_archive.c:782
 msgid "_Unit:"
 msgstr "單位(_U)："
 
-#: ../src/def_archive.c:811
+#: ../src/def_archive.c:789
 msgid "_Next on:"
 msgstr "下一個(_N)"
 
-#: ../src/def_budget.c:322 ../src/ui_category.c:866
+#: ../src/def_budget.c:322 ../src/ui_category.c:872
 msgid "File format error"
 msgstr "檔案格式錯誤"
 
@@ -151,17 +151,17 @@ msgstr "是相同的"
 msgid "is different"
 msgstr "是不同的"
 
-#: ../src/def_budget.c:806 ../src/ui_category.c:1523 ../src/ui_payee.c:895
+#: ../src/def_budget.c:806 ../src/ui_category.c:1538 ../src/ui_payee.c:949
 msgid "_Import"
 msgstr "匯入(_I)"
 
-#: ../src/def_budget.c:810 ../src/ui_category.c:1527 ../src/ui_payee.c:899
+#: ../src/def_budget.c:810 ../src/ui_category.c:1542 ../src/ui_payee.c:953
 msgid "E_xport"
 msgstr "匯出(_X)"
 
-#: ../src/def_budget.c:921 ../src/rep_stats.c:939 ../src/rep_stats.c:955
-#: ../src/rep_stats.c:962 ../src/ui_account.c:344 ../src/ui_category.c:187
-#: ../src/ui_category.c:441 ../src/ui_payee.c:147 ../src/ui_payee.c:319
+#: ../src/def_budget.c:921 ../src/rep_stats.c:948 ../src/rep_stats.c:965
+#: ../src/rep_stats.c:974 ../src/ui_account.c:348 ../src/ui_category.c:288
+#: ../src/ui_category.c:441 ../src/ui_payee.c:237 ../src/ui_payee.c:373
 #: ../src/widgets.c:64
 msgid "(none)"
 msgstr "(無)"
@@ -181,7 +181,7 @@ msgstr "不包含"
 #: ../src/def_filter.c:801 ../src/def_filter.c:850 ../src/def_filter.c:899
 #: ../src/def_filter.c:977 ../src/def_filter.c:1072 ../src/def_filter.c:1116
 msgid "_Option:"
-msgstr "选项(_O):"
+msgstr "選項(_O)"
 
 #: ../src/def_filter.c:822 ../src/def_filter.c:871 ../src/def_filter.c:920
 msgid "All"
@@ -193,25 +193,25 @@ msgstr "無"
 
 #: ../src/def_filter.c:830 ../src/def_filter.c:879 ../src/def_filter.c:928
 msgid "Invert"
-msgstr "反转"
+msgstr "反轉"
 
 #: ../src/def_filter.c:968
 msgid "<b>Filter Date</b>"
-msgstr "<b>过滤日期</b>"
+msgstr "<b>過濾日期</b>"
 
-#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:915
-#: ../src/rep_car.c:649 ../src/rep_over.c:642 ../src/rep_stats.c:1466
+#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:921
+#: ../src/rep_car.c:650 ../src/rep_over.c:680 ../src/rep_stats.c:1479
 msgid "_From:"
-msgstr "来自(_F):"
+msgstr "從(_F)："
 
-#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:921
-#: ../src/rep_car.c:656 ../src/rep_over.c:648 ../src/rep_stats.c:1472
+#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:927
+#: ../src/rep_car.c:657 ../src/rep_over.c:686 ../src/rep_stats.c:1485
 msgid "_To:"
 msgstr "至(_T)："
 
 #: ../src/def_filter.c:1015
 msgid "<b>Filter State</b>"
-msgstr "<b>过滤状态</b>"
+msgstr "<b>過濾狀態</b>"
 
 #: ../src/def_filter.c:1023
 msgid "Validated:"
@@ -251,24 +251,26 @@ msgstr "編輯過濾器"
 msgid "General"
 msgstr "一般"
 
-#: ../src/def_filter.c:1207 ../src/def_pref.c:1773 ../src/list_operation.c:378
-#: ../src/list_operation.c:762 ../src/rep_budget.c:1239 ../src/rep_stats.c:198
+#: ../src/def_filter.c:1207 ../src/def_pref.c:1791 ../src/dsp_wallet.c:2001
+#: ../src/list_operation.c:378 ../src/list_operation.c:771
+#: ../src/rep_budget.c:1262 ../src/rep_stats.c:198
 msgid "Category"
 msgstr "分類"
 
-#: ../src/def_filter.c:1212 ../src/def_pref.c:1768 ../src/list_operation.c:316
-#: ../src/list_operation.c:751 ../src/list_upcoming.c:172
-#: ../src/rep_stats.c:198
+#: ../src/def_filter.c:1212 ../src/def_pref.c:1786 ../src/dsp_wallet.c:1998
+#: ../src/list_operation.c:316 ../src/list_operation.c:760
+#: ../src/list_upcoming.c:172 ../src/rep_stats.c:198
 msgid "Payee"
 msgstr "收款人"
 
-#: ../src/def_filter.c:1221 ../src/list_operation.c:691
+#: ../src/def_filter.c:1221 ../src/dsp_wallet.c:1995
+#: ../src/list_operation.c:700
 msgid "Account"
 msgstr "帳戶"
 
 #: ../src/def_operation.c:90 ../src/dsp_wallet.c:226
 msgid "Add transaction"
-msgstr "加入交易"
+msgstr "新增交易"
 
 #: ../src/def_operation.c:91
 msgid "Inherit transaction"
@@ -304,7 +306,7 @@ msgstr "<b>一般資訊</b>"
 
 #: ../src/def_operation.c:663
 msgid "_Date:"
-msgstr "日期(_D):"
+msgstr "日期(_D)："
 
 #: ../src/def_operation.c:671
 msgid ""
@@ -344,7 +346,7 @@ msgstr ""
 
 #: ../src/def_operation.c:801
 msgid "_Tags:"
-msgstr ""
+msgstr "標籤(_T)："
 
 #: ../src/def_operation.c:906
 msgid "_Fill with archive:"
@@ -389,7 +391,7 @@ msgstr "文字在圖示下方"
 
 #: ../src/def_pref.c:169
 msgid "Text beside icons"
-msgstr "圖示旁顯示文字"
+msgstr "文字在圖示旁"
 
 #: ../src/def_pref.c:762
 msgid "<b>Statistics options</b>"
@@ -411,7 +413,7 @@ msgstr "顯示明細(_D)"
 msgid "<b>Budget options</b>"
 msgstr "<b>預算選項</b>"
 
-#: ../src/def_pref.c:819 ../src/def_pref.c:1181 ../src/def_wallet.c:195
+#: ../src/def_pref.c:819 ../src/def_pref.c:1199 ../src/def_wallet.c:195
 msgid "<b>General</b>"
 msgstr "<b>一般</b>"
 
@@ -421,7 +423,7 @@ msgstr "填滿自："
 
 #: ../src/def_pref.c:837
 msgid "Country:"
-msgstr "國家："
+msgstr "國家/地區："
 
 #: ../src/def_pref.c:846
 msgid "Value:"
@@ -431,23 +433,23 @@ msgstr "數值："
 msgid "<b>Numbers format</b>"
 msgstr "<b>數字格式</b>"
 
-#: ../src/def_pref.c:860 ../src/def_pref.c:1016
+#: ../src/def_pref.c:860 ../src/def_pref.c:1034
 msgid "Prefix symbol:"
 msgstr "字首符號:"
 
-#: ../src/def_pref.c:867 ../src/def_pref.c:1023
+#: ../src/def_pref.c:867 ../src/def_pref.c:1041
 msgid "Suffix symbol:"
 msgstr "字尾符號："
 
-#: ../src/def_pref.c:874 ../src/def_pref.c:1030
+#: ../src/def_pref.c:874 ../src/def_pref.c:1048
 msgid "Decimal char:"
 msgstr "小數點文字:"
 
-#: ../src/def_pref.c:881 ../src/def_pref.c:1037
+#: ../src/def_pref.c:881 ../src/def_pref.c:1055
 msgid "Grouping char:"
 msgstr "群組文字"
 
-#: ../src/def_pref.c:888 ../src/def_pref.c:1044
+#: ../src/def_pref.c:888 ../src/def_pref.c:1062
 msgid "_Frac digits:"
 msgstr "小數點位數:"
 
@@ -459,124 +461,144 @@ msgstr "<b>日期選項</b>"
 msgid "_Date format:"
 msgstr "日期格式(_D):"
 
-#: ../src/def_pref.c:1012
+#: ../src/def_pref.c:1004
+msgid ""
+"%a locale's abbreviated weekday name.\n"
+"%A locale's full weekday name. \n"
+"%b locale's abbreviated month name. \n"
+"%B locale's full month name. \n"
+"%c locale's appropriate date and time representation. \n"
+"%C century number (the year divided by 100 and truncated to an integer) as a "
+"decimal number [00-99]. \n"
+"%d day of the month as a decimal number [01,31]. \n"
+"%D same as %m/%d/%y. \n"
+"%e day of the month as a decimal number [1,31]; a single digit is preceded "
+"by a space. \n"
+"%j day of the year as a decimal number [001,366]. \n"
+"%m month as a decimal number [01,12]. \n"
+"%x locale's appropriate date representation. \n"
+"%y year without century as a decimal number [00,99]. \n"
+"%Y year with century as a decimal number. \n"
+msgstr ""
+
+#: ../src/def_pref.c:1030
 msgid "<b>Numbers options</b>"
 msgstr "<b>數字選項</b>"
 
-#: ../src/def_pref.c:1075
+#: ../src/def_pref.c:1093
 msgid "<b>Measurement units</b>"
-msgstr "<b>測量單位</b>"
+msgstr "<b>度量單位</b>"
 
-#: ../src/def_pref.c:1079
+#: ../src/def_pref.c:1097
 msgid "Use _Imperial units"
-msgstr ""
+msgstr "使用英制單位"
 
-#: ../src/def_pref.c:1105
+#: ../src/def_pref.c:1123
 msgid "<b>Transaction list</b>"
 msgstr "<b>交易清單</b>"
 
-#: ../src/def_pref.c:1185
+#: ../src/def_pref.c:1203
 msgid "_Toolbar:"
 msgstr "工具列(_T):"
 
-#: ../src/def_pref.c:1209
+#: ../src/def_pref.c:1227
 msgid "<b>Amount colors</b>"
 msgstr "<b>總額顏色</b>"
 
-#: ../src/def_pref.c:1213
+#: ../src/def_pref.c:1231
 msgid "_Expense:"
 msgstr "開支(_E):"
 
-#: ../src/def_pref.c:1223
+#: ../src/def_pref.c:1241
 msgid "_Income:"
 msgstr "收入(_I):"
 
-#: ../src/def_pref.c:1233
+#: ../src/def_pref.c:1251
 msgid "_Warning:"
 msgstr "提醒(_W):"
 
-#: ../src/def_pref.c:1262
+#: ../src/def_pref.c:1280
 msgid "<b>Folders</b>"
 msgstr "<b>資料夾</b>"
 
-#: ../src/def_pref.c:1270
+#: ../src/def_pref.c:1288
 msgid "_Wallet:"
 msgstr "錢包(_W):"
 
-#: ../src/def_pref.c:1286
+#: ../src/def_pref.c:1304
 msgid "_Import:"
-msgstr "匯入(_I)"
-
-#: ../src/def_pref.c:1302
-msgid "_Export:"
-msgstr ""
+msgstr "匯入(_I)："
 
 #: ../src/def_pref.c:1320
+msgid "_Export:"
+msgstr "匯出(_E)："
+
+#: ../src/def_pref.c:1338
 msgid "_Run the wizard"
 msgstr "起動精靈(_R)"
 
-#: ../src/def_pref.c:1329
+#: ../src/def_pref.c:1347
 msgid "<b>Initial date filter</b>"
 msgstr "<b>初始日期過濾</b>"
 
-#: ../src/def_pref.c:1333 ../src/dsp_account.c:2034 ../src/rep_budget.c:927
-#: ../src/rep_car.c:662 ../src/rep_over.c:654 ../src/rep_stats.c:1478
+#: ../src/def_pref.c:1351 ../src/dsp_account.c:2088 ../src/rep_budget.c:933
+#: ../src/rep_car.c:663 ../src/rep_over.c:692 ../src/rep_stats.c:1491
 msgid "_Range:"
 msgstr "範圍(_R):"
 
-#: ../src/def_pref.c:1343
+#: ../src/def_pref.c:1361
 msgid "<b>Start behaviour</b>"
 msgstr ""
 
-#: ../src/def_pref.c:1347
+#: ../src/def_pref.c:1365
 msgid "Load last opened file"
-msgstr ""
+msgstr "載入最後開啟的檔案"
 
-#: ../src/def_pref.c:1448
+#: ../src/def_pref.c:1466
 msgid "Preferences"
 msgstr "偏好設定"
 
 #. {	N_(""), COL_OPE_STATUS,		},
 #. {	N_(""), COL_OPE_DATE,		},
-#: ../src/def_pref.c:1767 ../src/list_operation.c:291
-#: ../src/list_operation.c:735
+#: ../src/def_pref.c:1785 ../src/list_operation.c:291
+#: ../src/list_operation.c:744
 msgid "Info"
 msgstr "資訊"
 
-#: ../src/def_pref.c:1769 ../src/list_operation.c:334
-#: ../src/list_operation.c:713 ../src/list_upcoming.c:184
-#: ../src/rep_over.c:979
+#: ../src/def_pref.c:1787 ../src/list_operation.c:334
+#: ../src/list_operation.c:722 ../src/list_upcoming.c:184
+#: ../src/rep_over.c:1029
 msgid "Description"
 msgstr "描述"
 
 #. column: Amount
-#: ../src/def_pref.c:1770 ../src/list_operation.c:509
-#: ../src/list_operation.c:723 ../src/list_upcoming.c:196
-#: ../src/rep_car.c:1039
+#: ../src/def_pref.c:1788 ../src/list_operation.c:518
+#: ../src/list_operation.c:732 ../src/list_upcoming.c:196
+#: ../src/rep_car.c:1040
 msgid "Amount"
 msgstr "總額"
 
 #. column: Expense
-#: ../src/def_pref.c:1771 ../src/list_operation.c:512 ../src/rep_budget.c:101
-#: ../src/rep_over.c:989 ../src/rep_stats.c:202 ../src/rep_stats.c:1842
+#: ../src/def_pref.c:1789 ../src/list_operation.c:521 ../src/rep_budget.c:101
+#: ../src/rep_over.c:1039 ../src/rep_stats.c:202 ../src/rep_stats.c:1875
 msgid "Expense"
 msgstr "開支"
 
 #. column: Income
-#: ../src/def_pref.c:1772 ../src/list_operation.c:515 ../src/rep_budget.c:101
-#: ../src/rep_over.c:993 ../src/rep_stats.c:202 ../src/rep_stats.c:1848
+#: ../src/def_pref.c:1790 ../src/list_operation.c:524 ../src/rep_budget.c:101
+#: ../src/rep_over.c:1043 ../src/rep_stats.c:202 ../src/rep_stats.c:1881
 msgid "Income"
 msgstr "收入"
 
-#: ../src/def_pref.c:1774 ../src/list_operation.c:396
+#: ../src/def_pref.c:1792 ../src/list_operation.c:396
 msgid "Tags"
-msgstr ""
+msgstr "標籤"
 
-#: ../src/def_pref.c:1893 ../src/ui_account.c:495 ../src/ui_payee.c:449
+#: ../src/def_pref.c:1911 ../src/ui_account.c:499 ../src/ui_payee.c:503
 msgid "Visible"
 msgstr "可見的"
 
-#: ../src/def_pref.c:1904
+#: ../src/def_pref.c:1922
 msgid "Column"
 msgstr "欄"
 
@@ -605,89 +627,90 @@ msgid "<b>Car cost</b>"
 msgstr "<b>汽車花費</b>"
 
 #. name, stock id, label
-#: ../src/dsp_account.c:155
+#: ../src/dsp_account.c:156
 msgid "_Account"
 msgstr "帳戶(_A)"
 
-#: ../src/dsp_account.c:156
+#: ../src/dsp_account.c:157
 msgid "Transacti_on"
 msgstr "交易在"
 
-#: ../src/dsp_account.c:157
+#: ../src/dsp_account.c:158
 msgid "_Tools"
 msgstr "工具 (_T)"
 
-#: ../src/dsp_account.c:159 ../src/dsp_wallet.c:210
+#: ../src/dsp_account.c:160 ../src/dsp_wallet.c:210
 msgid "_Close"
 msgstr "關閉(_C)"
 
-#: ../src/dsp_account.c:159
+#: ../src/dsp_account.c:160
 msgid "Close the current account"
 msgstr "關閉目前帳戶"
 
 #. name, stock id, label, accelerator, tooltip
-#: ../src/dsp_account.c:162
+#: ../src/dsp_account.c:163
 msgid "_Filter..."
 msgstr "過濾(_F)..."
 
-#: ../src/dsp_account.c:162
+#: ../src/dsp_account.c:163
 msgid "Open the list filter"
 msgstr "打開清單過濾"
 
-#: ../src/dsp_account.c:164
+#: ../src/dsp_account.c:165
 msgid "_Add..."
-msgstr "增加(_A)..."
+msgstr "新增(_A)..."
 
-#: ../src/dsp_account.c:164
+#: ../src/dsp_account.c:165
 msgid "Add a new transaction"
 msgstr "加入新的交易"
 
-#: ../src/dsp_account.c:165
+#: ../src/dsp_account.c:166
 msgid "_Inherit..."
 msgstr "繼承(_I)..."
 
-#: ../src/dsp_account.c:165
+#: ../src/dsp_account.c:166
 msgid "Inherit from the active transaction"
 msgstr "繼承來自於啟用的交易"
 
-#: ../src/dsp_account.c:166
+#: ../src/dsp_account.c:167
 msgid "_Edit..."
 msgstr "編輯(_E)..."
 
-#: ../src/dsp_account.c:166
+#: ../src/dsp_account.c:167
 msgid "Edit the active transaction"
 msgstr "編輯啟用的交易"
 
-#: ../src/dsp_account.c:167
-msgid "(In)_Validate..."
+#: ../src/dsp_account.c:168
+#, fuzzy
+msgid "(In)_Validate"
 msgstr "(進入)(_V)生效"
 
-#: ../src/dsp_account.c:167
+#: ../src/dsp_account.c:168
 msgid "Validate the active transactions"
 msgstr "啟用交易生效"
 
-#: ../src/dsp_account.c:168
+#: ../src/dsp_account.c:169
 msgid "_Remove..."
 msgstr "移除(_R)..."
 
-#: ../src/dsp_account.c:168
+#: ../src/dsp_account.c:169
 msgid "Remove the active transactions"
 msgstr "移除啟用交易"
 
-#: ../src/dsp_account.c:169
+#: ../src/dsp_account.c:170
 msgid "Make an archive..."
 msgstr "建立資料檔..."
 
-#: ../src/dsp_account.c:171
+#: ../src/dsp_account.c:172
 msgid "Export CSV..."
 msgstr "匯出 CSV..."
 
-#: ../src/dsp_account.c:348
+#: ../src/dsp_account.c:349
 msgid "No corresponding transfert can be found."
 msgstr "沒有相同的交易可以搜尋"
 
 #. warn the useer we have notfound the child internal transfert
-#: ../src/dsp_account.c:368
+#: ../src/dsp_account.c:369
 #, c-format
 msgid ""
 "Could not delete child transfert:\n"
@@ -698,83 +721,117 @@ msgid ""
 "\n"
 "You should fix the problem manually."
 msgstr ""
-"Could not delete child transfert:\n"
+"無法刪除子交易:\n"
 "\n"
 "帳戶: %s\n"
 "日期: %s\n"
 "總額: %s\n"
 "\n"
-"You should fix the problem manually."
+"您必須手動修正錯誤。"
 
-#: ../src/dsp_account.c:614
+#: ../src/dsp_account.c:617
 msgid ""
 "Do you want to create an Archive with\n"
 "each of the selected transaction ?"
 msgstr "你是否要將選擇的交易建立資料庫封存?"
 
-#: ../src/dsp_account.c:1212
+#: ../src/dsp_account.c:1215
 msgid ""
 "Do you want to delete\n"
 "each of the selected transaction ?"
 msgstr "你是否要刪除選擇的交易?"
 
-#: ../src/dsp_account.c:1516
+#: ../src/dsp_account.c:1520
 #, c-format
 msgid "%d transactions selected, %d hidden"
 msgstr "選取了 %d 個，隱藏了 %d 個"
 
-#: ../src/dsp_account.c:1518
+#: ../src/dsp_account.c:1522
 #, c-format
 msgid "%d transactions selected, %d hidden :: %s ( %s - %s)"
 msgstr "選取了 %d 個，隱藏了 %d 個 :: %s ( %s - %s)"
 
-#: ../src/dsp_account.c:1583
+#: ../src/dsp_account.c:1588
 msgid "Modify date..."
 msgstr "修改日期..."
 
-#: ../src/dsp_account.c:1588
+#: ../src/dsp_account.c:1593
 msgid "Modify info..."
 msgstr "修改資訊..."
 
-#: ../src/dsp_account.c:1595
+#: ../src/dsp_account.c:1600
 msgid "Modify payee..."
 msgstr "修改收款人..."
 
-#: ../src/dsp_account.c:1601
+#: ../src/dsp_account.c:1606
 msgid "Modify description..."
 msgstr "修改敘述..."
 
-#: ../src/dsp_account.c:1607
+#: ../src/dsp_account.c:1613
 msgid "Modify amount..."
 msgstr "修改總額..."
 
-#: ../src/dsp_account.c:1612
+#: ../src/dsp_account.c:1618
 msgid "Modify category..."
 msgstr "修改類別..."
 
-#: ../src/dsp_account.c:2039 ../src/rep_budget.c:933 ../src/rep_car.c:668
-#: ../src/rep_over.c:660 ../src/rep_stats.c:1484
+#: ../src/dsp_account.c:1624
+#, fuzzy
+msgid "Modify tags..."
+msgstr "修改日期..."
+
+#: ../src/dsp_account.c:2025 ../src/dsp_wallet.c:2013
+#, fuzzy
+msgid "Add"
+msgstr "新增..."
+
+#: ../src/dsp_account.c:2028
+#, fuzzy
+msgid "Inherit"
+msgstr "繼承(_I)..."
+
+#: ../src/dsp_account.c:2031
+#, fuzzy
+msgid "Edit"
+msgstr "編輯(_E)"
+
+#: ../src/dsp_account.c:2034 ../src/rep_stats.c:134
+msgid "Filter"
+msgstr "過濾"
+
+#: ../src/dsp_account.c:2037
+#, fuzzy
+msgid "Validate"
+msgstr "有效(_V)"
+
+#: ../src/dsp_account.c:2040
+#, fuzzy
+msgid "Remove"
+msgstr "移除(_R)..."
+
+#: ../src/dsp_account.c:2093 ../src/rep_budget.c:939 ../src/rep_car.c:669
+#: ../src/rep_over.c:698 ../src/rep_stats.c:1497
 msgid "_Month:"
 msgstr "月(_M):"
 
-#: ../src/dsp_account.c:2044 ../src/rep_budget.c:939 ../src/rep_car.c:674
-#: ../src/rep_over.c:666 ../src/rep_stats.c:1490
+#: ../src/dsp_account.c:2098 ../src/rep_budget.c:945 ../src/rep_car.c:675
+#: ../src/rep_over.c:704 ../src/rep_stats.c:1503
 msgid "_Year:"
 msgstr "年(_Y):"
 
-#: ../src/dsp_account.c:2064
+#: ../src/dsp_account.c:2118
 msgid "Future:"
-msgstr "未來:"
+msgstr "未來："
 
-#: ../src/dsp_account.c:2073
+#: ../src/dsp_account.c:2127
 msgid "Today:"
 msgstr "今天:"
 
-#: ../src/dsp_account.c:2082
+#: ../src/dsp_account.c:2136
 msgid "Bank:"
 msgstr "銀行:"
 
-#: ../src/dsp_account.c:2088
+#: ../src/dsp_account.c:2142
 msgid "Minor"
 msgstr "次要"
 
@@ -789,7 +846,7 @@ msgstr "編輯(_E)"
 
 #: ../src/dsp_wallet.c:191
 msgid "_View"
-msgstr ""
+msgstr "檢視(_V)"
 
 #: ../src/dsp_wallet.c:192
 msgid "_Transactions"
@@ -801,7 +858,7 @@ msgstr "報告(_R)"
 
 #: ../src/dsp_wallet.c:194
 msgid "T_ools"
-msgstr ""
+msgstr "工具 (_o)"
 
 #: ../src/dsp_wallet.c:195
 msgid "_Help"
@@ -813,7 +870,7 @@ msgstr "最近開啟(_R)"
 
 #: ../src/dsp_wallet.c:198
 msgid "Export to"
-msgstr ""
+msgstr "匯出至"
 
 #. name, stock id, label, accelerator, tooltip
 #. FileMenu
@@ -823,7 +880,7 @@ msgstr "新增(_N)"
 
 #: ../src/dsp_wallet.c:202
 msgid "Create a new wallet"
-msgstr "建立一個錢包"
+msgstr "建立新錢包"
 
 #: ../src/dsp_wallet.c:203
 msgid "_Open..."
@@ -847,7 +904,7 @@ msgstr "另存新檔..."
 
 #: ../src/dsp_wallet.c:205
 msgid "Save the current wallet with a different name"
-msgstr "儲存目前錢包至不同的名稱"
+msgstr "使用不同的名稱儲存目前的錢包"
 
 #: ../src/dsp_wallet.c:206
 msgid "Revert"
@@ -858,8 +915,9 @@ msgid "Revert to a saved version of this file"
 msgstr "將此檔案還原儲存的版本"
 
 #: ../src/dsp_wallet.c:207
-msgid "Import..."
-msgstr "匯入..."
+#, fuzzy
+msgid "Import QIF/OFX/CSV..."
+msgstr "匯出 CSV..."
 
 #: ../src/dsp_wallet.c:207
 msgid "Open the import assistant"
@@ -888,11 +946,11 @@ msgstr "退出 Homebank"
 #. Export Menu
 #: ../src/dsp_wallet.c:214
 msgid "QIF Format..."
-msgstr ""
+msgstr "QIF格式..."
 
 #: ../src/dsp_wallet.c:214
 msgid "Open the export to QIF assistant"
-msgstr ""
+msgstr "開啟QIF匯入助理"
 
 #. EditMenu
 #: ../src/dsp_wallet.c:217
@@ -941,7 +999,7 @@ msgstr "偏好設定..."
 
 #: ../src/dsp_wallet.c:222
 msgid "Configure homebank"
-msgstr "設定 家庭銀行(Homebank)"
+msgstr "Homebank設定"
 
 #. OperationMenu
 #: ../src/dsp_wallet.c:225
@@ -995,7 +1053,7 @@ msgstr "汽車成本(_C)..."
 
 #: ../src/dsp_wallet.c:233
 msgid "Open the Car cost report"
-msgstr "打開汽車成本報告"
+msgstr "開啟汽車成本報告"
 
 #. ToolsMenu
 #: ../src/dsp_wallet.c:236
@@ -1013,11 +1071,11 @@ msgstr "內容(_C)"
 
 #: ../src/dsp_wallet.c:239
 msgid "Documentation about HomeBank"
-msgstr "關於 家庭銀行(HomeBank) 文件"
+msgstr "Homebank文件"
 
 #: ../src/dsp_wallet.c:240
 msgid "Get Help Online..."
-msgstr "取得線上說明...."
+msgstr "取得線上說明..."
 
 #: ../src/dsp_wallet.c:240
 msgid "Connect to the LaunchPad website for online help"
@@ -1033,7 +1091,7 @@ msgstr "連線到 LaunchPad 網站協助翻譯這個應用程式"
 
 #: ../src/dsp_wallet.c:242
 msgid "Report a Problem..."
-msgstr "回報問題..."
+msgstr "問題回報..."
 
 #: ../src/dsp_wallet.c:242
 msgid "Connect to the LaunchPad website to help fix problems"
@@ -1045,7 +1103,7 @@ msgstr "關於(_A)"
 
 #: ../src/dsp_wallet.c:244
 msgid "About HomeBank"
-msgstr "關於 家庭銀行(HomeBank)"
+msgstr "關於Homebank"
 
 #. name         , stockid, label, accelerator, tooltip, callback, is_active
 #: ../src/dsp_wallet.c:252
@@ -1054,7 +1112,7 @@ msgstr "次要貨幣"
 
 #: ../src/dsp_wallet.c:596 ../src/dsp_wallet.c:649 ../src/dsp_wallet.c:665
 msgid "No suitable web browser executable could be found."
-msgstr "沒有找到可以執行適合的網頁瀏覽器"
+msgstr "找不到可執行的網頁瀏覽器。"
 
 #: ../src/dsp_wallet.c:597 ../src/dsp_wallet.c:618 ../src/dsp_wallet.c:634
 #: ../src/dsp_wallet.c:650 ../src/dsp_wallet.c:666
@@ -1064,76 +1122,113 @@ msgstr "無法顯示 URL '%s'"
 
 #: ../src/dsp_wallet.c:617 ../src/dsp_wallet.c:633
 msgid "No suitable web browser application could be found."
-msgstr "應用程式無法找到適合的網頁瀏覽器"
+msgstr "找不到網頁瀏覽器。"
 
-#: ../src/dsp_wallet.c:754
+#: ../src/dsp_wallet.c:769
 msgid ""
 "Do you want to save the changes\n"
 "in the current file ?"
 msgstr "你確定要儲存目前修改的檔案?"
 
-#: ../src/dsp_wallet.c:758
+#: ../src/dsp_wallet.c:773
 #, c-format
 msgid ""
 "If you do not save, %d changes will be\n"
 "definitively lost."
 msgstr "如果你不儲存, %d 修改中的資料將會遺失."
 
-#: ../src/dsp_wallet.c:763
+#: ../src/dsp_wallet.c:778
 msgid "Do _not save"
 msgstr "不保存(_N)"
 
 #. fix: v4.0
-#: ../src/dsp_wallet.c:835 ../src/homebank.c:1135
+#: ../src/dsp_wallet.c:850 ../src/homebank.c:1145
 msgid "(Nobody)"
 msgstr "(無人)"
 
-#: ../src/dsp_wallet.c:1139
+#: ../src/dsp_wallet.c:1156
 msgid "No transaction to insert"
-msgstr "沒有插入交易"
+msgstr "沒有交易插入"
 
-#: ../src/dsp_wallet.c:1141
+#: ../src/dsp_wallet.c:1158
 #, c-format
 msgid "%d transactions inserted"
 msgstr "%d 交易已經插入"
 
-#: ../src/dsp_wallet.c:1144
+#: ../src/dsp_wallet.c:1161
 msgid "Check automated transactions result"
-msgstr "檢查自動交易後回報"
+msgstr "檢查自動交易的結果"
 
-#: ../src/dsp_wallet.c:1169
+#: ../src/dsp_wallet.c:1186
 msgid "Import Amiga file"
 msgstr "匯入 Amiga 文件"
 
-#: ../src/dsp_wallet.c:1211
+#: ../src/dsp_wallet.c:1228
 #, c-format
 msgid "Revert to the previously saved file of '%s'?"
-msgstr "確定還原到之前儲存的檔案'%s'?"
+msgstr "確定還原到之前儲存的'%s'檔案？"
 
-#: ../src/dsp_wallet.c:1217
+#: ../src/dsp_wallet.c:1234
+#, fuzzy
 msgid ""
 "- Changes made to the wallet will be permanently lost\n"
-"- Wallet will be restored to the last save (.old)"
+"- Wallet will be restored to the last save (.xhb~)"
 msgstr ""
 "- 修改這各項目會導致永久遺失錢包\n"
 "- 錢包已經重置最後儲存的檔案 (.old)"
 
-#: ../src/dsp_wallet.c:1315
+#: ../src/dsp_wallet.c:1332
 msgid "File error"
-msgstr ""
+msgstr "檔案錯誤"
 
-#: ../src/dsp_wallet.c:1316
+#: ../src/dsp_wallet.c:1333
 #, c-format
 msgid "The file %s is not a valid HomeBank file."
-msgstr ""
+msgstr "%s 不是有效的HomeBank檔案。"
 
-#: ../src/dsp_wallet.c:2297
+#: ../src/dsp_wallet.c:1989
+#, fuzzy
+msgid "Open"
+msgstr "開啟(_O)..."
+
+#: ../src/dsp_wallet.c:2004
+#, fuzzy
+msgid "Archive"
+msgstr "封存的資料庫(_H)..."
+
+#. column: Income
+#: ../src/dsp_wallet.c:2007 ../src/dsp_wallet.c:2019 ../src/rep_budget.c:99
+#: ../src/rep_budget.c:1277
+msgid "Budget"
+msgstr "預算"
+
+#: ../src/dsp_wallet.c:2010
+#, fuzzy
+msgid "Show"
+msgstr "顯示..."
+
+#: ../src/dsp_wallet.c:2016
+#, fuzzy
+msgid "Statistics"
+msgstr "統計(_S)..."
+
+#: ../src/dsp_wallet.c:2022
+#, fuzzy
+msgid "Overdrawn"
+msgstr "透支(_R)..."
+
+#: ../src/dsp_wallet.c:2025
+#, fuzzy
+msgid "Carcost"
+msgstr "汽車成本(_C)..."
+
+#: ../src/dsp_wallet.c:2360
 msgid "<b>Accounts summary</b>"
-msgstr "<b>摘要</b>"
+msgstr "<b>帳戶摘要</b>"
 
-#: ../src/dsp_wallet.c:2313
+#: ../src/dsp_wallet.c:2376
 msgid "<b>Upcoming automated transactions</b>"
-msgstr "<b>即將自動交易</b>"
+msgstr "<b>預定的自動交易</b>"
 
 #: ../src/homebank.c:106
 msgid "Output version information and exit"
@@ -1145,57 +1240,57 @@ msgstr "[檔案]"
 
 #: ../src/homebank.c:196
 msgid "Export as QIF"
-msgstr ""
+msgstr "匯出 QIF 檔案"
 
-#: ../src/homebank.c:207
+#: ../src/homebank.c:207 ../src/import.c:1601
 msgid "QIF files"
-msgstr ""
+msgstr "QIF檔案"
 
 #: ../src/homebank.c:212 ../src/homebank.c:277 ../src/homebank.c:342
-#: ../src/homebank.c:463
+#: ../src/homebank.c:463 ../src/import.c:1591
 msgid "All files"
-msgstr ""
+msgstr "所有檔案"
 
 #: ../src/homebank.c:251
 msgid "Import from CSV"
-msgstr "匯入來自於 CSV"
+msgstr "從CSV檔匯入"
 
 #: ../src/homebank.c:257
 msgid "Export as CSV"
 msgstr "匯出 CSV 檔案"
 
-#: ../src/homebank.c:272
+#: ../src/homebank.c:272 ../src/import.c:1606
 msgid "CSV files"
 msgstr "CSV 檔案"
 
 #: ../src/homebank.c:320
 msgid "Open homebank file"
-msgstr ""
+msgstr "開啟 homebank 檔案"
 
 #: ../src/homebank.c:325
 msgid "Save homebank file as"
-msgstr ""
+msgstr "另存 homebank 檔案"
 
 #: ../src/homebank.c:337
 msgid "HomeBank files"
-msgstr ""
+msgstr "HomeBank 檔案"
 
 #: ../src/homebank.c:458
 msgid "Amiga files"
 msgstr "Amiga 檔案"
 
-#: ../src/homebank.c:1244 ../src/homebank.c:1245
+#: ../src/homebank.c:1254 ../src/homebank.c:1255
 msgid "HomeBank options"
-msgstr "家庭銀行(HomeBank) 選項"
+msgstr "HomeBank 選項"
 
-#: ../src/homebank.c:1363
+#: ../src/homebank.c:1373
 #, c-format
 msgid "Unable to open '%s', the file does not exist.\n"
 msgstr "無法開啟 '%s', 檔案不存在.\n"
 
 #: ../src/imp_amiga.c:105
 msgid "Import HomeBank Amiga File"
-msgstr "匯入 家庭銀行(HomeBank) Amiga 檔案"
+msgstr "匯入 HomeBank Amiga 檔案"
 
 #: ../src/imp_amiga.c:106
 #, c-format
@@ -1208,15 +1303,15 @@ msgstr ""
 
 #: ../src/import.c:58
 msgid "Import assistant"
-msgstr ""
+msgstr "匯入助理"
 
 #: ../src/import.c:59
 msgid "Select a file to import"
-msgstr ""
+msgstr "選擇匯入檔案"
 
 #: ../src/import.c:60
 msgid "File content"
-msgstr ""
+msgstr "檔案內容"
 
 #: ../src/import.c:61
 msgid "Transaction selection"
@@ -1226,31 +1321,31 @@ msgstr ""
 msgid "Update your accounts"
 msgstr "更新你的帳戶"
 
-#: ../src/import.c:672
+#: ../src/import.c:682
 msgid "Please select a file..."
-msgstr ""
+msgstr "請選取一個檔案..."
 
-#: ../src/import.c:683
+#: ../src/import.c:693
 msgid "Unknown/Invalid file..."
-msgstr ""
+msgstr "未知/無效的檔案..."
 
-#: ../src/import.c:687
+#: ../src/import.c:697
 msgid "QIF file recognised !"
 msgstr ""
 
-#: ../src/import.c:694
+#: ../src/import.c:704
 msgid "OFX file recognised !"
 msgstr "驗證 OFX 檔案!"
 
-#: ../src/import.c:697
+#: ../src/import.c:707
 msgid "** OFX support is disabled **"
-msgstr ""
+msgstr "** OFX 支援已關閉 **"
 
-#: ../src/import.c:702
+#: ../src/import.c:712
 msgid "CSV operation file recognised !"
 msgstr "驗證 CSV 操作檔案!"
 
-#: ../src/import.c:1239
+#: ../src/import.c:1249
 #, c-format
 msgid ""
 "%d accounts\n"
@@ -1258,8 +1353,12 @@ msgid ""
 "%d payees\n"
 "%d categories\n"
 msgstr ""
+"%d 帳戶\n"
+"%d 交易\n"
+"%d 收款人\n"
+"%d 分類\n"
 
-#: ../src/import.c:1362
+#: ../src/import.c:1372
 #, c-format
 msgid ""
 "%d accounts will be created.\n"
@@ -1271,12 +1370,12 @@ msgstr ""
 "%d 交易已經匯入.\n"
 "%d 交易已經拒絕."
 
-#: ../src/import.c:1379
+#: ../src/import.c:1389
 #, c-format
 msgid "Import assistant (%d of %d)"
 msgstr "匯入助理 (%d of %d)"
 
-#: ../src/import.c:1518
+#: ../src/import.c:1530
 msgid ""
 "HomeBank can import transactions from several file formats:\n"
 "\n"
@@ -1291,24 +1390,41 @@ msgid ""
 "\n"
 "Now, click \"forward\" to start importing a file."
 msgstr ""
+"HomeBank 可以從數種檔案格式匯入交易：\n"
+"\n"
+"- QIF\n"
+"- OFX/QFX (optional at compilation time)\n"
+"- CSV (HomeBank 僅支援 CSV 格式匯出交易)\n"
+"\n"
+"目前未支援其他格式。\n"
+"\n"
+"匯入過程有幾個步驟。您的 HomeBank 帳戶\n"
+"不會被修改，直到離開助理前按下\"套用\"。\n"
+"\n"
+"現在，按下\"前進\"開始匯入檔案。"
 
-#: ../src/import.c:1658
+#: ../src/import.c:1596
+#, fuzzy
+msgid "OFX/QFX files"
+msgstr "QIF檔案"
+
+#: ../src/import.c:1693
 msgid "<b>File analysis summary</b>"
-msgstr ""
+msgstr "<b>檔案分析摘要</b>"
 
-#: ../src/import.c:1666
+#: ../src/import.c:1701
 msgid "Filename:"
-msgstr ""
+msgstr "檔案名稱："
 
-#: ../src/import.c:1674
+#: ../src/import.c:1709
 msgid "Details:"
-msgstr ""
+msgstr "詳細資料："
 
-#: ../src/import.c:1685
+#: ../src/import.c:1720
 msgid "<b>Unamed account selection</b>"
 msgstr ""
 
-#: ../src/import.c:1697
+#: ../src/import.c:1732
 msgid ""
 "The file that you just loaded appears to contain transactions for an account "
 "without specifying\n"
@@ -1316,50 +1432,50 @@ msgid ""
 "transactions can be attached."
 msgstr ""
 
-#: ../src/import.c:1707
+#: ../src/import.c:1742
 msgid "new account"
-msgstr ""
+msgstr "新帳戶"
 
-#: ../src/import.c:1712
+#: ../src/import.c:1747
 msgid "_Name:"
-msgstr ""
+msgstr "名稱(_N)："
 
-#: ../src/import.c:1720
+#: ../src/import.c:1755
 msgid "existing account"
-msgstr ""
+msgstr "已存在的帳戶"
 
-#: ../src/import.c:1775
+#: ../src/import.c:1810
 msgid "<b>Duplicate match options</b>"
-msgstr ""
+msgstr "複製相配的選項"
 
-#: ../src/import.c:1787
+#: ../src/import.c:1822
 msgid "Date _tolerance:"
 msgstr "日期格式(_D):"
 
-#: ../src/import.c:1797
+#: ../src/import.c:1832
 msgid "days"
 msgstr "天"
 
-#: ../src/import.c:1814
+#: ../src/import.c:1849
 msgid ""
 "The match is done in order: by account, amount and date.\n"
 "A date tolerance of 0 days means an exact match"
 msgstr ""
 
-#: ../src/import.c:1827
+#: ../src/import.c:1862
 msgid "<b>Transactions to import</b>"
 msgstr "<b>交易匯入</b>"
 
-#: ../src/import.c:1847
+#: ../src/import.c:1882
 msgid "<b>Possible duplicate for the above selected transaction</b>"
 msgstr "<b>可能重複作上述選定的交易</b>"
 
 #. Create the expander
-#: ../src/import.c:1851
+#: ../src/import.c:1886
 msgid "Details"
 msgstr "詳細資料"
 
-#: ../src/import.c:1916
+#: ../src/import.c:1951
 msgid ""
 "Click \"Apply\" to update your accounts.\n"
 "\n"
@@ -1367,7 +1483,7 @@ msgstr ""
 "點擊 \"套用\" 來更新你的帳戶.\n"
 "\n"
 
-#: ../src/list_account.c:253 ../src/list_operation.c:468
+#: ../src/list_account.c:253 ../src/list_operation.c:477
 msgid "State"
 msgstr "狀態"
 
@@ -1386,8 +1502,8 @@ msgstr "今天"
 msgid "Future"
 msgstr "未來"
 
-#: ../src/list_operation.c:491 ../src/list_operation.c:702
-#: ../src/rep_car.c:995 ../src/rep_over.c:968
+#: ../src/list_operation.c:500 ../src/list_operation.c:711
+#: ../src/rep_car.c:996 ../src/rep_over.c:1018
 msgid "Date"
 msgstr "日期"
 
@@ -1404,17 +1520,12 @@ msgid "Spent & Budget"
 msgstr "花费和预算"
 
 #. column: Expense
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1250
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1273
 msgid "Spent"
 msgstr "花費"
 
-#. column: Income
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1254
-msgid "Budget"
-msgstr "預算"
-
 #. column: Balance
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1258
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1281
 msgid "Decay"
 msgstr "衰減"
 
@@ -1458,42 +1569,42 @@ msgstr "重新整理"
 msgid "Refresh results"
 msgstr "重新整理報告"
 
-#: ../src/rep_budget.c:857
+#: ../src/rep_budget.c:863
 msgid "Budget report"
 msgstr "預算報告"
 
-#: ../src/rep_budget.c:883 ../src/rep_car.c:623 ../src/rep_over.c:617
-#: ../src/rep_stats.c:1423
+#: ../src/rep_budget.c:889 ../src/rep_car.c:623 ../src/rep_over.c:654
+#: ../src/rep_stats.c:1436
 msgid "<b>Display</b>"
 msgstr "<b>顯示</b>"
 
-#: ../src/rep_budget.c:887
+#: ../src/rep_budget.c:893
 msgid "_Kind:"
 msgstr "種類(_K):"
 
-#: ../src/rep_budget.c:894 ../src/rep_stats.c:1434
+#: ../src/rep_budget.c:900 ../src/rep_stats.c:1447
 msgid "_View:"
 msgstr "檢視(_V):"
 
-#: ../src/rep_budget.c:901 ../src/rep_car.c:635 ../src/rep_over.c:628
-#: ../src/rep_stats.c:1446
+#: ../src/rep_budget.c:907 ../src/rep_car.c:636 ../src/rep_over.c:666
+#: ../src/rep_stats.c:1459
 msgid "_Minor currency"
 msgstr "次要貨幣(_M)"
 
-#: ../src/rep_budget.c:911 ../src/rep_car.c:645 ../src/rep_over.c:638
-#: ../src/rep_stats.c:1462
+#: ../src/rep_budget.c:917 ../src/rep_car.c:646 ../src/rep_over.c:676
+#: ../src/rep_stats.c:1475
 msgid "<b>Date filter</b>"
 msgstr "<b>日期過濾</b>"
 
-#: ../src/rep_budget.c:987
+#: ../src/rep_budget.c:1010
 msgid "Decay:"
 msgstr "透支:"
 
-#: ../src/rep_budget.c:996
+#: ../src/rep_budget.c:1019
 msgid "Budget:"
 msgstr "預算:"
 
-#: ../src/rep_budget.c:1005
+#: ../src/rep_budget.c:1028
 msgid "Spent:"
 msgstr "花費:"
 
@@ -1506,35 +1617,35 @@ msgid "_Car category:"
 msgstr "汽車分類(_C):"
 
 #. column: consumption for 100Km
-#: ../src/rep_car.c:711 ../src/rep_car.c:1047
+#: ../src/rep_car.c:712 ../src/rep_car.c:1048
 msgid "100 Km"
 msgstr "100 公里"
 
-#: ../src/rep_car.c:714
+#: ../src/rep_car.c:715
 msgid "Total"
 msgstr "總計"
 
-#: ../src/rep_car.c:718
+#: ../src/rep_car.c:719
 msgid "Meter:"
 msgstr "計量器:"
 
-#: ../src/rep_car.c:722
+#: ../src/rep_car.c:723
 msgid "Consumption:"
 msgstr "消費:"
 
-#: ../src/rep_car.c:726
+#: ../src/rep_car.c:727
 msgid "Fuel cost:"
 msgstr "燃料費用:"
 
-#: ../src/rep_car.c:730
+#: ../src/rep_car.c:731
 msgid "Other cost:"
 msgstr "其它費用:"
 
-#: ../src/rep_car.c:734
+#: ../src/rep_car.c:735
 msgid "Total cost:"
 msgstr "費用總計:"
 
-#. 
+#.
 #. LST_CAR_DATE,
 #. LST_CAR_WORDING,
 #. LST_CAR_METER,
@@ -1543,10 +1654,10 @@ msgstr "費用總計:"
 #. LST_CAR_AMOUNT,
 #. LST_CAR_DIST,
 #. LST_CAR_100KM
-#. 
-#. 
+#.
+#.
 #. column: Wording
-#. 
+#.
 #. column = gtk_tree_view_column_new();
 #. gtk_tree_view_column_set_title(column, _("Wording"));
 #. gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
@@ -1554,24 +1665,24 @@ msgstr "費用總計:"
 #. gtk_tree_view_column_pack_start(column, renderer, TRUE);
 #. gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_WORDING);
 #. //gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_text_cell_data_function, NULL, NULL);
-#. 
+#.
 #. column: Meter
-#: ../src/rep_car.c:1027
+#: ../src/rep_car.c:1028
 msgid "Meter"
 msgstr "計量器"
 
 #. column: Fuel load
-#: ../src/rep_car.c:1031
+#: ../src/rep_car.c:1032
 msgid "Fuel"
 msgstr "燃料"
 
 #. column: Price by unit
-#: ../src/rep_car.c:1035
+#: ../src/rep_car.c:1036
 msgid "Price"
 msgstr "價格"
 
 #. column: Distance done
-#: ../src/rep_car.c:1043
+#: ../src/rep_car.c:1044
 msgid "Dist."
 msgstr "距離."
 
@@ -1586,20 +1697,20 @@ msgstr "以直線方式查看結果"
 #: ../src/rep_over.c:302
 #, c-format
 msgid "%d/%d under %s"
-msgstr ""
+msgstr "%d/%d 在 %s 之下"
 
-#: ../src/rep_over.c:588
+#: ../src/rep_over.c:625
 msgid "Overdrawn report"
 msgstr "透支報告"
 
 #. column: Balance
-#: ../src/rep_over.c:997 ../src/rep_stats.c:202 ../src/rep_stats.c:1854
+#: ../src/rep_over.c:1047 ../src/rep_stats.c:202 ../src/rep_stats.c:1887
 msgid "Balance"
 msgstr "平衡"
 
 #: ../src/rep_stats.c:128
 msgid "Pie"
-msgstr "餅圖"
+msgstr "圓餅圖"
 
 #: ../src/rep_stats.c:128
 msgid "View results as pies"
@@ -1614,20 +1725,16 @@ msgid "Toggle rate"
 msgstr "改變比率"
 
 #: ../src/rep_stats.c:134
-msgid "Filter"
-msgstr "過濾"
-
-#: ../src/rep_stats.c:134
 msgid "Edit the filter"
 msgstr "編輯過濾"
 
 #: ../src/rep_stats.c:198
 msgid "Subcategory"
-msgstr ""
+msgstr "子分類"
 
 #: ../src/rep_stats.c:198
 msgid "Tag"
-msgstr ""
+msgstr "標籤"
 
 #: ../src/rep_stats.c:202
 msgid "Exp. & Inc."
@@ -1729,100 +1836,100 @@ msgstr "十一月"
 msgid "December"
 msgstr "十二月"
 
-#: ../src/rep_stats.c:1397
+#: ../src/rep_stats.c:1410
 msgid "Statistics Report"
 msgstr "統計報告"
 
-#: ../src/rep_stats.c:1427
+#: ../src/rep_stats.c:1440
 msgid "_For:"
 msgstr "給(_F):"
 
-#: ../src/rep_stats.c:1441
+#: ../src/rep_stats.c:1454
 msgid "By _amount"
 msgstr "於總額(_A):"
 
-#: ../src/rep_stats.c:1539
+#: ../src/rep_stats.c:1572
 msgid "Balance:"
 msgstr "平衡:"
 
-#: ../src/rep_stats.c:1548
+#: ../src/rep_stats.c:1581
 msgid "Income:"
 msgstr "收入:"
 
-#: ../src/rep_stats.c:1557
+#: ../src/rep_stats.c:1590
 msgid "Expense:"
 msgstr "開支:"
 
-#: ../src/rep_stats.c:1831
+#: ../src/rep_stats.c:1864
 msgid "Result"
-msgstr "報告"
+msgstr "結果"
 
-#: ../src/ui_account.c:864
+#: ../src/ui_account.c:868
 #, c-format
 msgid "(account %d)"
-msgstr ""
+msgstr "(帳戶 %d)"
 
-#: ../src/ui_account.c:896
+#: ../src/ui_account.c:898
 msgid "Remove not allowed"
-msgstr ""
+msgstr "不允許刪除"
 
-#: ../src/ui_account.c:897
+#: ../src/ui_account.c:899
 msgid "This account is used and cannot be removed."
-msgstr ""
+msgstr "本帳戶使用中，不能刪除。"
 
-#: ../src/ui_account.c:1004
+#: ../src/ui_account.c:1039
 msgid "Manage Accounts"
-msgstr ""
+msgstr "管理帳戶"
 
-#: ../src/ui_account.c:1077
+#: ../src/ui_account.c:1112
 msgid "<b>Informations</b>"
 msgstr "<b>資訊</b>"
 
-#: ../src/ui_account.c:1085
+#: ../src/ui_account.c:1120
 msgid "_Heading:"
 msgstr "標題(_H)"
 
-#: ../src/ui_account.c:1102
+#: ../src/ui_account.c:1137
 msgid "_Number:"
 msgstr "號碼(_N)"
 
-#: ../src/ui_account.c:1109
+#: ../src/ui_account.c:1144
 msgid "_Bank name:"
 msgstr "銀行名稱(_B)"
 
-#: ../src/ui_account.c:1116
+#: ../src/ui_account.c:1151
 msgid "Include in the budget"
 msgstr "包含預算"
 
-#: ../src/ui_account.c:1121
+#: ../src/ui_account.c:1156
 msgid "This account was closed"
 msgstr "這個帳戶已經關閉"
 
-#: ../src/ui_account.c:1133
+#: ../src/ui_account.c:1168
 msgid "<b>Balances</b>"
 msgstr "<b>帳戶餘額</b>"
 
-#: ../src/ui_account.c:1137
+#: ../src/ui_account.c:1172
 msgid "_Initial:"
 msgstr "最初(_I):"
 
-#: ../src/ui_account.c:1148
+#: ../src/ui_account.c:1183
 msgid "_Overdrawn at:"
 msgstr "透支於(_O):"
 
-#: ../src/ui_account.c:1162
+#: ../src/ui_account.c:1197
 msgid "<b>Cheque number</b>"
 msgstr "<b>支票號碼</b>"
 
-#: ../src/ui_account.c:1166
+#: ../src/ui_account.c:1201
 msgid "Notebook _1:"
 msgstr "支票簿_1"
 
-#: ../src/ui_account.c:1180
+#: ../src/ui_account.c:1215
 msgid "Notebook _2:"
 msgstr "支票簿_2"
 
-#: ../src/ui_category.c:867
+#: ../src/ui_category.c:873
 msgid ""
 "The csv file must contains the exact numbers of column,\n"
 "separated by a semi-colon, please see the help for more details."
@@ -1830,67 +1937,73 @@ msgstr ""
 "CSV檔案必須包含確切的欄位，\n"
 "使用分號分隔，需要更多說明請查閱輔助說明。"
 
-#: ../src/ui_category.c:996 ../src/ui_payee.c:579
+#: ../src/ui_category.c:1002 ../src/ui_payee.c:633
 msgid "Modify..."
 msgstr "修改..."
 
-#: ../src/ui_category.c:1018
+#: ../src/ui_category.c:1024
 msgid "_Income"
-msgstr "收益(_I)"
+msgstr "收入(_I)"
 
-#: ../src/ui_category.c:1100 ../src/ui_payee.c:620
+#: ../src/ui_category.c:1106 ../src/ui_payee.c:674
 msgid "Error"
-msgstr ""
+msgstr "錯誤"
 
-#: ../src/ui_category.c:1101
+#: ../src/ui_category.c:1107
 #, c-format
 msgid ""
 "Cannot rename this Category,\n"
 "from '%s' to '%s',\n"
 "this name already exists."
 msgstr ""
+"不能更改分類名稱。\n"
+"從 '%s\" 到 '%s'。\n"
+"這個名稱已存在。"
 
-#: ../src/ui_category.c:1219
+#: ../src/ui_category.c:1225
 msgid "Remove a category ?"
-msgstr ""
+msgstr "刪除分類？"
 
-#: ../src/ui_category.c:1220
+#: ../src/ui_category.c:1226
 #, c-format
 msgid ""
 "If you remove '%s', archive and operation referencing this category\n"
 "will set place to 'no category'"
 msgstr ""
 
-#: ../src/ui_category.c:1428
+#: ../src/ui_category.c:1443
 msgid "Manage Categories"
-msgstr ""
+msgstr "管理分類"
 
-#: ../src/ui_category.c:1466
+#: ../src/ui_category.c:1481
 msgid "I_ncome"
 msgstr "收入(_I)"
 
-#: ../src/ui_payee.c:621
+#: ../src/ui_payee.c:675
 #, c-format
 msgid ""
 "Cannot rename this Payee,\n"
 "from '%s' to '%s',\n"
 "this name already exists."
 msgstr ""
+"無法更改收款人名稱。\n"
+"從 '%s' 到 '%s'。\n"
+"這個名稱已存在。"
 
-#: ../src/ui_payee.c:741
+#: ../src/ui_payee.c:795
 msgid "Remove a payee ?"
-msgstr ""
+msgstr "刪除收款人？"
 
-#: ../src/ui_payee.c:742
+#: ../src/ui_payee.c:796
 #, c-format
 msgid ""
 "If you remove '%s', archive and operation referencing this payee\n"
 "will set place to 'no payee'"
 msgstr ""
 
-#: ../src/ui_payee.c:826
+#: ../src/ui_payee.c:880
 msgid "Manage Payees"
-msgstr ""
+msgstr "管理收款人"
 
 #: ../src/widgets.c:65
 msgid "Credit card"
@@ -1911,3 +2024,6 @@ msgstr "銀行轉帳"
 #: ../src/widgets.c:69
 msgid "Internal transfer"
 msgstr "內部轉帳"
+
+#~ msgid "Import..."
+#~ msgstr "匯入..."

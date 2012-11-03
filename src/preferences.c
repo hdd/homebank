@@ -595,8 +595,8 @@ static void homebank_pref_set_string(
 
 	if( string != NULL && *string != '\0')
 		g_key_file_set_string  (key_file, group_name, key, string);
-	//else
-	//	g_key_file_set_string  (key_file, group_name, key, "");
+	else
+		g_key_file_set_string  (key_file, group_name, key, "");
 		
 }
 
@@ -717,6 +717,8 @@ gsize length;
 		DB( g_print(" -> filename: %s\n", filename) );
 
 		g_file_set_contents(filename, contents, length, NULL);
+
+		DB( g_print(" -> contents: %s\n", contents) );
 
 		DB( g_print(" -> freeing filename\n") );
 		g_free(filename);

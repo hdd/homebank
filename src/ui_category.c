@@ -667,13 +667,11 @@ Category *item;
 
 
 
-static void ui_cat_listview_populate_ghfunc(gpointer key, gpointer value, GtkTreeModel *model)
+static void ui_cat_listview_populate_cat_ghfunc(gpointer key, gpointer value, GtkTreeModel *model)
 {
 GtkTreeIter  toplevel, child;
 Category *item = value;
 gboolean ret;
-
-	//todo:may not work if toplevl not inserted before 1st child
 
 	//DB( g_print("cat listview populate: %d %s\n", (guint32 *)key, item->name) );
 
@@ -687,7 +685,16 @@ gboolean ret;
 			LST_DEFCAT_NAME, item->name,
 			-1);
 	}
-	else
+}
+
+static void ui_cat_listview_populate_subcat_ghfunc(gpointer key, gpointer value, GtkTreeModel *model)
+{
+GtkTreeIter  toplevel, child;
+Category *item = value;
+gboolean ret;
+
+
+	if( item->parent != 0 )
 	{
 		ret = ui_cat_listview_get_top_level(model, item->parent, &toplevel);
 		if( ret == TRUE )
@@ -720,8 +727,10 @@ GtkTreeModel *model;
 	g_object_ref(model); /* Make sure the model stays with us after the tree view unrefs it */
 	gtk_tree_view_set_model(GTK_TREE_VIEW(view), NULL); /* Detach model from view */
 
-	/* populate */
-	g_hash_table_foreach(GLOBALS->h_cat, (GHFunc)ui_cat_listview_populate_ghfunc, model);
+	/* we have to do this in 2 times to ensure toplevel (cat) will be added before childs */
+	/* populate cat 1st */
+	g_hash_table_foreach(GLOBALS->h_cat, (GHFunc)ui_cat_listview_populate_cat_ghfunc, model);
+	g_hash_table_foreach(GLOBALS->h_cat, (GHFunc)ui_cat_listview_populate_subcat_ghfunc, model);
 
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(view), model); /* Re-attach model to view */
@@ -815,7 +824,7 @@ gchar *result = g_new (gchar, length);
 
   for (i=0; i < length; i++)
   {
-    if (!isprint(text[i]) || text[i]==':')
+    if (text[i]==':')
       continue;
     result[count++] = text[i];
   }
@@ -1498,7 +1507,7 @@ gint row;
 
     gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin), GTK_SHADOW_ETCHED_IN);
 	//gtk_container_set_border_width (GTK_CONTAINER(scrollwin), 5);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
  	treeview = (GtkWidget *)ui_cat_listview_new(FALSE);
  	data.LV_cat = treeview;
 	gtk_container_add(GTK_CONTAINER(scrollwin), treeview);

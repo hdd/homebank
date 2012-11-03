@@ -346,11 +346,19 @@ QIF_Tran tran = { 0 };
 	gchar *value = NULL;
 	gchar *cur_acc;
 		
+		
+		DB( g_print(" -> encoding is %s\n", g_io_channel_get_encoding(io)) );
+		
+		g_io_channel_set_encoding(io, NULL, NULL);
+		
 		cur_acc = g_strdup(QIF_UNKNOW_ACCOUNT_NAME);
 
 		for(;;)
 		{
 			io_stat = g_io_channel_read_line(io, &tmpstr, NULL, NULL, &err);
+			
+			DB (g_print(" line read %s\n", tmpstr));
+			
 			if( io_stat == G_IO_STATUS_EOF )
 				break;
 			if( io_stat == G_IO_STATUS_ERROR )
@@ -360,6 +368,8 @@ QIF_Tran tran = { 0 };
 			}
 			if( io_stat == G_IO_STATUS_NORMAL )
 			{
+				
+				
 				
 				hb_string_strip_crlf(tmpstr);
 
@@ -531,6 +541,40 @@ QIF_Tran tran = { 0 };
 }
 
 
+
+Operation *
+account_qif_get_child_transfert(Operation *src, GList *list)
+{
+Operation *item;
+
+	DB( g_print("(operation) operation_get_child_transfert\n") );
+
+	DB( g_print(" search: %d %s %f %d=>%d\n", src->date, src->wording, src->amount, src->account, src->dst_account) );
+
+	list = g_list_first(list);
+	while (list != NULL)
+	{
+		item = list->data;
+		if( item->paymode == PAYMODE_PERSTRANSFERT)
+		{
+			if( src->date == item->date &&
+			    src->account == item->dst_account &&
+			    src->dst_account == item->account &&
+			    ABS(src->amount) == ABS(item->amount) )
+			{
+				DB( g_print(" found : %d %s %f %d=>%d\n", item->date, item->wording, item->amount, item->account, item->dst_account) );
+
+				return item;			
+			}
+		}
+		list = g_list_next(list);
+	}		
+
+	DB( g_print(" not found...\n") );
+
+	return NULL;
+}
+
 /*
 ** this is ourmain qif entry point
 **
@@ -565,7 +609,7 @@ GList *list = NULL;
 	while (qiflist != NULL)
 	{
 	QIF_Tran *item = qiflist->data;
-	Operation *newope;
+	Operation *newope, *child;
 	Account *accitem;
 	Payee *payitem;
 	Category *catitem;
@@ -673,9 +717,22 @@ GList *list = NULL;
 		if( newope->amount > 0)
 			newope->flags |= OF_INCOME;
 
-		DB( g_print(" -> append trans. acc:'%s', memo:'%s', val:%.2f\n", item->account, item->memo, item->amount ) );
+		child = NULL;
+		
+		child = account_qif_get_child_transfert(newope, list);
+		if( child != NULL)
+		{
+			DB( g_print(" -> already exist\n" ) );
+		
+			da_operation_free(newope);
+		}
+		else
+		{
+			DB( g_print(" -> append trans. acc:'%s', memo:'%s', val:%.2f\n", item->account, item->memo, item->amount ) );
 
-		list = g_list_append(list, newope);
+			list = g_list_append(list, newope);
+		}
+		
 
 		qiflist = g_list_next(qiflist);
 	}

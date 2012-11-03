@@ -809,7 +809,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
  	scrollwin = gtk_scrolled_window_new(NULL,NULL);
 	gtk_box_pack_start (GTK_BOX (hbox), scrollwin, TRUE, TRUE, 0);
 
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin), GTK_SHADOW_ETCHED_IN);
 	//gtk_container_set_border_width (GTK_CONTAINER(scrollwin), HB_BOX_SPACING);
 
@@ -858,7 +858,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
  	scrollwin = gtk_scrolled_window_new(NULL,NULL);
 	gtk_box_pack_start (GTK_BOX (hbox), scrollwin, TRUE, TRUE, 0);
 
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin), GTK_SHADOW_ETCHED_IN);
 	//gtk_container_set_border_width (GTK_CONTAINER(scrollwin), HB_BOX_SPACING);
 
@@ -907,7 +907,7 @@ GtkWidget *container, *scrollwin, *hbox, *vbox, *label, *widget;
  	scrollwin = gtk_scrolled_window_new(NULL,NULL);
 	gtk_box_pack_start (GTK_BOX (hbox), scrollwin, TRUE, TRUE, 0);
 
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin), GTK_SHADOW_ETCHED_IN);
 	//gtk_container_set_border_width (GTK_CONTAINER(scrollwin), HB_BOX_SPACING);
 

@@ -204,7 +204,7 @@ static GtkActionEntry entries[] = {
   { "Save"       , GTK_STOCK_SAVE           , N_("_Save")         , NULL, N_("Save the current wallet"),    G_CALLBACK (wallet_action_save) },
   { "SaveAs"     , GTK_STOCK_SAVE_AS        , N_("Save As...")    , NULL, N_("Save the current wallet with a different name"),    G_CALLBACK (wallet_action_saveas) },
   { "Revert"     , GTK_STOCK_REVERT_TO_SAVED, N_("Revert")        , NULL, N_("Revert to a saved version of this file"),    G_CALLBACK (wallet_action_revert) },
-  { "Import"     , NULL                     , N_("Import...")     , NULL, N_("Open the import assistant"),    G_CALLBACK (wallet_action_import) },
+  { "Import"     , NULL                     , N_("Import QIF/OFX/CSV...")     , NULL, N_("Open the import assistant"),    G_CALLBACK (wallet_action_import) },
 
   { "Properties" , GTK_STOCK_PROPERTIES     , N_("_Properties..."), NULL, N_("Configure wallet"),    G_CALLBACK (wallet_action_defwallet) },
   { "Close"      , GTK_STOCK_CLOSE          , N_("_Close")        , NULL, N_("Close the current wallet"),    G_CALLBACK (wallet_action_close) },
@@ -1435,19 +1435,24 @@ Account *acc;
 	{
 		acc = list->data;
 
-		//todo: for stock account
-		/*
-			if( acc->type == ACC_TYPE_STOCKS )
-				gtk_tree_store_append (GTK_TREE_STORE(model), &child_iter, &iter2);
-			else
-		*/
+		//do not display closed accounts
+		if( !(acc->flags & AF_CLOSED))
+		{
 
-		DB( g_printf(" -> insert %d:%s\n", acc->key, acc->name) );
+			//todo: for stock account
+			/*
+				if( acc->type == ACC_TYPE_STOCKS )
+					gtk_tree_store_append (GTK_TREE_STORE(model), &child_iter, &iter2);
+				else
+			*/
 
-		gtk_tree_store_append (GTK_TREE_STORE(model), &child_iter, &iter1);
-		gtk_tree_store_set (GTK_TREE_STORE(model), &child_iter,
-			  LST_DSPACC_DATAS, acc,
-			  -1);
+			DB( g_printf(" -> insert %d:%s\n", acc->key, acc->name) );
+
+			gtk_tree_store_append (GTK_TREE_STORE(model), &child_iter, &iter1);
+			gtk_tree_store_set (GTK_TREE_STORE(model), &child_iter,
+				  LST_DSPACC_DATAS, acc,
+				  -1);
+		}
 
 		list = g_list_next(list);
 	}
@@ -1667,7 +1672,7 @@ gint flags;
 		
 		
 		sensitive = (GLOBALS->change != 0 ) ? TRUE : FALSE;
-		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/FileMenu/SaveAs"), sensitive);
+		//gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/FileMenu/SaveAs"), sensitive);
 		//if(sensitive == TRUE && GLOBALS->wallet_is_new == TRUE) sensitive = FALSE;
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/FileMenu/Save"), sensitive);
 		gtk_action_set_sensitive(gtk_ui_manager_get_action(data->ui, "/MenuBar/FileMenu/Revert"), GLOBALS->exists_old);
@@ -1968,6 +1973,7 @@ wallet_construct_menu(struct wallet_data *data)
 GError *error = NULL;
 GtkUIManager *ui;
 GtkActionGroup *actions;
+GtkAction *action;
 
 	actions = gtk_action_group_new ("Wallet");
 	data->actions = actions;
@@ -1977,6 +1983,46 @@ GtkActionGroup *actions;
 			entries,
 			n_entries,
 			NULL);
+
+	/* set which action should have priority in the toolbar & also the short label (without ...) */
+	action = gtk_action_group_get_action(actions, "Open");
+	g_object_set(action, "is_important", TRUE, "short_label", _("Open"), NULL);
+	
+	action = gtk_action_group_get_action(actions, "Save");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+	action = gtk_action_group_get_action(actions, "Account");
+	g_object_set(action, "short_label", _("Account"), NULL);
+
+	action = gtk_action_group_get_action(actions, "Payee");
+	g_object_set(action, "short_label", _("Payee"), NULL);
+
+	action = gtk_action_group_get_action(actions, "Category");
+	g_object_set(action, "short_label", _("Category"), NULL);
+
+	action = gtk_action_group_get_action(actions, "Archive");
+	g_object_set(action, "short_label", _("Archive"), NULL);
+
+	action = gtk_action_group_get_action(actions, "Budget");
+	g_object_set(action, "short_label", _("Budget"), NULL);
+
+	action = gtk_action_group_get_action(actions, "ShowOpe");
+	g_object_set(action, "short_label", _("Show"), NULL);
+
+	action = gtk_action_group_get_action(actions, "AddOpe");
+	g_object_set(action, "is_important", TRUE, "short_label", _("Add"), NULL);
+
+	action = gtk_action_group_get_action(actions, "Statistics");
+	g_object_set(action, "short_label", _("Statistics"), NULL);
+
+	action = gtk_action_group_get_action(actions, "BudgetR");
+	g_object_set(action, "short_label", _("Budget"), NULL);
+
+	action = gtk_action_group_get_action(actions, "Overdrawn");
+	g_object_set(action, "short_label", _("Overdrawn"), NULL);
+
+	action = gtk_action_group_get_action(actions, "Carcost");
+	g_object_set(action, "short_label", _("Carcost"), NULL);
 
 	gtk_action_group_add_toggle_actions (actions,
 			toggle_entries,
@@ -2316,7 +2362,7 @@ GtkWidget *statusbar;
 
 		sw = gtk_scrolled_window_new (NULL, NULL);
 		gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
-		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 		gtk_box_pack_start (GTK_BOX (box), sw, TRUE, TRUE, 0);
 		//gtk_container_set_border_width (GTK_CONTAINER(sw), 5);
 
@@ -2332,7 +2378,7 @@ GtkWidget *statusbar;
 
 		sw = gtk_scrolled_window_new (NULL, NULL);
 		gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
-		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 		gtk_box_pack_start (GTK_BOX (box), sw, TRUE, TRUE, 0);
 
 		treeview = (GtkWidget *)create_list_upcoming();

@@ -603,6 +603,7 @@ GtkWidget *label, *widget, *table, *alignment;
 gint row;
 GtkUIManager *ui;
 GtkActionGroup *actions;
+GtkAction *action;
 GError *error = NULL;
 
 	data = g_malloc0(sizeof(struct repover_data));
@@ -718,6 +719,18 @@ GError *error = NULL;
 	// data to action callbacks is set here (data)
 	gtk_action_group_add_actions (actions, entries, n_entries, data);
 
+	/* set which action should have priority in the toolbar */
+	action = gtk_action_group_get_action(actions, "List");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+	action = gtk_action_group_get_action(actions, "Line");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+	action = gtk_action_group_get_action(actions, "Refresh");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+
+
 	ui = gtk_ui_manager_new ();
 	gtk_ui_manager_insert_action_group (ui, actions, 0);
 	gtk_window_add_accel_group (GTK_WINDOW (window), gtk_ui_manager_get_accel_group (ui));
@@ -758,7 +771,7 @@ GError *error = NULL;
 	//page: list
 	widget = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
 	treeview = create_list_repover();
 	data->LV_report = treeview;
@@ -866,7 +879,7 @@ gboolean is_over;
 		g_free(markuptxt);
 	}
 	else
-	g_object_set(renderer, "markup", datestr, NULL);
+	g_object_set(renderer, "text", datestr, NULL);
 
 }
 
@@ -883,12 +896,12 @@ gboolean is_over;
 
 	if(is_over==TRUE)
 	{
-		markuptxt = g_strdup_printf("<span color='#%06x'>%s</span>", PREFS->color_warn, buf);
+		markuptxt = g_markup_printf_escaped("<span color='#%06x'>%s</span>", PREFS->color_warn, buf);
 		g_object_set(renderer, "markup", markuptxt, NULL);
 		g_free(markuptxt);
 	}
 	else
-		g_object_set(renderer, "markup", buf, NULL);
+		g_object_set(renderer, "text", buf, NULL);
 
 }
 

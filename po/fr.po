@@ -7,123 +7,123 @@ msgid ""
 msgstr ""
 "Project-Id-Version: homebank\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-13 23:35+0200\n"
-"PO-Revision-Date: 2008-11-06 10:42+0000\n"
-"Last-Translator: Michael Castielli <michael.castielli@gmail.com>\n"
+"POT-Creation-Date: 2009-01-31 18:22+0100\n"
+"PO-Revision-Date: 2009-01-31 17:15+0100\n"
+"Last-Translator: Maxime DOYEN\n"
 "Language-Team: fr <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-11-22 13:12+0000\n"
+"X-Launchpad-Export-Date: 2009-01-31 15:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. "translator-credits"	, "trans",
-#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:720
+#: ../data/homebank.desktop.in.in.h:1 ../src/dsp_wallet.c:730
 msgid "Free, easy, personal accounting for everyone."
-msgstr "Comptabilité personnelle, libre, facile, pour chacun."
+msgstr "Comptabilité personnelle libre et facile, pour tous."
 
 #: ../data/homebank.desktop.in.in.h:2 ../src/homebank.c:29
 msgid "HomeBank"
 msgstr "HomeBank"
 
-#: ../src/def_archive.c:114
+#: ../src/def_archive.c:97
 msgid "Day"
 msgstr "Jour"
 
-#: ../src/def_archive.c:114
+#: ../src/def_archive.c:97
 msgid "Week"
 msgstr "Semaine"
 
-#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+#: ../src/def_archive.c:97 ../src/rep_stats.c:198
 msgid "Month"
 msgstr "Mois"
 
-#: ../src/def_archive.c:114 ../src/rep_stats.c:198
+#: ../src/def_archive.c:97 ../src/rep_stats.c:198
 msgid "Year"
 msgstr "Année"
 
-#: ../src/def_archive.c:139 ../src/dsp_account.c:659
+#: ../src/def_archive.c:118 ../src/dsp_account.c:662
 msgid "(new archive)"
 msgstr "(nouvelle archive)"
 
-#: ../src/def_archive.c:603
+#: ../src/def_archive.c:583
 msgid "Manage Archives"
 msgstr "Gérer Archives"
 
-#: ../src/def_archive.c:667
+#: ../src/def_archive.c:645
 msgid "<b>General infos</b>"
 msgstr "<b>Informations générales</b>"
 
-#: ../src/def_archive.c:675
+#: ../src/def_archive.c:653
 msgid "_Wording:"
 msgstr "_Libellé:"
 
-#: ../src/def_archive.c:683 ../src/def_operation.c:684
+#: ../src/def_archive.c:661 ../src/def_operation.c:684
 msgid "_Amount:"
 msgstr "Mont_ant:"
 
-#: ../src/def_archive.c:699 ../src/def_operation.c:700 ../src/import.c:1725
-#: ../src/rep_over.c:621
+#: ../src/def_archive.c:677 ../src/def_operation.c:700 ../src/import.c:1760
+#: ../src/rep_over.c:658
 msgid "A_ccount:"
 msgstr "_Compte:"
 
-#: ../src/def_archive.c:707 ../src/def_operation.c:708
+#: ../src/def_archive.c:685 ../src/def_operation.c:708
 msgid "_Validated"
 msgstr "_Validée"
 
-#: ../src/def_archive.c:715
+#: ../src/def_archive.c:693
 msgid "<b>Optional infos</b>"
-msgstr "<b>Informations optionelles</b>"
+msgstr "<b>Informations optionnelles</b>"
 
-#: ../src/def_archive.c:719 ../src/def_operation.c:740
+#: ../src/def_archive.c:697 ../src/def_operation.c:740
 msgid "Pay_ment:"
 msgstr "Paie_ment:"
 
-#: ../src/def_archive.c:738 ../src/def_operation.c:759
+#: ../src/def_archive.c:716 ../src/def_operation.c:759
 msgid "Of notebook _2"
 msgstr "Du carnet _2"
 
-#: ../src/def_archive.c:744 ../src/def_operation.c:765
+#: ../src/def_archive.c:722 ../src/def_operation.c:765
 msgid "_To account:"
 msgstr "Vers comp_te:"
 
-#: ../src/def_archive.c:751 ../src/def_operation.c:781
+#: ../src/def_archive.c:729 ../src/def_operation.c:781
 msgid "_Payee:"
 msgstr "_Tiers:"
 
-#: ../src/def_archive.c:759 ../src/def_operation.c:791 ../src/def_wallet.c:235
+#: ../src/def_archive.c:737 ../src/def_operation.c:791 ../src/def_wallet.c:235
 msgid "_Category:"
 msgstr "_Catégorie:"
 
-#: ../src/def_archive.c:771
+#: ../src/def_archive.c:749
 msgid "<b>Automated insertion</b>"
 msgstr "<b>Insertion automatique</b>"
 
-#: ../src/def_archive.c:775
+#: ../src/def_archive.c:753
 msgid "_Activate"
 msgstr "_Activer"
 
-#: ../src/def_archive.c:782
+#: ../src/def_archive.c:760
 msgid "_Limit to:"
 msgstr "_Limiter à:"
 
-#: ../src/def_archive.c:790
+#: ../src/def_archive.c:768
 msgid "t_imes"
 msgstr "fo_is"
 
-#: ../src/def_archive.c:795
+#: ../src/def_archive.c:773
 msgid "Ever_y:"
 msgstr "Tous les:"
 
-#: ../src/def_archive.c:804
+#: ../src/def_archive.c:782
 msgid "_Unit:"
 msgstr "_Unitée:"
 
-#: ../src/def_archive.c:811
+#: ../src/def_archive.c:789
 msgid "_Next on:"
 msgstr "Prochai_ne le:"
 
-#: ../src/def_budget.c:322 ../src/ui_category.c:866
+#: ../src/def_budget.c:322 ../src/ui_category.c:872
 msgid "File format error"
 msgstr "Erreur du format de fichier"
 
@@ -151,17 +151,17 @@ msgstr "est le même"
 msgid "is different"
 msgstr "est différent"
 
-#: ../src/def_budget.c:806 ../src/ui_category.c:1523 ../src/ui_payee.c:895
+#: ../src/def_budget.c:806 ../src/ui_category.c:1538 ../src/ui_payee.c:949
 msgid "_Import"
 msgstr "_Importer"
 
-#: ../src/def_budget.c:810 ../src/ui_category.c:1527 ../src/ui_payee.c:899
+#: ../src/def_budget.c:810 ../src/ui_category.c:1542 ../src/ui_payee.c:953
 msgid "E_xport"
 msgstr "E_xporter"
 
-#: ../src/def_budget.c:921 ../src/rep_stats.c:939 ../src/rep_stats.c:955
-#: ../src/rep_stats.c:962 ../src/ui_account.c:344 ../src/ui_category.c:187
-#: ../src/ui_category.c:441 ../src/ui_payee.c:147 ../src/ui_payee.c:319
+#: ../src/def_budget.c:921 ../src/rep_stats.c:948 ../src/rep_stats.c:965
+#: ../src/rep_stats.c:974 ../src/ui_account.c:348 ../src/ui_category.c:288
+#: ../src/ui_category.c:441 ../src/ui_payee.c:237 ../src/ui_payee.c:373
 #: ../src/widgets.c:64
 msgid "(none)"
 msgstr "(aucun)"
@@ -199,13 +199,13 @@ msgstr "Inverser"
 msgid "<b>Filter Date</b>"
 msgstr "<b>Filtre Date</b>"
 
-#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:915
-#: ../src/rep_car.c:649 ../src/rep_over.c:642 ../src/rep_stats.c:1466
+#: ../src/def_filter.c:985 ../src/def_filter.c:1081 ../src/rep_budget.c:921
+#: ../src/rep_car.c:650 ../src/rep_over.c:680 ../src/rep_stats.c:1479
 msgid "_From:"
 msgstr "_De:"
 
-#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:921
-#: ../src/rep_car.c:656 ../src/rep_over.c:648 ../src/rep_stats.c:1472
+#: ../src/def_filter.c:993 ../src/def_filter.c:1088 ../src/rep_budget.c:927
+#: ../src/rep_car.c:657 ../src/rep_over.c:686 ../src/rep_stats.c:1485
 msgid "_To:"
 msgstr "_A:"
 
@@ -232,7 +232,7 @@ msgstr "affichage 'Ajouts'"
 #. gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, row, row+1);
 #: ../src/def_filter.c:1045
 msgid "display 'Edited'"
-msgstr "affichage 'Editions'"
+msgstr "affichage 'Éditions'"
 
 #: ../src/def_filter.c:1064
 msgid "<b>Filter Amount</b>"
@@ -244,25 +244,27 @@ msgstr "<b>Filtre Paiement</b>"
 
 #: ../src/def_filter.c:1167
 msgid "Edit Filter"
-msgstr "Editer Filtre"
+msgstr "Éditer Filtre"
 
 #. common (date + state + amount)
 #: ../src/def_filter.c:1201 ../src/def_pref.c:154
 msgid "General"
 msgstr "Général"
 
-#: ../src/def_filter.c:1207 ../src/def_pref.c:1773 ../src/list_operation.c:378
-#: ../src/list_operation.c:762 ../src/rep_budget.c:1239 ../src/rep_stats.c:198
+#: ../src/def_filter.c:1207 ../src/def_pref.c:1791 ../src/dsp_wallet.c:2001
+#: ../src/list_operation.c:378 ../src/list_operation.c:771
+#: ../src/rep_budget.c:1262 ../src/rep_stats.c:198
 msgid "Category"
 msgstr "Catégorie"
 
-#: ../src/def_filter.c:1212 ../src/def_pref.c:1768 ../src/list_operation.c:316
-#: ../src/list_operation.c:751 ../src/list_upcoming.c:172
-#: ../src/rep_stats.c:198
+#: ../src/def_filter.c:1212 ../src/def_pref.c:1786 ../src/dsp_wallet.c:1998
+#: ../src/list_operation.c:316 ../src/list_operation.c:760
+#: ../src/list_upcoming.c:172 ../src/rep_stats.c:198
 msgid "Payee"
 msgstr "Tiers"
 
-#: ../src/def_filter.c:1221 ../src/list_operation.c:691
+#: ../src/def_filter.c:1221 ../src/dsp_wallet.c:1995
+#: ../src/list_operation.c:700
 msgid "Account"
 msgstr "Compte"
 
@@ -316,7 +318,7 @@ msgstr ""
 "Date acceptées ici:\n"
 "jour,\n"
 "jour/mois ou mois/jour,\n"
-"et date complete"
+"et date complète"
 
 #: ../src/def_operation.c:674
 msgid "_Description:"
@@ -328,7 +330,7 @@ msgstr "_Rappel"
 
 #: ../src/def_operation.c:732
 msgid "<b>Optional information</b>"
-msgstr "<b>Infos optionelles</b>"
+msgstr "<b>Informations optionnelles</b>"
 
 #: ../src/def_operation.c:772
 msgid "_Info:"
@@ -339,7 +341,7 @@ msgid ""
 "Autocompletion and direct saise\n"
 "is available for Payee"
 msgstr ""
-"Autocomplétion et saisie directe\n"
+"Auto complétion et saisie directe\n"
 "disponible pour Tiers"
 
 #: ../src/def_operation.c:798
@@ -347,7 +349,7 @@ msgid ""
 "Autocompletion and direct saise\n"
 "is available for Category"
 msgstr ""
-"Autocomplétion et saisie directe\n"
+"Auto complétion et saisie directe\n"
 "disponible pour Catégorie"
 
 #: ../src/def_operation.c:801
@@ -419,7 +421,7 @@ msgstr "Voir _détails"
 msgid "<b>Budget options</b>"
 msgstr "<b>Options du budget</b>"
 
-#: ../src/def_pref.c:819 ../src/def_pref.c:1181 ../src/def_wallet.c:195
+#: ../src/def_pref.c:819 ../src/def_pref.c:1199 ../src/def_wallet.c:195
 msgid "<b>General</b>"
 msgstr "<b>Général</b>"
 
@@ -439,23 +441,23 @@ msgstr "Valeur:"
 msgid "<b>Numbers format</b>"
 msgstr "<b>Format de nombres</b>"
 
-#: ../src/def_pref.c:860 ../src/def_pref.c:1016
+#: ../src/def_pref.c:860 ../src/def_pref.c:1034
 msgid "Prefix symbol:"
 msgstr "Symbole préfixe:"
 
-#: ../src/def_pref.c:867 ../src/def_pref.c:1023
+#: ../src/def_pref.c:867 ../src/def_pref.c:1041
 msgid "Suffix symbol:"
-msgstr "Symbole sufixe:"
+msgstr "Symbole suffixe:"
 
-#: ../src/def_pref.c:874 ../src/def_pref.c:1030
+#: ../src/def_pref.c:874 ../src/def_pref.c:1048
 msgid "Decimal char:"
 msgstr "Car. décimal:"
 
-#: ../src/def_pref.c:881 ../src/def_pref.c:1037
+#: ../src/def_pref.c:881 ../src/def_pref.c:1055
 msgid "Grouping char:"
 msgstr "Car. groupement:"
 
-#: ../src/def_pref.c:888 ../src/def_pref.c:1044
+#: ../src/def_pref.c:888 ../src/def_pref.c:1062
 msgid "_Frac digits:"
 msgstr "Nombre de _décimales:"
 
@@ -467,130 +469,150 @@ msgstr "<b>Options de date</b>"
 msgid "_Date format:"
 msgstr "Format de _date:"
 
-#: ../src/def_pref.c:1012
+#: ../src/def_pref.c:1004
+msgid ""
+"%a locale's abbreviated weekday name.\n"
+"%A locale's full weekday name. \n"
+"%b locale's abbreviated month name. \n"
+"%B locale's full month name. \n"
+"%c locale's appropriate date and time representation. \n"
+"%C century number (the year divided by 100 and truncated to an integer) as a "
+"decimal number [00-99]. \n"
+"%d day of the month as a decimal number [01,31]. \n"
+"%D same as %m/%d/%y. \n"
+"%e day of the month as a decimal number [1,31]; a single digit is preceded "
+"by a space. \n"
+"%j day of the year as a decimal number [001,366]. \n"
+"%m month as a decimal number [01,12]. \n"
+"%x locale's appropriate date representation. \n"
+"%y year without century as a decimal number [00,99]. \n"
+"%Y year with century as a decimal number. \n"
+msgstr ""
+
+#: ../src/def_pref.c:1030
 msgid "<b>Numbers options</b>"
 msgstr "<b>Options des nombres</b>"
 
-#: ../src/def_pref.c:1075
+#: ../src/def_pref.c:1093
 msgid "<b>Measurement units</b>"
 msgstr "<b>Unités de mesure</b>"
 
-#: ../src/def_pref.c:1079
+#: ../src/def_pref.c:1097
 msgid "Use _Imperial units"
 msgstr "Utiliser les unitées _Impériales"
 
-#: ../src/def_pref.c:1105
+#: ../src/def_pref.c:1123
 msgid "<b>Transaction list</b>"
 msgstr "<b>Liste des opérations</b>"
 
-#: ../src/def_pref.c:1185
+#: ../src/def_pref.c:1203
 msgid "_Toolbar:"
 msgstr "_Barre d'outils:"
 
-#: ../src/def_pref.c:1209
+#: ../src/def_pref.c:1227
 msgid "<b>Amount colors</b>"
 msgstr "<b>Couleurs des montant</b>"
 
-#: ../src/def_pref.c:1213
+#: ../src/def_pref.c:1231
 msgid "_Expense:"
 msgstr "_Débit:"
 
-#: ../src/def_pref.c:1223
+#: ../src/def_pref.c:1241
 msgid "_Income:"
 msgstr "_Crédit:"
 
-#: ../src/def_pref.c:1233
+#: ../src/def_pref.c:1251
 msgid "_Warning:"
 msgstr "_Alerte:"
 
-#: ../src/def_pref.c:1262
+#: ../src/def_pref.c:1280
 msgid "<b>Folders</b>"
 msgstr "<b>Dossiers</b>"
 
-#: ../src/def_pref.c:1270
+#: ../src/def_pref.c:1288
 msgid "_Wallet:"
 msgstr "_Portefeuille:"
 
-#: ../src/def_pref.c:1286
+#: ../src/def_pref.c:1304
 msgid "_Import:"
 msgstr "_Importer:"
 
-#: ../src/def_pref.c:1302
+#: ../src/def_pref.c:1320
 msgid "_Export:"
 msgstr "E_xporter:"
 
-#: ../src/def_pref.c:1320
+#: ../src/def_pref.c:1338
 msgid "_Run the wizard"
 msgstr "Lance_r l'assistant"
 
-#: ../src/def_pref.c:1329
+#: ../src/def_pref.c:1347
 msgid "<b>Initial date filter</b>"
 msgstr "<b>Filtre date initial</b>"
 
-#: ../src/def_pref.c:1333 ../src/dsp_account.c:2034 ../src/rep_budget.c:927
-#: ../src/rep_car.c:662 ../src/rep_over.c:654 ../src/rep_stats.c:1478
+#: ../src/def_pref.c:1351 ../src/dsp_account.c:2088 ../src/rep_budget.c:933
+#: ../src/rep_car.c:663 ../src/rep_over.c:692 ../src/rep_stats.c:1491
 msgid "_Range:"
 msgstr "_Plage:"
 
-#: ../src/def_pref.c:1343
+#: ../src/def_pref.c:1361
 msgid "<b>Start behaviour</b>"
 msgstr "<b>Comportement au démarrage</b>"
 
-#: ../src/def_pref.c:1347
+#: ../src/def_pref.c:1365
 msgid "Load last opened file"
 msgstr "Charger dernier fichier ouvert"
 
-#: ../src/def_pref.c:1448
+#: ../src/def_pref.c:1466
 msgid "Preferences"
 msgstr "Préférences"
 
 #. {	N_(""), COL_OPE_STATUS,		},
 #. {	N_(""), COL_OPE_DATE,		},
-#: ../src/def_pref.c:1767 ../src/list_operation.c:291
-#: ../src/list_operation.c:735
+#: ../src/def_pref.c:1785 ../src/list_operation.c:291
+#: ../src/list_operation.c:744
 msgid "Info"
 msgstr "Info"
 
-#: ../src/def_pref.c:1769 ../src/list_operation.c:334
-#: ../src/list_operation.c:713 ../src/list_upcoming.c:184
-#: ../src/rep_over.c:979
+#: ../src/def_pref.c:1787 ../src/list_operation.c:334
+#: ../src/list_operation.c:722 ../src/list_upcoming.c:184
+#: ../src/rep_over.c:1029
 msgid "Description"
 msgstr "Description"
 
 #. column: Amount
-#: ../src/def_pref.c:1770 ../src/list_operation.c:509
-#: ../src/list_operation.c:723 ../src/list_upcoming.c:196
-#: ../src/rep_car.c:1039
+#: ../src/def_pref.c:1788 ../src/list_operation.c:518
+#: ../src/list_operation.c:732 ../src/list_upcoming.c:196
+#: ../src/rep_car.c:1040
 msgid "Amount"
 msgstr "Montant"
 
 #. column: Expense
-#: ../src/def_pref.c:1771 ../src/list_operation.c:512 ../src/rep_budget.c:101
-#: ../src/rep_over.c:989 ../src/rep_stats.c:202 ../src/rep_stats.c:1842
+#: ../src/def_pref.c:1789 ../src/list_operation.c:521 ../src/rep_budget.c:101
+#: ../src/rep_over.c:1039 ../src/rep_stats.c:202 ../src/rep_stats.c:1875
 msgid "Expense"
 msgstr "Débit"
 
 #. column: Income
-#: ../src/def_pref.c:1772 ../src/list_operation.c:515 ../src/rep_budget.c:101
-#: ../src/rep_over.c:993 ../src/rep_stats.c:202 ../src/rep_stats.c:1848
+#: ../src/def_pref.c:1790 ../src/list_operation.c:524 ../src/rep_budget.c:101
+#: ../src/rep_over.c:1043 ../src/rep_stats.c:202 ../src/rep_stats.c:1881
 msgid "Income"
 msgstr "Crédit"
 
-#: ../src/def_pref.c:1774 ../src/list_operation.c:396
+#: ../src/def_pref.c:1792 ../src/list_operation.c:396
 msgid "Tags"
 msgstr "Etiquettes"
 
-#: ../src/def_pref.c:1893 ../src/ui_account.c:495 ../src/ui_payee.c:449
+#: ../src/def_pref.c:1911 ../src/ui_account.c:499 ../src/ui_payee.c:503
 msgid "Visible"
 msgstr "Visible"
 
-#: ../src/def_pref.c:1904
+#: ../src/def_pref.c:1922
 msgid "Column"
 msgstr "Colonne"
 
 #: ../src/def_wallet.c:164
 msgid "Wallet properties"
-msgstr "Propriétés Portefeuille"
+msgstr "Propriétés du portefeuille"
 
 #: ../src/def_wallet.c:203
 msgid "_Owner:"
@@ -613,89 +635,89 @@ msgid "<b>Car cost</b>"
 msgstr "<b>Coût voiture</b>"
 
 #. name, stock id, label
-#: ../src/dsp_account.c:155
+#: ../src/dsp_account.c:156
 msgid "_Account"
 msgstr "_Compte"
 
-#: ../src/dsp_account.c:156
+#: ../src/dsp_account.c:157
 msgid "Transacti_on"
 msgstr "_Opération"
 
-#: ../src/dsp_account.c:157
+#: ../src/dsp_account.c:158
 msgid "_Tools"
 msgstr "_Outils"
 
-#: ../src/dsp_account.c:159 ../src/dsp_wallet.c:210
+#: ../src/dsp_account.c:160 ../src/dsp_wallet.c:210
 msgid "_Close"
 msgstr "_Fermer"
 
-#: ../src/dsp_account.c:159
+#: ../src/dsp_account.c:160
 msgid "Close the current account"
 msgstr "Fermer le portefeuille courant"
 
 #. name, stock id, label, accelerator, tooltip
-#: ../src/dsp_account.c:162
+#: ../src/dsp_account.c:163
 msgid "_Filter..."
 msgstr "_Filtre..."
 
-#: ../src/dsp_account.c:162
+#: ../src/dsp_account.c:163
 msgid "Open the list filter"
 msgstr "Ouvre le filtre de liste"
 
-#: ../src/dsp_account.c:164
+#: ../src/dsp_account.c:165
 msgid "_Add..."
 msgstr "_Ajouter..."
 
-#: ../src/dsp_account.c:164
+#: ../src/dsp_account.c:165
 msgid "Add a new transaction"
 msgstr "Ajouter une nouvelle opération"
 
-#: ../src/dsp_account.c:165
+#: ../src/dsp_account.c:166
 msgid "_Inherit..."
 msgstr "_Hériter..."
 
-#: ../src/dsp_account.c:165
+#: ../src/dsp_account.c:166
 msgid "Inherit from the active transaction"
 msgstr "Hériter depuis l'opération active"
 
-#: ../src/dsp_account.c:166
+#: ../src/dsp_account.c:167
 msgid "_Edit..."
-msgstr "_Editer..."
+msgstr "_Éditer..."
 
-#: ../src/dsp_account.c:166
+#: ../src/dsp_account.c:167
 msgid "Edit the active transaction"
-msgstr "Editer l'opération active"
+msgstr "Éditer l'opération active"
 
-#: ../src/dsp_account.c:167
-msgid "(In)_Validate..."
-msgstr "(Dé)_Valider..."
+#: ../src/dsp_account.c:168
+msgid "(In)_Validate"
+msgstr "(Dé)_Valider"
 
-#: ../src/dsp_account.c:167
+#: ../src/dsp_account.c:168
 msgid "Validate the active transactions"
 msgstr "Valider les opérations actives"
 
-#: ../src/dsp_account.c:168
+#: ../src/dsp_account.c:169
 msgid "_Remove..."
 msgstr "_Supprimer..."
 
-#: ../src/dsp_account.c:168
+#: ../src/dsp_account.c:169
 msgid "Remove the active transactions"
 msgstr "Supprimer les opérations actives"
 
-#: ../src/dsp_account.c:169
+#: ../src/dsp_account.c:170
 msgid "Make an archive..."
 msgstr "Créer une archive..."
 
-#: ../src/dsp_account.c:171
+#: ../src/dsp_account.c:172
 msgid "Export CSV..."
 msgstr "Exporter CSV..."
 
-#: ../src/dsp_account.c:348
+#: ../src/dsp_account.c:349
 msgid "No corresponding transfert can be found."
 msgstr "Pas de virement correspondant trouvé."
 
 #. warn the useer we have notfound the child internal transfert
-#: ../src/dsp_account.c:368
+#: ../src/dsp_account.c:369
 #, c-format
 msgid ""
 "Could not delete child transfert:\n"
@@ -714,7 +736,7 @@ msgstr ""
 "\n"
 "Vous devez corriger le problème manuellement."
 
-#: ../src/dsp_account.c:614
+#: ../src/dsp_account.c:617
 msgid ""
 "Do you want to create an Archive with\n"
 "each of the selected transaction ?"
@@ -722,7 +744,7 @@ msgstr ""
 "Voulez-vous créer une Archive avec\n"
 "chaque Opérations sélectionnées ?"
 
-#: ../src/dsp_account.c:1212
+#: ../src/dsp_account.c:1215
 msgid ""
 "Do you want to delete\n"
 "each of the selected transaction ?"
@@ -730,63 +752,91 @@ msgstr ""
 "Voulez-vous effacer\n"
 "chaque Opérations sélectionnées ?"
 
-#: ../src/dsp_account.c:1516
+#: ../src/dsp_account.c:1520
 #, c-format
 msgid "%d transactions selected, %d hidden"
 msgstr "%d opérations sélectionnées, %d cachées"
 
-#: ../src/dsp_account.c:1518
+#: ../src/dsp_account.c:1522
 #, c-format
 msgid "%d transactions selected, %d hidden :: %s ( %s - %s)"
 msgstr "%d opérations sélectionnées, %d cachées :: %s ( %s - %s )"
 
-#: ../src/dsp_account.c:1583
+#: ../src/dsp_account.c:1588
 msgid "Modify date..."
 msgstr "Modifier date..."
 
-#: ../src/dsp_account.c:1588
+#: ../src/dsp_account.c:1593
 msgid "Modify info..."
 msgstr "Modifier info..."
 
-#: ../src/dsp_account.c:1595
+#: ../src/dsp_account.c:1600
 msgid "Modify payee..."
 msgstr "Modifier tiers..."
 
-#: ../src/dsp_account.c:1601
+#: ../src/dsp_account.c:1606
 msgid "Modify description..."
 msgstr "Modifier le libellé..."
 
-#: ../src/dsp_account.c:1607
+#: ../src/dsp_account.c:1613
 msgid "Modify amount..."
 msgstr "Modifier montant..."
 
-#: ../src/dsp_account.c:1612
+#: ../src/dsp_account.c:1618
 msgid "Modify category..."
 msgstr "Modifier catégorie..."
 
-#: ../src/dsp_account.c:2039 ../src/rep_budget.c:933 ../src/rep_car.c:668
-#: ../src/rep_over.c:660 ../src/rep_stats.c:1484
+#: ../src/dsp_account.c:1624
+msgid "Modify tags..."
+msgstr "Modifier les étiquettes..."
+
+#: ../src/dsp_account.c:2025 ../src/dsp_wallet.c:2013
+msgid "Add"
+msgstr "Ajouter"
+
+#: ../src/dsp_account.c:2028
+msgid "Inherit"
+msgstr "Hériter"
+
+#: ../src/dsp_account.c:2031
+msgid "Edit"
+msgstr "Éditer"
+
+#: ../src/dsp_account.c:2034 ../src/rep_stats.c:134
+msgid "Filter"
+msgstr "Filtre"
+
+#: ../src/dsp_account.c:2037
+msgid "Validate"
+msgstr "Valider"
+
+#: ../src/dsp_account.c:2040
+msgid "Remove"
+msgstr "Supprimer"
+
+#: ../src/dsp_account.c:2093 ../src/rep_budget.c:939 ../src/rep_car.c:669
+#: ../src/rep_over.c:698 ../src/rep_stats.c:1497
 msgid "_Month:"
 msgstr "_Mois:"
 
-#: ../src/dsp_account.c:2044 ../src/rep_budget.c:939 ../src/rep_car.c:674
-#: ../src/rep_over.c:666 ../src/rep_stats.c:1490
+#: ../src/dsp_account.c:2098 ../src/rep_budget.c:945 ../src/rep_car.c:675
+#: ../src/rep_over.c:704 ../src/rep_stats.c:1503
 msgid "_Year:"
 msgstr "_Année:"
 
-#: ../src/dsp_account.c:2064
+#: ../src/dsp_account.c:2118
 msgid "Future:"
 msgstr "Futur:"
 
-#: ../src/dsp_account.c:2073
+#: ../src/dsp_account.c:2127
 msgid "Today:"
 msgstr "Aujourd'hui:"
 
-#: ../src/dsp_account.c:2082
+#: ../src/dsp_account.c:2136
 msgid "Bank:"
 msgstr "Banque:"
 
-#: ../src/dsp_account.c:2088
+#: ../src/dsp_account.c:2142
 msgid "Minor"
 msgstr "Mineur"
 
@@ -870,8 +920,8 @@ msgid "Revert to a saved version of this file"
 msgstr "Rétablir a une version sauvé de ce fichier"
 
 #: ../src/dsp_wallet.c:207
-msgid "Import..."
-msgstr "Import..."
+msgid "Import QIF/OFX/CSV..."
+msgstr "Importer QIF/OFX/CSV..."
 
 #: ../src/dsp_wallet.c:207
 msgid "Open the import assistant"
@@ -1080,7 +1130,7 @@ msgstr "Impossible d'afficher l'URL « %s »"
 msgid "No suitable web browser application could be found."
 msgstr "Impossible de trouver un navigateur Web adéquat."
 
-#: ../src/dsp_wallet.c:754
+#: ../src/dsp_wallet.c:769
 msgid ""
 "Do you want to save the changes\n"
 "in the current file ?"
@@ -1088,7 +1138,7 @@ msgstr ""
 "Voulez-vous enregistrer les modifications\n"
 "dans le fichier courant ?"
 
-#: ../src/dsp_wallet.c:758
+#: ../src/dsp_wallet.c:773
 #, c-format
 msgid ""
 "If you do not save, %d changes will be\n"
@@ -1097,59 +1147,90 @@ msgstr ""
 "Si vous n'enregistrez pas, %d modifications seront\n"
 "definitivement perdues."
 
-#: ../src/dsp_wallet.c:763
+#: ../src/dsp_wallet.c:778
 msgid "Do _not save"
 msgstr "_Ne pas enregistrer"
 
 #. fix: v4.0
-#: ../src/dsp_wallet.c:835 ../src/homebank.c:1135
+#: ../src/dsp_wallet.c:850 ../src/homebank.c:1145
 msgid "(Nobody)"
 msgstr "(Personne)"
 
-#: ../src/dsp_wallet.c:1139
+#: ../src/dsp_wallet.c:1156
 msgid "No transaction to insert"
 msgstr "Pas d'opérations à insérer"
 
-#: ../src/dsp_wallet.c:1141
+#: ../src/dsp_wallet.c:1158
 #, c-format
 msgid "%d transactions inserted"
 msgstr "%d opérations insérées"
 
-#: ../src/dsp_wallet.c:1144
+#: ../src/dsp_wallet.c:1161
 msgid "Check automated transactions result"
 msgstr "Résultat de vérification des opérations automatiques"
 
-#: ../src/dsp_wallet.c:1169
+#: ../src/dsp_wallet.c:1186
 msgid "Import Amiga file"
 msgstr "Importer un fichier Amiga"
 
-#: ../src/dsp_wallet.c:1211
+#: ../src/dsp_wallet.c:1228
 #, c-format
 msgid "Revert to the previously saved file of '%s'?"
 msgstr "Revenir au fichier précédemment sauvé de '%s'?"
 
-#: ../src/dsp_wallet.c:1217
+#: ../src/dsp_wallet.c:1234
 msgid ""
 "- Changes made to the wallet will be permanently lost\n"
-"- Wallet will be restored to the last save (.old)"
+"- Wallet will be restored to the last save (.xhb~)"
 msgstr ""
-"- Les changements fait au portefeuille cournat seront définitivement perdus\n"
-"- Le portefeuille sera restoré à la derniere sauveguarde (.old)"
+"- Les changements fait au portefeuille courant seront définitivement perdus\n"
+"- Le portefeuille sera restauré à la dernière sauvegarde (.xhb~)"
 
-#: ../src/dsp_wallet.c:1315
+#: ../src/dsp_wallet.c:1332
 msgid "File error"
 msgstr "Erreur fichier"
 
-#: ../src/dsp_wallet.c:1316
+#: ../src/dsp_wallet.c:1333
 #, c-format
 msgid "The file %s is not a valid HomeBank file."
 msgstr "Le fichier %s n'est pas un fichier Homebank valide."
 
-#: ../src/dsp_wallet.c:2297
+#: ../src/dsp_wallet.c:1989
+msgid "Open"
+msgstr "Ouvrir"
+
+#: ../src/dsp_wallet.c:2004
+msgid "Archive"
+msgstr "Archive"
+
+#. column: Income
+#: ../src/dsp_wallet.c:2007 ../src/dsp_wallet.c:2019 ../src/rep_budget.c:99
+#: ../src/rep_budget.c:1277
+msgid "Budget"
+msgstr "Budget"
+
+#: ../src/dsp_wallet.c:2010
+msgid "Show"
+msgstr "Voir"
+
+#: ../src/dsp_wallet.c:2016
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: ../src/dsp_wallet.c:2022
+msgid "Overdrawn"
+msgstr "Découvert"
+
+#: ../src/dsp_wallet.c:2025
+#, fuzzy
+msgid "Carcost"
+msgstr "Coût voiture"
+
+#: ../src/dsp_wallet.c:2360
 msgid "<b>Accounts summary</b>"
 msgstr "<b>Résumé comptes</b>"
 
-#: ../src/dsp_wallet.c:2313
+#: ../src/dsp_wallet.c:2376
 msgid "<b>Upcoming automated transactions</b>"
 msgstr "<b>Opérations automatiques à venir</b>"
 
@@ -1165,12 +1246,12 @@ msgstr "[FICHIER]"
 msgid "Export as QIF"
 msgstr "Exporter en QIF"
 
-#: ../src/homebank.c:207
+#: ../src/homebank.c:207 ../src/import.c:1601
 msgid "QIF files"
 msgstr "Fichiers QIF"
 
 #: ../src/homebank.c:212 ../src/homebank.c:277 ../src/homebank.c:342
-#: ../src/homebank.c:463
+#: ../src/homebank.c:463 ../src/import.c:1591
 msgid "All files"
 msgstr "Tous fichiers"
 
@@ -1182,7 +1263,7 @@ msgstr "Importer depuis CSV"
 msgid "Export as CSV"
 msgstr "Exporter vers CSV"
 
-#: ../src/homebank.c:272
+#: ../src/homebank.c:272 ../src/import.c:1606
 msgid "CSV files"
 msgstr "Fichier CSV"
 
@@ -1202,11 +1283,11 @@ msgstr "Fichiers HomeBank"
 msgid "Amiga files"
 msgstr "Fichiers Amiga"
 
-#: ../src/homebank.c:1244 ../src/homebank.c:1245
+#: ../src/homebank.c:1254 ../src/homebank.c:1255
 msgid "HomeBank options"
 msgstr "Options d'HomeBank"
 
-#: ../src/homebank.c:1363
+#: ../src/homebank.c:1373
 #, c-format
 msgid "Unable to open '%s', the file does not exist.\n"
 msgstr "Impossible d'ouvrir '%s', le fichier n'existe pas.\n"
@@ -1230,7 +1311,7 @@ msgstr "Assistant d'import"
 
 #: ../src/import.c:59
 msgid "Select a file to import"
-msgstr "Selectionnez un fichier à importer"
+msgstr "Sélectionnez un fichier à importer"
 
 #: ../src/import.c:60
 msgid "File content"
@@ -1244,31 +1325,31 @@ msgstr "Sélection d'opérations"
 msgid "Update your accounts"
 msgstr "Mettre à jour vos comptes"
 
-#: ../src/import.c:672
+#: ../src/import.c:682
 msgid "Please select a file..."
 msgstr "Veuillez sélectionner un fichier..."
 
-#: ../src/import.c:683
+#: ../src/import.c:693
 msgid "Unknown/Invalid file..."
 msgstr "Fichier inconnu/Invalide..."
 
-#: ../src/import.c:687
+#: ../src/import.c:697
 msgid "QIF file recognised !"
 msgstr "Fichier QIF reconnu !"
 
-#: ../src/import.c:694
+#: ../src/import.c:704
 msgid "OFX file recognised !"
 msgstr "Fichier OFX reconnu !"
 
-#: ../src/import.c:697
+#: ../src/import.c:707
 msgid "** OFX support is disabled **"
 msgstr "** gestion OFX désactivé **"
 
-#: ../src/import.c:702
+#: ../src/import.c:712
 msgid "CSV operation file recognised !"
 msgstr "Fichier CSV operation reconnu !"
 
-#: ../src/import.c:1239
+#: ../src/import.c:1249
 #, c-format
 msgid ""
 "%d accounts\n"
@@ -1281,7 +1362,7 @@ msgstr ""
 "%d tiers\n"
 "%d catégories\n"
 
-#: ../src/import.c:1362
+#: ../src/import.c:1372
 #, c-format
 msgid ""
 "%d accounts will be created.\n"
@@ -1289,17 +1370,17 @@ msgid ""
 "%d transactions will be imported.\n"
 "%d transactions will be rejected."
 msgstr ""
-"%d comptess seront créés.\n"
+"%d comptes seront créés.\n"
 "\n"
 "%d opérations seront importées.\n"
 "%d opérations seront rejetées."
 
-#: ../src/import.c:1379
+#: ../src/import.c:1389
 #, c-format
 msgid "Import assistant (%d of %d)"
 msgstr "Assistant d'import (%d de %d)"
 
-#: ../src/import.c:1518
+#: ../src/import.c:1530
 msgid ""
 "HomeBank can import transactions from several file formats:\n"
 "\n"
@@ -1328,23 +1409,27 @@ msgstr ""
 "\n"
 "Maintenant, cliquez sur \"Avancer\" pour démarrer l'import d'un fichier."
 
-#: ../src/import.c:1658
+#: ../src/import.c:1596
+msgid "OFX/QFX files"
+msgstr "fichiers OFX/QFX"
+
+#: ../src/import.c:1693
 msgid "<b>File analysis summary</b>"
 msgstr "<b>Résumé analyse fichier</b>"
 
-#: ../src/import.c:1666
+#: ../src/import.c:1701
 msgid "Filename:"
 msgstr "Nom de fichier:"
 
-#: ../src/import.c:1674
+#: ../src/import.c:1709
 msgid "Details:"
 msgstr "Détails:"
 
-#: ../src/import.c:1685
+#: ../src/import.c:1720
 msgid "<b>Unamed account selection</b>"
 msgstr "<b>Sélection du compte sans nom</b>"
 
-#: ../src/import.c:1697
+#: ../src/import.c:1732
 msgid ""
 "The file that you just loaded appears to contain transactions for an account "
 "without specifying\n"
@@ -1356,31 +1441,31 @@ msgstr ""
 "\n"
 "Veuillez sélectionner le compte auquel rattacher ces opérations."
 
-#: ../src/import.c:1707
+#: ../src/import.c:1742
 msgid "new account"
 msgstr "nouveau compte"
 
-#: ../src/import.c:1712
+#: ../src/import.c:1747
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: ../src/import.c:1720
+#: ../src/import.c:1755
 msgid "existing account"
 msgstr "compte existant"
 
-#: ../src/import.c:1775
+#: ../src/import.c:1810
 msgid "<b>Duplicate match options</b>"
 msgstr "<b>Options de concordance des doublons</b>"
 
-#: ../src/import.c:1787
+#: ../src/import.c:1822
 msgid "Date _tolerance:"
 msgstr "_Tolérance de date:"
 
-#: ../src/import.c:1797
+#: ../src/import.c:1832
 msgid "days"
 msgstr "jours"
 
-#: ../src/import.c:1814
+#: ../src/import.c:1849
 msgid ""
 "The match is done in order: by account, amount and date.\n"
 "A date tolerance of 0 days means an exact match"
@@ -1388,20 +1473,20 @@ msgstr ""
 "La concordance est faite dans l'ordre par: compte, montant et date.\n"
 "Un tolérance de date de 0 signifie un concordance exacte."
 
-#: ../src/import.c:1827
+#: ../src/import.c:1862
 msgid "<b>Transactions to import</b>"
 msgstr "<b>Opérations a importer</b>"
 
-#: ../src/import.c:1847
+#: ../src/import.c:1882
 msgid "<b>Possible duplicate for the above selected transaction</b>"
 msgstr "<b>Doublons possible pour l'opération sélectionnée ci-dessus</b>"
 
 #. Create the expander
-#: ../src/import.c:1851
+#: ../src/import.c:1886
 msgid "Details"
 msgstr "Détails"
 
-#: ../src/import.c:1916
+#: ../src/import.c:1951
 msgid ""
 "Click \"Apply\" to update your accounts.\n"
 "\n"
@@ -1409,9 +1494,9 @@ msgstr ""
 "Cliquez sur \"Appliquer\" pour mettre à jour vos comptes.\n"
 "\n"
 
-#: ../src/list_account.c:253 ../src/list_operation.c:468
+#: ../src/list_account.c:253 ../src/list_operation.c:477
 msgid "State"
-msgstr "Etat"
+msgstr "État"
 
 #. column 4: Bank
 #: ../src/list_account.c:273
@@ -1428,8 +1513,8 @@ msgstr "Aujourd'hui"
 msgid "Future"
 msgstr "Futur"
 
-#: ../src/list_operation.c:491 ../src/list_operation.c:702
-#: ../src/rep_car.c:995 ../src/rep_over.c:968
+#: ../src/list_operation.c:500 ../src/list_operation.c:711
+#: ../src/rep_car.c:996 ../src/rep_over.c:1018
 msgid "Date"
 msgstr "Date"
 
@@ -1446,23 +1531,18 @@ msgid "Spent & Budget"
 msgstr "Dépensé & Budget"
 
 #. column: Expense
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1250
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1273
 msgid "Spent"
 msgstr "Dépensé"
 
-#. column: Income
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1254
-msgid "Budget"
-msgstr "Budget"
-
 #. column: Balance
-#: ../src/rep_budget.c:99 ../src/rep_budget.c:1258
+#: ../src/rep_budget.c:99 ../src/rep_budget.c:1281
 msgid "Decay"
-msgstr "Ecart"
+msgstr "Écart"
 
 #: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
 msgid "List"
-msgstr "List"
+msgstr "Liste"
 
 #: ../src/rep_budget.c:107 ../src/rep_over.c:93 ../src/rep_stats.c:126
 msgid "View results as list"
@@ -1500,42 +1580,42 @@ msgstr "Rafraichir"
 msgid "Refresh results"
 msgstr "Rafraichir résultats"
 
-#: ../src/rep_budget.c:857
+#: ../src/rep_budget.c:863
 msgid "Budget report"
 msgstr "Rapport Budget"
 
-#: ../src/rep_budget.c:883 ../src/rep_car.c:623 ../src/rep_over.c:617
-#: ../src/rep_stats.c:1423
+#: ../src/rep_budget.c:889 ../src/rep_car.c:623 ../src/rep_over.c:654
+#: ../src/rep_stats.c:1436
 msgid "<b>Display</b>"
 msgstr "<b>Affichage</b>"
 
-#: ../src/rep_budget.c:887
+#: ../src/rep_budget.c:893
 msgid "_Kind:"
 msgstr "_Type:"
 
-#: ../src/rep_budget.c:894 ../src/rep_stats.c:1434
+#: ../src/rep_budget.c:900 ../src/rep_stats.c:1447
 msgid "_View:"
 msgstr "_Voir:"
 
-#: ../src/rep_budget.c:901 ../src/rep_car.c:635 ../src/rep_over.c:628
-#: ../src/rep_stats.c:1446
+#: ../src/rep_budget.c:907 ../src/rep_car.c:636 ../src/rep_over.c:666
+#: ../src/rep_stats.c:1459
 msgid "_Minor currency"
 msgstr "Devise _mineure"
 
-#: ../src/rep_budget.c:911 ../src/rep_car.c:645 ../src/rep_over.c:638
-#: ../src/rep_stats.c:1462
+#: ../src/rep_budget.c:917 ../src/rep_car.c:646 ../src/rep_over.c:676
+#: ../src/rep_stats.c:1475
 msgid "<b>Date filter</b>"
 msgstr "<b>Filtre date</b>"
 
-#: ../src/rep_budget.c:987
+#: ../src/rep_budget.c:1010
 msgid "Decay:"
-msgstr "Ecart:"
+msgstr "Écart:"
 
-#: ../src/rep_budget.c:996
+#: ../src/rep_budget.c:1019
 msgid "Budget:"
 msgstr "Budget:"
 
-#: ../src/rep_budget.c:1005
+#: ../src/rep_budget.c:1028
 msgid "Spent:"
 msgstr "Dépensé:"
 
@@ -1548,35 +1628,35 @@ msgid "_Car category:"
 msgstr "_Voiture:"
 
 #. column: consumption for 100Km
-#: ../src/rep_car.c:711 ../src/rep_car.c:1047
+#: ../src/rep_car.c:712 ../src/rep_car.c:1048
 msgid "100 Km"
 msgstr "100 Km"
 
-#: ../src/rep_car.c:714
+#: ../src/rep_car.c:715
 msgid "Total"
 msgstr "Total"
 
-#: ../src/rep_car.c:718
+#: ../src/rep_car.c:719
 msgid "Meter:"
 msgstr "Compteur:"
 
-#: ../src/rep_car.c:722
+#: ../src/rep_car.c:723
 msgid "Consumption:"
-msgstr "Consomation:"
+msgstr "Consommation:"
 
-#: ../src/rep_car.c:726
+#: ../src/rep_car.c:727
 msgid "Fuel cost:"
 msgstr "Coût carburant:"
 
-#: ../src/rep_car.c:730
+#: ../src/rep_car.c:731
 msgid "Other cost:"
 msgstr "Autres coût:"
 
-#: ../src/rep_car.c:734
+#: ../src/rep_car.c:735
 msgid "Total cost:"
 msgstr "Coût total:"
 
-#. 
+#.
 #. LST_CAR_DATE,
 #. LST_CAR_WORDING,
 #. LST_CAR_METER,
@@ -1585,10 +1665,10 @@ msgstr "Coût total:"
 #. LST_CAR_AMOUNT,
 #. LST_CAR_DIST,
 #. LST_CAR_100KM
-#. 
-#. 
+#.
+#.
 #. column: Wording
-#. 
+#.
 #. column = gtk_tree_view_column_new();
 #. gtk_tree_view_column_set_title(column, _("Wording"));
 #. gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
@@ -1596,24 +1676,24 @@ msgstr "Coût total:"
 #. gtk_tree_view_column_pack_start(column, renderer, TRUE);
 #. gtk_tree_view_column_add_attribute(column, renderer, "text", LST_CAR_WORDING);
 #. //gtk_tree_view_column_set_cell_data_func(column, renderer, repcar_text_cell_data_function, NULL, NULL);
-#. 
+#.
 #. column: Meter
-#: ../src/rep_car.c:1027
+#: ../src/rep_car.c:1028
 msgid "Meter"
 msgstr "Compteur"
 
 #. column: Fuel load
-#: ../src/rep_car.c:1031
+#: ../src/rep_car.c:1032
 msgid "Fuel"
 msgstr "Carburant"
 
 #. column: Price by unit
-#: ../src/rep_car.c:1035
+#: ../src/rep_car.c:1036
 msgid "Price"
 msgstr "Prix"
 
 #. column: Distance done
-#: ../src/rep_car.c:1043
+#: ../src/rep_car.c:1044
 msgid "Dist."
 msgstr "Dist."
 
@@ -1630,22 +1710,22 @@ msgstr "Voir résultats en lignes"
 msgid "%d/%d under %s"
 msgstr "%d/%d en dessous de %s"
 
-#: ../src/rep_over.c:588
+#: ../src/rep_over.c:625
 msgid "Overdrawn report"
 msgstr "Rapport Découvert"
 
 #. column: Balance
-#: ../src/rep_over.c:997 ../src/rep_stats.c:202 ../src/rep_stats.c:1854
+#: ../src/rep_over.c:1047 ../src/rep_stats.c:202 ../src/rep_stats.c:1887
 msgid "Balance"
 msgstr "Solde"
 
 #: ../src/rep_stats.c:128
 msgid "Pie"
-msgstr "Camenbert"
+msgstr "Camembert"
 
 #: ../src/rep_stats.c:128
 msgid "View results as pies"
-msgstr "Voir les résultats en camenberts"
+msgstr "Voir les résultats en camemberts"
 
 #: ../src/rep_stats.c:132
 msgid "Rate"
@@ -1656,12 +1736,8 @@ msgid "Toggle rate"
 msgstr "Afficher taux"
 
 #: ../src/rep_stats.c:134
-msgid "Filter"
-msgstr "Filtre"
-
-#: ../src/rep_stats.c:134
 msgid "Edit the filter"
-msgstr "Editer le filtre"
+msgstr "Éditer le filtre"
 
 #: ../src/rep_stats.c:198
 msgid "Subcategory"
@@ -1669,7 +1745,7 @@ msgstr "Sous catégorie"
 
 #: ../src/rep_stats.c:198
 msgid "Tag"
-msgstr "Etiquette"
+msgstr "Étiquette"
 
 #: ../src/rep_stats.c:202
 msgid "Exp. & Inc."
@@ -1771,100 +1847,100 @@ msgstr "Novembre"
 msgid "December"
 msgstr "Décembre"
 
-#: ../src/rep_stats.c:1397
+#: ../src/rep_stats.c:1410
 msgid "Statistics Report"
 msgstr "Rapport Statistiques"
 
-#: ../src/rep_stats.c:1427
+#: ../src/rep_stats.c:1440
 msgid "_For:"
 msgstr "_Pour:"
 
-#: ../src/rep_stats.c:1441
+#: ../src/rep_stats.c:1454
 msgid "By _amount"
 msgstr "Par _montant"
 
-#: ../src/rep_stats.c:1539
+#: ../src/rep_stats.c:1572
 msgid "Balance:"
 msgstr "Solde:"
 
-#: ../src/rep_stats.c:1548
+#: ../src/rep_stats.c:1581
 msgid "Income:"
 msgstr "Crédit:"
 
-#: ../src/rep_stats.c:1557
+#: ../src/rep_stats.c:1590
 msgid "Expense:"
 msgstr "Débit:"
 
-#: ../src/rep_stats.c:1831
+#: ../src/rep_stats.c:1864
 msgid "Result"
 msgstr "Résultat"
 
-#: ../src/ui_account.c:864
+#: ../src/ui_account.c:868
 #, c-format
 msgid "(account %d)"
 msgstr "(compte %d)"
 
-#: ../src/ui_account.c:896
+#: ../src/ui_account.c:898
 msgid "Remove not allowed"
 msgstr "Suppression interdite"
 
-#: ../src/ui_account.c:897
+#: ../src/ui_account.c:899
 msgid "This account is used and cannot be removed."
 msgstr "Ce compte est utilisé et ne peut pas être supprimé."
 
-#: ../src/ui_account.c:1004
+#: ../src/ui_account.c:1039
 msgid "Manage Accounts"
 msgstr "Gérer les comptes"
 
-#: ../src/ui_account.c:1077
+#: ../src/ui_account.c:1112
 msgid "<b>Informations</b>"
 msgstr "<b>Informations</b>"
 
-#: ../src/ui_account.c:1085
+#: ../src/ui_account.c:1120
 msgid "_Heading:"
 msgstr "Intitulé:"
 
-#: ../src/ui_account.c:1102
+#: ../src/ui_account.c:1137
 msgid "_Number:"
 msgstr "_Numéro:"
 
-#: ../src/ui_account.c:1109
+#: ../src/ui_account.c:1144
 msgid "_Bank name:"
 msgstr "Nom de la _banque:"
 
-#: ../src/ui_account.c:1116
+#: ../src/ui_account.c:1151
 msgid "Include in the budget"
 msgstr "Inclure dans le budget"
 
-#: ../src/ui_account.c:1121
+#: ../src/ui_account.c:1156
 msgid "This account was closed"
 msgstr "Ce compte a été clos"
 
-#: ../src/ui_account.c:1133
+#: ../src/ui_account.c:1168
 msgid "<b>Balances</b>"
 msgstr "<b>Soldes</b>"
 
-#: ../src/ui_account.c:1137
+#: ../src/ui_account.c:1172
 msgid "_Initial:"
 msgstr "_Initial:"
 
-#: ../src/ui_account.c:1148
+#: ../src/ui_account.c:1183
 msgid "_Overdrawn at:"
 msgstr "Déc_ouvert à:"
 
-#: ../src/ui_account.c:1162
+#: ../src/ui_account.c:1197
 msgid "<b>Cheque number</b>"
 msgstr "<b>Numéro de chèque</b>"
 
-#: ../src/ui_account.c:1166
+#: ../src/ui_account.c:1201
 msgid "Notebook _1:"
 msgstr "Carnet _1:"
 
-#: ../src/ui_account.c:1180
+#: ../src/ui_account.c:1215
 msgid "Notebook _2:"
 msgstr "Carnet _2:"
 
-#: ../src/ui_category.c:867
+#: ../src/ui_category.c:873
 msgid ""
 "The csv file must contains the exact numbers of column,\n"
 "separated by a semi-colon, please see the help for more details."
@@ -1872,19 +1948,19 @@ msgstr ""
 "Le fichier csv doit contenir le nombre exacte de colonnes,\n"
 "séparées par un point-virgule, reportez-vous à l'aide pour plus de détails."
 
-#: ../src/ui_category.c:996 ../src/ui_payee.c:579
+#: ../src/ui_category.c:1002 ../src/ui_payee.c:633
 msgid "Modify..."
 msgstr "Modifier..."
 
-#: ../src/ui_category.c:1018
+#: ../src/ui_category.c:1024
 msgid "_Income"
 msgstr "_Crédit"
 
-#: ../src/ui_category.c:1100 ../src/ui_payee.c:620
+#: ../src/ui_category.c:1106 ../src/ui_payee.c:674
 msgid "Error"
 msgstr "Erreur"
 
-#: ../src/ui_category.c:1101
+#: ../src/ui_category.c:1107
 #, c-format
 msgid ""
 "Cannot rename this Category,\n"
@@ -1895,11 +1971,11 @@ msgstr ""
 "de '%s' vers '%s',\n"
 "ce nom existe déjà."
 
-#: ../src/ui_category.c:1219
+#: ../src/ui_category.c:1225
 msgid "Remove a category ?"
 msgstr "Supprimer une catégorie ?"
 
-#: ../src/ui_category.c:1220
+#: ../src/ui_category.c:1226
 #, c-format
 msgid ""
 "If you remove '%s', archive and operation referencing this category\n"
@@ -1909,15 +1985,15 @@ msgstr ""
 "catégorie\n"
 "seront remplacé par 'aucune'"
 
-#: ../src/ui_category.c:1428
+#: ../src/ui_category.c:1443
 msgid "Manage Categories"
 msgstr "Gérer les catégories"
 
-#: ../src/ui_category.c:1466
+#: ../src/ui_category.c:1481
 msgid "I_ncome"
 msgstr "R_evenu"
 
-#: ../src/ui_payee.c:621
+#: ../src/ui_payee.c:675
 #, c-format
 msgid ""
 "Cannot rename this Payee,\n"
@@ -1928,11 +2004,11 @@ msgstr ""
 "de '%s' vers '%s',\n"
 "ce nom existe déjà."
 
-#: ../src/ui_payee.c:741
+#: ../src/ui_payee.c:795
 msgid "Remove a payee ?"
 msgstr "Supprimer un Tiers ?"
 
-#: ../src/ui_payee.c:742
+#: ../src/ui_payee.c:796
 #, c-format
 msgid ""
 "If you remove '%s', archive and operation referencing this payee\n"
@@ -1941,7 +2017,7 @@ msgstr ""
 "Si vous supprimez '%s', les archives et opérations qui utilise ce tiers\n"
 "seront remplacé par 'aucun'"
 
-#: ../src/ui_payee.c:826
+#: ../src/ui_payee.c:880
 msgid "Manage Payees"
 msgstr "Gérer les tiers"
 
@@ -1951,7 +2027,7 @@ msgstr "Carte crédit"
 
 #: ../src/widgets.c:66
 msgid "Cheque"
-msgstr "Chéque"
+msgstr "Chèque"
 
 #: ../src/widgets.c:67
 msgid "Cash"
@@ -1964,6 +2040,9 @@ msgstr "Transfert bancaire"
 #: ../src/widgets.c:69
 msgid "Internal transfer"
 msgstr "Transfert interne"
+
+#~ msgid "Import..."
+#~ msgstr "Import..."
 
 #~ msgid "Free easy personal accounting for all !"
 #~ msgstr "Comptabilité personnelle libre et facile pour tous !"
@@ -2034,7 +2113,6 @@ msgstr "Transfert interne"
 #~ msgid "Operation CSV import result"
 #~ msgstr "Résultat import opération CSV"
 
-#, c-format
 #~ msgid ""
 #~ "%d operation(s) inserted\n"
 #~ "%d error(s) in the file"
@@ -2105,7 +2183,8 @@ msgstr "Transfert interne"
 #~ "Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le "
 #~ "modifier\n"
 #~ "conformément aux dispositions de la Licence Publique Générale GNU, telle\n"
-#~ "que publiée par la Free Software Foundation ; version 2 de la licence, ou\n"
+#~ "que publiée par la Free Software Foundation ; version 2 de la licence, "
+#~ "ou\n"
 #~ "encore (à votre choix) toute version ultérieure.\n"
 #~ "\n"
 #~ "Ce programme est distribué dans l'espoir qu'il sera utile,\n"
@@ -2121,7 +2200,6 @@ msgstr "Transfert interne"
 #~ msgid "No operation to insert"
 #~ msgstr "Pas d'opérations à insérer"
 
-#, c-format
 #~ msgid "%d operations inserted"
 #~ msgstr "%d opérations insérées"
 
@@ -2137,7 +2215,6 @@ msgstr "Transfert interne"
 #~ msgid "Export as csv"
 #~ msgstr "Exporter vers csv"
 
-#, c-format
 #~ msgid "new%d"
 #~ msgstr "nouveau%d"
 
@@ -2147,7 +2224,6 @@ msgstr "Transfert interne"
 #~ msgid "CSV operation file recognized !"
 #~ msgstr "Fichier CSV operation reconnu !"
 
-#, c-format
 #~ msgid ""
 #~ "%d account(s) will be created.\n"
 #~ "\n"
@@ -2159,7 +2235,6 @@ msgstr "Transfert interne"
 #~ "%d opération(s) seront importées.\n"
 #~ "%d opération(s) seront rejetées."
 
-#, c-format
 #~ msgid ""
 #~ "%d operation(s) will be imported.\n"
 #~ "%d operation(s) will be rejected."
@@ -2176,11 +2251,13 @@ msgstr "Transfert interne"
 #~ "Other formats or not supported for the moment.\n"
 #~ "\n"
 #~ "The import process has several steps. Your HomeBank accounts\n"
-#~ "will not be changed until you click \"Apply\" at the end of this assistant.\n"
+#~ "will not be changed until you click \"Apply\" at the end of this "
+#~ "assistant.\n"
 #~ "\n"
 #~ "Now, click \"forward\" to start importing a file."
 #~ msgstr ""
-#~ "HomeBank peut importer des opérations depuis plusieurs formats de fichiers:\n"
+#~ "HomeBank peut importer des opérations depuis plusieurs formats de "
+#~ "fichiers:\n"
 #~ "\n"
 #~ "- CSV (format d'export csv d'opération HomeBank seulement)\n"
 #~ "- OFX/QFX (optionel)\n"
@@ -2188,8 +2265,8 @@ msgstr "Transfert interne"
 #~ "Les autres formats ne sont pas supportés pour le moment.\n"
 #~ "\n"
 #~ "Le processus d'import comporte plusieurs étapes. Vos comptes HomeBank\n"
-#~ "ne changeront pas jusqu'a ce que vous cliquiez \"Appliquer\" à la fin de cet "
-#~ "assistant.\n"
+#~ "ne changeront pas jusqu'a ce que vous cliquiez \"Appliquer\" à la fin de "
+#~ "cet assistant.\n"
 #~ "\n"
 #~ "Maintenant, cliquez sur \"Avancer\" pour démarrer l'import d'un fichier."
 
@@ -2273,15 +2350,6 @@ msgstr "Transfert interne"
 #~ msgid "tip"
 #~ msgstr "info"
 
-#~ msgid "Statistics"
-#~ msgstr "Statistiques"
-
-#~ msgid "Overdrawn"
-#~ msgstr "Découvert"
-
-#~ msgid "Car cost"
-#~ msgstr "Coût voiture"
-
 #~ msgid "_About..."
 #~ msgstr "_A propos..."
 
@@ -2348,14 +2416,8 @@ msgstr "Transfert interne"
 #~ msgid "Run this wizard next time"
 #~ msgstr "Lancer l'assistant la procahine fois"
 
-#~ msgid "Add"
-#~ msgstr "Ajouter"
-
 #~ msgid "Inh."
 #~ msgstr "Héri."
-
-#~ msgid "Edit"
-#~ msgstr "Editer"
 
 #~ msgid "Remo."
 #~ msgstr "Supp."
@@ -2369,9 +2431,6 @@ msgstr "Transfert interne"
 #~ msgid "New"
 #~ msgstr "Nouveau"
 
-#~ msgid "Open"
-#~ msgstr "Ouvrir"
-
 #~ msgid "Save"
 #~ msgstr "Sauver"
 
@@ -2383,9 +2442,6 @@ msgstr "Transfert interne"
 
 #~ msgid "Budg."
 #~ msgstr "Budg."
-
-#~ msgid "Show"
-#~ msgstr "Voir"
 
 #~ msgid "Stat."
 #~ msgstr "Etat"
@@ -2435,13 +2491,9 @@ msgstr "Transfert interne"
 #~ msgid "Validate theactive transactions"
 #~ msgstr "Valider les opérations actives"
 
-#~ msgid "Import CSV..."
-#~ msgstr "Import CSV..."
-
 #~ msgid "Transaction CSV import result"
 #~ msgstr "Résultat import opération CSV"
 
-#, c-format
 #~ msgid ""
 #~ "%d transactions inserted\n"
 #~ "%d errors in the file"
@@ -2452,7 +2504,6 @@ msgstr "Transfert interne"
 #~ msgid "Free, easy, personal accounting for everyone !"
 #~ msgstr "Comptabilité personnelle libre et facile pour tous !"
 
-#, c-format
 #~ msgid ""
 #~ "%d transactions will be imported.\n"
 #~ "%d transactions will be rejected."

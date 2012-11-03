@@ -772,13 +772,13 @@ gdouble exprate, incrate, balrate;
 	switch(tmpfor)
 	{
 		case STAT_CATEGORY:
-			n_result = da_cat_get_max_key();
+			n_result = da_cat_get_max_key() + 1;
 			break;
 		case STAT_SUBCATEGORY:
-			n_result = da_cat_get_max_key();
+			n_result = da_cat_get_max_key() + 1;
 			break;
 		case STAT_PAYEE:
-			n_result = da_pay_get_max_key();
+			n_result = da_pay_get_max_key() + 1;
 			break;
 		case STAT_TAG:
 			n_result = da_tag_length();
@@ -804,8 +804,8 @@ gdouble exprate, incrate, balrate;
 	DB( g_print(" %s :: n_result=%d\n", CYA_STATSELECT[tmpfor], n_result) );
 
 	/* allocate some memory */
-	tmp_expense = g_malloc0((n_result+1) * sizeof(gdouble));
-	tmp_income  = g_malloc0((n_result+1) * sizeof(gdouble));
+	tmp_expense = g_malloc0((n_result+2) * sizeof(gdouble));
+	tmp_income  = g_malloc0((n_result+2) * sizeof(gdouble));
 
 	data->total_expense = 0.0;
 	data->total_income  = 0.0;
@@ -820,6 +820,9 @@ gdouble exprate, incrate, balrate;
 
 			//filter here
 			//if( !(ope->flags & OF_REMIND) && ope->date >= from && ope->date <= to)
+
+			//debug
+			DB( g_print("** testing '%s', cat=%d==> %d\n", ope->wording, ope->category, filter_test(data->filter, ope)) );
 
 
 			if(filter_test(data->filter, ope) == 1)
@@ -922,6 +925,9 @@ gdouble exprate, incrate, balrate;
 
 			name = NULL;
 			fullcatname = NULL;
+
+			DB( g_print("try to insert item %d\n", i) );
+
 
 			/* filter empty results */
 			if(tmpfor == STAT_CATEGORY || tmpfor == STAT_SUBCATEGORY || tmpfor == STAT_PAYEE || tmpfor == STAT_TAG)
@@ -1384,6 +1390,7 @@ GtkWidget *label, *widget, *table, *alignment, *vbar, *entry;
 gint row;
 GtkUIManager *ui;
 GtkActionGroup *actions;
+GtkAction *action;
 GError *error = NULL;
 
 	data = g_malloc0(sizeof(struct statistic_data));
@@ -1511,6 +1518,26 @@ GError *error = NULL;
 	// data to action callbacks is set here (data)
 	gtk_action_group_add_actions (actions, entries, n_entries, data);
 
+	/* set which action should have priority in the toolbar */
+	action = gtk_action_group_get_action(actions, "List");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+	action = gtk_action_group_get_action(actions, "Bar");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+	action = gtk_action_group_get_action(actions, "Pie");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+	action = gtk_action_group_get_action(actions, "Detail");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+	action = gtk_action_group_get_action(actions, "Filter");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+	action = gtk_action_group_get_action(actions, "Refresh");
+	g_object_set(action, "is_important", TRUE, NULL);
+
+
 	ui = gtk_ui_manager_new ();
 	gtk_ui_manager_insert_action_group (ui, actions, 0);
 	gtk_window_add_accel_group (GTK_WINDOW (window), gtk_ui_manager_get_accel_group (ui));
@@ -1581,7 +1608,7 @@ GError *error = NULL;
 	widget = gtk_scrolled_window_new (NULL, NULL);
 	//gtk_scrolled_window_set_placement(GTK_SCROLLED_WINDOW (widget), GTK_CORNER_TOP_RIGHT);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	treeview = create_list_statistic();
 	data->LV_report = treeview;
 	gtk_container_add (GTK_CONTAINER(widget), treeview);
@@ -1592,7 +1619,7 @@ GError *error = NULL;
 	data->GR_detail = widget;
 	//gtk_scrolled_window_set_placement(GTK_SCROLLED_WINDOW (widget), GTK_CORNER_TOP_RIGHT);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (widget), GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (widget), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	treeview = create_list_operation(PREFS->lst_ope_columns);
 	data->LV_detail = treeview;
 	gtk_container_add (GTK_CONTAINER(widget), treeview);

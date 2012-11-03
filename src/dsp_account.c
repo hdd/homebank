@@ -165,7 +165,7 @@ static GtkActionEntry entries[] = {
   { "Add"          , "hb-stock-ope-add", N_("_Add..."), NULL,    N_("Add a new transaction"), G_CALLBACK (account_action_add) },
   { "Inherit"      , "hb-stock-ope-herit", N_("_Inherit..."), NULL, N_("Inherit from the active transaction"), G_CALLBACK (account_action_inherit) },
   { "Edit"         , "hb-stock-ope-edit", N_("_Edit..."), NULL, N_("Edit the active transaction"),  G_CALLBACK (account_action_edit) },
-  { "Validate"     , "hb-stock-ope-valid", N_("(In)_Validate..."), NULL,    N_("Validate the active transactions"), G_CALLBACK (account_action_validate) },
+  { "Validate"     , "hb-stock-ope-valid", N_("(In)_Validate"), NULL,    N_("Validate the active transactions"), G_CALLBACK (account_action_validate) },
   { "Remove"       , "hb-stock-ope-delete", N_("_Remove..."), NULL,    N_("Remove the active transactions"), G_CALLBACK (account_action_remove) },
   { "MakeArchive"  , NULL, N_("Make an archive..."), NULL,    NULL, G_CALLBACK (account_action_createarchive) },
 
@@ -1954,6 +1954,7 @@ GtkWidget *treeview, *check_button, *vbar, *label, *entry, *sw;
 //GtkWidget *menu, *menu_items;
 GtkUIManager *ui;
 GtkActionGroup *actions;
+GtkAction *action;
 GError *error = NULL;
 
 	data = g_malloc0(sizeof(struct account_data));
@@ -2018,6 +2019,26 @@ GError *error = NULL;
 
 		DB( g_print("add actions: %x user_data: %x\n", (gint)actions, data) );
 		gtk_action_group_add_actions (actions, entries, n_entries, data);
+
+		/* set which action should have priority in the toolbar */
+		action = gtk_action_group_get_action(actions, "Add");
+		g_object_set(action, "is_important", TRUE, "short_label", _("Add"), NULL);
+
+		action = gtk_action_group_get_action(actions, "Inherit");
+		g_object_set(action, "is_important", TRUE, "short_label", _("Inherit"), NULL);
+
+		action = gtk_action_group_get_action(actions, "Edit");
+		g_object_set(action, "is_important", TRUE, "short_label", _("Edit"), NULL);
+
+		action = gtk_action_group_get_action(actions, "Filter");
+		g_object_set(action, "is_important", TRUE, "short_label", _("Filter"), NULL);
+
+		action = gtk_action_group_get_action(actions, "Validate");
+		g_object_set(action, "is_important", TRUE, "short_label", _("Validate"), NULL);
+
+		action = gtk_action_group_get_action(actions, "Remove");
+		g_object_set(action, "is_important", TRUE, "short_label", _("Remove"), NULL);
+
 
 		ui = gtk_ui_manager_new ();
 

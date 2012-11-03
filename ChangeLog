@@ -1,3 +1,21 @@
+2009-01-31  Maxime Doyen
+
+	Made 4.0.2 release.
+	* bugfix: 321237 category dialog box and accents
+	* bugfix: 315071 fixed minimun version of glib to 2.12 and gtk to 2.10
+	* bugfix: 314817 manage categories dialog does not show all categories recorded
+	* bugfix: 314049 missing added categories in statistics report
+	* bugfix: 307803 Import from Quicken creates duplicate transactions on Internal transfers
+	* bugfix: 305974 using "&" in description field leads to misinterpretation inOverdrawn report
+	* bugfix: 305692 closed account should not be displayed to main list window
+	* bugfix: 305674 suffix and prefix in display format
+	* change: 306967 "Save as..." menu option unavailable to unmodified files	
+	* change: 306750 do not show scrollbars when not needed
+	* change: 306741 do not ellipsize toolbar button labels
+	* change: 203663 sate format entry could display tooltip about the format
+	* change: 203653 toolbar style "Icons beside text" isn't displayed.
+	* change: 117857 french text on the main menu icon are too long...
+
 2008-12-04  Maxime Doyen
 
 	Made 4.0.1 release.
